@@ -205,25 +205,27 @@ public abstract class AbstractAction implements Pageable, StickyAction {
     }
 
     protected String success(String msg) {
-        return this.putMessage(Action.SUCCESS,msg);
+        return this.putMessage(SUCCESS,msg);
     }
 
     public String error(boolean listDependencies, String errorMsg) {
-        if(listDependencies){
+        this.putMessage(ERROR,errorMsg);
+		if(listDependencies){
 	        this.doListDependencies();
         }
-        return this.putMessage(ERROR,errorMsg);
+        return ERROR;
     }
 
     public String warning(boolean listDependencies, String warningMsg) {
-        if(listDependencies){
+        this.putMessage(WARNING,warningMsg);
+		if(listDependencies){
 	        this.doListDependencies();
         }
-        return this.putMessage(WARNING,warningMsg);
+		return WARNING;
     }
 
-    public String info(AbstractAction ac, String infoMsg) {
-        return ac.putMessage(INFO,infoMsg);
+    public String info(AbstractAction action, String infoMsg) {
+        return action.putMessage(INFO,infoMsg);
     }
 
     public boolean isPost() {
