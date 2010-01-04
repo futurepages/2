@@ -1,0 +1,137 @@
+package org.futurepages.core.consequence;
+
+import org.futurepages.exceptions.ConsequenceException;
+import org.futurepages.core.action.Action;
+import java.io.IOException;
+import java.util.Iterator;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.futurepages.core.control.AbstractApplicationManager;
+import org.futurepages.core.control.Controller;
+import org.futurepages.core.output.Output;
+
+/**
+ * A forward web consequence.
+ * 
+ * @author Sergio Oliveira
+ */
+public class Forward implements Consequence {
+    
+    /**
+     * The action is set in the request with this name
+     */
+    public static String ACTION_REQUEST = "action";
+
+    /**
+     * The session context is set in the request with this name
+     */    
+    public static String SESSION_REQUEST = "session";
+
+    /**
+     * The application context is set in the request with this name
+     */    
+    public static String APPLICATION_REQUEST = "application";
+    
+    /**
+     * The action input is set in the request with this name
+     */        
+    public static String INPUT_REQUEST = "input";
+    
+    private String url;
+	
+	/**
+	 * Creates a web consequence for the given url.
+	 * 
+	 * @param url The url for the forward
+	 */
+	public Forward(String url) {
+		this.url = putSlash(url);
+		
+		String viewDir = AbstractApplicationManager.getViewDir();
+		
+		if (viewDir != null) {
+			
+			if (viewDir.endsWith("/") && viewDir.length() > 1) {
+				
+				viewDir = viewDir.substring(0, viewDir.length() - 1);
+			}
+			
+			this.url = putSlash(viewDir) + this.url; 
+		}
+		
+	}
+    
+    private String putSlash(String url) {
+        if (url != null && !url.startsWith("/")) {
+            return "/" + url;
+        }
+        return url;
+    }
+    
+    public void execute(Action a, HttpServletRequest req, HttpServletResponse res) throws ConsequenceException {
+        try {
+            // put output values in the request...
+            
+            if (a != null) {
+            
+                Output output = a.getOutput();
+                Iterator<String> iter = output.keys();
+                while(iter.hasNext()) {
+                    String key = (String) iter.next();
+                    Object value = output.getValue(key);
+                    req.setAttribute(key, value);
+                }
+                
+                // put the application in the request...
+                req.setAttribute(APPLICATION_REQUEST, a.getApplication());
+                
+                // put the session in the request...
+                req.setAttribute(SESSION_REQUEST, a.getSession());
+                
+                // put the input in the request...
+                req.setAttribute(INPUT_REQUEST, a.getInput());
+                
+                // put the action in the request...
+                req.setAttribute(ACTION_REQUEST, a);
+            
+            }
+            
+            forward(this.url, req, res);
+            
+        } catch(Exception e) {
+            throw new ConsequenceException(e);
+        }
+    }
+    
+    /**
+     * Forward your web application to an URL.
+     *
+     * @param url The url for the forward.
+     * @param req The http servlet request.
+     * @param res the http servlet response.
+     */
+	public static void forward(String url, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        ServletContext app = Controller.getApplication();
+        RequestDispatcher rd = app.getRequestDispatcher(url);
+        rd.forward(req, res);
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer sb = new StringBuffer(100);
+        sb.append("Forward to ").append(url);
+        return sb.toString();
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = putSlash(url);
+    }
+}
