@@ -10,6 +10,6 @@ public class HasError extends ConditionalTag {
 
 	@Override
 	public boolean testCondition() throws JspException {
-		return action.hasError();
+		return (action!=null)? action.hasError() : false;
 	}
 }
