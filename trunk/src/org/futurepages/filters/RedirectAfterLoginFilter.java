@@ -1,6 +1,5 @@
 package org.futurepages.filters;
 
-import org.futurepages.filters.AuthenticationFilter;
 import org.futurepages.core.action.Action;
 import org.futurepages.core.action.AbstractAction;
 import org.futurepages.core.context.Context;

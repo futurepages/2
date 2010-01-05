@@ -3,17 +3,22 @@ package org.futurepages.filters;
 import org.futurepages.core.filter.Filter;
 import org.futurepages.core.control.InvocationChain;
 
-public class GlobalFilterFreeMarkerFilter implements Filter {
+/*
+ * Marca quais innerActions devem ser livres dos filtros globais.
+ *
+ * Se nenuma innerAction é especificada, então toda a action é livre dos filtros globais.
+ */
+public class GlobalFilterFreeFilter implements Filter {
    
    private final String[] innerActions;
    
-   public GlobalFilterFreeMarkerFilter() {
+   public GlobalFilterFreeFilter() {
       
       this.innerActions = null;
       
    }
    
-   public GlobalFilterFreeMarkerFilter(String ... innerActions) {
+   public GlobalFilterFreeFilter(String ... innerActions) {
       
       this.innerActions = innerActions;
    }

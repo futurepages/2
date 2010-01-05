@@ -13,8 +13,8 @@ public class DefaultConsequenceProvider implements ConsequenceProvider {
     /**
      * @byLeandro
      * Novo tipo de consequencia padrao caso nao seja definido.
-     * Action.inner.mtw ==> Action.inner.page
-     * Action.mtw ==> Action.page
+     * Action.inner.fpg ==> Action.inner.page
+     * Action.fpg ==> Action.page
      * 
      **/
    public Consequence getConsequence(String action, Class<? extends Object> actionClass, String result, String innerAction) {

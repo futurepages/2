@@ -82,11 +82,11 @@ public class AuthenticationFilter implements Filter {
                 //maker ??
                 if (!shouldRedirect) {
 
-                    Filter f = chain.getFilter(RedirectAfterLoginMarkerFilter.class);
+                    Filter f = chain.getFilter(ShouldRedirectFilter.class);
 
                     if (f != null) {
 
-                        RedirectAfterLoginMarkerFilter ramf = (RedirectAfterLoginMarkerFilter) f;
+                        ShouldRedirectFilter ramf = (ShouldRedirectFilter) f;
 
                         shouldRedirect = ramf.shouldRedirect(innerAction);
                     }
