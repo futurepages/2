@@ -70,7 +70,9 @@ public class ApplicationListener implements ServletContextListener {
 
             //Inicializa os parâmetros de configuração de Email se solicitado.
             if (Params.get("EMAIL_ACTIVE").equals("true")) {
+				log("Configurando Email...: ");
                 MailConfig.initialize();
+				log("Config Email OK");
             }
 
             //Por padrão gera o arquivo taglib.tld com as tags dos módulos da aplicação
