@@ -67,4 +67,8 @@ public class Paths {
     public static String host(HttpServletRequest req){
         return req.getScheme()+"://"+req.getServerName()+(req.getServerPort()!=80 ? ":"+req.getServerPort() : "" );
     }
+
+	public static String template(HttpServletRequest req, String module) {
+		return (module==null? Paths.template(req) : Paths.module(req, module)+"/"+Params.TEMPLATE_PATH);
+	}
 }

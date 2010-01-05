@@ -1,30 +1,23 @@
 package org.futurepages.tags;
 
-
-import javax.servlet.jsp.JspException;
-
-import org.futurepages.core.tags.PrintTag;
-
+import org.apache.taglibs.standard.tag.common.core.SetSupport;
 
 /**
  * @author Leandro
+ * // pageContext.setAttribute(var, value);
  */
-public class Set extends PrintTag{
-   
-	private String var;
-	private Object value;
-
-	public void setVar(String var) {
-		this.var = var;
-	}
+public class Set extends SetSupport {
 
 	public void setValue(Object value) {
 		this.value = value;
+		this.valueSpecified = true;
 	}
 
-	public String getStringToPrint() throws JspException {
-		pageContext.setAttribute(var, value);
-		return "";
+	public void setTarget(Object target) {
+		this.target = target;
 	}
 
+	public void setProperty(String property) {
+		this.property = property;
+	}
 }

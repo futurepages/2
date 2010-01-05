@@ -10,13 +10,6 @@ import org.futurepages.core.template.TemplateServlet;
  */
 public class Block extends PrintTag {
 
-	private String id;
-
-	@Override
-	public void setId(String id) {
-		this.id = id;
-	}
-
 	@Override
 	public String getStringToPrint() throws JspException {
 		Page page = (Page) req.getAttribute(TemplateServlet.PAGE_ATTR);
