@@ -36,45 +36,44 @@ public abstract class AbstractAction implements Pageable, StickyAction {
     protected Context application;
     protected Context cookies;
     protected Locale loc;
+    private Map<String, String> messages;
 
-	private Map<String,String> messages;
+    public AbstractAction() {
+        messages = new HashMap<String, String>();
+        messages.put(SUCCESS, null);
+        messages.put(INFO, null);
+        messages.put(ERROR, null);
+        messages.put(WARNING, null);
+    }
 
-	public AbstractAction() {
-		messages = new HashMap<String, String>();
-		messages.put(SUCCESS , null);
-		messages.put(INFO    , null);
-		messages.put(ERROR   , null);
-		messages.put(WARNING , null);
-	}
+    public String putMessage(String key, String message) {
+        output.setValue(key, HtmlMapChars.htmlValue(message));
+        messages.put(key, message);
+        return key;
+    }
 
-	public String putMessage(String key, String message){
-		output.setValue(key,  HtmlMapChars.htmlValue(message));
-		messages.put(key, message);
-		return key;
-	}
-
-	public String getMessage(String key){
-		return messages.get(key);
-	}
+    public String getMessage(String key) {
+        return messages.get(key);
+    }
 
     public String execute() throws Exception {
         doListDependencies();
         return SUCCESS;
     }
 
-	/**
-	 * Paginação de elementos
-	 * 
-	 * Depreciado por ser uma má pratica de programação (mistura controle e modelo)
-	 * 
-	 * @deprecated Utilize setOutputPaginationSlice (verificar em site2 e scrummer o uso)
-	 */
+    /**
+     * Paginação de elementos
+     *
+     * Depreciado por ser uma má pratica de programação (mistura controle e modelo)
+     *
+     * @deprecated Utilize setOutputPaginationSlice (verificar em site2 e scrummer o uso)
+     */
     public <T extends Serializable> List<T> paginateList(int pageSize, Class<T> entityClass, String where, String order) {
         List<T> list = Dao.listPage(getPageNum(), pageSize, " FROM " + entityClass.getName() + " WHERE " + where + " ORDER BY " + order);
         long totalSize = Dao.numRows(entityClass, where);
         double total = totalSize;
         int totalPages = (int) Math.ceil(total / pageSize);
-        setOutputPaginationValues(pageSize, totalSize, totalPages,getPageNum());
+        setOutputPaginationValues(pageSize, totalSize, totalPages, getPageNum());
         return list;
     }
 
@@ -124,7 +123,7 @@ public abstract class AbstractAction implements Pageable, StickyAction {
         output.setValue(key, input.getValue(key));
     }
 
-	public void setSessionTime(int minutes) {
+    public void setSessionTime(int minutes) {
         ((SessionContext) session).getSession().setMaxInactiveInterval(minutes * 60);
     }
 
@@ -142,20 +141,20 @@ public abstract class AbstractAction implements Pageable, StickyAction {
 
     public void doListDependencies() {
         listDependencies();
-    }	
-	
+    }
+
     protected void listDependencies() {
     }
 
-	public boolean hasSuccess() {
-		return messages.get(Action.SUCCESS) != null;
-	}
-
-    public boolean hasError() {
-        return messages.get(ERROR)!=null;
+    public boolean hasSuccess() {
+        return messages.get(Action.SUCCESS) != null;
     }
 
-	public String getError() {
+    public boolean hasError() {
+        return messages.get(ERROR) != null;
+    }
+
+    public String getError() {
         return messages.get(ERROR);
     }
 
@@ -205,27 +204,27 @@ public abstract class AbstractAction implements Pageable, StickyAction {
     }
 
     protected String success(String msg) {
-        return this.putMessage(SUCCESS,msg);
+        return this.putMessage(SUCCESS, msg);
     }
 
     public String error(boolean listDependencies, String errorMsg) {
-        this.putMessage(ERROR,errorMsg);
-		if(listDependencies){
-	        this.doListDependencies();
+        this.putMessage(ERROR, errorMsg);
+        if (listDependencies) {
+            this.doListDependencies();
         }
         return ERROR;
     }
 
     public String warning(boolean listDependencies, String warningMsg) {
-        this.putMessage(WARNING,warningMsg);
-		if(listDependencies){
-	        this.doListDependencies();
+        this.putMessage(WARNING, warningMsg);
+        if (listDependencies) {
+            this.doListDependencies();
         }
-		return WARNING;
+        return WARNING;
     }
 
     public String info(AbstractAction action, String infoMsg) {
-        return action.putMessage(INFO,infoMsg);
+        return action.putMessage(INFO, infoMsg);
     }
 
     public boolean isPost() {
@@ -320,7 +319,7 @@ public abstract class AbstractAction implements Pageable, StickyAction {
         // subclasses can override this to trap this callback for sticky actions...
     }
 
-	public String getContextPath() {
+    public String getContextPath() {
         return input.getProperty("contextPath");
     }
 }
