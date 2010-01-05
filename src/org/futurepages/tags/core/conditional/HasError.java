@@ -4,7 +4,9 @@ import javax.servlet.jsp.JspException;
 import org.futurepages.core.tags.ConditionalTag;
 
 /**
- * @author Sergio Oliveira
+ * Verifica se existe erro na tag.
+ * 
+ * @author Leandro Santana Pereira
  */
 public class HasError extends ConditionalTag {
 
