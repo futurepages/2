@@ -331,7 +331,7 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 	}
 
     /**
-     * Override this method to define formatters that can be used by mtw:out tag
+     * Override this method to define formatters that can be used by fpg:out tag
      */
     public void loadFormatters() {
 

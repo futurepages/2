@@ -47,7 +47,7 @@ public class RequestInput extends AbstractInput implements Map<String, Object> {
 		// that's why the clone...
 		this.map = clone(map);
 
-		// Path-info is not supported by *.mtw web.xml mapping!
+		// Path-info is not supported by *.fpg web.xml mapping!
 		/*
 		 * String pathInfo = req.getPathInfo(); if (pathInfo != null &&
 		 * pathInfo.equals("")) { map.put("pathInfo", pathInfo); }

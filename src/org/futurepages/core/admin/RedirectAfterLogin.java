@@ -6,9 +6,9 @@ package org.futurepages.core.admin;
  * <br>
  * Redirect After Login is basically this:
  * <ul>
- * <li> The user tries to access action /MyAction.mtw
+ * <li> The user tries to access action /MyAction.fpg
  * <li> The user is not logged, so he is taken to the login page.
- * <li> After a successful login, instead of going to the first page (welcome page), it is taken to the /MyAction.mtw action.
+ * <li> After a successful login, instead of going to the first page (welcome page), it is taken to the /MyAction.fpg action.
  * </ul>
  *
  * For this to happen, MyAction has to implement this marker interface.

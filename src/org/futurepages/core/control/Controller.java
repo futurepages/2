@@ -34,7 +34,7 @@ import javax.servlet.http.HttpSessionBindingListener;
 
 import org.futurepages.core.consequence.ConsequenceProvider;
 import org.futurepages.core.consequence.DefaultConsequenceProvider;
-import org.futurepages.filters.GlobalFilterFreeMarkerFilter;
+import org.futurepages.filters.GlobalFilterFreeFilter;
 import org.futurepages.core.formatter.FormatterManager;
 import org.futurepages.core.input.RequestInput;
 import org.futurepages.core.output.ResponseOutput;
@@ -257,7 +257,7 @@ public class Controller extends HttpServlet {
     /**
      * Returns the URI from this request. URI = URI - context - extension. This
      * method is used by getActionName and getInnerActionName. You may call this
-     * method in your own controller subclass. Ex: /myapp/UserAction.add.mtw
+     * method in your own controller subclass. Ex: /myapp/UserAction.add.fpg
      * will return UserAction.add
      *
      * @param req
@@ -281,7 +281,7 @@ public class Controller extends HttpServlet {
             return Params.get("START_PAGE_NAME");
         }
 
-        // cut the extension... (.mtw or whatever was defined in web.xml)
+        // cut the extension... (.fpg or whatever was defined in web.xml)
         int index = uri.lastIndexOf(".");
 
         if (index > 0) {
@@ -324,7 +324,7 @@ public class Controller extends HttpServlet {
 
     /**
      * The action name may include an Inner Action. For example: for
-     * bookmanager.add.mtw the action name is "bookmanager" and the inneraction
+     * bookmanager.add.fpg the action name is "bookmanager" and the inneraction
      * name is "add". If you want to extract the inner action through some other
      * way you can override this method in your own controller.
      *
@@ -681,9 +681,9 @@ public class Controller extends HttpServlet {
 
             Filter f = iter.next();
 
-            if (GlobalFilterFreeMarkerFilter.class.isAssignableFrom(f.getClass())) {
+            if (GlobalFilterFreeFilter.class.isAssignableFrom(f.getClass())) {
 
-                GlobalFilterFreeMarkerFilter gffmf = (GlobalFilterFreeMarkerFilter) f;
+                GlobalFilterFreeFilter gffmf = (GlobalFilterFreeFilter) f;
 
                 return gffmf.isGlobalFilterFree(innerAction);
             }

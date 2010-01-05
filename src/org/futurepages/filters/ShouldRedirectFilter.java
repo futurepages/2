@@ -3,17 +3,26 @@ package org.futurepages.filters;
 import org.futurepages.core.filter.Filter;
 import org.futurepages.core.control.InvocationChain;
 
-public class RedirectAfterLoginMarkerFilter implements Filter {
+/**
+ * Marca quais innerActions devem ser redirecionadas após o login.
+ *
+ * Se nenhuma innerAction for definida, toda a action é redirecionada.
+ *
+ * Deve ser usado numa action especifica.
+ * 
+ * @author leandro
+ */
+public class ShouldRedirectFilter implements Filter {
    
    private final String[] innerActions;
    
-   public RedirectAfterLoginMarkerFilter() {
+   public ShouldRedirectFilter() {
       
       this.innerActions = null;
       
    }
    
-   public RedirectAfterLoginMarkerFilter(String ... innerActions) {
+   public ShouldRedirectFilter(String ... innerActions) {
       
       this.innerActions = innerActions;
    }
