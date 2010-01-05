@@ -11,7 +11,7 @@ import org.jgroups.blocks.PullPushAdapter;
 import org.jgroups.util.Util;
 
 public class DistributedCache implements Cache, MessageListener {
-    
+
     public static final String JGROUPS_PROTOCOL_STACK = "UDP:" +
 	                                                    "PING:" +
 	                                                    "FD(timeout=5000):" +
@@ -20,18 +20,18 @@ public class DistributedCache implements Cache, MessageListener {
 	                                                    "MERGE2:" +
 	                                                    "NAKACK:" +
 	                                                    "UNICAST(timeout=5000):" +
-	                                                    "FRAG:" +  
+	                                                    "FRAG:" +
 	                                                    "FLUSH:" +
 	                                                    "GMS:" +
                                                         "VIEW_ENFORCER:" +
                                                         "STATE_TRANSFER:" +
 	                                                    "QUEUE";
-    
+
     private Cache cache;
     private JChannel channel;
     private PullPushAdapter adapter;
     private String groupname;
-    
+
     public DistributedCache(String name, String groupname, int capacity, Class cacheImpl, String jgroups_protocol_stack) {
         try {
             Constructor c = cacheImpl.getConstructor(new Class[] { String.class, int.class });
@@ -41,15 +41,15 @@ public class DistributedCache implements Cache, MessageListener {
             throw new RuntimeException("Error creating synchronized cache!", e);
         }
     }
-    
+
     public DistributedCache(String name, String groupname, int capacity) {
        this(name, groupname, capacity, LRUCache.class);
     }
-    
+
     public DistributedCache(String name, String groupname, int capacity, Class cacheImpl) {
         this(name, groupname, capacity, cacheImpl, JGROUPS_PROTOCOL_STACK);
-    }    
-    
+    }
+
     public DistributedCache(String name, String groupname, int capacity, float load, Class cacheImpl, String jgroups_protocol_stack) {
         try {
             Constructor c = cacheImpl.getConstructor(new Class[] { String.class, int.class, float.class });
@@ -59,28 +59,28 @@ public class DistributedCache implements Cache, MessageListener {
             throw new RuntimeException("Error creating synchronized cache!", e);
         }
     }
-    
+
     public DistributedCache(String name, String groupname, int capacity, float load, Class cacheImpl) {
         this(name, groupname, capacity, load, cacheImpl, JGROUPS_PROTOCOL_STACK);
-    }    
-    
+    }
+
     private void initChannel(String groupname, String stack) throws Exception {
         this.groupname = groupname;
         this.channel = new JChannel(stack);
         channel.setOpt(JChannel.GET_STATE_EVENTS, Boolean.TRUE);
-        channel.connect(groupname);        
+        channel.connect(groupname);
         this.adapter = new PullPushAdapter(channel, this);
         channel.getState(null, 0);
     }
-    
+
     public synchronized Object get(Object key) {
         return cache.get(key);
     }
-    
+
     public synchronized Object put(Object key, Object value) {
         return put(key, value, true);
     }
-    
+
     protected synchronized Object put(Object key, Object value, boolean send) {
         Object obj = cache.put(key, value);
         if (send) {
@@ -93,11 +93,11 @@ public class DistributedCache implements Cache, MessageListener {
         }
         return obj;
     }
-    
+
     public synchronized Object remove(Object key) {
         return remove(key, true);
     }
-    
+
     protected synchronized Object remove(Object key, boolean send) {
         Object obj = cache.remove(key);
         if (send) {
@@ -110,11 +110,11 @@ public class DistributedCache implements Cache, MessageListener {
         }
         return obj;
     }
-    
+
     public synchronized void clear() {
         clear(true);
     }
-    
+
     protected synchronized void clear(boolean send) {
         cache.clear();
         if (send) {
@@ -126,14 +126,14 @@ public class DistributedCache implements Cache, MessageListener {
             }
         }
     }
-    
+
     public String toString() {
         StringBuffer sb = new StringBuffer(1000);
         sb.append("ReplicatedCache: GroupName=").append(groupname).append("\n");
         sb.append(cache.toString());
         return sb.toString();
     }
-    
+
     public synchronized void receive(Message msg) {
         try {
             Object obj = Util.objectFromByteBuffer(msg.getBuffer());
@@ -151,7 +151,7 @@ public class DistributedCache implements Cache, MessageListener {
             e.printStackTrace();
         }
     }
-    
+
     public synchronized void setState(byte [] state) {
         try {
             this.cache = (Cache) Util.objectFromByteBuffer(state);
@@ -160,8 +160,8 @@ public class DistributedCache implements Cache, MessageListener {
             e.printStackTrace();
         }
     }
-    
-    public synchronized byte [] getState() { 
+
+    public synchronized byte [] getState() {
         try {
             return Util.objectToByteBuffer(cache);
         } catch(Exception e) {
@@ -173,30 +173,30 @@ public class DistributedCache implements Cache, MessageListener {
 }
 
 class DistributedCacheMessage implements Serializable {
-    
+
     public static final int PUT = 1;
     public static final int REMOVE = 2;
     public static final int CLEAR = 3;
-    
+
     private int type;
     private Serializable key = null;
     private Serializable value = null;
-    
+
     public DistributedCacheMessage(int type) {
         this.type = type;
     }
-    
+
     public DistributedCacheMessage(int type, Serializable key, Serializable value) {
         this.type = type;
         this.key = key;
         this.value = value;
     }
-    
+
     public DistributedCacheMessage(int type, Serializable key) {
         this.type = type;
         this.key = key;
     }
-    
+
     public int getType() { return type; }
     public Serializable getKey() { return key; }
     public Serializable getValue() { return value; }
