@@ -2,10 +2,15 @@ package org.futurepages.core.session;
 
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
-import org.futurepages.core.session.SessionEventListener;
-import org.futurepages.core.session.SessionListenerManager;
 
-
+/**
+ * SessionListener registra os sessionListeners dos módulos.
+ *
+ * Um sessionListener é o resposável por executar atividades na criação
+ * e destruição da sessão.
+ * 
+ * @author leandro
+ */
 public class SessionListener implements HttpSessionListener{
 
 	public void sessionCreated(HttpSessionEvent event) {
