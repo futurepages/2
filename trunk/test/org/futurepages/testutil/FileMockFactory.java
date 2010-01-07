@@ -1,10 +1,12 @@
 package org.futurepages.testutil;
 
+import static org.easymock.EasyMock.expect;
+import static org.easymock.classextension.EasyMock.createNiceMock;
+import static org.easymock.classextension.EasyMock.replay;
+
 import java.io.File;
 
 import org.futurepages.test.factory.StringFactory;
-
-import static org.easymock.classextension.EasyMock.*;
 
 public class FileMockFactory {
 
