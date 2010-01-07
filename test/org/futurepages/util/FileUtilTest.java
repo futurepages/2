@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.futurepages.test.mockiness.FileMockFactory;
-import org.futurepages.test.util.AssertUtil;
+import org.futurepages.testutil.FileMockFactory;
 import org.junit.Assert;
 import org.junit.Test;
 

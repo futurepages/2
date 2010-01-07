@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.futurepages.test.factory.ListFactory;
-import org.futurepages.test.util.AssertUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
