@@ -42,7 +42,7 @@ public class HibernateManager {
 				running = true;
 			}
 		} catch (ConfigFileNotFoundException e) {
-			log("Arquivo de Configurações do não encontrado: " + e.getMessage());
+			log("Arquivo de Configurações do hibernate não encontrado: " + e.getMessage());
 		} catch (UnsupportedEncodingException e) {
 			log("Não foi possível carregar as configurações hibernate: " + e.getMessage());
 			System.out.println(e.getMessage());

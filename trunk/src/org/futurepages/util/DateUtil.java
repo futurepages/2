@@ -350,7 +350,7 @@ public class DateUtil {
 	}
 
 	/**
-	 * @see format(Date date, DateFormatEnum mask)
+	 * @see DateUtil.format(Date date, DateFormatEnum mask)
 	 * @return format(calendar ,mask.getMask())
 	 */
 	public static String format(Calendar calendar, DateFormatEnum mask) {
@@ -382,7 +382,6 @@ public class DateUtil {
 	 * Formata a data com a máscara informada.
 	 * @param date
 	 * @param mask
-	 * @return
 	 */
 	public static String format(Date date, String mask) {
 		if (date == null) {

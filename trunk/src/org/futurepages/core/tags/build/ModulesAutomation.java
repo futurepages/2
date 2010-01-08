@@ -17,7 +17,6 @@ public abstract class ModulesAutomation {
 
 	protected File[] modules;
 	private String dirName;
-
 	private List applicationClasses = null;
 
 	public ModulesAutomation(File[] modules, String dirName) {
@@ -34,47 +33,47 @@ public abstract class ModulesAutomation {
 		return dirName;
 	}
 
-	protected <S extends Object> List<Class<S>> getApplicationClasses(Class<S> superKlass,  Class<? extends Annotation> annotation) {
-		if (applicationClasses == null){
+	protected <S extends Object> List<Class<S>> getApplicationClasses(Class<S> superKlass, Class<? extends Annotation> annotation) {
+		if (applicationClasses == null) {
 			applicationClasses = new ArrayList<Class<S>>();
-			File dirr = new File(Params.get("CLASSES_PATH")+this.getDirName());
-			
+			File dirr = new File(Params.get("CLASSES_PATH") + this.getDirName());
+
 			applicationClasses = new ArrayList<Class<S>>(ClassesUtil.getInstance().listClassesFromDirectory(
 					dirr, Params.get("CLASSES_PATH"), superKlass, annotation, true));
 		}
 		return applicationClasses;
 	}
 
-	public <S extends Object> Map<String, List<Class<S>>> getModulesDirectoryClasses(Class<S> superKlass, Class<? extends Annotation> annotation){
+	public <S extends Object> Map<String, List<Class<S>>> getModulesDirectoryClasses(Class<S> superKlass, Class<? extends Annotation> annotation) {
 
 		Map<String, List<Class<S>>> modulesClasses = new HashMap<String, List<Class<S>>>();
 		List<Class<S>> classes;
-		for (File module : this.modules) {
+		if (this.modules != null) {
+			for (File module : this.modules) {
 
-			final File dir = getSubFile(module, getDirName());
-			classes = new ArrayList<Class<S>>(ClassesUtil.getInstance().listClassesFromDirectory(
-					dir, Params.get("CLASSES_PATH"), superKlass, annotation, true));
+				final File dir = getSubFile(module, getDirName());
+				classes = new ArrayList<Class<S>>(ClassesUtil.getInstance().listClassesFromDirectory(
+						dir, Params.get("CLASSES_PATH"), superKlass, annotation, true));
 
-			sortClassList(classes);
-			modulesClasses.put(module.getName(), classes);
+				sortClassList(classes);
+				modulesClasses.put(module.getName(), classes);
+			}
 		}
 		return modulesClasses;
 	}
 
 	private <S extends Object> void sortClassList(List<Class<S>> classes) {
-		Collections.sort(classes, new Comparator<Class<S>>(){
+		Collections.sort(classes, new Comparator<Class<S>>() {
+
 			@Override
 			public int compare(Class<S> o1, Class<S> o2) {
 				return o1.getName().compareTo(o2.getName());
 			}
-		}
-		);
+		});
 	}
 
-	protected File getSubFile(File file, String name){
+	protected File getSubFile(File file, String name) {
 		return FileUtil.getInstance().getSubFile(file, name);
 	}
-
-
 }
 

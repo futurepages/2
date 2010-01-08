@@ -45,7 +45,7 @@ import org.futurepages.core.list.ListManager;
  */
 public abstract class AbstractApplicationManager  implements Manipulable{
 
-	public static String EXTENSION = "mtw";
+	public static String EXTENSION = "fpg";
 
     private static String realPath;
 

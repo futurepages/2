@@ -284,7 +284,10 @@ public class HQLField implements HQLable {
 		return HQLUtil.escQuote(hql);
 	}
 
-	/** @see #equalsTo()*/
+	/**
+	 * utilize o #equalsTo()
+	 * 
+	 */
 	@Override
 	@Deprecated
 	public boolean equals(Object obj) {

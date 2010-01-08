@@ -21,9 +21,9 @@ public class SessionListenerManager extends ModulesAutomation{
     private static SessionListenerManager instance;
 
 	public SessionListenerManager(File[] modules){
-		super(modules, LISTENERS_DIR_NAME);
-		listeners = new ArrayList<SessionEventListener>();
-		instance = this;
+			super(modules, LISTENERS_DIR_NAME);
+			listeners = new ArrayList<SessionEventListener>();
+			instance = this;
 	}
 	
 	public static SessionListenerManager getInstance() {
@@ -35,16 +35,15 @@ public class SessionListenerManager extends ModulesAutomation{
 	}
 
     public void initialize() throws InstantiationException, IllegalAccessException{
+			Map<String, List<Class<SessionEventListener>>> classes = getModulesDirectoryClasses(SessionEventListener.class, null);
 
-    	Map<String, List<Class<SessionEventListener>>> classes = getModulesDirectoryClasses(SessionEventListener.class, null);
-		
-    	for (String moduleName : classes.keySet()) {
-			for (Class<SessionEventListener> listener : classes.get(moduleName)) {
-				log(moduleName+" : "+listener.getName());
-				listeners.add(listener.newInstance());
-			
+			for (String moduleName : classes.keySet()) {
+				for (Class<SessionEventListener> listener : classes.get(moduleName)) {
+					log(moduleName+" : "+listener.getName());
+					listeners.add(listener.newInstance());
+
+				}
 			}
-		}
     }
 
     private static void log(String msg) {

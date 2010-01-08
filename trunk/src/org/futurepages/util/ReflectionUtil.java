@@ -343,7 +343,7 @@ public final class ReflectionUtil {
 	/**
 	 * Invoke the Get access fields of the given object with the given field name.
 	 * @param object
-	 * @param constName
+	 * @param fieldName
 	 * @return Object
 	 */
 	public static Object getStaticField(Object object, String fieldName) {

@@ -28,7 +28,6 @@ public class InstallersManager extends ModulesAutomation {
 	/**
 	 * Inicializa os Instaladores do banco de dados.
 	 * 
-	 * @param modules são as pastas de módulos que serão varridas para instalação.
 	 * @throws java.lang.Exception
 	 */
 	public void install() throws Exception {
@@ -37,6 +36,12 @@ public class InstallersManager extends ModulesAutomation {
 		log("END.");
 	}
 
+	/**
+	 *
+	 * @param modules são as pastas de módulos que serão varridas para instalação.
+	 * 
+	 * @throws Exception
+	 */
 	public static void initialize(File[] modules) throws Exception {
 		new InstallersManager(modules).install();
 	}
