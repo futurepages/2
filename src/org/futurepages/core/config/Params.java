@@ -109,7 +109,7 @@ public class Params {
 		paramsMap.put("MODULES_WEB_REAL_PATH", get("WEB_REAL_PATH") + "/" + Params.MODULES_PATH);
 
 		if (get("START_INDEX") == null) {
-            paramsMap.put("START_INDEX", get("START_PAGE_NAME") + ".mtw");
+            paramsMap.put("START_INDEX", get("START_PAGE_NAME") + ".fpg");
         }
 
 		if (get("RESOURCE_PATH") == null) {

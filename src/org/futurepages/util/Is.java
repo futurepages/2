@@ -126,7 +126,6 @@ public class Is {
 	/**
 	 * TODO altera para regex
 	 * @param urlStr
-	 * @return
 	 */
 	public static boolean validURL(String urlStr) {
 		if (urlStr != null) {
@@ -144,7 +143,6 @@ public class Is {
 	 * Testa se todos os caracteres de uma String "str" são iguais ao caracter "testStr"
 	 * @param str
 	 * @param testStr
-	 * @return
 	 */
 	public static boolean everyCharsLike(String str, String testStr) {
 		if (testStr.length() > 1) {

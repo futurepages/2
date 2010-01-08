@@ -7,7 +7,6 @@ public abstract class CPFUtil {
 	/**
 	 * Converte 00351063366 -> 003.510.633-66
 	 * @param cpfCnpj entrada bruta
-	 * @return
 	 */
 	public static String formata(String cpfCnpj) {
 		StringBuffer sb = new StringBuffer(cpfCnpj);
@@ -20,7 +19,6 @@ public abstract class CPFUtil {
 	/**
 	 * Remove máscara
 	 * @param cpf
-	 * @return
 	 */
 	public static String somenteNumeros(String cpf) {
 		cpf = cpf.replace(".", "").toString();

@@ -80,17 +80,17 @@ public class TagLibBuilder extends ModulesAutomation{
 		tagDeclarations.append("\n   <!-- Generated Application Tags From Modules -->\n\n");
 
 		Map<String, List<Class<Object>>> classes = getModulesDirectoryClasses(null, Tag.class);
-		List<String> keyList = new ArrayList<String>(classes.keySet());
-		Collections.sort(keyList);
-		TagBean tag;
-		ClassTagAnnotationReader reader = new ClassTagAnnotationReader();
-		for (String moduleName : keyList) {
-			tagDeclarations.append("\n   <!-- from module '"+moduleName+"' ...-->\n\n");
-			for (Class<?> tagClass : classes.get(moduleName)) {
-				tag = reader.readTag(tagClass);
-				tagDeclarations.append(TagDeclarationBuilder.build(tag));
+			List<String> keyList = new ArrayList<String>(classes.keySet());
+			Collections.sort(keyList);
+			TagBean tag;
+			ClassTagAnnotationReader reader = new ClassTagAnnotationReader();
+			for (String moduleName : keyList) {
+				tagDeclarations.append("\n   <!-- from module '"+moduleName+"' ...-->\n\n");
+				for (Class<?> tagClass : classes.get(moduleName)) {
+					tag = reader.readTag(tagClass);
+					tagDeclarations.append(TagDeclarationBuilder.build(tag));
+				}
 			}
-		}
 		return tagDeclarations.toString();
 	}
 

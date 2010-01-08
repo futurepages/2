@@ -25,8 +25,8 @@ public class ProbabilityUtil {
 	/**
 	 * Calcula quantos subconjuntos N elementos podem ser formados de um conjunto com S elementos.
 	 * 
-	 * @param numberOfelements: S
-	 * @param groupSize: N
+	 * @param numberOfelements : S
+	 * @param groupSize : N
 	 * 		
 	 * @return fat(S) / [fat(N) * fat(S - N)] 
 	 */

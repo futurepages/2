@@ -175,7 +175,7 @@ public class CalendarUtil {
 	/**
 	 * Compara dois Calendar utilizando o campo ano
 	 * @param calendar1
-	 * @param calencdar2
+	 * @param calendar2
 	 * @return 
 	 *          true (quando os dois são iguais do mesmo ano)
 	 *          false caso contrario
@@ -216,12 +216,12 @@ public class CalendarUtil {
 	}
 
 	/**
-	 * retorno um literal expressando o tempo para um
+	 * retorna um literal expressando o tempo para um
 	 * determinado intervalo de calendar que possuem o mesmo dia/mes/ano
 	 * caso contrario se não forem do mesmo dia e retornado ""
 	 * @param calIni
 	 * @param calFim
-	 * @return
+	 * @return período literal de horários
 	 */
 	public static String literalRangeOfTimes(Calendar calIni, Calendar calFim) {
 		boolean ehMesmaData = (compareCalendarDate(calIni, calFim) == 0);
@@ -266,8 +266,7 @@ public class CalendarUtil {
 	}
 
 	/**
-	 * Retorna AAhBB onde AA são as horas e BB são os minutos
-	 * @return
+	 * @return AAhBB onde AA são as horas e BB são os minutos
 	 */
 	public static String showLiteralHourMin(Calendar cal) {
 		String mask = null;

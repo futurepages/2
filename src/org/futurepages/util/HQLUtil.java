@@ -99,7 +99,6 @@ public class HQLUtil {
 	 * Escape simple cote '
 	 * Escape de HQL/SQL para evitar Injections
 	 * @param original HQL de entrada
-	 * @return
 	 */
 	public static String escQuote(String original) {
 		original = original.replace("'", "''");

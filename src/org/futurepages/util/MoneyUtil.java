@@ -56,7 +56,6 @@ public class MoneyUtil {
 	 * Retorna valor double com duas casas arredondadas para cima.
 	 * 34.550001 => 34.56
 	 * @param rawValue
-	 * @return
 	 */
 	public static double ceilValue(Double rawValue){
 		return Math.ceil((rawValue)*100)/100;
@@ -66,7 +65,6 @@ public class MoneyUtil {
 	 * Retorna valor double com duas casas arredondadas para baixo.
 	 * 34.559999 => 34.55 
 	 * @param rawValue
-	 * @return
 	 */
 	public static double floorValue(Double rawValue){
 		return Math.floor((rawValue)*100)/100;
@@ -75,7 +73,6 @@ public class MoneyUtil {
 	/**
 	 * Retorna valor double com duas casas arredondadas.
 	 * @param rawValue
-	 * @return
 	 */
 	public static double roundValue(Double rawValue){
 		return  ((double) Math.round((rawValue)*100)) / 100;
@@ -84,7 +81,6 @@ public class MoneyUtil {
     /**
 	 * Retorna valor double com duas casas arredondadas.
 	 * @param rawValue
-	 * @return
 	 */
 	public static double roundValue(String rawValue){
 		return  ((double) Math.round((valueOf(rawValue))*100)) / 100;

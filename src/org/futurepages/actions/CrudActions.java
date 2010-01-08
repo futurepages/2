@@ -53,7 +53,6 @@ public abstract class CrudActions extends AbstractAction implements RedirectAfte
     /**
      * A exibição do bean é desprotegido.
      * @param innerAction
-     * @return
      */
     public boolean bypassAuthentication(String innerAction) {
         if (innerAction == null) {

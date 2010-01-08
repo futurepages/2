@@ -90,8 +90,7 @@ public abstract class AbstractAction implements Pageable, StickyAction {
     }
 
     /**
-     * Pega o numero da página corrente em uso
-     * @return
+     * @return Pega o numero da página corrente em uso
      */
     protected int getPageNum() {
         int pageNum = 1;

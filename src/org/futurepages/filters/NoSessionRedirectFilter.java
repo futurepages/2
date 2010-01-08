@@ -23,7 +23,7 @@ public class NoSessionRedirectFilter implements Filter {
         }
         else {
             return chain.invoke();
-        }
+		}
     }
 
     public void destroy() {

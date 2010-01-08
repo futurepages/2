@@ -145,7 +145,6 @@ public class HtmlMapChars {
     /**
      * Converte as quebras de texto escrito em textarea para as quebras de html.
      * @param strIn
-     * @return
      */
     public static String textAreaValue(String strIn){
         if(strIn == null) return "&nbsp;";
