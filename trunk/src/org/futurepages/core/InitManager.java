@@ -56,7 +56,7 @@ public class InitManager extends AbstractApplicationManager{
             filter(new FileUploadFilter());
             filter(new InjectionFilter());
 
-            on(Action.NULL, new NullConsequence());
+            on(NULL, new NullConsequence());
 
             //Ação Inicial Padrão
             try {
