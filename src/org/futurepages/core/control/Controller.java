@@ -71,6 +71,7 @@ public class Controller extends HttpServlet {
      * @param conf
      *            the ServletConfig.
      */
+	@Override
     public void init(ServletConfig conf) throws ServletException {
 
         super.init(conf);
@@ -87,18 +88,14 @@ public class Controller extends HttpServlet {
         String reload = config.getInitParameter("reloadAppManager");
 
         if (reload != null && reload.equalsIgnoreCase("true")) {
-
             reloadAppManager = true;
-
         }
 
         // verifies if the "auto view" is on (default is on!)
         String auto = config.getInitParameter("autoView");
 
         if (auto != null && auto.equalsIgnoreCase("true")) {
-
             autoView = true;
-
         }
 
         // verifies if the "stats mode" is on
@@ -106,9 +103,7 @@ public class Controller extends HttpServlet {
         String stats = config.getInitParameter("stats");
 
         if (stats != null && stats.equalsIgnoreCase("true")) {
-
             statsMode = true;
-
         }
 
         // gets the AplicationManager class
@@ -116,13 +111,10 @@ public class Controller extends HttpServlet {
 
         if (appMgrClassname == null || appMgrClassname.trim().equals("")) {
 
-            appMgrClassname = "ApplicationManager"; // default without
-        // package...
+            appMgrClassname = "ApplicationManager"; // default without package...
 
         }
-
         initApplicationManager();
-
     }
 
     public static void setConsequenceProvider(ConsequenceProvider provider) {
@@ -384,7 +376,7 @@ public class Controller extends HttpServlet {
          * you forget to turn this off in production your site will suck!
          */
         if (reloadAppManager) {
-
+			System.out.println("CUIDADO: reloadAppManager do Controller ligado.");
             synchronized (this) {
 
                 if (isAppMgrModified()) {
@@ -414,7 +406,6 @@ public class Controller extends HttpServlet {
             return;
 
         }
-
 
         String innerAction = getInnerActionName(req);
 
@@ -621,6 +612,9 @@ public class Controller extends HttpServlet {
             c = ac.getConsequence(result);
 
         }
+
+//      imprime pra deubug: action e consequencia
+//		System.out.println(ac.getName()+ ((ac.getInnerAction()!=null)?"."+ac.getInnerAction():"")+"-> "+(c!=null?c.toString():" conseq: NULL"));
 
         // If not found, try to get a global consequence
 

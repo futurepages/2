@@ -28,8 +28,7 @@ public class Block extends PrintTag {
 		}
 
 		String oldView = (String) req.getAttribute("_view");
-		System.out.println("oldView: "+oldView);
-		System.out.println("view: "+view);
+
 		String _view = "/" + view;
 		req.setAttribute("_view", _view);
 		try {
