@@ -57,7 +57,8 @@ public class CalendarUtil_literalRangeOfTimesTest {
 			{"01/01/2009 00:00:00", "01/01/2009 13:30:00", "até 13h30",			 "SEM HORÁRIO INICIO PREENCHIDO"},
 			{"01/01/2009 12:00:00", "01/01/2009 23:59:00", "a partir de 12h",	 "HORARIO FINAL VAZIO SO TEM HORARIO INICIAL"},
 			{"01/01/2009 00:30:00", "01/01/2009 23:49:00", "de 0h30 às 23h49",	 "HORA MAIOR QUE 1 E MENOR QUE 23"},
-			{"01/01/2009 00:30:00", "01/01/2009 01:30:00", "de 0h30 à 1h30",	 "HORA FINAL MENOR IGUAL A 1"}
+			{"01/01/2009 00:30:00", "01/01/2009 01:30:00", "de 0h30 à 1h30",	 "HORA FINAL MENOR IGUAL A 1"},
+                        {"01/01/2009 00:00:00", "01/01/2009 00:00:00", "",			 "SEM HORÁRIO DE INICIO E FIM PREENCHIDO"}
 
 		});
 		return col;
