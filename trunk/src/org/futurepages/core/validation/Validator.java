@@ -2,7 +2,7 @@ package org.futurepages.core.validation;
 
 import java.util.HashMap;
 import org.futurepages.exceptions.ErrorException;
-import org.futurepages.exceptions.ValidationException;
+//import org.futurepages.exceptions.ValidationException;
 
 public abstract class Validator {
 
@@ -38,24 +38,24 @@ public abstract class Validator {
     }
 
     public void error(String msg){
-        error();
+      //  error();
         if(breakOnFirst){
             throw new ErrorException(msg);
         }
     }
 
     public void error(ErrorException ex){
-        error();
+      //  error();
         if(breakOnFirst){
             throw ex;
         }
     }
 
-    private void error(){
-            if(validationMap.size()>0){
-                throw new ValidationException("É necessário definir uma chave para o mapa de validações");
-            }
+    /*private void error(){
+    if(validationMap.size()>0){
+    throw new ValidationException("É necessário definir uma chave para o mapa de validações");
     }
+    }*/
 
     public void setBreakOnFirst(boolean breakOnFirst) {
         this.breakOnFirst = breakOnFirst;
