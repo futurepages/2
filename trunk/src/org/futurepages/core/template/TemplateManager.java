@@ -25,7 +25,7 @@ public class TemplateManager extends AbstractTemplateManager {
 		try {
 			initialize();
 		} catch (Exception ex) {
-			System.out.println("[::w7i::] - Erro ao inicializar TemplateManager. ("+ex.getMessage()+")");
+			System.out.println("[::templateManager::] - Erro ao inicializar TemplateManager. ("+ex.getMessage()+")");
 		}
 	}
 

@@ -24,7 +24,7 @@ public class Block extends PrintTag {
 			TemplateServlet.executeListener(block, req, res, application);
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			throw new JspException("Não foi possível executar o TemplateServlet listener");
+			throw new JspException(ex);
 		}
 
 		String oldView = (String) req.getAttribute("_view");
@@ -35,7 +35,7 @@ public class Block extends PrintTag {
 			pageContext.include(_view, false); //o mesmo que <jsp:include page="${_view}" flush="false"/>
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			throw new JspException("Não foi possível incluir o template.");
+			throw new JspException(ex);
 		}
 		req.setAttribute("_view", oldView);
 		req.setAttribute(TemplateServlet.PAGE_ATTR, page);

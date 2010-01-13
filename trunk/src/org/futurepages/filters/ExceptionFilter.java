@@ -45,6 +45,7 @@ public class ExceptionFilter implements Filter {
                 }
                 return EXCEPTION;
             } else {
+                 ErrorException errorException = (ErrorException) throwable.getCause();
                 if (Dao.isTransactionActive()) {
                     Dao.rollBackTransaction();
                 }
@@ -52,7 +53,7 @@ public class ExceptionFilter implements Filter {
                 if (throwable.getCause().getClass().isAnnotationPresent(NotListDependencies.class)) {
                     listDependencies = false;
                 }
-                return action.error(listDependencies, throwable.getCause().getMessage());
+                return action.error(listDependencies, errorException);
             }
         }
     }

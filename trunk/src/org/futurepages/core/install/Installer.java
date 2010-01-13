@@ -12,7 +12,7 @@ public abstract class Installer implements InstallerImpl {
 		try {
 			this.execute();
 		} catch (Exception ex) {
-			System.out.println("[::w7i::] Error installing... "+this.getClass().getName());
+			System.out.println("[::install::] Error installing... "+this.getClass().getName());
 			ex.printStackTrace();
 		}
     }

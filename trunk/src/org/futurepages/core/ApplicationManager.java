@@ -22,8 +22,7 @@ public class ApplicationManager extends AbstractApplicationManager {
 	/**
 	 * Default constructor, capable to call the registerManagers() method.
 	 *
-	 * @throws Exception
-	 *             about the ApplicationManager instanciation
+	 * @throws Exception  about the ApplicationManager instanciation
 	 */
 	public ApplicationManager() {
 		super();
@@ -37,7 +36,7 @@ public class ApplicationManager extends AbstractApplicationManager {
      */
     public void registerManagers() {
         try {
-            System.out.println("[::w7i::] Iniciando Registro de Managers");
+            log("Iniciando Registro de Managers");
             //Lista os módulos na árvore de arquivos
             File[] modules = (new File(Params.get("MODULES_CLASSES_REAL_PATH"))).listFiles();
 
@@ -53,9 +52,9 @@ public class ApplicationManager extends AbstractApplicationManager {
                     Modules.registerAllModules(this, modules);
                 }
             }
-            System.out.println("[::w7i::] Managers Iniciados");
+            log("Managers Iniciados");
         } catch (Exception ex) {
-            System.out.println("[::w7i::] Erro ao registrar os módulos do sistema: "+ex.getMessage());
+            log("Erro ao registrar os módulos do sistema: "+ex.getMessage());
             ex.printStackTrace();
         }
     }
@@ -127,4 +126,8 @@ public class ApplicationManager extends AbstractApplicationManager {
 			manager.loadLists();
 		}
 	}
+
+    private void log(String msg){
+        log("[::appManager::] "+msg);
+    }
 }
