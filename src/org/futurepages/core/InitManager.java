@@ -22,7 +22,6 @@ import org.futurepages.formatters.NoSpecialsFormatter;
 import org.futurepages.formatters.SEOURLFormatter;
 import org.futurepages.formatters.TextAreaFormatter;
 import org.futurepages.formatters.UpperCaseFormatter;
-import org.futurepages.core.action.Action;
 import org.futurepages.core.control.AbstractApplicationManager;
 import org.futurepages.consequences.NullConsequence;
 import org.futurepages.filters.FileUploadFilter;
@@ -63,7 +62,7 @@ public class InitManager extends AbstractApplicationManager{
                 Class initActionClass = Class.forName(Params.get("INIT_ACTION"));
                 action(Params.get("START_PAGE_NAME"), initActionClass).on(SUCCESS, fwd(Params.get("START_CONSEQUENCE")));
             } catch (ClassNotFoundException ex) {
-                System.out.println("[::w7i::] A classe de Ação Inicial da Aplicação não foi encontrada.");
+                System.out.println("[::initManager::] A classe de Ação Inicial da Aplicação não foi encontrada.");
                 ex.printStackTrace();
             }
     }

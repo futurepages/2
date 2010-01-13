@@ -20,6 +20,8 @@ import org.futurepages.core.i18n.LocaleManager;
 import org.futurepages.core.pagination.Pageable;
 import org.futurepages.core.pagination.PaginationSlice;
 import org.futurepages.core.persistence.Dao;
+import org.futurepages.core.validation.Validator;
+import org.futurepages.exceptions.ErrorException;
 import org.futurepages.filters.HeadTitleFilter;
 import org.futurepages.util.Is;
 
@@ -59,6 +61,25 @@ public abstract class AbstractAction implements Pageable, StickyAction {
     public String execute() throws Exception {
         doListDependencies();
         return SUCCESS;
+    }
+
+    /**
+     * Valida perante três modos: breakOnFirst = null | false | true.
+     * 
+     * @param breakOnFirst true se lança ErrorException na primeira falha, false se retorna no fim, e null e não retorna ErrorException
+     * @return retorna o validador daquele tipo passando o tipo de validação
+     */
+    public <T extends Validator> T validate(Class<T> t, Boolean breakOnFirst){
+        return Validator.validate(t, breakOnFirst);
+    }
+
+    /**
+     * Valida quebrando retornando ErrorException na primeira falha
+     * @param t Tipo do Validator
+     * @return o validador
+     */
+    public <T extends Validator> T validate(Class<T> t){
+        return Validator.validate(t, true);
     }
 
     /**
@@ -206,8 +227,13 @@ public abstract class AbstractAction implements Pageable, StickyAction {
         return this.putMessage(SUCCESS, msg);
     }
 
-    public String error(boolean listDependencies, String errorMsg) {
-        this.putMessage(ERROR, errorMsg);
+    public void showAsError(Exception exception) {
+            throw new ErrorException(exception);
+    }
+
+    public String error(boolean listDependencies, ErrorException errorException) {
+        this.putMessage(ERROR, errorException.getMessage());
+        output.setValue("errorList", errorException.getValidationMap());
         if (listDependencies) {
             this.doListDependencies();
         }

@@ -23,7 +23,7 @@ public class TagLibBuilder extends ModulesAutomation{
 	private final String APP_TAGLIB_NAME = "taglib.tld";
 	private final String TAGS_REPLACE_CONSTANT = "<!-- ${TAGS_REPLACE} -->";
 	private final String TAGSFILE_REPLACE_CONSTANT = "<!-- ${TAGSFILE_REPLACE} -->";
-	private final String TAGLIB_BASE_URI = "<uri>http://futurepages.w7i.com.br/</uri>";
+	private final String TAGLIB_BASE_URI = "<uri>http://futurepages.org/taglib.tld</uri>";
 	private final String TAGLIB_APP_URI = "<uri>futurepagesApp</uri>";
 	private final String TAGLIB_BASE_DYSPLAYNAME = "<display-name>futurepages</display-name>";
 	private final String TAGLIB_APP_DYSPLAYNAME = "<display-name>futurepages App</display-name>";
@@ -52,7 +52,7 @@ public class TagLibBuilder extends ModulesAutomation{
 
 		URL baseTaglibURL = getClass().getResource(BASE_TAGLIB_URL);
 		FileUtil.putKeyValue(contentMap, baseTaglibURL, applicationTaglibPath);
-		System.out.println("[::w7i::] Arquivo de taglib criado: " + applicationTaglibPath);
+		System.out.println("[::taglibBuilder::] Arquivo de taglib criado: " + applicationTaglibPath);
 	}
 
 	private String buildTagLibsContentFromApp() {

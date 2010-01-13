@@ -33,11 +33,17 @@ public class ApplicationListener implements ServletContextListener {
 
             log("Inicializando " + servletContext.getServletContextName() + "...");
             String realPath = servletContext.getRealPath("/");
-            Params.initialize(realPath, contextName);
-            File[] modules = (new File(Params.get("MODULES_CLASSES_REAL_PATH"))).listFiles();
 
+            log("Inicializando Parâmetros...");
+            Params.initialize(realPath, contextName);
+            log("Parâmetros OK");
+
+            log("Carregando módulos...");
+            File[] modules = (new File(Params.get("MODULES_CLASSES_REAL_PATH"))).listFiles();
+            log("Módulos OK");
+            
             if(HibernateManager.isRunning()){
-				log("HIBERNATE Running...");
+				log("Hibernate OK");
             	// Atualiza/gera esquema do banco como solicitado no arquivo de configuração.
                 if (Params.get("SCHEMA_GENERATION_TYPE").equals("update")) {
 					log("SCHEMA UPDATE Begin");
@@ -109,6 +115,6 @@ public class ApplicationListener implements ServletContextListener {
      * @param logText
      */
     private void log(String logText) {
-        System.out.println("[::w7i-Listener::] " + logText);
+        System.out.println("[::appListener::] " + logText);
     }
 }

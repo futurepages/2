@@ -47,6 +47,6 @@ public class SessionListenerManager extends ModulesAutomation{
     }
 
     private static void log(String msg) {
-        System.out.println("[:session-listener:] " + msg);
+        System.out.println("[:sessionListener:] " + msg);
     }
 }

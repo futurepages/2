@@ -1,15 +1,14 @@
 package org.futurepages.core.validation;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import org.futurepages.exceptions.ErrorException;
-//import org.futurepages.exceptions.ValidationException;
+import org.futurepages.exceptions.ValidationException;
 
 public abstract class Validator {
 
-
-    private HashMap<String,ErrorException> validationMap;
-    private boolean breakOnFirst;
-
+    private LinkedHashMap<String,ErrorException> validationMap;
+    protected Boolean breakOnFirst;
 
     public static <T extends Validator> T validate(Class<T> t, boolean breakOnFirst) {
         T validator;
@@ -24,7 +23,7 @@ public abstract class Validator {
     }
 
     public Validator() {
-        validationMap = new HashMap<String, ErrorException>();
+        validationMap = new LinkedHashMap<String, ErrorException>();
     }
 
     public void error(String key, String msg){
@@ -38,30 +37,33 @@ public abstract class Validator {
     }
 
     public void error(String msg){
-      //  error();
+        error();
         if(breakOnFirst){
             throw new ErrorException(msg);
         }
     }
 
     public void error(ErrorException ex){
-      //  error();
+        error();
         if(breakOnFirst){
             throw ex;
         }
     }
 
-    /*private void error(){
-    if(validationMap.size()>0){
-    throw new ValidationException("É necessário definir uma chave para o mapa de validações");
+    private void error(){
+            if(validationMap.size()>0 && (breakOnFirst!=null && breakOnFirst)){
+                throw new ValidationException("É necessário definir uma chave para o mapa de validações");
+            }
     }
-    }*/
 
     public void setBreakOnFirst(boolean breakOnFirst) {
         this.breakOnFirst = breakOnFirst;
     }
 
     public HashMap<String, ErrorException> getValidationMap() {
+        if(breakOnFirst != null){
+            throw new ErrorException(validationMap);
+        }
         return validationMap;
     }
 }
