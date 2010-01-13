@@ -228,11 +228,6 @@ public class CalendarUtil {
 
 		if (ehMesmaData) {//se são da mesma data verifica o intervalo de tempo
 
-
-			if (hourOfDay(calIni) == 0 && minute(calIni) == 0) {
-				return "";
-			}
-
 			boolean isTimeInitEqualsTimeFinal = (hourOfDay(calIni) == hourOfDay(calFim) && (minute(calIni) == minute(calFim)));
 
 			//se possuem o mesmo horario de inicio e fim faça
@@ -240,8 +235,8 @@ public class CalendarUtil {
 				return "às " + showLiteralHourMin(calIni);
 			}
 
-			if ((hourOfDay(calIni) < 1) && minute(calIni) > 0 && (hourOfDay(calFim) >= 1) && minute(calFim) > 0) {
-				return "de " + showLiteralHourMin(calIni) + " a " + showLiteralHourMin(calFim);
+			if ((hourOfDay(calIni) < 1) && minute(calIni) > 0 && (hourOfDay(calFim) == 1) && minute(calFim) > 0) {
+				return "de " + showLiteralHourMin(calIni) + " à " + showLiteralHourMin(calFim);
 			}
 
 			//se possuem somente o horario de inicio
