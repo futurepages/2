@@ -128,6 +128,6 @@ public class ApplicationManager extends AbstractApplicationManager {
 	}
 
     private void log(String msg){
-        log("[::appManager::] "+msg);
+        System.out.println("[::appManager::] "+msg);
     }
 }

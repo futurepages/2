@@ -6,6 +6,7 @@ import org.futurepages.core.action.Action;
 import org.futurepages.core.filter.Filter;
 import org.futurepages.core.control.InvocationChain;
 import org.futurepages.core.admin.AuthenticationFree;
+import org.futurepages.core.admin.DefaultUser;
 
 /**
  * Usado individualmente por action, para proteger uma action
@@ -19,18 +20,24 @@ public class PermissionFilter implements Filter {
 
     private String[] roles;
     private Class userType;
+    private Class actionType;
     /*TODO VERIFICAR ISSO*/
 
     public PermissionFilter() {
     }
 
-    public PermissionFilter(Class userType, String... roles) {
+    public <T extends DefaultUser> PermissionFilter(Class<T> userType, String... roles) {
         this.roles = roles;
         this.userType = userType;
     }
 
-    public PermissionFilter(Class userType) {
+    public <T extends DefaultUser> PermissionFilter(Class<T> userType) {
         this.userType = userType;
+    }
+
+    public <T extends DefaultUser> PermissionFilter(Class<T> userType, Class actionType) {
+        this.userType = userType;
+        this.actionType = actionType;
     }
 
     public PermissionFilter(String... roles) {
@@ -43,14 +50,19 @@ public class PermissionFilter implements Filter {
 
         if (action.loggedUser() != null) {
 
-            if(AuthenticationFree.class.isAssignableFrom(action.getClass())){
-                if(((AuthenticationFree)action).bypassAuthentication(chain.getInnerAction())){
+            if (AuthenticationFree.class.isAssignableFrom(action.getClass())) {
+                if (((AuthenticationFree) action).bypassAuthentication(chain.getInnerAction())) {
                     return chain.invoke();
                 }
             }
 
-            if (userType != null) {
-                if (!userType.isAssignableFrom(action.loggedUser().getClass()) ) {
+            if (actionType == null && userType != null) {
+                if (!userType.isAssignableFrom(action.loggedUser().getClass())) {
+                    return denied(action);
+                }
+            } else if (actionType != null) {
+                if (actionType.isAssignableFrom(action.getClass())
+                        && !userType.isAssignableFrom(action.loggedUser().getClass())) {
                     return denied(action);
                 }
             }
