@@ -31,86 +31,54 @@ public class AuthenticationFilter implements Filter {
     }
 
     public String filter(InvocationChain chain) throws Exception {
-
         Action action = chain.getAction();
-
         String innerAction = chain.getInnerAction();
-
         Context session = action.getSession();
-
         boolean shouldBypass = false;
-
-
         if (action instanceof AuthenticationFree) {
-
             if(!(action instanceof LoginAction)){
                 session.setAttribute(AuthenticationFilter.URL_KEY, null);
             }
-
             AuthenticationFree af = (AuthenticationFree) action;
-
             shouldBypass = af.bypassAuthentication(innerAction);
-
         }
-
         if (!shouldBypass) {
-
             Filter f = chain.getFilter(AuthenticationFreeMarkerFilter.class);
-
             if (f != null) {
-
                 AuthenticationFreeMarkerFilter aff = (AuthenticationFreeMarkerFilter) f;
-
                 shouldBypass = aff.bypassAuthentication(innerAction);
-
             }
         }
-
         if (!shouldBypass) {
-
             if (!LoginAction.isLogged(session)) {
-
                 boolean shouldRedirect = false;
-
                 if ((action instanceof RedirectAfterLogin) && !(action instanceof DynAction)) {
-
                     RedirectAfterLogin ral = (RedirectAfterLogin) action;
-
                     shouldRedirect = ral.shouldRedirect(innerAction);
                 }
-
                 //maker ??
                 if (!shouldRedirect) {
-
                     Filter f = chain.getFilter(ShouldRedirectFilter.class);
-
                     if (f != null) {
-
                         ShouldRedirectFilter ramf = (ShouldRedirectFilter) f;
 
                         shouldRedirect = ramf.shouldRedirect(innerAction);
                     }
                 }
 
-
                 if (shouldRedirect) {
-
                     HttpServletRequest req = ((SessionContext) session).getRequest();
                     HttpSession ses = ((SessionContext) session).getSession();
                     setCallbackUrl(ses, req);
-
                 }
 
                 if (action instanceof AjaxAction) {
-
                     return AJAX_DENIED;
                 }
 
                 if (action instanceof DynAction) {
-
                     return DYN_LOGIN;
                 }
-
                 return LOGIN;
             }
         }
@@ -134,8 +102,6 @@ public class AuthenticationFilter implements Filter {
         }
         session.setAttribute(URL_KEY, url.toString());
     }
-
     public void destroy() {
     }
 }
-		
