@@ -38,4 +38,9 @@ public class ErrorException extends RuntimeException {
         }
         return sb.toString();
     }
+
+    @Override
+    public String toString() {
+        return super.getMessage();
+    }
 }
