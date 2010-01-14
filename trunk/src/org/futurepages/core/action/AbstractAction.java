@@ -66,7 +66,7 @@ public abstract class AbstractAction implements Pageable, StickyAction {
     /**
      * Valida perante três modos: breakOnFirst = null | false | true.
      * 
-     * @param breakOnFirst true se lança ErrorException na primeira falha, false se retorna no fim, e null e não retorna ErrorException
+     * @param breakOnFirst true se lança ErrorException na primeira falha, false se retorna no fim, e null se não retorna ErrorException
      * @return retorna o validador daquele tipo passando o tipo de validação
      */
     public <T extends Validator> T validate(Class<T> t, Boolean breakOnFirst){
