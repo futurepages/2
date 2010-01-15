@@ -36,6 +36,10 @@ public enum MonthEnum {
 		return MonthEnum.values()[cal.get(Calendar.MONTH)].nome;
 	}
 
+        public static String getMonthSigla(Calendar cal) {
+		return MonthEnum.values()[cal.get(Calendar.MONTH)].sigla;
+	}
+
 	public int getId() {
 		return id;
 	}
