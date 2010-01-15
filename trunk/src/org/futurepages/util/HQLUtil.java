@@ -91,7 +91,6 @@ public class HQLUtil {
 	public static String esc(String original) {
 		original = escQuote(original);
 		original = original.replace("%","\\%");
-		original = original.replace("@","\\@");
 		original = original.replace("_","\\_");
 		return original;
 	}
