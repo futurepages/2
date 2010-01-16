@@ -73,7 +73,7 @@ public class HQLField implements HQLable {
         if (Is.empty(value)) {
             return "";
         }
-        return fieldName + HQLUtil.matches(fieldName, esc(value));
+        return HQLUtil.matches(fieldName, esc(value));
     }
 
     public String is(Boolean bool) {
