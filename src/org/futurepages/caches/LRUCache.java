@@ -1,4 +1,4 @@
-package org.futurepages.cache;
+package org.futurepages.caches;
 
 import org.futurepages.core.cache.AbstractCache;
 import java.util.LinkedHashMap;

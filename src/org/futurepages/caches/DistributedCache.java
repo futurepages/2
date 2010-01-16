@@ -1,4 +1,4 @@
-package org.futurepages.cache;
+package org.futurepages.caches;
 
 import org.futurepages.core.cache.Cache;
 import java.io.Serializable;
