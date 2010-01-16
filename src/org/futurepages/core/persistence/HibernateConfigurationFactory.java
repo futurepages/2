@@ -30,6 +30,7 @@ import org.jdom.JDOMException;
  * @author Danilo Medeiros
  */
 public class HibernateConfigurationFactory extends Mapper{
+
 	public static HibernateConfigurationFactory uniqueInstance;
 	public static File rootDir;
 
@@ -116,7 +117,7 @@ public class HibernateConfigurationFactory extends Mapper{
 	}
 
 	private void insertPropertiesConfiguration(AnnotationConfiguration configuration, File path) throws ConfigFileNotFoundException{
-		String file = path.getAbsolutePath()+"/"+Params.CONFIGURATION_DIR_NAME+"/"+BASE_HIBERNATE_PROPERTIES_FILE;
+		String file = path.getAbsolutePath()+"/"+Params.CONFIGURATION_DIR_NAME+"/"+Params.BASE_HIBERNATE_PROPERTIES_FILE;
 		Properties properties = new Properties();
 		InputStream inputStream;
 		boolean naoCarregado = false;
@@ -138,7 +139,7 @@ public class HibernateConfigurationFactory extends Mapper{
 	private void insertSessionFactoryXMLProperties(Configuration config,File module) throws ConfigFileNotFoundException{
 
 		Element rootElement = null;
-		String file = module.getAbsolutePath()+"/"+Params.CONFIGURATION_DIR_NAME+"/"+BASE_HIBERANTE_XML_FILE;
+		String file = module.getAbsolutePath()+"/"+Params.CONFIGURATION_DIR_NAME+"/"+Params.BASE_HIBERANTE_XML_FILE;
 		try {
 			rootElement =  XmlUtil.getRootElement(file);
 		} catch (IOException e) {

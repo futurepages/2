@@ -4,9 +4,6 @@ import java.io.File;
 
 public abstract class Mapper {
     
-	protected static final String BASE_HIBERANTE_XML_FILE = "hibernate.cfg.xml";
-	protected static final String BASE_HIBERNATE_PROPERTIES_FILE = "hibernate.properties";
-	
 	/**
      * Verifica a existência de uma pasta chamada "database" dentro da pasta referente ao
      * módulo passado como entrada. Retorna verdadeiro caso exista. 
