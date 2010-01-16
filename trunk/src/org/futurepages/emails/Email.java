@@ -1,5 +1,6 @@
-package org.futurepages.mail;
+package org.futurepages.emails;
 
+import org.futurepages.core.mail.DefaultAuthenticator;
 import org.futurepages.exceptions.EmailException;
 import java.security.AccessControlException;
 import java.security.Security;

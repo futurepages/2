@@ -1,4 +1,4 @@
-package org.futurepages.mail;
+package org.futurepages.emails;
 
 import org.futurepages.exceptions.EmailException;
 import org.futurepages.util.StringUtils;
