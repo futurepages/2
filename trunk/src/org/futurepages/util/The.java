@@ -215,7 +215,12 @@ public class The {
         StringTokenizer st = new StringTokenizer(fileName, ".");
         return st.nextToken();
     }
-
+    
+    /**
+     * Retornar wIn sem caracteres especiais.
+     * @param wIn
+     */
+    
     public static String wordIn(String wIn){
         String[] specials = new String[]{":",";",",",".","!","?","(",")","\\","/",
                                          "\"","'","%","#","{","}","[","]","º","ª",
@@ -252,7 +257,7 @@ public class The {
 	private static String eliminaCaracteres(String[] specials, String wIn) {
 		for (String special : specials) {
 			if (wIn.contains(special)) {
-				wIn = wIn.replace(special, " ");
+				wIn = wIn.replace(special, " ").trim();
 			}
 		}
 		return wIn;
