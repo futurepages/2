@@ -1,7 +1,8 @@
-package org.futurepages.core.config;
+package org.futurepages.core.mail;
 
+import org.futurepages.core.config.Params;
 import org.futurepages.util.ReflectionUtil;
-import org.futurepages.mail.Email;
+import org.futurepages.emails.Email;
 
 /**
  * Configuração dos valores padrão dos parâmetros de Configuração do Email.

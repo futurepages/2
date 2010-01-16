@@ -4,40 +4,34 @@ import java.util.Calendar;
 
 public enum MonthEnum {
 
-	JANEIRO(1, "janeiro", "jan"),
-	FEVEREIRO(2, "fevereiro", "fev"),
-	MARCO(3, "março", "mar"),
-	ABRIL(4, "abril", "abr"),
-	MAIO(5, "maio", "mai"),
-	JUNHO(6, "junho", "jun"),
-	JULHO(7, "julho", "jul"),
-	AGOSTO(8, "agosto", "ago"),
-	SETEMBRO(9, "setembro", "set"),
-	OUTUBRO(10, "outubro", "out"),
-	NOVEMBRO(11, "novembro", "nov"),
-	DEZEMBRO(12, "dezembro", "dez");
+	JANEIRO  (1,  "janeiro"  ),
+	FEVEREIRO(2,  "fevereiro"),
+	MARCO    (3,  "março"    ),
+	ABRIL    (4,  "abril"    ),
+	MAIO     (5,  "maio"     ),
+	JUNHO    (6,  "junho"    ),
+	JULHO    (7,  "julho"    ),
+	AGOSTO   (8,  "agosto"   ),
+	SETEMBRO (9,  "setembro" ),
+	OUTUBRO  (10, "outubro"  ),
+	NOVEMBRO (11, "novembro" ),
+	DEZEMBRO (12, "dezembro" );
 
 	private int id;
-	private String nome;
-	private String sigla;
+	private String name;
 
-	private MonthEnum(int id, String nome, String sigla) {
+	private MonthEnum(int id, String name) {
 
 		this.id = id;
-		this.nome = nome;
-		this.sigla = sigla;
+		this.name = name;
 	}
 
 	public static String get(int i) {
-		return MonthEnum.values()[i - 1].nome;
+		return MonthEnum.values()[i - 1].name;
 	}
 
 	public static String get(Calendar cal) {
-		return MonthEnum.values()[cal.get(Calendar.MONTH)].nome;
-	}
-
-        public static String getMonthSigla(Calendar cal) {
-		return MonthEnum.values()[cal.get(Calendar.MONTH)].sigla;
+		return MonthEnum.values()[cal.get(Calendar.MONTH)].name;
 	}
 
 	public int getId() {
@@ -48,23 +42,15 @@ public enum MonthEnum {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getName() {
+		return name;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public String getAbbr() {
+		return name.substring(0, 3);
 	}
 
-	public String getSigla() {
-		return sigla;
-	}
-
-	public void setSigla(String sigla) {
-		this.sigla = sigla;
-	}
-
-	public static int quantidadeDeDias(int ano, int mes) {
+	public static int daysCount(int ano, int mes) {
 		if (mes != 2) {
 			int[] mesesQuant = new int[]{0, 31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 			return mesesQuant[mes];
@@ -75,6 +61,6 @@ public enum MonthEnum {
 
 	@Override
 	public String toString() {
-		return this.nome;
+		return this.name;
 	}
 }

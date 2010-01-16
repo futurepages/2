@@ -6,7 +6,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.futurepages.core.config.MailConfig;
+import org.futurepages.core.mail.MailConfig;
 import org.futurepages.core.config.Params;
 import org.futurepages.core.install.InstallersManager;
 import org.futurepages.core.persistence.HibernateManager;

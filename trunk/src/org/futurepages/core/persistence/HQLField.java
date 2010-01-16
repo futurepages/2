@@ -24,7 +24,6 @@ public class HQLField implements HQLable {
 
     public String between(String dateBegin, String dateEnd) {
         return "((" + fieldName + GREATER_EQUALS + "'" + esc(dateBegin) + "') " + AND + " (" + fieldName + LOWER_EQUALS + "'" + esc(dateEnd) + "'))";
-//		return HQLProvider.ands( greaterEqualsThen(dateBegin) ,lowerEqualsThen(dateEnd) );
     }
 
     public String inDate(Date date) {
