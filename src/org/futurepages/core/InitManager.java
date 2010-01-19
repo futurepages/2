@@ -1,5 +1,8 @@
 package org.futurepages.core;
 
+import org.futurepages.formatters.LiteralAnniversaryFormatter;
+import org.futurepages.formatters.AnniversaryAbbrFormatter;
+import org.futurepages.formatters.AnniversaryFormatter;
 import java.util.Locale;
 
 import org.futurepages.core.config.Params;
@@ -75,20 +78,23 @@ public class InitManager extends AbstractApplicationManager{
     
     @Override
     public void loadFormatters() {
-        FormatterManager.addFormatter("cpfCnpj"		 	 , new CPFCNPJFormatter());
-        FormatterManager.addFormatter("date"         	 , new DateFormatter());   
-        FormatterManager.addFormatter("dateTime"     	 , new DateTimeFormatter());
-        FormatterManager.addFormatter("elapsedTime"   	 , new ElapsedTimeFormatter());
-        FormatterManager.addFormatter("html"        	 , new HTMLFormatter());
-        FormatterManager.addFormatter("javascript"       , new JavascriptFormatter());
-        FormatterManager.addFormatter("literalDate" 	 , new LiteralDateFormatter());      
-        FormatterManager.addFormatter("literalDateTime"  , new LiteralDateTimeFormatter());
-        FormatterManager.addFormatter("literalDayOfWeek" , new LiteralDayOfWeekFormatter());      
-        FormatterManager.addFormatter("money"        	 , new MoneyFormatter());
-        FormatterManager.addFormatter("float"        	 , new FloatFormatter());
-        FormatterManager.addFormatter("seoURL"	     	 , new SEOURLFormatter());
-        FormatterManager.addFormatter("noSpecials"  	 , new NoSpecialsFormatter());      
-        FormatterManager.addFormatter("textarea"		 , new TextAreaFormatter());
-        FormatterManager.addFormatter("uppercase"		 , new UpperCaseFormatter());
+        FormatterManager.addFormatter("cpfCnpj"		 	   , new CPFCNPJFormatter());
+        FormatterManager.addFormatter("date"         	   , new DateFormatter());
+        FormatterManager.addFormatter("dateTime"     	   , new DateTimeFormatter());
+        FormatterManager.addFormatter("elapsedTime"   	   , new ElapsedTimeFormatter());
+        FormatterManager.addFormatter("html"        	   , new HTMLFormatter());
+        FormatterManager.addFormatter("javascript"         , new JavascriptFormatter());
+        FormatterManager.addFormatter("literalDate" 	   , new LiteralDateFormatter());
+        FormatterManager.addFormatter("literalDateTime"    , new LiteralDateTimeFormatter());
+        FormatterManager.addFormatter("literalDayOfWeek"   , new LiteralDayOfWeekFormatter());
+        FormatterManager.addFormatter("anniversary"        , new AnniversaryFormatter());
+        FormatterManager.addFormatter("anniversaryAbbr"    , new AnniversaryAbbrFormatter());
+        FormatterManager.addFormatter("literalAnniversary" , new LiteralAnniversaryFormatter());
+        FormatterManager.addFormatter("money"              , new MoneyFormatter());
+        FormatterManager.addFormatter("float"        	   , new FloatFormatter());
+        FormatterManager.addFormatter("seoURL"	     	   , new SEOURLFormatter());
+        FormatterManager.addFormatter("noSpecials"  	   , new NoSpecialsFormatter());
+        FormatterManager.addFormatter("textarea"		   , new TextAreaFormatter());
+        FormatterManager.addFormatter("uppercase"		   , new UpperCaseFormatter());
     }
 }
