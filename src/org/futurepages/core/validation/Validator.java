@@ -79,7 +79,7 @@ public abstract class Validator {
                     validationMap.putAll(v.validationMap());
                 }
             }
-            if(breakOnFirst != null){
+            if((breakOnFirst != null) && (validationMap.size() > 0 )){
                 throw new ErrorException(validationMap);
             }
         }
