@@ -614,7 +614,7 @@ public class Controller extends HttpServlet {
         }
 
 //      imprime pra deubug: action e consequencia
-//		System.out.println(ac.getName()+ ((ac.getInnerAction()!=null)?"."+ac.getInnerAction():"")+"-> "+(c!=null?c.toString():" conseq: NULL"));
+//		System.out.println(ac.getName()+ ((ac.getInnerAction()!=null)?"."+ac.getInnerAction():"")+"["+result+"] -> "+(c!=null?c.toString():" conseq: NULL"));
 
         // If not found, try to get a global consequence
 
