@@ -29,4 +29,9 @@ public interface DefaultUser {
 	public boolean hasRole(String roleId);
 	
 	public String getInfo();
+
+	public void setEmail(String email);
+
+	public String getEmail();
+
 }
