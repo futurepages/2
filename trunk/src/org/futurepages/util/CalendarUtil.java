@@ -474,6 +474,17 @@ public class CalendarUtil {
         return DateUtil.format(calendar, "H:mm");
     }
 
+	public static Calendar buildCalendar(Calendar calendar) {
+			Calendar newCalendar = new GregorianCalendar(
+					calendar.get(Calendar.YEAR),
+					calendar.get(Calendar.MONTH),
+					calendar.get(Calendar.DAY_OF_MONTH),
+					calendar.get(Calendar.HOUR_OF_DAY),
+					calendar.get(Calendar.MINUTE),
+					calendar.get(Calendar.SECOND));
+			return newCalendar;
+	}
+
     public static class TooBigDateException extends Exception {
     }
 
