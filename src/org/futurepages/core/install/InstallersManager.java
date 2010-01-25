@@ -70,7 +70,7 @@ public class InstallersManager extends ModulesAutomation {
 					Class resourcesInstaller = Class.forName(INSTALL_DIR_NAME+".Resources");
 					log(">>> installer " + resourcesInstaller.getSimpleName() + " running...  ");
 					resourcesInstaller.newInstance();
-					System.out.println("   Resources OK.");
+					log("   Resources OK.");
 				} catch(ClassNotFoundException ex){
 					log(">>> installer of Examples isn't present.");
 				}
@@ -80,9 +80,9 @@ public class InstallersManager extends ModulesAutomation {
 				for (String moduleName : classes.keySet()) {
 					log("module '" + moduleName + "' installing...");
 					for (Class<?> installer : classes.get(moduleName)) {
-						System.out.print(">>> installer " + installer.getSimpleName() + " running...  ");
+						log(">>> installer " + installer.getSimpleName() + " running...  ");
 						installer.newInstance();
-						System.out.println(" OK.");
+						log(">>> installer " + installer.getSimpleName() + " OK");
 					}
 					log("module '" + moduleName + "' installed.");
 				}
@@ -91,7 +91,7 @@ public class InstallersManager extends ModulesAutomation {
 					Class examplesInstaller = Class.forName(INSTALL_DIR_NAME+".Examples");
 					log(">>> installer " + examplesInstaller.getSimpleName() + " running...  ");
 					examplesInstaller.newInstance();
-					System.out.println("   Examples OK.");
+					log("   Examples OK.");
 				} catch(ClassNotFoundException ex){
 					log(">>> installer of Examples isn't present.");
 				}
