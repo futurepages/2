@@ -74,7 +74,7 @@ public abstract class CPFUtil {
 		} while (!validaCPF(cpf));
 		return cpf;
 	}
-	
+
 	/**
 	 * Gera um CPF aleatório
 	 */
@@ -82,7 +82,7 @@ public abstract class CPFUtil {
 		StringBuffer iniciais = new StringBuffer("");
 		String cpf = null;
 		do {
-				iniciais.append(The.strWithLeftZeros(value+"", 9));
+			iniciais.append(The.strWithLeftZeros(value + "", 9));
 			cpf = iniciais + calcDigVerif(iniciais.toString());
 		} while (!validaCPF(cpf));
 		return cpf;
@@ -112,5 +112,4 @@ public abstract class CPFUtil {
 		}
 		return calcDigVerif(numDig).equals(cpf.substring(9, 11));
 	}
-
 }
