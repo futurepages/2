@@ -76,7 +76,8 @@ public abstract class CPFUtil {
 	}
 
 	/**
-	 * Gera um CPF aleatório
+	 * Gera um CPF a partir de um inteiro
+	 * ex.: 1 , retornaria 000000001DF onde DF é o dígito verificador gerado.
 	 */
 	public static String geraCPF(long value) {
 		StringBuffer iniciais = new StringBuffer("");
