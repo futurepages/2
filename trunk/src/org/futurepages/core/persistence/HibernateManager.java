@@ -124,6 +124,6 @@ public class HibernateManager {
 	}
 
 	private static void log(String msg) {
-		System.err.println("[::HIBERNATE-MANAGER::] " + msg);
+		System.out.println("[::hibernateManager::] " + msg);
 	}
 }

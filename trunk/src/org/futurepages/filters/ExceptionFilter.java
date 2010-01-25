@@ -53,7 +53,7 @@ public class ExceptionFilter implements Filter {
                 if (throwable.getCause().getClass().isAnnotationPresent(NotListDependencies.class)) {
                     listDependencies = false;
                 }
-                return action.error(listDependencies, errorException);
+                return action.putError(listDependencies, errorException);
             }
         }
     }

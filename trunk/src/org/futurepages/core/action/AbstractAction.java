@@ -69,8 +69,9 @@ public abstract class AbstractAction implements Pageable, StickyAction {
      * @param breakOnFirst true se lança ErrorException na primeira falha, false se retorna no fim, e null se não retorna ErrorException
      * @return retorna o validador daquele tipo passando o tipo de validação
      */
-    public <T extends Validator> T validate(Class<T> t, Boolean breakOnFirst){
-        return Validator.validate(t, breakOnFirst);
+    public <V extends Validator> V validate(Class<V> t, Boolean breakOnFirst){
+	    V validator = Validator.validate(t, breakOnFirst);
+        return validator;
     }
 
     /**
@@ -78,7 +79,7 @@ public abstract class AbstractAction implements Pageable, StickyAction {
      * @param t Tipo do Validator
      * @return o validador
      */
-    public <T extends Validator> T validate(Class<T> t){
+    public <V extends Validator> V validate(Class<V> t){
         return Validator.validate(t, true);
     }
 
@@ -227,11 +228,7 @@ public abstract class AbstractAction implements Pageable, StickyAction {
         return this.putMessage(SUCCESS, msg);
     }
 
-    public void showAsError(Exception exception) {
-            throw new ErrorException(exception);
-    }
-
-    public String error(boolean listDependencies, ErrorException errorException) {
+    public String putError(boolean listDependencies, ErrorException errorException) {
         this.putMessage(ERROR, errorException.getMessage());
         output.setValue("errorList", errorException.getValidationMap());
         if (listDependencies) {

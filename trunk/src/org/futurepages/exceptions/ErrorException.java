@@ -15,7 +15,13 @@ public class ErrorException extends RuntimeException {
     }
 
     public ErrorException(Exception ex) {
+        this("1",ex);
+    }
+
+	public ErrorException(String key, Exception ex) {
         super(ex.getMessage());
+		validationMap = new LinkedHashMap();
+		validationMap.put(key, this);
     }
 
     public ErrorException(LinkedHashMap<String, ErrorException> validationMap) {
@@ -33,8 +39,8 @@ public class ErrorException extends RuntimeException {
 
     private static String validationMessage(LinkedHashMap<String,ErrorException> validationMap){
         StringBuffer sb = new StringBuffer();
-        for(ErrorException ex : validationMap.values()){
-            sb.append("- "+ex.getMessage()+"\n");
+        for(String key : validationMap.keySet()){
+            sb.append(key+") "+validationMap.get(key).getMessage()+"\n");
         }
         return sb.toString();
     }
