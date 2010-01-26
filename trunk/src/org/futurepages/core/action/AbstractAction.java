@@ -39,6 +39,7 @@ public abstract class AbstractAction implements Pageable, StickyAction {
     protected Context cookies;
     protected Locale loc;
     private Map<String, String> messages;
+	protected boolean listingDependencies;
 
     public AbstractAction() {
         messages = new HashMap<String, String>();
@@ -46,6 +47,7 @@ public abstract class AbstractAction implements Pageable, StickyAction {
         messages.put(INFO, null);
         messages.put(ERROR, null);
         messages.put(WARNING, null);
+		listingDependencies = false;
     }
 
     public String putMessage(String key, String message) {
@@ -161,7 +163,9 @@ public abstract class AbstractAction implements Pageable, StickyAction {
     }
 
     public void doListDependencies() {
+		listingDependencies = true;
         listDependencies();
+		listingDependencies = false;
     }
 
     protected void listDependencies() {
@@ -231,7 +235,7 @@ public abstract class AbstractAction implements Pageable, StickyAction {
     public String putError(boolean listDependencies, ErrorException errorException) {
         this.putMessage(ERROR, errorException.getMessage());
         output.setValue("errorList", errorException.getValidationMap());
-        if (listDependencies) {
+        if (listDependencies && !listingDependencies) {
             this.doListDependencies();
         }
         return ERROR;
