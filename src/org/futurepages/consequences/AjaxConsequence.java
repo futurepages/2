@@ -2,6 +2,7 @@ package org.futurepages.consequences;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -76,7 +77,9 @@ public class AjaxConsequence implements Consequence {
     	
     	Object obj = a.getOutput().getValue(key);
     	
-    	if (obj == null) throw new ConsequenceException("Cannot find value for key: " + key);
+    	if (obj == null) {
+			obj = new HashMap();
+		}
 
         try {
            
