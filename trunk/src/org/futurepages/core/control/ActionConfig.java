@@ -1,7 +1,6 @@
 package org.futurepages.core.control;
 
 import org.futurepages.core.consequence.Forward;
-import org.futurepages.core.consequence.Redirect;
 import org.futurepages.core.consequence.Consequence;
 import org.futurepages.core.filter.Filter;
 import org.futurepages.core.action.Action;
@@ -390,37 +389,13 @@ public class ActionConfig {
     }
     
     /**
-     * Shorter version of a forward on success.
-     * 
-     * @param page
-     * @return this
-     * @since 1.3
-     */
-    public ActionConfig fwdOk(String page) {
-        
-        return addConsequence(Action.SUCCESS, new Forward(page));
-    }
-    
-    /**
-     * Shorter version of a forward on error.
-     * 
-     * @param page
-     * @return this
-     * @since 1.3
-     */
-    public ActionConfig fwdError(String page) {
-        
-        return addConsequence(Action.ERROR, new Forward(page));
-    }
-    
-    /**
      * Shorter version of a AjaxConsequence success.
      * 
      * @param renderer
      * @return this
      * @since 1.10.1
      */
-    public ActionConfig ajaxOk(AjaxRenderer renderer){
+    public ActionConfig ajaxSuccess(AjaxRenderer renderer){
     
     	return addConsequence(Action.SUCCESS, new AjaxConsequence(AjaxConsequence.KEY , renderer));
     }
@@ -437,78 +412,8 @@ public class ActionConfig {
     	return addConsequence(Action.ERROR, new AjaxConsequence(AjaxConsequence.KEY, renderer));
     }    
     
-    /**
-     * Shorter version of a redir on success.
-     * 
-     * @param page
-     * @return this
-     * @since 1.3
-     */
-    public ActionConfig redirOk(String page) {
-        
-        return addConsequence(Action.SUCCESS, new Redirect(page));
-    }
-    
-    /**
-     * Shorter version of a redir on error.
-     * 
-     * @param page
-     * @return this
-     * @since 1.3
-     */
-    public ActionConfig redirError(String page) {
-        
-        return addConsequence(Action.ERROR, new Redirect(page));
-    }
-    
-    /**
-     * Shorter version of a redir on success.
-     * 
-     * @return this
-     * @since 1.3
-     */
-    public ActionConfig redirOk() {
-        
-        return addConsequence(Action.SUCCESS, new Redirect());
-    }
-    
-    /**
-     * Shorter version of a redir on error.
-     * 
-     * @return this
-     * @since 1.3
-     */
-    public ActionConfig redirError() {
-        
-        return addConsequence(Action.ERROR, new Redirect());
-    }
-    
-    /**
-     * Shorter version of a redir on success.
-     * 
-     * @param page
-     * @param flag
-     * @return this
-     * @since 1.3
-     */
-    public ActionConfig redirOk(String page, boolean flag) {
-        
-        return addConsequence(Action.SUCCESS, new Redirect(page, flag));
-    }
-    
-    /**
-     * Shorter version of a redir on error.
-     * 
-     * @param page
-     * @param flag
-     * @return this
-     * @since 1.3
-     */
-    public ActionConfig redirError(String page, boolean flag) {
-        
-        return addConsequence(Action.ERROR, new Redirect(page, flag));
-    }    
-    
+ 
+ 
     
     /**
      * Adds a list of filter for the inner action.

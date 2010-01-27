@@ -47,11 +47,18 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
     }
     
 	public ActionConfig ajaxAction(String act, Class<? extends AjaxAction> actionClass) {
-        return super.action(webPath + act, actionClass).ajaxOk(new JSONGenericRenderer());
+        return super.action(webPath + act, actionClass)
+				.ajaxSuccess(new JSONGenericRenderer())
+				.ajaxError(new JSONGenericRenderer())
+		;
     }
 
 	public ActionConfig ajaxAction(Class<? extends AjaxAction> actionClass) {
-        return super.action(webPath + actionClass.getSimpleName(),actionClass).ajaxOk(new JSONGenericRenderer());
+        return super.action(webPath +
+						actionClass.getSimpleName(),actionClass)
+							.ajaxSuccess(new JSONGenericRenderer())
+							.ajaxError(new JSONGenericRenderer())
+		;
     }
 	
     protected Consequence fwIn(String page) {
