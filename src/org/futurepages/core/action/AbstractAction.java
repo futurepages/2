@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.futurepages.actions.AjaxAction;
 import org.futurepages.consequences.AjaxConsequence;
 import org.futurepages.core.admin.DefaultUser;
 import org.futurepages.util.HtmlMapChars;
@@ -234,7 +235,13 @@ public abstract class AbstractAction implements Pageable, StickyAction {
 
     public String putError(boolean listDependencies, ErrorException errorException) {
         this.putMessage(ERROR, errorException.getMessage());
-        output.setValue("errorList", errorException.getValidationMap());
+
+		if(this instanceof AjaxAction){
+			outputAjax(errorException.getValidationMap());
+		}else{
+			output.setValue("errorList", errorException.getValidationMap());
+		}
+
         if (listDependencies && !listingDependencies) {
             this.doListDependencies();
         }

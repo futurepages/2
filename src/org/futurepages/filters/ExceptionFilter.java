@@ -5,6 +5,7 @@ import org.futurepages.core.exception.ExceptionLoggerImpl;
 import org.futurepages.annotations.NotListDependencies;
 import org.futurepages.core.persistence.Dao;
 import java.util.Date;
+import org.futurepages.actions.AjaxAction;
 import org.futurepages.actions.DynAction;
 import org.futurepages.core.action.AbstractAction;
 import org.futurepages.core.filter.Filter;
@@ -28,8 +29,9 @@ public class ExceptionFilter implements Filter {
             return chain.invoke();
         } catch (Throwable throwable) {
 
-             AbstractAction action = (AbstractAction) chain.getAction();
+			 AbstractAction action = (AbstractAction) chain.getAction();
 
+			 //Exceptions, causadas por erros inesperados
             if (!(throwable.getCause() instanceof ErrorException)) {
                 long exceptionNumber = (new Date()).getTime();
                 if (exLogger != null) {
@@ -40,10 +42,12 @@ public class ExceptionFilter implements Filter {
                     action.getOutput().setValue("exceptionNumber", exceptionNumber);
                     action.getOutput().setValue("exceptionMessage", throwable.getCause().getMessage());
                 }
-                if(action instanceof DynAction){
+                if(action instanceof DynAction || action instanceof AjaxAction){
                     return DYN_EXCEPTION;
                 }
                 return EXCEPTION;
+
+			//Erros causados por Exceptions Esperadas (ErrorExceptions)
             } else {
                  ErrorException errorException = (ErrorException) throwable.getCause();
                 if (Dao.isTransactionActive()) {
