@@ -7,7 +7,7 @@ import org.futurepages.exceptions.ErrorException;
 
 public abstract class Validator {
 
-	private LinkedHashMap<String, ErrorException> validationMap;
+	private LinkedHashMap<String, String> validationMap;
 	private boolean validationMapLoaded;
 	private ArrayList<Validator> subValidators;
 	protected Boolean breakOnFirst;
@@ -25,7 +25,7 @@ public abstract class Validator {
 	}
 
 	public Validator() {
-		validationMap = new LinkedHashMap<String, ErrorException>();
+		validationMap = new LinkedHashMap<String, String>();
 		subValidators = new ArrayList<Validator>();
 		validationMapLoaded = false;
 	}
@@ -35,30 +35,30 @@ public abstract class Validator {
 	}
 
 	public void error(String key, String msg) {
-		putError(key, new ErrorException(msg));
+		putError(key, msg);
 	}
 
 	public void error(String key, ErrorException ex) {
-		putError(key, ex);
+		putError(key, ex.getMessage());
 	}
 
 	public void error(String msg) {
 		error(null, msg);
-
 	}
 
-	public void error(ErrorException ex) {
-		error(null, ex);
+	public void error(Exception ex) {
+		error(null, ex.getMessage());
 	}
 
-	private void putError(String key, ErrorException ex) {
-		if (breakOnFirst) {
-			throw ex;
-		} else {
-			if (key == null) {
+
+	private void putError(String key, String message) {
+		if (key == null) {
 				key = String.valueOf(validationMap.size()+1);
-			}
-			validationMap.put(key, ex);
+		}
+		validationMap.put(key, message);
+
+		if (breakOnFirst) {
+			throw new ErrorException(validationMap);
 		}
 	}
 
@@ -66,11 +66,11 @@ public abstract class Validator {
 		this.breakOnFirst = breakOnFirst;
 	}
 
-	public void validate(){
+	protected void validate(){
 		validationMap();
 	}
 
-	public HashMap<String, ErrorException> validationMap() {
+	private HashMap<String, String> validationMap() {
 		if (!validationMapLoaded) {
 			if (subValidators.size() > 0) {
 				for (Validator v : subValidators) {
