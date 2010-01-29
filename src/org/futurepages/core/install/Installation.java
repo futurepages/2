@@ -1,6 +1,6 @@
 package org.futurepages.core.install;
 
-public interface InstallerImpl {
+public interface Installation {
     
     public void execute() throws Exception;
     
