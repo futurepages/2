@@ -70,9 +70,9 @@ public class InstallersManager extends ModulesAutomation {
 					Class resourcesInstaller = Class.forName(INSTALL_DIR_NAME+".Resources");
 					log(">>> installer " + resourcesInstaller.getSimpleName() + " running...  ");
 					resourcesInstaller.newInstance();
-					log("   Resources OK.");
+					log(">>>   Resources OK.");
 				} catch(ClassNotFoundException ex){
-					log(">>> installer of Examples isn't present.");
+					log(">>> installer of Resources isn't present.");
 				}
 
 
@@ -88,12 +88,12 @@ public class InstallersManager extends ModulesAutomation {
 				}
 				//Examples Installer
 				try{
-					Class examplesInstaller = Class.forName(INSTALL_DIR_NAME+".Examples");
-					log(">>> installer " + examplesInstaller.getSimpleName() + " running...  ");
-					examplesInstaller.newInstance();
-					log("   Examples OK.");
+					Class exInstallerClass = Class.forName(INSTALL_DIR_NAME+".Examples");
+					log(">>> Examples installing...  ");
+					Installer examples = (Installer) exInstallerClass.newInstance();
+					log(">>> Examples installed in "+examples.totalTime()+" secs.");
 				} catch(ClassNotFoundException ex){
-					log(">>> installer of Examples isn't present.");
+					log(">>> installer of Examples not present.");
 				}
 
 				if (HibernateManager.isRunning()) {
