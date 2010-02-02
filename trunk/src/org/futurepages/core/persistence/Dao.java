@@ -158,11 +158,11 @@ public class Dao extends HQLProvider {
         return new PaginationSlice<T>(numRows, pageSize, totalPages, page, list);
     }
 
-    public static <T extends Serializable> PaginationSlice<T> paginationSlice(int page, int pageSize, String fromAndJoin, String whereClause, String... orderClauses) {
+    public static <T extends Serializable> PaginationSlice<T> paginationSlice(int page, int pageSize,String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
         final long numRows = Dao.numRows(fromAndJoin, whereClause);
         int totalPages = calcNumPages(numRows, pageSize);
         page = calcPage(page, totalPages);
-        List<T> list = listPage(page, pageSize, fromAndJoin + where(whereClause) + orderBy(orderClauses));
+        List<T> list = listPage(page, pageSize, select(entityAlias) + fromAndJoin + where(whereClause) + orderBy(orderClauses));
         return new PaginationSlice<T>(numRows, pageSize, totalPages, page, list);
     }
 
