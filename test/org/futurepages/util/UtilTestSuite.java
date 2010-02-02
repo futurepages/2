@@ -21,6 +21,7 @@ import org.junit.runners.Suite.SuiteClasses;
     ProbabilityUtilTest.class,
     SecurityTest.class,
     SEOUtilTest.class,
+    StringUtilTest.class,
     TheTest.class    
 })
 public class UtilTestSuite {
