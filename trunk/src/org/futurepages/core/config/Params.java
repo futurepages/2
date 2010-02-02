@@ -70,8 +70,8 @@ public class Params {
 		paramsMap.put("INIT_MANAGER_CLASS", "org.futurepages.core.InitManager");
 		paramsMap.put("INSTALL_MODE", "off");
 		paramsMap.put("PRETTY_URL", "false");
-		paramsMap.put("EXCEPTION_FILE_PATH", "/exception.jsp");
-		paramsMap.put("DYN_EXCEPTION_FILE_PATH", "/dynException.jsp");
+		paramsMap.put("EXCEPTION_FILE_PATH",     "/exceptions/exception.jsp");
+		paramsMap.put("DYN_EXCEPTION_FILE_PATH", "/exceptions/dynException.jsp");
 		paramsMap.put("QUARTZ_MODE", "off");
 		paramsMap.put("SCHEMA_GENERATION_TYPE", "none");
 		paramsMap.put("START_PAGE_NAME", "Index");
