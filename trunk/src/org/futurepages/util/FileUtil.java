@@ -81,7 +81,7 @@ public class FileUtil {
 	private static String replaceAll(Map<String, String> map, InputStream source) throws IOException {
 		try {
 			if (source == null) {
-				throw new Exception(new FileNotFoundException("File " + source.toString() + "doesn´t exists."));
+				throw new Exception(new FileNotFoundException("File doesn´t exist."));
 			}
 			byte[] content = new byte[source.available()];
 			source.read(content);
@@ -190,7 +190,7 @@ public class FileUtil {
 		return explodedName[explodedName.length - 1].toLowerCase();
 	}
 
-	public static String classRealPath(Class klass) throws UnsupportedEncodingException {
+	public static String classRealPath(Class<?> klass) throws UnsupportedEncodingException {
 		return EncodingUtil.correctPath(klass.getResource("").getPath());
 	}
 
@@ -319,9 +319,9 @@ public class FileUtil {
 		return listResourcesFromDirectory(directory, new PatternFileParser(pattern), recursive);
 	}
 
-	public static <T> ArrayList<T> listFilesFromDirectory(File directory, boolean recursive, String pattern) {
+	public static ArrayList<File> listFilesFromDirectory(File directory, boolean recursive, String pattern) {
 		final Collection<File> collection = new FileUtil().filesFromDirectory(directory, recursive, pattern);
-		return new ArrayList(collection);
+		return new ArrayList<File>(collection);
 	}
 
 	<T extends Object> Collection<T> listResourcesFromDirectory(File directory, FileParser<T> parser, boolean recursive) {
