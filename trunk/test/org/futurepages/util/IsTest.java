@@ -11,9 +11,6 @@ import static org.junit.Assert.assertTrue;
 import org.futurepages.test.factory.StringFactory;
 import org.junit.Test;
 
-/**
- * @author wilton
- */
 public class IsTest {
 
 	@Test
@@ -38,12 +35,12 @@ public class IsTest {
 
   	@Test
 	public void testValidStringKey_invalido_vogalComTil() {
-		assertFalse("Com vogal acentuada  'ã': 'mão' INVÁLIDO.", Is.validStringKey("mão"));
+		assertFalse("Com vogal acentuada  'ã': 'mão' INVÁLIDO.", Is.validStringKey("mãoasd"));
 	}
 
 	@Test
 	public void testValidStringKey_invalido_espacos() {
-		assertFalse("Com espaços ' ' 'maria de fatima'. INVÁLIDO", Is.validStringKey("maria de fatima"));
+		assertFalse("Com espaços 'maria de fatima'. INVÁLIDO", Is.validStringKey("maria de fatima"));
 	}
 
 	@Test
@@ -73,7 +70,7 @@ public class IsTest {
 
 	@Test
 	public void testValidStringKey_invalido_muitoGrande_50() {
-		assertFalse("Com tres caracteres- 'qwe'", Is.validStringKey(StringFactory.getRandom(50)));
+		assertFalse("Muito grnade- 'size 50'", Is.validStringKey(StringFactory.getRandom(50)));
 	}
 
   	@Test
