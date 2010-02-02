@@ -220,20 +220,24 @@ public class The {
      * Retornar wIn sem caracteres especiais.
      * @param wIn
      */
-    
     public static String wordIn(String wIn){
         String[] specials = new String[]{":",";",",",".","!","?","(",")","\\","/",
                                          "\"","'","%","#","{","}","[","]","º","ª",
                                          "<",">","´","`"};
 
-       return eliminaCaracteres(specials, wIn);
+       return eliminaCaracteres(specials, wIn," ").trim();
     }
 
+    /**
+     * 
+     * @param str
+     * @return
+     */
 	 public static String stringKeyIn(String str){
         String[] specials = new String[]{":",";",",","!","?","(",")","\\","/",
                                          "\"","'","%","#","{","}","[","]","º","ª",
                                          "<",">","´","`"," ","\\t","\\n","\\r","\\h"};
-		return eliminaCaracteres(specials, str);
+		return eliminaCaracteres(specials, str,"");
 
     }
 
@@ -254,10 +258,10 @@ public class The {
         return in;
     }
 
-	private static String eliminaCaracteres(String[] specials, String wIn) {
+	private static String eliminaCaracteres(String[] specials, String wIn, String substituto) {
 		for (String special : specials) {
 			if (wIn.contains(special)) {
-				wIn = wIn.replace(special, " ").trim();
+				wIn = wIn.replace(special, substituto);
 			}
 		}
 		return wIn;
