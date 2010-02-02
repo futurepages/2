@@ -16,7 +16,7 @@ public class Paths {
      * @return a url completa do módulo
      */
     public static String module(HttpServletRequest req,String module) {
-        return context(req)+"/"+Params.MODULES_PATH+"/"+module;
+        return context(req)+"/"+Params.MODULES_PATH+"/"+((module!=null)?module:"");
     }
 
     public static String moduleAction(HttpServletRequest req, String moduleId) {
