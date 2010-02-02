@@ -1,122 +1,105 @@
 package org.futurepages.util;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Utilidades para Search Engine Optimization
  * @author leandro
+ * @changes Danilo
  */
 public class SEOUtil {
 
-    private static HashMap urlMapping    = new HashMap();
-	private static HashMap urlMappingAlphabetics    = new HashMap();
-	private static HashMap urlMappingEspeciais    = new HashMap();
+    private static final Map<Character, String> urlDirt    = new HashMap<Character, String>();
+	private static final Map<Character, String> alphabetics    = new HashMap<Character, String>();
+	private static final Map<Character, String> specials    = new HashMap<Character, String>();
 
     static{
-        urlMappingEspeciais.put("-","_");
-        urlMappingEspeciais.put(" ","-");
-        urlMappingEspeciais.put("@","_");
-        urlMappingEspeciais.put("º","");
-        urlMappingEspeciais.put("!","");
-        urlMappingEspeciais.put("?","");
-        urlMappingEspeciais.put(".","");
-        urlMappingEspeciais.put(",","");
-        urlMappingEspeciais.put(":","");
-        urlMappingEspeciais.put(";","");
-        urlMappingEspeciais.put("(","");
-        urlMappingEspeciais.put(")","");
-        urlMappingEspeciais.put("'","");
-        urlMappingEspeciais.put("\"","");
-        urlMappingEspeciais.put("\\","");
-        urlMappingEspeciais.put("/","-");
-        urlMappingEspeciais.put("<","");
-        urlMappingEspeciais.put(">","");
-        urlMappingEspeciais.put("\t","");
-        urlMappingEspeciais.put("\n","");
-        urlMappingEspeciais.put("\r","");
-        urlMappingEspeciais.put("%","");
-        urlMappingEspeciais.put("Ø","");
-        urlMappingEspeciais.put("ø","");
-        urlMappingEspeciais.put("Ð","");
-        urlMappingEspeciais.put("ð","");
-        urlMappingEspeciais.put("Æ","");
-        urlMappingEspeciais.put("æ","");
+    	String empty =  "";
+        specials.put('-',"_");
+        specials.put(' ',"-");
+        specials.put('@',"_");
+        specials.put('º', empty);
+        specials.put('!', empty);
+        specials.put('?',  empty);
+        specials.put('.', empty);
+        specials.put(',', empty);
+        specials.put(':', empty);
+        specials.put(';', empty);
+        specials.put('(', empty);
+        specials.put(')', empty);
+        specials.put('\'', empty);
+        specials.put('\'',empty);
+        specials.put('\\',empty);
+        specials.put('/',"-");
+        specials.put('<',empty);
+        specials.put('>',empty);
+        specials.put('\t',empty);
+        specials.put('\n',empty);
+        specials.put('\r',empty);
+        specials.put('%',empty);
+        specials.put('Ø',empty);
+        specials.put('ø',empty);
+        specials.put('Ð',empty);
+        specials.put('ð',empty);
+        specials.put('Æ',empty);
+        specials.put('æ',empty);
         
-        urlMappingAlphabetics.put("á","a");
-        urlMappingAlphabetics.put("â","a");
-        urlMappingAlphabetics.put("à","a");
-        urlMappingAlphabetics.put("å","a");
-        urlMappingAlphabetics.put("ã","a");
-        urlMappingAlphabetics.put("ä","a");
-        urlMappingAlphabetics.put("é","e");
-        urlMappingAlphabetics.put("ê","e");
-        urlMappingAlphabetics.put("è","e");
-        urlMappingAlphabetics.put("&","e");
-        urlMappingAlphabetics.put("ë","e");
-        urlMappingAlphabetics.put("í","i");
-        urlMappingAlphabetics.put("î","i");
-        urlMappingAlphabetics.put("ì","i");
-        urlMappingAlphabetics.put("ï","i");
-        urlMappingAlphabetics.put("ó","o");
-        urlMappingAlphabetics.put("ô","o");
-        urlMappingAlphabetics.put("ò","o");
-        urlMappingAlphabetics.put("õ","o");
-        urlMappingAlphabetics.put("ö","o");
-        urlMappingAlphabetics.put("ú","u");
-        urlMappingAlphabetics.put("û","u");
-        urlMappingAlphabetics.put("ù","u");
-        urlMappingAlphabetics.put("ü","u");
-        urlMappingAlphabetics.put("Ç","c");
-        urlMappingAlphabetics.put("ç","c");
-        urlMappingAlphabetics.put("ñ","n");
+        alphabetics.put('á',"a");
+        alphabetics.put('â',"a");
+        alphabetics.put('à',"a");
+        alphabetics.put('å',"a");
+        alphabetics.put('ã',"a");
+        alphabetics.put('ä',"a");
+        alphabetics.put('é',"e");
+        alphabetics.put('ê',"e");
+        alphabetics.put('è',"e");
+        alphabetics.put('&',"e");
+        alphabetics.put('ë',"e");
+        alphabetics.put('í',"i");
+        alphabetics.put('î',"i");
+        alphabetics.put('ì',"i");
+        alphabetics.put('ï',"i");
+        alphabetics.put('ó',"o");
+        alphabetics.put('ô',"o");
+        alphabetics.put('ò',"o");
+        alphabetics.put('õ',"o");
+        alphabetics.put('ö',"o");
+        alphabetics.put('ú',"u");
+        alphabetics.put('û',"u");
+        alphabetics.put('ù',"u");
+        alphabetics.put('ü',"u");
+        alphabetics.put('Ç',"c");
+        alphabetics.put('ç',"c");
+        alphabetics.put('ñ',"n");
 		
-		urlMapping.putAll(urlMappingEspeciais);
-		urlMapping.putAll(urlMappingAlphabetics);
+		urlDirt.putAll(specials);
+		urlDirt.putAll(alphabetics);
 		
     }
     
-    public static String get(char ch){
-        return (String) urlMapping.get(String.valueOf(ch));
+    public static String get(Character ch){
+        return  urlDirt.get(ch.toString()).toString();
     }
 
-	private static String getAlphabetics(char ch) {
-		return (String) urlMappingAlphabetics.get(String.valueOf(ch));
-	}
-    
-    public static String urlFormat(String strIn){
-        if(Is.empty(strIn)) return "";
-
-        strIn = strIn.toLowerCase().trim();
-		StringBuffer outBuffer = new StringBuffer();
-
-        for(int i = 0; i < strIn.length();i++){
-            String urlFormat = get(strIn.charAt(i));
-            if(urlFormat != null){
-                outBuffer.append(urlFormat);
-            }
-            else{
-                outBuffer.append(strIn.charAt(i));
-            }
-        }
-        return outBuffer.toString();
-    }
-
+    /**
+     * Devolve a string informadoa sem acentuacao e pontuacao
+     * @see urlMappingAlphabetics
+     * @see urlMappingEspeciais
+     */
 	public static String stringKeyValid(String strIn){
-        if(Is.empty(strIn)) return "";
-
         strIn = strIn.toLowerCase().trim();
-		StringBuffer outBuffer = new StringBuffer();
-
-        for(int i = 0; i < strIn.length();i++){
-            String urlFormat = getAlphabetics(strIn.charAt(i));
-            if(urlFormat != null){
-                outBuffer.append(urlFormat);
-            }
-            else{
-                outBuffer.append(strIn.charAt(i));
-            }
-        }
-        return outBuffer.toString();
+        return StringUtils.replace(strIn, alphabetics);
     }
 
+	
+	/**
+	 * Devolve a string informada sem acentuacao, pontuacao e sem caracteres especiais
+	 * @see urlMappingAlphabetics
+	 * @see urlMappingEspeciais
+	 */
+	public static String urlFormat(String strIn){
+		strIn = strIn.toLowerCase().trim();
+		return StringUtils.replace(strIn, urlDirt);
+	}
 }
