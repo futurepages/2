@@ -157,10 +157,14 @@ public class Is {
 		return true;
 	}
 
+	/**
+	 *  Verificar se a string não possui acentuacao, nem especiais com excecao do de '_', '.', '-',' '
+	 */
 	public static boolean validStringKey(String str) {
 
 		String loginVerify = The.stringKeyIn(str);//TIRA CARACTERES ESPECIAIS
 		loginVerify = SEOUtil.stringKeyValid(loginVerify);//TIRA ACENTOS E Ç
+		
 		if (loginVerify.equalsIgnoreCase(str)) {
 			return true;
 		}
