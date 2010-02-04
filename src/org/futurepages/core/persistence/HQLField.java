@@ -236,6 +236,9 @@ public class HQLField implements HQLable {
     public String inSubQuery(String subQuery) {
         return fieldName + " IN " + "(" + subQuery + ")";
     }
+    public String notInSubQuery(String subQuery) {
+        return fieldName + " NOT  IN " + "(" + subQuery + ")";
+    }
 
     public String in(long... tokens) {
         return buildlLongExpression("IN", tokens);
