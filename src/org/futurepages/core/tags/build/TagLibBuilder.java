@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.futurepages.annotations.Tag;
 import org.futurepages.core.config.Params;
+import org.futurepages.exceptions.NotModuleException;
 import org.futurepages.util.FileUtil;
 import org.futurepages.util.The;
 
@@ -75,7 +76,7 @@ public class TagLibBuilder extends ModulesAutomation{
 	 * @return String das declarações das tags criadas na aplicação
 	 * @throws java.lang.ClassNotFoundException
 	 */
-	private String buildTagLibsContentFromModules() throws ClassNotFoundException {
+	private String buildTagLibsContentFromModules() throws ClassNotFoundException, NotModuleException {
 		StringBuilder tagDeclarations = new StringBuilder();
 		tagDeclarations.append("\n   <!-- Generated Application Tags From Modules -->\n\n");
 

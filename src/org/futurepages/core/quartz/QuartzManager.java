@@ -3,6 +3,7 @@ package org.futurepages.core.quartz;
 import java.io.File;
 import java.text.ParseException;
 import java.util.Collection;
+import org.futurepages.exceptions.NotModuleException;
 
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -21,7 +22,7 @@ public class QuartzManager {
 
 	private static SchedulerFactory schedulerFactory;
 	
-	public static void initialize(File[] modules) throws SchedulerException, ClassNotFoundException, ParseException {
+	public static void initialize(File[] modules) throws SchedulerException, ClassNotFoundException, ParseException, NotModuleException {
 		schedulerFactory = new StdSchedulerFactory();
 		(new QuartzJobsRegister(modules)).register();
 		schedulerFactory.getScheduler().start();
