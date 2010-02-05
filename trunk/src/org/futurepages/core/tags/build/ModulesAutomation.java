@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.futurepages.core.config.Params;
+import org.futurepages.exceptions.NotModuleException;
 import org.futurepages.util.ClassesUtil;
 import org.futurepages.util.FileUtil;
 
@@ -44,19 +45,25 @@ public abstract class ModulesAutomation {
 		return applicationClasses;
 	}
 
-	public <S extends Object> Map<String, List<Class<S>>> getModulesDirectoryClasses(Class<S> superKlass, Class<? extends Annotation> annotation) {
+	public <S extends Object> Map<String, List<Class<S>>> getModulesDirectoryClasses(Class<S> superKlass, Class<? extends Annotation> annotation) throws NotModuleException {
 
 		Map<String, List<Class<S>>> modulesClasses = new HashMap<String, List<Class<S>>>();
 		List<Class<S>> classes;
 		if (this.modules != null) {
 			for (File module : this.modules) {
 
-				final File dir = getSubFile(module, getDirName());
-				classes = new ArrayList<Class<S>>(ClassesUtil.getInstance().listClassesFromDirectory(
-						dir, Params.get("CLASSES_PATH"), superKlass, annotation, true));
+				if (module.isDirectory()) {
 
-				sortClassList(classes);
-				modulesClasses.put(module.getName(), classes);
+					final File dir = getSubFile(module, getDirName());
+					classes = new ArrayList<Class<S>>(ClassesUtil.getInstance().listClassesFromDirectory(
+							dir, Params.get("CLASSES_PATH"), superKlass, annotation, true));
+
+					sortClassList(classes);
+					modulesClasses.put(module.getName(), classes);
+				}
+				else{
+					throw new NotModuleException(module.getAbsolutePath()+" não pode ficar dentro da pasta de módulos");
+				}
 			}
 		}
 		return modulesClasses;

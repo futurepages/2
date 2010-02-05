@@ -102,8 +102,7 @@ public class InstallersManager extends ModulesAutomation {
 				}
 			} catch (Exception ex) {
 				Dao.rollBackTransaction();
-				ex.printStackTrace();
-				throw new Exception("[::install::] Error trying to INSTALL something: (" + ex + ")");
+				throw ex;
 			}
 		}
 	}

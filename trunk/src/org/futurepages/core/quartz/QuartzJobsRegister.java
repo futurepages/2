@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.futurepages.core.tags.build.ModulesAutomation;
+import org.futurepages.exceptions.NotModuleException;
 import org.quartz.Job;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
@@ -18,7 +19,7 @@ public class QuartzJobsRegister extends ModulesAutomation{
 		super(modules, "jobs");
 	}
 
-	public void register() throws ClassNotFoundException, SchedulerException, ParseException{
+	public void register() throws ClassNotFoundException, SchedulerException, ParseException, NotModuleException{
 		Map<String, List<Class<Job>>> classes = getModulesDirectoryClasses(Job.class, null);
 		for (String moduleName : classes.keySet()) {
 			for (Class<Job> jobKlass : classes.get(moduleName)) {

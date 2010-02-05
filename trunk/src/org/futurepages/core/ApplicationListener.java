@@ -26,10 +26,13 @@ import org.quartz.SchedulerException;
  */
 public class ApplicationListener implements ServletContextListener {
 
+	private String contextName;
+
     public void contextInitialized(ServletContextEvent evt) {
         try {
             ServletContext servletContext = evt.getServletContext();
-            String contextName = The.tokenAt(1, servletContext.getResource("/").getPath(), "/");
+			String name = The.tokenAt(1, servletContext.getResource("/").getPath(), "/");
+            contextName = (name!=null ? name : "ROOT");
 
             log("Inicializando " + servletContext.getServletContextName() + "...");
             String realPath = servletContext.getRealPath("/");
@@ -90,7 +93,7 @@ public class ApplicationListener implements ServletContextListener {
 
             log(servletContext.getServletContextName() + " inicializado.");
         } catch (Exception ex) {
-            log("Erro ao inicializar contexto: " + ex.getMessage());
+            log("Erro ao inicializar contexto.");
             ex.printStackTrace();
         }
     }
@@ -115,6 +118,6 @@ public class ApplicationListener implements ServletContextListener {
      * @param logText
      */
     private void log(String logText) {
-        System.out.println("[::appListener::] " + logText);
+        System.out.println("[::"+contextName+"::] " + logText);
     }
 }
