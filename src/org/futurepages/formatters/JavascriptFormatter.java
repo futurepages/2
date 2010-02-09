@@ -11,8 +11,14 @@ import org.futurepages.core.formatter.Formatter;
 public class JavascriptFormatter implements Formatter {
     
     public String format(Object value, Locale loc) {
+		if(((String)value).contains("\n")){
+			value = ((String)value).replaceAll("\n", "\\\\n");
+		}
+		if(((String)value).contains("\r")){
+			value = ((String)value).replaceAll("\r", "\\\\r");
+		}
 		if(((String)value).contains("'")){
-			return ((String)value).replaceAll("'", "\\\\'");
+			value = ((String)value).replaceAll("'", "\\\\'");
 		}
         return ((String) value);
     }
