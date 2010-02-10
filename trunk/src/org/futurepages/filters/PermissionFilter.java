@@ -6,6 +6,7 @@ import org.futurepages.core.action.Action;
 import org.futurepages.core.filter.Filter;
 import org.futurepages.core.control.InvocationChain;
 import org.futurepages.core.admin.AuthenticationFree;
+import org.futurepages.core.admin.DefaultRole;
 import org.futurepages.core.admin.DefaultUser;
 
 /**
@@ -42,6 +43,13 @@ public class PermissionFilter implements Filter {
 
     public PermissionFilter(String... roles) {
         this.roles = roles;
+    }
+
+	public PermissionFilter(DefaultRole... roles) {
+		this.roles = new String[roles.length];
+        for(int i = 0 ; i < roles.length  ; i++){
+			this.roles[i] = roles[i].getRoleId();
+		}
     }
 
     public String filter(InvocationChain chain) throws Exception {

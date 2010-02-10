@@ -225,7 +225,7 @@ public class The {
                                          "\"","'","%","#","{","}","[","]","º","ª",
                                          "<",">","´","`"};
 
-       return eliminaCaracteres(specials, wIn," ").trim();
+       return wordWithoutSpecials(specials, wIn," ").trim();
     }
 
     /**
@@ -237,7 +237,7 @@ public class The {
         String[] specials = new String[]{":",";",",","!","?","(",")","\\","/",
                                          "\"","'","%","#","{","}","[","]","º","ª",
                                          "<",">","´","`"," ","\\t","\\n","\\r","\\h"};
-		return eliminaCaracteres(specials, str,"");
+		return wordWithoutSpecials(specials, str,"");
 
     }
 
@@ -258,13 +258,12 @@ public class The {
         return in;
     }
 
-	private static String eliminaCaracteres(String[] specials, String wIn, String substituto) {
+	private static String wordWithoutSpecials(String[] specials, String wIn, String newChar) {
 		for (String special : specials) {
 			if (wIn.contains(special)) {
-				wIn = wIn.replace(special, substituto);
+				wIn = wIn.replace(special, newChar);
 			}
 		}
 		return wIn;
 	}
-
 }
