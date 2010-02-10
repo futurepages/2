@@ -27,6 +27,8 @@ public interface DefaultUser {
 	public boolean hasModules();
 	
 	public boolean hasRole(String roleId);
+
+	public boolean hasRole(DefaultRole role);
 	
 	public String getInfo();
 
