@@ -205,6 +205,15 @@ public class Dao extends HQLProvider {
 
     }
 
+    public static <T extends Serializable> List<T> topList(int topSize, String entityAlias, String fromAndJoin, String where, String... order) {
+        String strQuery = select(entityAlias) + fromAndJoin + where(where) + orderBy(order);
+        Query query = session().createQuery(strQuery);
+        query.setMaxResults(topSize);
+        return query.list();
+
+    }
+
+
     public static <T extends Serializable> List<T> topList(int topSize, Class<T> entity, String where, String... order) {
         Query query = session().createQuery(from(entity) + where(where) + orderBy(order));        
         query.setMaxResults(topSize);
