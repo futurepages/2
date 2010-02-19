@@ -22,7 +22,6 @@ public class PermissionFilter implements Filter {
     private String[] roles;
     private Class userType;
     private Class actionType;
-    /*TODO VERIFICAR ISSO*/
 
     public PermissionFilter() {
     }
@@ -82,7 +81,6 @@ public class PermissionFilter implements Filter {
                     }
                 }
             }
-
         }
 
         return chain.invoke();
