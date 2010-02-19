@@ -30,9 +30,16 @@ public class Dao extends HQLProvider {
     private static Session session() {
         return HibernateManager.getSession();
     }
+    
+    public static void clearSession() {
+        Session session = session();
+		if (session.isDirty()) {        	
+            session.clear();
+        }
+    }
 
     public static void open() {
-        if (!session().isOpen()) {
+        if (!session().isOpen()) {        	
             session().getSessionFactory().openSession();
         }
     }
