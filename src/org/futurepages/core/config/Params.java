@@ -77,7 +77,6 @@ public class Params {
 		paramsMap.put("START_PAGE_NAME", "Index");
         paramsMap.put("THEME", "default");
         paramsMap.put("THEMES_DIR_NAME", "themes");
-		paramsMap.put("OVERRIDE_EXCEPTION_FILTER", "false");
 	}
 
 	/**

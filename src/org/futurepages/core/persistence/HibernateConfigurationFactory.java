@@ -78,9 +78,10 @@ public class HibernateConfigurationFactory extends Mapper{
 					defaultConfiguration = mapModule(module, defaultConfiguration);
 
 				} else if (moduleHasDB(module)){
-					moduleConfiguration = mapModule(module);
-					moduleConfiguration.createMappings();
-					configurations.put(HibernateManager.SESSION_KEY_PREFIX+module.getName(), moduleConfiguration);
+					//@TODO - não está funcionando ainda para módulos externos. Deve ser implementado.
+					 moduleConfiguration = mapModule(module);
+					 moduleConfiguration.createMappings();
+					 configurations.put(module.getName(), moduleConfiguration);
 				}
 			}
 		}

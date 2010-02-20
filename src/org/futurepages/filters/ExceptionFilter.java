@@ -1,41 +1,51 @@
 package org.futurepages.filters;
 
+import org.futurepages.core.action.Action;
 import org.futurepages.core.exception.DefaultExceptionLogger;
-import org.futurepages.core.exception.ExceptionLoggerImpl;
+import org.futurepages.core.exception.ExceptionLogger;
 import org.futurepages.annotations.NotListDependencies;
-import org.futurepages.core.persistence.Dao;
 import java.util.Date;
 import org.futurepages.actions.AjaxAction;
 import org.futurepages.actions.DynAction;
 import org.futurepages.core.action.AbstractAction;
-import org.futurepages.core.filter.Filter;
 import org.futurepages.core.control.InvocationChain;
+import org.futurepages.core.filter.Filter;
 import org.futurepages.exceptions.ErrorException;
 
-public class ExceptionFilter implements Filter {
+public class ExceptionFilter  implements Filter {
 
-	private ExceptionLoggerImpl exLogger;
+	private ExceptionLogger exLogger;
 
     public ExceptionFilter() {
         exLogger = DefaultExceptionLogger.getInstance();
     }
 
-    public ExceptionFilter(ExceptionLoggerImpl exLogger) {
+    public ExceptionFilter(ExceptionLogger exLogger) {
         this.exLogger = exLogger;
     }
 
     public String filter(InvocationChain chain) throws Exception {
-        try {
+		try {
             return chain.invoke();
         } catch (Throwable throwable) {
+			return treatedException(chain.getAction(), exLogger, throwable);
+        }
+    }
 
-			 AbstractAction action = (AbstractAction) chain.getAction();
+    public void destroy() {
+    }
 
+
+	/**
+	 * 
+	 * @return DYN_EXCEPTION ou EXCEPTION para exceptions esperadas, ERROR para exceptions esperadas.
+	 */
+	public static String treatedException(Action action, ExceptionLogger exLogger, Throwable throwable) {
 			 //Exceptions, causadas por erros inesperados
             if (!(throwable.getCause() instanceof ErrorException)) {
                 long exceptionNumber = (new Date()).getTime();
                 if (exLogger != null) {
-                    exLogger.execute(throwable,exceptionNumber);
+                    exLogger.execute(throwable, exceptionNumber);
                 }
                 if(throwable.getCause()!=null){
                     action.getOutput().setValue("exceptionName", throwable.getCause().getClass().getName());
@@ -49,19 +59,12 @@ public class ExceptionFilter implements Filter {
 
 			//Erros causados por Exceptions Esperadas (ErrorExceptions)
             } else {
-                 ErrorException errorException = (ErrorException) throwable.getCause();
-                if (Dao.isTransactionActive()) {
-                    Dao.rollBackTransaction();
-                }
+                ErrorException errorException = (ErrorException) throwable.getCause();
                 boolean listDependencies = true;
                 if (throwable.getCause().getClass().isAnnotationPresent(NotListDependencies.class)) {
                     listDependencies = false;
                 }
-                return action.putError(listDependencies, errorException);
+                return ((AbstractAction) action).putError(listDependencies, errorException);
             }
-        }
-    }
-
-    public void destroy() {
-    }
+	}
 }
