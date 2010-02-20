@@ -41,15 +41,11 @@ public class InitManager extends AbstractApplicationManager{
     @Override
     public final void loadActions() {
             //Filtros Globais
-            if(!Params.get("OVERRIDE_EXCEPTION_FILTER").equals("true")){
-                filter(new ExceptionFilter());
-                on(EXCEPTION, fwd(Params.get("EXCEPTION_FILE_PATH")));
-                on(DYN_EXCEPTION, fwd(Params.get("DYN_EXCEPTION_FILE_PATH")));
-            }
-
             if(HibernateManager.isRunning()){
                 filter(new HibernateFilter());
-            }
+            }else{
+                filter(new ExceptionFilter());
+			}
             
             if(Params.get("GLOBAL_HEAD_TITLE")!=null){
                 filter(new HeadTitleFilter(Params.get("GLOBAL_HEAD_TITLE")));

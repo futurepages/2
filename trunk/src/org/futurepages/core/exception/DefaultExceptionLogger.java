@@ -1,6 +1,6 @@
 package org.futurepages.core.exception;
 
-public class DefaultExceptionLogger implements ExceptionLoggerImpl{
+public class DefaultExceptionLogger implements ExceptionLogger{
 
     private static final DefaultExceptionLogger INSTANCE = new DefaultExceptionLogger();
 

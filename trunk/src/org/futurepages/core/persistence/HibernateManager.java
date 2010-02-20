@@ -7,27 +7,21 @@ import java.util.Map;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.futurepages.core.persistence.transaction.Transaction;
 
 import org.futurepages.exceptions.ConfigFileNotFoundException;
 
 public class HibernateManager {
 
-	public static final String SESSION_KEY = "session";
-	public static final String SESSION_KEY_PREFIX = "session-";
-	public static final String TRANS_KEY = "transaction";
 	public static final String FACTORY_KEY = HibernateManager.DEFAULT;
 	public static final String DEFAULT = "default";
 	private static boolean running = false;
 	private static Map<String, Configuration> configurations;
 	private static Map<String, SessionFactory> factories = new HashMap<String, SessionFactory>();
 	private static Map<String, ThreadLocal<Session>> sessionTL = new HashMap<String, ThreadLocal<Session>>();
-	private static Map<String, ThreadLocal<Transaction>> transactionTL = new HashMap<String, ThreadLocal<Transaction>>();
+
 	/**
 	 * Inicialização Estática da Conexão do Hibernate com o(s) Banco(s) de Dados.
 	 */
-
-
 	static {
 		try {
 			configurations = HibernateConfigurationFactory.getInstance().getApplicationConfigurations();
@@ -93,10 +87,6 @@ public class HibernateManager {
 		return sessionTL.get(sessionFactoryKey);
 	}
 
-	static ThreadLocal<Transaction> getTransactionTL(String sessionFactoryKey) {
-		return transactionTL.get(sessionFactoryKey);
-	}
-
 	public static boolean isRunning() {
 		return running;
 	}
@@ -124,6 +114,6 @@ public class HibernateManager {
 	}
 
 	private static void log(String msg) {
-		System.out.println("[::hibernateManager::] " + msg);
+		System.out.println("[::hibernate::] " + msg);
 	}
 }

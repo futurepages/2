@@ -1,6 +1,6 @@
 package org.futurepages.core.exception;
 
-public interface ExceptionLoggerImpl {
+public interface ExceptionLogger {
 
     public void execute(Throwable throwable);
     public void execute(Throwable throwable, long protocolNum);

@@ -3,7 +3,6 @@ package org.futurepages.core.control;
 import org.futurepages.core.filter.Filter;
 import org.futurepages.exceptions.ActionException;
 import org.futurepages.core.action.Action;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashSet;
@@ -29,6 +28,7 @@ public class InvocationChain {
 	private Action action;
 	private String innerAction = null;
 	private final String actionName;
+	private Method innerMethod = null;
 
 	/**
 	 * Creates an InvocationChain for this action.
@@ -96,23 +96,15 @@ public class InvocationChain {
 
 		String result = null;
 
-		Object pojo = null;
-
-		boolean isPojoAction = false;
-
-		pojo = action;
-
 		String methodToExec = innerAction;
 
 		if (methodToExec == null) {
 
 			methodToExec = "execute";
+			
 		}
 
-		// starting 1.13 you can now execute any method from an action
-		// not just PojoActions like before...
-
-		Method[] m = pojo.getClass().getMethods();
+		Method[] m = action.getClass().getMethods();
 
 		for (int i = 0; i < m.length; i++) {
 
@@ -219,7 +211,7 @@ public class InvocationChain {
 					}
 				}
 
-				Object retval = theOne.invoke(pojo, paramValues);
+				Object retval = theOne.invoke(action, paramValues);
 
 				if (theOne.getReturnType() == null || theOne.getReturnType().equals(Void.TYPE)) {
 
@@ -242,133 +234,16 @@ public class InvocationChain {
 				}
 			}
 		}
-
-		if (isPojoAction) {
-			throw new ActionException("Cannot find method to execute: " + methodToExec);
-		}
-		if (innerAction != null) {
-
-			// first try an inner class...
-
-			Class<Action> klass = getInnerClass(innerAction);
-
-			if (klass != null) {
-
-				// get constructor...
-
-				Constructor c = getConstructor(klass);
-
-				if (c == null) {
-					throw new ActionException("The inner class for this inner action does not have a constructor: " + innerAction);                    // ok, now check whether this is a static inner class or instance inner class...
-				}
-				Class[] paramTypes = c.getParameterTypes();
-
-				if (paramTypes.length == 0) {
-
-					// static inner class...
-
-					try {
-
-						Action innerActionClass = klass.newInstance();
-
-						initInnerAction(action, innerActionClass);
-
-						Method executeMethod = getMethod(innerActionClass, "execute");
-
-						if (executeMethod != null) {
-
-							result = (String) executeMethod.invoke(innerActionClass, (Object[]) null);
-
-						} else {
-
-							throw new ActionException("The static inner action class does not have the execute method!");
-
-						}
-
-						//result = innerActionClass.execute(); // removed from interface on version 1.12
-
-					} catch (ActionException e) {
-
-						throw e;
-
-					} catch (Exception e) {
-
-						throw new ActionException(e);
-					}
-
-				} else if (paramTypes.length == 1) {
-
-					// instance inner class...
-
-					try {
-
-						Action innerActionClass = (Action) c.newInstance(action);
-
-						initInnerAction(action, innerActionClass);
-
-						Method executeMethod = getMethod(innerActionClass, "execute");
-
-						if (executeMethod != null) {
-
-							result = (String) executeMethod.invoke(innerActionClass, (Object[]) null);
-
-						} else {
-
-							throw new ActionException("The innerAction class does not have the execute method!");
-
-						}
-
-						//result = innerActionClass.execute(); // removed from interface on version 1.12
-
-					} catch (ActionException e) {
-
-						throw e;
-
-					} catch (Exception e) {
-
-						throw new ActionException(e);
-					}
-
-				}
-
-			} else {
-
-				Method method = getMethod(innerAction);
-
-				if (method != null) {
-					try {
-						result = (String) method.invoke(action, (Object[]) null);
-					} catch (Exception e) {
-						throw new ActionException(e);
-					}
-				} else {
-					throw new ActionException("The inner action does not exist: " + innerAction);
-				}
-
+		Method method = getInvokedMethod();
+		if (method != null) {
+			try {
+				result = (String) method.invoke(action, (Object[]) null);
+			} catch (Exception e) {
+				throw new ActionException(e);
 			}
 		} else {
-
-			Method method = getMethod(action, "execute");
-
-			if (method != null) {
-
-				try {
-
-					result = (String) method.invoke(action, (Object[]) null);
-
-				} catch (Exception e) {
-
-					throw new ActionException(e);
-
-				}
-
-			} else {
-
-				throw new ActionException("The action does not implement the execute method!");
-
-			}
+			throw new ActionException("The inner action does not exist: " + innerAction);
 		}
-
 		return result;
 	}
 
@@ -390,52 +265,15 @@ public class InvocationChain {
 
 	}
 
-	private Constructor getConstructor(Class<Action> klass) {
-
-		Constructor c = null;
-
-		try {
-
-			c = klass.getConstructor((Class[]) null);
-
-		} catch (NoSuchMethodException e) {            // do nothing... not found...
-		}
-
-		if (c != null) {
-			return c;
-		}
-		try {
-
-			c = klass.getConstructor(action.getClass());
-
-		} catch (NoSuchMethodException e) {            // do nothing... not found...
-		}
-
-		return c;
-
-	}
-
-	private Class<Action> getInnerClass(String innerAction) {
-
-		Class[] classes = action.getClass().getClasses();
-
-		for (Class clazz : classes) {
-
-			String simpleName = clazz.getSimpleName();
-
-			if (Action.class.isAssignableFrom(clazz) && (simpleName.equals(innerAction) || simpleName.equalsIgnoreCase(innerAction))) {
-
-				return (Class<Action>) clazz;
-
+	public Method getInvokedMethod() {
+		if (innerMethod == null) {
+			if (innerAction != null) {
+				innerMethod = getMethod(action, innerAction);
+			} else {
+				innerMethod = getMethod(action, "execute");
 			}
 		}
-
-		return null;
-	}
-
-	private Method getMethod(String innerAction) {
-
-		return getMethod(action, innerAction);
+		return innerMethod;
 	}
 
 	private Method getMethod(Object action, String innerAction) {

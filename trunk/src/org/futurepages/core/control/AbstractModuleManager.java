@@ -6,6 +6,7 @@ import org.futurepages.core.consequence.Forward;
 import org.futurepages.core.consequence.Redirect;
 import org.futurepages.util.ModuleUtil;
 import org.futurepages.actions.AjaxAction;
+import org.futurepages.actions.DynAction;
 import org.futurepages.core.ajax.json.JSONGenericRenderer;
 
 public abstract class AbstractModuleManager extends AbstractApplicationManager {
@@ -58,6 +59,18 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
 						actionClass.getSimpleName(),actionClass)
 							.ajaxSuccess(new JSONGenericRenderer())
 							.ajaxError(new JSONGenericRenderer())
+		;
+    }
+
+	/**
+	 *
+	 * @param actionClass that implements DynAction
+	 * @return actionConfig para DynAction => fwIn("dyn/Action.jsp") on SUCCESS and ERROR
+	 */
+	public ActionConfig dynAction(Class<? extends DynAction> actionClass) {
+        return action(actionClass)
+				.on(SUCCESS,fwIn("dyn/"+actionClass.getSimpleName().substring(3)+".jsp"))
+				.on(ERROR,fwIn("dyn/"+actionClass.getSimpleName().substring(3)+".jsp"))
 		;
     }
 	
