@@ -1,5 +1,7 @@
 package org.futurepages.core.persistence;
 
+import java.lang.reflect.Method;
+
 import org.futurepages.annotations.Transactional;
 import org.futurepages.core.action.Action;
 import org.futurepages.core.filter.AfterConsequenceFilter;
@@ -55,6 +57,7 @@ public class HibernateFilter implements AfterConsequenceFilter {
 	}
 
 	private boolean isTransactional(InvocationChain chain) {
-		return chain.getInvokedMethod().isAnnotationPresent(Transactional.class);
+		Method method = chain.getMethod();
+		return method.isAnnotationPresent(Transactional.class);
 	}
 }
