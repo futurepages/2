@@ -95,29 +95,26 @@ public class InvocationChain {
 
 		Method metodo = getMethod();
 		if(metodo != null){
-
 			Object[] paramValues = getParametersValues(metodo);
-			Object retval = metodo.invoke(action, paramValues);
+			Object valorRetornado = metodo.invoke(action, paramValues);
 
 			String result;
-			if (metodo.getReturnType() == null || metodo.getReturnType().equals(Void.TYPE)) {
-				result = Action.SUCCESS; // default for void method...
-			} else 
-				if (metodo.getReturnType() == null || metodo.getReturnType().equals(String.class)) {
-					result = retval.toString(); // simple string...
+			Class<?> tipoRetorno = metodo.getReturnType();
+			if (tipoRetorno.equals(Void.TYPE)) {
+				result = Action.SUCCESS;
+			} else{
+				if (valorRetornado == null) {
+					result = Action.NULL;
 				} else { 
-					//@byLeandro: este else provavelmente existe por conta da antiga pojoAction
-					if (retval == null) {
-						result = Action.NULL;
-					} else {
-						result = retval.toString();
-					}
+					result = valorRetornado.toString();
 				}
+			}
 			return result;
 		}else{
 			throw new ActionException("The inner action does not exist: " + innerAction);
 		}
 	}
+	
 	/**
 	 * Returns the {@link Method} to be invoked.
 	 * @return
@@ -154,7 +151,6 @@ public class InvocationChain {
 		Class<?>[] params = method.getParameterTypes();
 		Input input = action.getInput();
 		Set<String> paramKeys = new HashSet<String>();
-
 		Object[] values = new Object[params.length];
 
 		for (int pos = 0; pos < params.length; pos++) {
@@ -183,8 +179,7 @@ public class InvocationChain {
 					break;
 				} else {
 					Object converted = InjectionUtils.tryToConvert(o, params[pos], action.getLocale(), true);
-					if ((converted != null) || // @leandro (to solve a problem)
-							((params[pos] == Integer.class) || (params[pos] == Long.class))) {
+					if ((converted != null) || ((params[pos] == Integer.class) || (params[pos] == Long.class))) {
 						values[pos] = converted;
 						paramKeys.add(key);
 						found = true;
@@ -194,7 +189,6 @@ public class InvocationChain {
 			}
 
 			if (!found) {
-
 				// let's try to create an object on the fly here...
 				// if we have something like add(User u1, User u2) we may get in trouble here,
 				// but for this case the user should configure the parameters by hand using a
