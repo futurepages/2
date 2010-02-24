@@ -1,8 +1,5 @@
 package org.futurepages.core.control;
 
-import org.futurepages.core.filter.Filter;
-import org.futurepages.exceptions.ActionException;
-import org.futurepages.core.action.Action;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashSet;
@@ -11,9 +8,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.futurepages.core.action.Action;
+import org.futurepages.core.filter.Filter;
+import org.futurepages.core.input.Input;
+import org.futurepages.exceptions.ActionException;
 import org.futurepages.filters.MethodParamFilter;
 import org.futurepages.util.InjectionUtils;
-import org.futurepages.core.input.Input;
 
 /**
  * When an action is executed, a chain of filters is created.
@@ -90,161 +90,132 @@ public class InvocationChain {
 
 		if (!filters.isEmpty()) {
 			Filter f = (Filter) filters.removeFirst();
-
 			return f.filter(this);
 		}
 
-		String result = null;
+		Method metodo = getMethod();
+		if(metodo != null){
 
-		String methodToExec = innerAction;
+			Object[] paramValues = getParametersValues(metodo);
+			Object retval = metodo.invoke(action, paramValues);
 
-		if (methodToExec == null) {
-
-			methodToExec = "execute";
-			
-		}
-
-		Method[] m = action.getClass().getMethods();
-
-		for (int i = 0; i < m.length; i++) {
-
-			if (!Modifier.isPublic(m[i].getModifiers())) {
-				continue;
-			}
-			if (m[i].getName().equals(methodToExec)) {
-
-				Method theOne = m[i];
-
-				Class<?>[] params = theOne.getParameterTypes();
-
-				Input input = action.getInput();
-
-				Object[] paramValues = new Object[params.length];
-
-				Set<String> paramKeys = new HashSet<String>();
-
-				for (int j = 0; j < params.length; j++) {
-
-					boolean found = false;
-
-					// check if we are using the MethodParamFilter!
-
-					List<String> list = (List<String>) input.getValue(MethodParamFilter.PARAM_KEY);
-
-					Iterator<String> keys;
-
-					if (list == null) {
-
-						keys = input.keys();
-
-					} else {
-
-						keys = list.iterator();
-					}
-
-					while (keys.hasNext()) {
-
-						String key = keys.next();
-
-						if (paramKeys.contains(key)) {
-							continue;
-						}
-						Object o = input.getValue(key);
-						o = InjectionUtils.trimValue(o);
-
-						if (params[j].isInstance(o)) {
-
-							paramValues[j] = o;
-
-							paramKeys.add(key);
-
-							found = true;
-
-							break;
-
-						} else {
-
-							Object converted = InjectionUtils.tryToConvert(o, params[j], action.getLocale(), true);
-
-							if ((converted != null) || // @leandro (to solve a problem)
-									((params[j] == Integer.class) || (params[j] == Long.class))) {
-
-								paramValues[j] = converted;
-
-								paramKeys.add(key);
-
-								found = true;
-
-								break;
-							}
-						}
-					}
-
-					if (!found) {
-
-						// let's try to create an object on the fly here...
-						// if we have something like add(User u1, User u2) we may get in trouble here,
-						// but for this case the user should configure the parameters by hand using a
-						// VOFilter ou MethodParamFilter...
-
-						// The if is because this is suppose to be a POJO, not a java.lang.String for example...
-
-						if (!params[j].getName().startsWith("java.lang.") && !params[j].isPrimitive() && InjectionUtils.hasDefaultConstructor(params[j])) {
-
-							Object obj = action.getInput().getObject(params[j]);
-
-							String key = params[j].getSimpleName().toLowerCase();
-
-							paramKeys.add(key);
-
-							paramValues[j] = obj;
-
-							action.getInput().setValue(key, obj);
-
-							found = true;
-						}
-
-					}
-
-					if (!found) {
-						throw new ActionException("Cannot find parameter value for method: " + methodToExec + " / " + params[j]);
-					}
-				}
-
-				Object retval = theOne.invoke(action, paramValues);
-
-				if (theOne.getReturnType() == null || theOne.getReturnType().equals(Void.TYPE)) {
-
-					return Action.SUCCESS; // default for void method...
-
-				} else if (theOne.getReturnType() == null || theOne.getReturnType().equals(String.class)) {
-
-					return retval.toString(); // simple string...
-
-				} else { //@byLeandro: este else provavelmente existe por conta da antiga pojoAction
-
+			String result;
+			if (metodo.getReturnType() == null || metodo.getReturnType().equals(Void.TYPE)) {
+				result = Action.SUCCESS; // default for void method...
+			} else 
+				if (metodo.getReturnType() == null || metodo.getReturnType().equals(String.class)) {
+					result = retval.toString(); // simple string...
+				} else { 
+					//@byLeandro: este else provavelmente existe por conta da antiga pojoAction
 					if (retval == null) {
-
-						return Action.NULL;
-
+						result = Action.NULL;
 					} else {
-
-						return retval.toString();
+						result = retval.toString();
 					}
 				}
-			}
-		}
-		Method method = getInvokedMethod();
-		if (method != null) {
-			try {
-				result = (String) method.invoke(action, (Object[]) null);
-			} catch (Exception e) {
-				throw new ActionException(e);
-			}
-		} else {
+			return result;
+		}else{
 			throw new ActionException("The inner action does not exist: " + innerAction);
 		}
-		return result;
+	}
+	/**
+	 * Returns the {@link Method} to be invoked.
+	 * @return
+	 */
+	public Method getMethod() {
+
+		if(this.innerMethod == null){
+			String methodToExec = innerAction;
+			if (methodToExec == null) {
+				methodToExec = "execute";
+			}
+
+			Method[] metodos = action.getClass().getMethods();
+			for (Method metodo: metodos) {
+				if (!Modifier.isPublic(metodo.getModifiers())) {
+					continue;
+				}
+				if (metodo.getName().equals(methodToExec)) {
+					this.innerMethod = metodo;
+				}
+			}
+		}
+		return this.innerMethod;
+	}
+
+	/**
+	 * Found the arguments to the action invocation
+	 * @param method
+	 * @return
+	 * @throws ActionException
+	 */
+	private Object[] getParametersValues(Method method) throws ActionException {
+
+		Class<?>[] params = method.getParameterTypes();
+		Input input = action.getInput();
+		Set<String> paramKeys = new HashSet<String>();
+
+		Object[] values = new Object[params.length];
+
+		for (int pos = 0; pos < params.length; pos++) {
+			boolean found = false;
+
+			// check if we are using the MethodParamFilter!
+			List<String> list = (List<String>) input.getValue(MethodParamFilter.PARAM_KEY);
+			Iterator<String> keys;
+			if (list == null) {
+				keys = input.keys();
+			} else {
+				keys = list.iterator();
+			}
+			while (keys.hasNext()) {
+				String key = keys.next();
+				if (paramKeys.contains(key)) {
+					continue;
+				}
+				Object o = input.getValue(key);
+				o = InjectionUtils.trimValue(o);
+
+				if (params[pos].isInstance(o)) {
+					values[pos] = o;
+					paramKeys.add(key);
+					found = true;
+					break;
+				} else {
+					Object converted = InjectionUtils.tryToConvert(o, params[pos], action.getLocale(), true);
+					if ((converted != null) || // @leandro (to solve a problem)
+							((params[pos] == Integer.class) || (params[pos] == Long.class))) {
+						values[pos] = converted;
+						paramKeys.add(key);
+						found = true;
+						break;
+					}
+				}
+			}
+
+			if (!found) {
+
+				// let's try to create an object on the fly here...
+				// if we have something like add(User u1, User u2) we may get in trouble here,
+				// but for this case the user should configure the parameters by hand using a
+				// VOFilter ou MethodParamFilter...
+
+				// The if is because this is suppose to be a POJO, not a java.lang.String for example...
+
+				if (!params[pos].getName().startsWith("java.lang.") && !params[pos].isPrimitive() && InjectionUtils.hasDefaultConstructor(params[pos])) {
+					Object obj = action.getInput().getObject(params[pos]);
+					String key = params[pos].getSimpleName().toLowerCase();
+					paramKeys.add(key);
+					values[pos] = obj;
+					action.getInput().setValue(key, obj);
+					found = true;
+				}
+			}
+			if (!found) {
+				throw new ActionException("Cannot find parameter value for method: " + method.getName() + " / " + params[pos]);
+			}
+		}
+		return values;
 	}
 
 	/**
@@ -263,31 +234,6 @@ public class InvocationChain {
 		innerAction.setCookies(mainAction.getCookies());
 		innerAction.setLocale(mainAction.getLocale());
 
-	}
-
-	public Method getInvokedMethod() {
-		if (innerMethod == null) {
-			if (innerAction != null) {
-				innerMethod = getMethod(action, innerAction);
-			} else {
-				innerMethod = getMethod(action, "execute");
-			}
-		}
-		return innerMethod;
-	}
-
-	private Method getMethod(Object action, String innerAction) {
-
-		try {
-			Method m = action.getClass().getMethod(innerAction, (Class[]) null);
-			if (m != null) {
-				return m;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return null;
 	}
 
 	/**
