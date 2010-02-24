@@ -86,6 +86,7 @@ public class InvocationChain {
 	 *
 	 * @return The result of a filter or the action.
 	 */
+	//TODO TEST
 	public String invoke() throws Exception {
 
 		if (!filters.isEmpty()) {
