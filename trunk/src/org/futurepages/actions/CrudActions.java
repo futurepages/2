@@ -18,11 +18,11 @@ public abstract class CrudActions extends AbstractAction implements RedirectAfte
         }
         if (type.equals(EXPLORE)) {
             listObjects();
-        } else { //SHOW, CREATE, UPDATE, DELETE.
+        } else { //SHOW, CREATE, UPDATE, DELETE, ETC.
             if (type.equals(CREATE) || type.equals(UPDATE)) {
                 doListDependencies();
             }
-            if (!type.equals(CREATE)) {
+            if (!type.equals(CREATE)) { //UPDATE, DELETE, SHOW, ETC.
                 restoreObject();
             }
             //not crud
