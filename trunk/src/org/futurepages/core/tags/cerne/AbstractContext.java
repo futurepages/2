@@ -11,6 +11,8 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTagSupport;
+import org.futurepages.annotations.SuperTag;
+import org.futurepages.annotations.TagAttribute;
 
 import org.futurepages.core.action.Action;
 import org.futurepages.core.consequence.Forward;
@@ -19,6 +21,7 @@ import org.futurepages.core.i18n.LocaleManager;
 /**
  * @author Sergio Oliveira
  */
+@SuperTag
 public abstract class AbstractContext extends BodyTagSupport implements Context {
     
 	protected ServletContext application = null;
@@ -27,7 +30,8 @@ public abstract class AbstractContext extends BodyTagSupport implements Context 
     protected HttpServletResponse res = null;
 	protected Locale loc = null;
 	protected Action action = null;
-    
+
+	@TagAttribute
     protected String var = null;
 
     public void setVar(String var) {
@@ -41,6 +45,7 @@ public abstract class AbstractContext extends BodyTagSupport implements Context 
     
     protected abstract String getName();
     
+	@Override
     public int doStartTag() throws JspException {
     	this.application = pageContext.getServletContext();
         this.session = pageContext.getSession();
@@ -57,6 +62,7 @@ public abstract class AbstractContext extends BodyTagSupport implements Context 
         return super.doStartTag();
     }
 	
+	@Override
     public int doAfterBody() throws JspException {
         BodyContent bc = getBodyContent();
         try {
@@ -69,6 +75,7 @@ public abstract class AbstractContext extends BodyTagSupport implements Context 
         return SKIP_BODY;
     }	
     
+	@Override
     public int doEndTag() throws JspException {
         pageContext.removeAttribute(getVar(), PageContext.PAGE_SCOPE);
         return super.doEndTag();
