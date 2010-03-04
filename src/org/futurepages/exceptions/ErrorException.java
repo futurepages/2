@@ -10,13 +10,22 @@ public class ErrorException extends RuntimeException {
 
 	private LinkedHashMap<String, String> validationMap;
 
+    private String message;
+
 	public ErrorException(String msg) {
 		super(msg);
 	}
 
 	public ErrorException(Exception ex) {
-		super(ex);
+        this.message = ex.getMessage();
 	}
+
+    @Override
+    public String getMessage() {
+        if(message!=null) return this.message; else return super.getMessage();
+    }
+
+
 
 	public ErrorException(LinkedHashMap<String, String> validationMap) {
 		super(validationMessage(validationMap));
