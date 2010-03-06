@@ -46,7 +46,9 @@ public class ExceptionFilter  implements Filter {
                 long exceptionNumber = (new Date()).getTime();
                 if (exLogger != null) {
                     exLogger.execute(throwable, exceptionNumber);
-                }
+                } else {
+					DefaultExceptionLogger.getInstance().execute(throwable, exceptionNumber);
+				}
                 if(throwable.getCause()!=null){
                     action.getOutput().setValue("exceptionName", throwable.getCause().getClass().getName());
                     action.getOutput().setValue("exceptionNumber", exceptionNumber);
