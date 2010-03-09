@@ -1,6 +1,7 @@
 package org.futurepages.tags;
 
 import java.util.List;
+import javax.persistence.Entity;
 
 import javax.servlet.jsp.JspException;
 
@@ -42,11 +43,18 @@ public class Select extends HTMLTag {
             }
 
             if (actionList.size() > 0) {
-                if (idName == null) {
-                    idName = Dao.getIdName(actionList.get(0).getClass());
-                }
+				Class objectClass = actionList.get(0).getClass();
+				boolean entityClass = (objectClass.isAnnotationPresent(Entity.class));
+				if (entityClass && idName == null) {
+					idName = Dao.getIdName(objectClass);
+				}
                 for (int i = 0; i < actionList.size(); i++) {
-                    value_id = ReflectionUtil.getField(actionList.get(i), idName).toString();
+					if(idName!=null){
+						value_id = ReflectionUtil.getField(actionList.get(i), idName).toString();
+					} else {
+						value_id = actionList.get(i).toString();
+					}
+
                     sb.append("<option value=\"" + value_id + "\"");
 
                     if ((values == null || values.length == 0) && selected != null && selected.equals(value_id)) {
