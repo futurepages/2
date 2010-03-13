@@ -3,9 +3,7 @@ package org.futurepages.tags.core.webcomponent;
 import java.io.IOException;
 import java.io.StringWriter;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 import org.futurepages.annotations.Tag;
 import org.futurepages.annotations.TagAttribute;
@@ -14,8 +12,6 @@ import org.futurepages.core.tags.build.ContentTypeEnum;
 
 @Tag(bodyContent = ContentTypeEnum.SCRIPTLESS)
 public final class ImportComponentRes extends SimpleTagSupport {
-
-	public static final String WEB_COMPONENTS_CONTAINER_KEY = WebComponentsContainer.WEB_COMPONENTS_CONTAINER_KEY;
 
 	@TagAttribute(required = true)
 	private String key;
@@ -32,50 +28,45 @@ public final class ImportComponentRes extends SimpleTagSupport {
 	@TagAttribute
 	private boolean jsInHead = false;
 
-	private WebComponentsContainer webComponentsContainer;
+	private WebContainer myContainer;
 
 	@Override
 	public void doTag() throws JspException, IOException {
-		WebComponentsContainer container = getWebComponentsContainer();
-		if (container != null) {
-			HttpServletRequest req = (HttpServletRequest) ((PageContext) getJspContext()).getRequest();
+		getMyContainer();
+		if (myContainer != null) {
 			StringBuffer buffer = new StringBuffer();
 			if (getJspBody() != null) {
-				if (!container.getComponents().containsKey(uniqueKey())) {
+				if (!myContainer.getComponents().containsKey(uniqueKey())) {
 					StringWriter out = new StringWriter();
 					getJspBody().invoke(out);
 					buffer.append(out.getBuffer());
 				}
 			}
-			if (container.isBodyEvaluated()) {
-				if (!noJS || !noCSS) {
-					if (!container.getComponents().containsKey(uniqueKey())) {
-						if (!noJS) {
-							appendJSto(req, buffer);
-						}
-						if (!noCSS) {
-							appendCSSto(req, buffer);
-						}
-					}
-				}
+			if (myContainer.isBodyEvaluated()) {
+				throw new JspException("Componente "+uniqueKey()+" em container já avaliado e não nulo");
 			}
 			getJspContext().getOut().print(buffer);
 			addToContainer();
-		} else {
-			throw new JspException("WebComponentsContainer não encontrado. Utilize a tag 'webComponentsContainer'");
+		}
+		else {
+			if(!noJS){
+				getJspContext().getOut().print("<script type=\"text/javascript\">needResourceJS('"+this.getKey()+"','"+this.getVersion()+"');</script>");
+			}
+			if(!noCSS){
+				getJspContext().getOut().print("<script type=\"text/javascript\">needResourceCSS('"+this.getKey()+"','"+this.getVersion()+"');</script>");
+			}
 		}
 	}
 
-	public WebComponentsContainer getWebComponentsContainer() {
-		if (webComponentsContainer == null) {
-			HttpSession session = ((PageContext) getJspContext()).getSession();
-			webComponentsContainer = (WebComponentsContainer) session.getAttribute(WEB_COMPONENTS_CONTAINER_KEY);
+	private WebContainer getMyContainer() {
+		if (myContainer == null) {
+			myContainer = WebContainer.get();
 		}
-		return webComponentsContainer;
+		return myContainer;
 	}
 
 	private void addToContainer() {
-		getWebComponentsContainer().addComponent(uniqueKey(), this);
+		getMyContainer().addComponent(uniqueKey(), this);
 	}
 
 	public String getKey() {
@@ -127,6 +118,12 @@ public final class ImportComponentRes extends SimpleTagSupport {
 	}
 
 	public void appendCSSto(HttpServletRequest req, StringBuffer buffer) {
-		buffer.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + Paths.resource(req) + "/" + key + "/" + version + "/" + key + ".css\" media=\"all\"/>");
+		buffer.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + Paths.resource(req) + "/" + key + "/" + version + "/" + key + ".css\" media=\"screen\"/>");
+	}
+
+	@Override
+	public String toString() {
+		getMyContainer();
+		return uniqueKey()+(myContainer!=null?" in "+this.getMyContainer():" without container");
 	}
 }
