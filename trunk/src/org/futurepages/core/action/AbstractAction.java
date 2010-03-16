@@ -142,9 +142,9 @@ public abstract class AbstractAction implements Pageable, StickyAction {
 		output.setValue(HEAD_TITLE, headTitle);
 	}
 
-	protected void headTitleAppend(String headTitle) {
-		output.setValue(HEAD_TITLE, output.getValue(HEAD_TITLE) + HeadTitleFilter.SEPARATOR + headTitle);
-	}
+    public void headTitleAppend(String headTitle) {
+        output.setValue(HEAD_TITLE, output.getValue(HEAD_TITLE) + HeadTitleFilter.SEPARATOR + headTitle);
+    }
 
 	protected void outputAjax(Map map) {
 		output.setValue(AjaxConsequence.KEY, map);
@@ -220,8 +220,16 @@ public abstract class AbstractAction implements Pageable, StickyAction {
 		return this.putMessage(SUCCESS, msg);
 	}
 
-	public String putError(boolean listDependencies, ErrorException errorException) {
-		this.putMessage(ERROR, errorException.getMessage());
+    protected String error() {
+        return error("");
+    }
+
+    protected String error(String msg) {
+        return this.putMessage(ERROR, msg);
+    }
+
+    public String putError(boolean listDependencies, ErrorException errorException) {
+        this.putMessage(ERROR, errorException.getMessage());
 
 		if(this instanceof AjaxAction){
 			outputAjax(errorException.getValidationMap());
