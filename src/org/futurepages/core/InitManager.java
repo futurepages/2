@@ -31,6 +31,7 @@ import org.futurepages.filters.FileUploadFilter;
 import org.futurepages.filters.InjectionFilter;
 import org.futurepages.core.formatter.FormatterManager;
 import org.futurepages.core.i18n.LocaleManager;
+import org.futurepages.formatters.CollectionSizeFormatter;
 
 /**
  * ApplicationManager que gerencia a Ação Inicial e os filtros Globais
@@ -76,6 +77,7 @@ public class InitManager extends AbstractApplicationManager{
     
     @Override
     public void loadFormatters() {
+        FormatterManager.addFormatter("collectionSize" 	   , new CollectionSizeFormatter());
         FormatterManager.addFormatter("cpfCnpj"		 	   , new CPFCNPJFormatter());
         FormatterManager.addFormatter("date"         	   , new DateFormatter());
         FormatterManager.addFormatter("dateTime"     	   , new DateTimeFormatter());
