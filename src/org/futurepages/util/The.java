@@ -99,7 +99,7 @@ public class The {
      */
     public static List<String> explodedToList(String str, String separator) {
         StringTokenizer st = new StringTokenizer(str, separator);
-        List<String> explodedTokens = new ArrayList();
+        List<String> explodedTokens = new ArrayList<String>();
         while (st.hasMoreTokens()) {
             explodedTokens.add(st.nextToken());
         }
