@@ -100,8 +100,8 @@ public final class WebContainer extends SimpleTagSupport {
 				}
 			}
 		}
-		headBufferEnd.append("</head><body>");
-		footerBuffer.append("</body></html>");
+		headBufferEnd.append("</head><body><div id=\"tb_superoverlay_selcontent\">");
+		footerBuffer.append("</div></body></html>");
 
 		getJspContext().getOut().print(headBufferBegin);
 		if (headFile != null) {
