@@ -7,9 +7,9 @@ import java.lang.annotation.Target;
 
 
 /**
- * Annotation para anotar innerActions transacionais
- * @author Leandro
+ * Annotation para anotar innerActions não transacionais
+ * @author Danilo Medeiros
  */
-@Target({ElementType.METHOD,ElementType.TYPE})
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Transactional {}
+public @interface NonTransactional {}
