@@ -98,7 +98,7 @@ public class CalendarUtil_literalRangeOfDatesTest {
 			{mask, "01/01/2009", "01/02/2010", "01/01/2010", "1 de janeiro de 2009 a 1 de fevereiro de 2010", "ANO diferente, MES diferente, ANO não corrente."},
 			{mask, "01/01/2009", "02/02/2010", "01/01/2009", "1 de janeiro de 2009 a 2 de fevereiro de 2010", "ANO diferente, MES diferente, DIA diferente."},
 			{mask, "01/01/2009", "02/02/2010", "01/01/2010", "1 de janeiro de 2009 a 2 de fevereiro de 2010", "ANO diferente, MES diferente, DIA diferente, ANO não corrente."},
-			{"dd/MM/yyyy hh:mm:ss", "01/01/2009 00:30:00", "01/01/2009 01:30:00", "01/01/2009 00:00:00", "1 de janeiro de 0h30 a 1h30",	 "HORA FINAL MENOR IGUAL A 1"},
+			{"dd/MM/yyyy hh:mm:ss", "01/01/2009 00:30:00", "01/01/2009 01:30:00", "01/01/2009 00:00:00", "1 de janeiro de 0h30 à 1h30",	 "HORA FINAL MENOR IGUAL A 1"},
 			{"dd/MM/yyyy HH:mm:ss", "01/01/2009 01:00:00", "01/01/2009 23:00:00", "01/01/2009 00:00:00", "1 de janeiro de 1h às 23h",	 		 "DE 1h a 23h MINUTO INICIAL E FINAL IGUAL A ZERO"}
 		});
 		return col;
