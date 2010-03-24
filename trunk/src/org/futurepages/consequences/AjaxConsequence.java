@@ -49,7 +49,7 @@ public class AjaxConsequence implements Consequence {
     private boolean pretty = false;
     
     public AjaxConsequence(AjaxRenderer renderer) {
-    	
+
     	this(KEY, renderer);
     }
   
