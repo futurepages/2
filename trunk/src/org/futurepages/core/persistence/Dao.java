@@ -341,7 +341,6 @@ public class Dao extends HQLProvider {
      * /////////////////////////////////////////////////
      */
     public static void beginTransaction() {
-    	System.out.println("Dao.beginTransaction()");
         session().getTransaction().begin();
     }
 
@@ -350,7 +349,6 @@ public class Dao extends HQLProvider {
     }
 
     public static void commitTransaction() {
-    	System.out.println("Dao.commitTransaction()");
         session().getTransaction().commit();
     }
 
