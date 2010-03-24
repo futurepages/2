@@ -6,8 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Defines a Mentawai consequence.
- * In Mentawai, an action has a result that in turn has a consequence.
+ * Defines a consequence.
+ * An action has a result that in turn has a consequence.
  * 
  * @author Sergio Oliveira
  */
