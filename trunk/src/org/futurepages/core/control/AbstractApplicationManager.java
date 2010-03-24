@@ -52,13 +52,10 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 	private Map<String, Consequence> globalConsequences = new HashMap<String, Consequence>();
 
     static AbstractApplicationManager instance = null;
-
+	
     private static String viewDir = null;
-
     private static ActionConfig defaultAction = null;
-
     private static Context appContext = null;
-
     private List<String> actionPackages = new LinkedList<String>();
 
     static void setApplication(Context appContext) {
