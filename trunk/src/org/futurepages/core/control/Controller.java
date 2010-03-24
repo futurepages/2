@@ -62,7 +62,6 @@ public class Controller extends HttpServlet {
     private static long lastModified = 0;
     static boolean reloadAppManager = false;
     static boolean autoView = true;
-    static boolean statsMode = false;
     private static final String STICKY_KEY = "_stickyActions";
 
     /**
@@ -73,15 +72,10 @@ public class Controller extends HttpServlet {
      */
 	@Override
     public void init(ServletConfig conf) throws ServletException {
-
         super.init(conf);
-
         config = conf;
-
         application = conf.getServletContext();
-
         appContext = new ApplicationContext(application);
-
         AbstractApplicationManager.setRealPath(application.getRealPath(""));
 
         // verifies if the "reload mode" is on
@@ -93,47 +87,31 @@ public class Controller extends HttpServlet {
 
         // verifies if the "auto view" is on (default is on!)
         String auto = config.getInitParameter("autoView");
-
         if (auto != null && auto.equalsIgnoreCase("true")) {
             autoView = true;
-        }
-
-        // verifies if the "stats mode" is on
-        // default is off -> Security issue!
-        String stats = config.getInitParameter("stats");
-
-        if (stats != null && stats.equalsIgnoreCase("true")) {
-            statsMode = true;
         }
 
         // gets the AplicationManager class
         appMgrClassname = config.getInitParameter("applicationManager");
 
         if (appMgrClassname == null || appMgrClassname.trim().equals("")) {
-
             appMgrClassname = "ApplicationManager"; // default without package...
-
         }
         initApplicationManager();
     }
 
     public static void setConsequenceProvider(ConsequenceProvider provider) {
-
         Controller.consequenceProvider = provider;
     }
 
     private static boolean isAppMgrModified() {
 
         // not thread-safe on purpouse...
-
         if (appManagerFile == null) {
-
             StringBuffer sb = new StringBuffer(AbstractApplicationManager.getRealPath());
             sb.append(SEP).append("WEB-INF").append(SEP).append("classes").append(SEP);
             sb.append(appMgrClassname.replace('.', SEP)).append(".class");
-
             appManagerFile = new File(sb.toString());
-
         }
 
         if (!appManagerFile.exists()) {
@@ -141,13 +119,9 @@ public class Controller extends HttpServlet {
         }
 
         if (appManagerFile.lastModified() != lastModified) {
-
             lastModified = appManagerFile.lastModified();
-
             return true;
-
         }
-
         return false;
     }
 
@@ -218,7 +192,6 @@ public class Controller extends HttpServlet {
     public void destroy() {
 
         if (appManager != null) {
-
             Set<Filter> filters = appManager.getAllFilters();
             Iterator<Filter> iter = filters.iterator();
             while (iter.hasNext()) {
@@ -227,13 +200,10 @@ public class Controller extends HttpServlet {
             }
 
             // call destroy from appmanager...
-
             appManager.destroy(appContext);
-
         }
 
         super.destroy();
-
         LocaleManager.stopLocaleScan();
     }
 
@@ -256,17 +226,11 @@ public class Controller extends HttpServlet {
      * @return The URI
      */
     protected String getURI(HttpServletRequest req) {
-
         String context = req.getContextPath();
-
         String uri = req.getRequestURI().toString();
-
         // remove the context from the uri, if present
-
         if (context.length() > 0 && uri.indexOf(context) == 0) {
-
             uri = uri.substring(context.length());
-
         }
 
         if(uri.equals("/")){
@@ -277,9 +241,7 @@ public class Controller extends HttpServlet {
         int index = uri.lastIndexOf(".");
 
         if (index > 0) {
-
             uri = uri.substring(0, index);
-
         }
 
         // cut the first '/'
@@ -299,18 +261,12 @@ public class Controller extends HttpServlet {
      * @return The action name
      */
     protected String getActionName(HttpServletRequest req) {
-
         String uri = getURI(req);
         // If there is an Inner Action, cut it off from the action name
-
         int index = uri.lastIndexOf(".");
-
         if (index > 0 && (uri.length() - index) >= 2) {
-
             uri = uri.substring(0, index);
-
         }
-
         return uri;
     }
 
@@ -324,19 +280,12 @@ public class Controller extends HttpServlet {
      * @return The inner action name or null if there is no inneraction.
      */
     protected String getInnerActionName(HttpServletRequest req) {
-
         String uri = getURI(req);
-
         String innerAction = null;
-
         int index = uri.lastIndexOf(".");
-
         if (index > 0 && (uri.length() - index) >= 2) {
-
             innerAction = uri.substring(index + 1, uri.length());
-
         }
-
         return innerAction;
     }
 
@@ -345,13 +294,9 @@ public class Controller extends HttpServlet {
      * to prepare the action before it is executed. This method creates and
      * injects in the action all contexts, input, output and locale.
      *
-     * @param action
-     *            The action to prepare for execution
-     * @param req
-     *            The http request (input will need that)
-     * @param res
-     *            The http response (output will need that)
-     * @since 1.2
+     * @param action The action to prepare for execution
+     * @param req The http request (input will need that)
+     * @param res The http response (output will need that)
      */
     protected void prepareAction(Action action, HttpServletRequest req, HttpServletResponse res) {
         action.setInput(new RequestInput(req));
@@ -369,6 +314,7 @@ public class Controller extends HttpServlet {
         if (appManager == null) {
             throw new ServletException("The Application manager is not loaded");
         }
+		res.setCharacterEncoding(Params.get("PAGE_ENCODING"));
 
         /*
          * This is very useful during development time, however it should not be
@@ -394,44 +340,23 @@ public class Controller extends HttpServlet {
 
         String actionName = getActionName(req);
 
-        /**
-         * This is for ApplicationManager stats! =)
-         */
-        if (statsMode && actionName.equalsIgnoreCase(ApplicationManagerViewer.STATS_PAGE_NAME)) {
-
-            ApplicationManagerViewer applicationManagerViewer = new ApplicationManagerViewer();
-
-            applicationManagerViewer.buildApplicationManagerStats(res);
-
-            return;
-
-        }
-
         String innerAction = getInnerActionName(req);
 
         ActionConfig ac = null;
 
         if (innerAction != null) {
-
             ac = appManager.getActionConfig(actionName, innerAction);
-
         }
 
         if (ac == null) {
-
             ac = appManager.getActionConfig(actionName);
         }
 
         if (ac == null) {
-
             if (AbstractApplicationManager.getDefaultAction() != null) {
-
                 ac = AbstractApplicationManager.getDefaultAction();
-
             } else {
-
                 throw new ServletException("Could not find the action for actionName: " + actionName + (innerAction != null ? "." + innerAction : ""));
-
             }
         }
 
@@ -439,108 +364,68 @@ public class Controller extends HttpServlet {
 
         // sticky logic! Re-use instance if action is sticky (similar to
         // continuations in other frameworks, but simpler!)
-
         Class<? extends Object> actionClass = ac.getActionClass();
-
         if (StickyAction.class.isAssignableFrom(actionClass)) {
-
             HttpSession session = req.getSession(true);
-
             StickyActionMap map = (StickyActionMap) session.getAttribute(STICKY_KEY);
-
             if (map != null) {
-
                 action = map.get(actionClass);
             }
         }
 
         if (action == null) {
-
             action = ac.getAction(); // create an action instance here...
-
         }
 
         if (action == null) {
-
             throw new ServletException("Could not get an action instace: " + ac);
-
         }
 
         prepareAction(action, req, res);
 
         List<Object> filters = new LinkedList<Object>();
-
         Consequence c = null;
-
         boolean conseqExecuted = false;
-
         boolean actionExecuted = false;
-
         StringBuilder returnedResult = new StringBuilder(32);
 
         try {
-
             c = invokeAction(ac, action, innerAction, filters, returnedResult);
-
             actionExecuted = true;
-
             c.execute(action, req, res);
-
             conseqExecuted = true;
-
         } catch (Exception e) {
-
             e.printStackTrace();
-
             Throwable cause = getRootCause(e);
-
             throw new ServletException("Exception while invoking action " + actionName + ": " + e.getMessage() + " / " + e.getClass().getName() + " / " + cause.getMessage() + " / " + cause.getClass().getName(), cause);
-
         } finally {
-
             /*
              * Here we check all filters that were executed together with the
              * action. If they are AfterConsequenceFilters, we need to call the
              * afterConsequence method.
              */
-
             Iterator<Object> iter = filters.iterator();
-
             while (iter.hasNext()) {
-
                 Filter f = (Filter) iter.next();
-
                 if (f instanceof AfterConsequenceFilter) {
-
                     AfterConsequenceFilter acf = (AfterConsequenceFilter) f;
-
                     try {
-
                         String s = returnedResult.toString();
-
                         acf.afterConsequence(action, c, conseqExecuted, actionExecuted, s.length() > 0 ? s : null);
-
                     } catch (Exception e) {
-
                         throw new ServletException(
                                 "Exception while executing the AfterConsequence filters: " + e.getMessage(), e);
                     }
-
                 }
             }
         }
     }
 
     private Throwable getRootCause(Throwable t) {
-
         Throwable curr = t;
-
         while (curr.getCause() != null) {
-
             curr = curr.getCause();
-
         }
-
         return curr;
     }
 
@@ -549,11 +434,8 @@ public class Controller extends HttpServlet {
      * This method also return all filters that were executed together with the
      * action inside the filters list parameter.
      *
-     * @param ac
-     *            The ActionConfig which contains the consequences for this
-     *            action.
-     * @param action
-     *            The action to invoke.
+     * @param ac  The ActionConfig which contains the consequences for this action.
+     * @param action The action to invoke.
      * @param innerAction
      *            The inner action to execute or null to execute the regular
      *            action (execute() method).
@@ -579,86 +461,57 @@ public class Controller extends HttpServlet {
             throw new IllegalArgumentException(
                     "filters parameter should be non-null and a zero-sized list!");
         }
-
         Iterator<Filter> iter = chain.getFilters().iterator();
 
         while (iter.hasNext()) {
-
             filters.add(iter.next());
-
         }
 
         // execute chain!
-
         String result = chain.invoke();
-
         returnedResult.append(result);
 
         // If there is an inner action, try to get a consequence for the inner
         // action
-
         Consequence c = null;
-
         if (innerAction != null) {
-
             c = ac.getConsequence(result, innerAction);
-
         }
 
         // If not fount, try to get a consequene specific for that action
-
         if (c == null) {
-
             c = ac.getConsequence(result);
-
         }
 
 //      imprime pra deubug: action e consequência
 //		System.out.println("<#"+Thread.currentThread().getId()+"#>"+  ac.getName()+ ((innerAction!=null)?"."+innerAction:"")+"["+result.toUpperCase()+"] -> "+(c!=null?c.toString():" NULL"));
         // If not found, try to get a global consequence
-
-        if (c == null) {
+		if (c == null) {
             c = appManager.getGlobalConsequence(result);
         }
 
         if (consequenceProvider != null) {
-
             // new consequenceProvider for Controller...
-
             if (c == null) {
-
                 c = consequenceProvider.getConsequence(ac.getName(), ac.getActionClass(), result, innerAction);
-
                 // add the consequence dynamically...
-
                 if (c != null) {
-
                     if (innerAction != null && ac.getInnerAction() == null) {
-
                         ac.addConsequence(result, innerAction, c);
-
                     } else {
-
                         ac.addConsequence(result, c);
                     }
                 }
             }
-
         } else {
-
             // use the default consequence provider...
-
             if (c == null && autoView) {
-
                 //c = ac.getAutoConsequence(result, innerAction); // moved to OldAutoViewConsequenceProvider
-
                 c = defaultConsequenceProvider.getConsequence(ac.getName(), ac.getActionClass(), result, innerAction);
             }
-
         }
 
         if (c == null) {
-
             throw new ActionException("Action has no consequence for result: " + ac.getName() + " - " + result);
         }
 
@@ -666,128 +519,84 @@ public class Controller extends HttpServlet {
     }
 
     private static boolean hasGlobalFilterFreeMarkerFilter(List<Filter> filters, String innerAction) {
-
         Iterator<Filter> iter = filters.iterator();
-
         while (iter.hasNext()) {
-
             Filter f = iter.next();
-
             if (GlobalFilterFreeFilter.class.isAssignableFrom(f.getClass())) {
-
                 GlobalFilterFreeFilter gffmf = (GlobalFilterFreeFilter) f;
-
                 return gffmf.isGlobalFilterFree(innerAction);
             }
         }
-
         return false;
     }
 
-    private static InvocationChain createInvocationChain(ActionConfig ac,
-            Action action, String innerAction) {
+    private static InvocationChain createInvocationChain(ActionConfig ac, Action action, String innerAction) {
 
         InvocationChain chain = new InvocationChain(ac.getName(), action);
-
         Object actionImpl = action;
 
         // first place the "firstFilters" for the action...
 
         List<Filter> firstFilters = ac.getFirstFilters(innerAction);
-
         if (firstFilters != null) {
-
             chain.addFilters(firstFilters);
         }
 
-
         // place the global filters that are NOT LAST...
-
         boolean isGlobalFilterFree = false;
-
         if (actionImpl instanceof GlobalFilterFree) {
-
             GlobalFilterFree gff = (GlobalFilterFree) actionImpl;
-
             isGlobalFilterFree = gff.isGlobalFilterFree(innerAction);
-
         }
 
         if (!isGlobalFilterFree) {
-
             List<Filter> globals = appManager.getGlobalFilters(false);
-
             if (globals != null) {
-
                 chain.addFilters(globals);
             }
         }
 
         // place the action specific filters...
-
         List<Filter> filters = ac.getFilters(innerAction);
-
         if (filters != null) {
-
             isGlobalFilterFree = hasGlobalFilterFreeMarkerFilter(filters, innerAction);
-
             if (isGlobalFilterFree) {
-
                 // remove previously added global filters...
-
                 chain.clearFilters();
             }
-
             chain.addFilters(filters);
         }
 
         // place the global filters that are LAST
 
         if (!isGlobalFilterFree) {
-
             List<Filter> globals = appManager.getGlobalFilters(true);
-
             if (globals != null) {
-
                 chain.addFilters(globals);
-
             }
-
         }
 
         if (innerAction != null) {
-
             chain.setInnerAction(innerAction);
         }
-
         return chain;
     }
 
     public static void adhere(StickyAction action, Class<? extends AbstractAction> actionClass) {
-
         Context session = action.getSession();
-
         StickyActionMap map = (StickyActionMap) session.getAttribute(STICKY_KEY);
-
         if (map == null) {
-
             map = new StickyActionMap(new HashMap<Object, StickyAction>());
-
             session.setAttribute(STICKY_KEY, map);
         }
-
         map.put(actionClass, action);
 
     }
 
     public static void disjoin(StickyAction action, Class<? extends AbstractAction> actionClass) {
-
         Context session = action.getSession();
-
         StickyActionMap map = (StickyActionMap) session.getAttribute(STICKY_KEY);
-
         if (map != null) {
-
             map.remove(actionClass);
         }
     }
@@ -797,23 +606,18 @@ public class Controller extends HttpServlet {
         private final Map<Object, StickyAction> map;
 
         public StickyActionMap(Map<Object, StickyAction> map) {
-
             this.map = map;
-
         }
 
         public void put(Object key, StickyAction value) {
-
             map.put(key, value);
         }
 
         public StickyAction get(Object key) {
-
             return map.get(key);
         }
 
         public StickyAction remove(Object key) {
-
             return map.remove(key);
         }
 
@@ -821,15 +625,10 @@ public class Controller extends HttpServlet {
         }
 
         public void valueUnbound(HttpSessionBindingEvent evt) {
-
             Iterator<StickyAction> iter = map.values().iterator();
-
             while (iter.hasNext()) {
-
                 StickyAction sticky = iter.next();
-
                 sticky.onRemoved();
-
             }
         }
     }
