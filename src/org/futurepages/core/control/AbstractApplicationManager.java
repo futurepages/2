@@ -7,17 +7,13 @@ import org.futurepages.core.consequence.Consequence;
 import org.futurepages.core.context.Context;
 import org.futurepages.core.filter.Filter;
 import org.futurepages.consequences.StreamConsequence;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -81,95 +77,27 @@ public abstract class AbstractApplicationManager  implements Manipulable{
         realPath = realpath;
     }
 
-    private String findHostName() {
-        try {
-            return InetAddress.getLocalHost().getHostName();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public static void setDefaultAction(ActionConfig ac) {
-
        AbstractApplicationManager.defaultAction = ac;
     }
 
     public static ActionConfig getDefaultAction() {
-
        return defaultAction;
     }
 
-    public Properties getProperties() {
-
-    	if (realPath == null) throw new IllegalStateException("Realpath is not set for this application!");
-
-    	String hostname = findHostName();
-
-      File fileWithHostname = null;
-
-    	if (hostname != null) {
-
-    	   fileWithHostname = new File(realPath + File.separator + "WEB-INF" + File.separator + "appManager-" + hostname + ".properties");
-
-      }
-
-    	File file = new File(realPath + File.separator + "WEB-INF" + File.separator + "appManager.properties");
-
-    	if (fileWithHostname != null && fileWithHostname.exists()) {
-
-    		Properties props = new Properties();
-
-    		try {
-
-    			props.load(new FileInputStream(fileWithHostname));
-
-    		} catch(Exception e) {
-
-    			throw new RuntimeException(e);
-    		}
-
-    		return props;
-
-    	} else if (file.exists()) {
-
-    		Properties props = new Properties();
-
-    		try {
-
-    			props.load(new FileInputStream(file));
-
-    		} catch(Exception e) {
-
-    			throw new RuntimeException(e);
-    		}
-
-    		return props;
-
-    	} else {
-
-    		throw new RuntimeException("Cannot find appManager.properties or appManager-HOSTNAME.properties inside WEB-INF!");
-    	}
-
-    }
-
     public StreamConsequence stream(String contentType) {
-
     	return new StreamConsequence(contentType);
     }
 
     public void addActionPackage(String actionPackage) {
-
     	actionPackages.add(actionPackage);
     }
 
     public void removeActionPackage(String actionPackage) {
-
     	actionPackages.remove(actionPackage);
     }
 
     public static void setViewDir(String viewDir) {
-
     	AbstractApplicationManager.viewDir = viewDir;
     }
 
@@ -211,9 +139,8 @@ public abstract class AbstractApplicationManager  implements Manipulable{
     }
 
 	/**
-	 * Register an ActionConfig for the Mentawai controller.
+	 * Register an ActionConfig for the controller.
      *
-     * Note: Starting from version 1.2, this method is returning the action config it receives.
 	 *
 	 * @param ac The ActionConfig to register
      * @return The ActionConfig it receives to register
@@ -243,26 +170,16 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 	 * @since 1.8
 	 */
 	public boolean removeActionConfig(ActionConfig ac) {
-
 		String name = ac.getName();
-
 		if (name == null) throw new IllegalStateException("Cannot remove an action config without a name!");
-
 		String innerAction = ac.getInnerAction();
-
 		if (innerAction == null) {
-
 			return actions.remove(name) != null;
-
 		} else {
-
 			Map<String, ActionConfig> map = innerActions.get(name);
-
             if (map != null) {
-
             	return map.remove(innerAction) != null;
             }
-
             return false;
 		}
 	}
@@ -271,7 +188,6 @@ public abstract class AbstractApplicationManager  implements Manipulable{
      * Shorter version of addActionConfig.
      *
      * @param ac
-     * @since 1.2
      * @return The ActionConfig it receives
      */
     public ActionConfig add(ActionConfig ac) {
@@ -281,32 +197,17 @@ public abstract class AbstractApplicationManager  implements Manipulable{
     /**
      * Override this method to do any initialization for your web application.
      *
-     * @deprecated Use init(Context application) instead.
-     */
-    public void init() { }
-
-    /**
-     * Override this method to do any initialization for your web application.
-     *
      * @param application The application context of your web application.
-     * @since 1.1
      */
     public void init(Context application) {
-        init(); // for deprecation...
     }
 
     /**
      * Called by the controller when the application is exiting.
      *
      * OBS: This is called by the Controller servlet's destroy method.
-     *
-     * @param application
-     * @since 1.4
      */
-    public void destroy(Context application) {
-
-
-    }
+    public void destroy(Context application) {  }
 
     /**
      * Override this method to register your mentabeans.
@@ -344,14 +245,10 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 	 * @return The ActionConfig associated with the given name
 	 */
 	public ActionConfig getActionConfig(String name) {
-
 		ActionConfig ac = actions.get(name);
-
 		if (ac == null) {
-
 			ac = loadActionConfig(name);
 		}
-
 		return ac;
 	}
 
@@ -370,53 +267,35 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 	public ActionConfig getActionConfig(String name, String innerAction) {
 
 		ActionConfig ac = null;
-
         Map<String, ActionConfig> map = innerActions.get(name);
 
         if (map != null) {
-
         	ac = map.get(innerAction);
         }
 
         if (ac == null) {
-
         	ac = loadActionConfig(name);
         }
-
         return ac;
 	}
 
 	private ActionConfig loadActionConfig(String name) {
-
 		StringBuilder sb = new StringBuilder(32);
-
 		Iterator<String> iter = actionPackages.iterator();
-
 		while(iter.hasNext()) {
-
 			String actionPackage = iter.next();
-
 			sb.setLength(0);
-
 			sb.append(actionPackage).append('.').append(name);
 
 			// check if action is in the classpath...
-
 			Class<? extends Object> actionClass = null;
-
 			try {
-
 				actionClass = Class.forName(sb.toString());
-
 			} catch(Exception e) {
-
 				continue;
 			}
-
 			ActionConfig ac = new ActionConfig(actionClass);
-
 			addActionConfig(ac);
-
 			return ac;
 		}
 
@@ -450,7 +329,6 @@ public abstract class AbstractApplicationManager  implements Manipulable{
      * the specific action filters.
      *
 	 * @param filters A list of filters.
-     * @since 1.1.1
 	 */
 	public void addGlobalFilter(List filters) {
 		addGlobalFilter(filters, false);
@@ -471,7 +349,6 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 	 *
 	 * @param filter The filter to register as a global filter.
      * @param last true if you want this filter to be executed <i>after</i> the specific action filters.
-     * @since 1.1.1
 	 */
 	public void addGlobalFilter(Filter filter, boolean last) {
         if (last) {
@@ -492,10 +369,6 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 
     /**
      * Shorter version of addGlobalFilter.
-     *
-     * @param filter
-     * @param last
-     * @since 1.2
      */
     public void filter(Filter filter, boolean last) {
         addGlobalFilter(filter, last);
@@ -503,9 +376,6 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 
     /**
      * Shorter version of addFlobalFilter.
-     *
-     * @param filter
-     * @since 1.3
      */
     public void filterLast(Filter filter) {
     	addGlobalFilter(filter, true);
@@ -513,10 +383,6 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 
 	/**
 	 * Register a list of filters for all actions in this application manager.
-	 *
-	 * @param filters A list of filters.
-     * @param last true if you want these filters to be executed <i>after</i> the specific action filters.
-     * @since 1.1.1
 	 */
 	public void addGlobalFilter(List filters, boolean last) {
         Iterator iter = filters.iterator();
@@ -528,10 +394,6 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 
     /**
      * Shorter version of addGlobalFilter.
-     *
-     * @param filters
-     * @param last
-     * @since 1.2
      */
     public void filter(List filters, boolean last) {
         addGlobalFilter(filters, last);
@@ -560,10 +422,6 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 
     /**
      * Shorter version of addGlobalConsequence.
-     *
-     * @param result
-     * @param c
-     * @since 1.2
      */
     public void on(String result, Consequence c) {
         addGlobalConsequence(result, c);
@@ -577,9 +435,7 @@ public abstract class AbstractApplicationManager  implements Manipulable{
      * @since 1.9
      */
     public void on(String result, String jsp) {
-
     	addGlobalConsequence(result, new Forward(jsp));
-
     }
 
 	/**
@@ -624,30 +480,20 @@ public abstract class AbstractApplicationManager  implements Manipulable{
         Set<Filter> filters = new HashSet<Filter>();
         filters.addAll(globalFilters);
         filters.addAll(globalFiltersLast);
-
         Iterator<ActionConfig> iterAc = actions.values().iterator();
 		while(iterAc.hasNext()) {
             ActionConfig ac = (ActionConfig) iterAc.next();
             filters.addAll(ac.getFilters());
         }
-
 		Iterator<Map<String, ActionConfig>> iter = innerActions.values().iterator();
-
         while(iter.hasNext()) {
-
         	Map<String, ActionConfig> map = iter.next();
-
             Iterator iter2 = map.values().iterator();
-
             while(iter2.hasNext()) {
-
                 ActionConfig ac = (ActionConfig) iter2.next();
-
                 filters.addAll(ac.getFilters());
-
             }
         }
-
         return filters;
     }
 
@@ -655,10 +501,6 @@ public abstract class AbstractApplicationManager  implements Manipulable{
      * Convenient method that provides a less verbose way to create a forward.
      *
      * This is shorter than new Forward("/foo.jsp").
-     *
-     * @param page
-     * @return a new forward consequence
-     * @since 1.2
      */
     public static Consequence fwd(String page) {
 
@@ -668,42 +510,26 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 
     /**
      * Convenient method that provides a less verbose way to create a redirect.
-     *
+	 * 
      * This is shorter than new Redirect("/foo.jsp").
-     *
-     * @param page
-     * @return a new redirect consequence
-     * @since 1.2
      */
     public static Consequence redir(String page) {
-
         return new Redirect(page);
-
     }
 
     /**
      * Convenient method that provides a less verbose way to create a redirect.
      *
      * This is shorter than new Redirect("/foo.jsp", true).
-     *
-     * @param page
-     * @param flag
-     * @return a new redirect consequence
-     * @since 1.3
      */
     public static Consequence redir(String page, boolean flag) {
-
         return new Redirect(page, flag);
-
     }
 
     /**
      * Convenient method that provides a less verbose way to create a redirect.
      *
      * This is shorter than new Redirect().
-     *
-     * @return a new redirect consequence
-     * @since 1.3
      */
     public static Consequence redir() {
 
@@ -715,10 +541,6 @@ public abstract class AbstractApplicationManager  implements Manipulable{
      * Convenient method that provides a less verbose way to create a redirect.
      *
      * This is shorter than new Redirect().
-     *
-     * @param flag
-     * @return a new redirect consequence
-     * @since 1.4
      */
     public static Consequence redir(boolean flag) {
 
@@ -730,10 +552,6 @@ public abstract class AbstractApplicationManager  implements Manipulable{
      * Convenient method that provides a less verbose way to create a chain.
      *
      * This is shorter than new Chain("/foo.jsp").
-     *
-     * @param ac The action config to chain
-     * @return a new chain consequence
-     * @since 1.2
      */
     public static Consequence chain(ActionConfig ac) {
 
@@ -748,11 +566,6 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 
     /**
      * Convenient method that provides a less verbose way to create a chain.
-     *
-     * @param ac
-     * @param innerAction
-     * @return a new chain consequence
-     * @since 1.12
      */
     public static Consequence chain(ActionConfig ac, String innerAction) {
 
@@ -761,24 +574,13 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 
     /**
      * Convenient method for setting a chain.
-     *
-     * @param klass
-     * @return a new chain consequence
-     * @since 1.11
      */
     public static Consequence chain(Class<? extends Object> klass) {
-
        return new Chain(new ActionConfig(klass));
-
     }
 
     /**
      * Convenient method for setting a chain.
-     *
-     * @param klass
-     * @param innerAction
-     * @return a new chain consequence
-     * @since 1.11
      */
     public static Consequence chain(Class<? extends Object> klass, String innerAction) {
 
@@ -791,10 +593,7 @@ public abstract class AbstractApplicationManager  implements Manipulable{
      *
      * Note: This will also add the action to this ApplicationManager, in other words,
      * no need to call add or addActionConfig !!!
-     *
-     * @param klass
-     * @return a new ActionConfig
-     * @since 1.3
+	 * 
      */
     public ActionConfig action(Class<? extends Object> klass) {
 
@@ -805,15 +604,10 @@ public abstract class AbstractApplicationManager  implements Manipulable{
      * Convenient method that provides a less verbose way to create an action config.
      *
      * Note: This will also add the action to this ApplicationManager, in other words,
-     * no need to call add or addActionConfig !!!
-     *
-     * @param name
-     * @param klass
-     * @return a new action config
-     * @since 1.2
+     * no need to call add or addActionConfig
+	 * 
      */
     public ActionConfig action(String name, Class<? extends Object> klass) {
-
         return addActionConfig(new ActionConfig(name, klass));
 
     }
@@ -823,12 +617,7 @@ public abstract class AbstractApplicationManager  implements Manipulable{
      *
      * Note: This will also add the action to this ApplicationManager, in other words,
      * no need to call add or addActionConfig !!!
-     *
-     * @param name
-     * @param klass
-     * @param innerAction
-     * @return a new action config
-     * @since 1.2
+	 * 
      */
     public ActionConfig action(String name, Class<? extends Object> klass, String innerAction) {
 
@@ -841,29 +630,13 @@ public abstract class AbstractApplicationManager  implements Manipulable{
      *
      * Note: This will also add the action to this ApplicationManager, in other words,
      * no need to call add or addActionConfig !!!
-     *
-     * @param klass
-     * @param innerAction
-     * @return a new ClassActionConfig
-     * @since 1.3
+	 * 
      */
     public ActionConfig action(Class<? extends Object> klass, String innerAction) {
 
         return addActionConfig(new ActionConfig(klass, innerAction));
 
     }
-
-    /**
-     * Turn on/off the statsMode mode here.
-     *
-     * @param statsMode
-     */
-    public void setStatsMode(boolean statsMode) {
-
-        Controller.statsMode = statsMode;
-
-    }
-
 
     /**
      * Turn on/off the reload mode of application manager.
