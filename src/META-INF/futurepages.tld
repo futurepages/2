@@ -5,7 +5,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
 "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
 <taglib>
 	<tlib-version>1.0</tlib-version>
-	<jsp-version>1.2</jsp-version>
+	<jsp-version>2.0</jsp-version>
 	<short-name>tld from futurepages</short-name>
 	<uri>http://futurepages.org/taglib.tld</uri>
 	<display-name>futurepages</display-name>
@@ -140,7 +140,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
 	<tag>
 		<name>out</name>
 		<tag-class>org.futurepages.tags.Out</tag-class>
-		<body-content>jsp</body-content>
+		<body-content>JSP</body-content>
 		<display-name></display-name>
 		<attribute>
 			<name>value</name>
@@ -194,7 +194,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
 	<tag>
 		<name>hasError</name>
 		<tag-class>org.futurepages.tags.core.conditional.HasError</tag-class>
-		<body-content>jsp</body-content>
+		<body-content>JSP</body-content>
 		<display-name></display-name>
 	</tag>
 	<tag>
@@ -538,25 +538,25 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
 			<name>id</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
-			<type>String</type>
+			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
 			<name>klass</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
-			<type>String</type>
+			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
 			<name>style</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
-			<type>String</type>
+			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
 			<name>onblur</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
-			<type>String</type>
+			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
 			<name>maxlength</name>
@@ -568,20 +568,20 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
 			<name>extra</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
-			<type>String</type>
+			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
 			<name>separator</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
-			<type>String</type>
+			<type>java.lang.String</type>
 		</attribute>
 	</tag>
 
 	<tag>
 		<name>hasSuccess</name>
 		<tag-class>org.futurepages.tags.core.conditional.HasSuccess</tag-class>
-		<body-content>jsp</body-content>
+		<body-content>JSP</body-content>
 		<display-name></display-name>
 		<attribute>
 			<name>negate</name>
@@ -647,17 +647,17 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
 	<tag>
 		<name>importModuleLayout</name>
 		<tag-class>org.futurepages.tags.ImportModuleLayout</tag-class>
-		<body-content>EMPTY</body-content>
+		<body-content>empty</body-content>
 	</tag>
 	<tag>
 		<name>includeModuleFunctions</name>
 		<tag-class>org.futurepages.tags.IncludeModuleFunctions</tag-class>
-		<body-content>EMPTY</body-content>
+		<body-content>empty</body-content>
 	</tag>
 	<tag>
 		<name>valueFormatter</name>
 		<tag-class>org.futurepages.tags.ValueFormatter</tag-class>
-		<body-content>EMPTY</body-content>
+		<body-content>empty</body-content>
 		<attribute>
 			<name>object</name>
 			<required>true</required>
@@ -810,31 +810,31 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
 			<name>id</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
-			<type>String</type>
+			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
 			<name>headFile</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
-			<type>String</type>
+			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
 			<name>xmlns</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
-			<type>String</type>
+			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
 			<name>lang</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
-			<type>String</type>
+			<type>java.lang.String</type>
 		</attribute>
 		<attribute>
 			<name>dir</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
-			<type>String</type>
+			<type>java.lang.String</type>
 		</attribute>
 	</tag>
 	<tag>
@@ -845,13 +845,13 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
 			<name>url</name>
 			<required>true</required>
 			<rtexprvalue>true</rtexprvalue>
-			<type>String</type>
+			<type>java.lang.String</type>
 		</attribute>
 	</tag>
 	<tag>
 		<name>set</name>
 		<tag-class>org.futurepages.tags.Set</tag-class>
-		<body-content>jsp</body-content>
+		<body-content>JSP</body-content>
 		<attribute>
 			<name>var</name>
 			<required>false</required>
