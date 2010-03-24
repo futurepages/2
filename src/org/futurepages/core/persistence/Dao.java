@@ -27,7 +27,7 @@ public class Dao extends HQLProvider {
         return totalPages;
     }
 
-    private static Session session() {
+    public static Session session() {
         return HibernateManager.getSession();
     }
     
@@ -341,6 +341,7 @@ public class Dao extends HQLProvider {
      * /////////////////////////////////////////////////
      */
     public static void beginTransaction() {
+    	System.out.println("Dao.beginTransaction()");
         session().getTransaction().begin();
     }
 
@@ -349,6 +350,7 @@ public class Dao extends HQLProvider {
     }
 
     public static void commitTransaction() {
+    	System.out.println("Dao.commitTransaction()");
         session().getTransaction().commit();
     }
 
@@ -477,6 +479,11 @@ public class Dao extends HQLProvider {
 
     public static <T extends Serializable> void persist(T obj) {
         session().persist(obj);
+    }
+
+    public static <T extends Serializable> T refresh(T obj) {
+        session().refresh(obj);
+        return obj;
     }
 
     public static <T extends Serializable> T merge(T obj) {
