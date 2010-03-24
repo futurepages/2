@@ -60,6 +60,7 @@ public class Params {
 		//só quando for dar suporte a mais de um banco de dados
 		paramsMap.put("CONNECT_EXTERNAL_MODULES", "false");
 		paramsMap.put("DATABASE_DIR_NAME", "database");
+		paramsMap.put("PAGE_ENCODING", "ISO-8859-1");
 
     	paramsMap.put("EMAIL_ACTIVE", "false");
 		paramsMap.put("EMAIL_DEFAULT_PORT", "25");
