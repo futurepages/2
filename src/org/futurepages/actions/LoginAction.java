@@ -2,15 +2,16 @@ package org.futurepages.actions;
 
 import java.util.Locale;
 import java.util.StringTokenizer;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import org.futurepages.core.admin.DefaultUser;
-import org.futurepages.core.action.Action;
-import org.futurepages.core.action.AbstractAction;
-import org.futurepages.core.context.Context;
-import org.futurepages.core.admin.AuthenticationFree;
 
-public abstract class LoginAction extends AbstractAction implements AuthenticationFree, Action {
+import org.futurepages.core.action.AbstractAction;
+import org.futurepages.core.admin.AuthenticationFree;
+import org.futurepages.core.admin.DefaultUser;
+import org.futurepages.core.context.Context;
+
+public abstract class LoginAction extends AbstractAction implements AuthenticationFree  {
 
 	public static int TIMEOUT = 30; // in Minutes
 
