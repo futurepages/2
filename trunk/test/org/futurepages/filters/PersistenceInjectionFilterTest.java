@@ -36,6 +36,23 @@ public class PersistenceInjectionFilterTest {
 		return retorno;
 	}
 	
+	
+	/**
+	 * ("aluno","alunoId",Aluno.class);
+	 * @throws Exception 
+	 */
+	@Test
+	public void testFilter_semKeyNoInput() throws Exception{
+		Aluno alunoBD = populator.criarUmAluno();
+		Input input = chain.getAction().getInput();
+		
+		filter = new PersistenceInjectionFilter("aluno","alunoId",Aluno.class);
+		filterTestProcedure();
+		
+		Aluno aluno = (Aluno) input.getValue("aluno");
+		Assert.assertNull("Aluno não foi injetado no input",aluno);		
+	}
+	
 	/**
 	 * ("aluno","alunoId",Aluno.class);
 	 * @throws Exception 
