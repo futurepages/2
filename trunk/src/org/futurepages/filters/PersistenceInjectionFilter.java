@@ -111,6 +111,4 @@ public class PersistenceInjectionFilter implements Filter{
 	public void destroy() {
 	}
 
-
-
 }
