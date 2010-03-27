@@ -17,7 +17,7 @@ import org.futurepages.util.The;
  * Recupera no banco um objeto do tipo 'classToInject' com o id passado no input com a chave 'keyToInject'
  * em seguida injeta no objeto que está referenciado no input com a chave 'targetKey'
  * @author leandro
- * Classe Deprecated. Use {@link PersistenceInjectionFilter}
+ * Deprecated Classe. Use {@link PersistenceInjectionFilter}
  */
 @Deprecated
 public class PIFilter implements Filter {
