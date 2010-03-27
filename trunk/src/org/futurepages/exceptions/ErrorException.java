@@ -1,5 +1,6 @@
 package org.futurepages.exceptions;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 /**
@@ -10,20 +11,20 @@ public class ErrorException extends RuntimeException {
 
 	private LinkedHashMap<String, String> validationMap;
 
-    private String message;
+	private String message;
 
 	public ErrorException(String msg) {
 		super(msg);
 	}
 
 	public ErrorException(Exception ex) {
-        this.message = ex.getMessage();
+		this.message = ex.getMessage();
 	}
 
-    @Override
-    public String getMessage() {
-        if(message!=null) return this.message; else return super.getMessage();
-    }
+	@Override
+	public String getMessage() {
+		if(message!=null) return this.message; else return super.getMessage();
+	}
 
 
 
@@ -41,13 +42,16 @@ public class ErrorException extends RuntimeException {
 	}
 
 	private static String validationMessage(LinkedHashMap<String, String> validationMap) {
+
 		StringBuffer sb = new StringBuffer();
 		if (validationMap.size() > 1) {
+			int index = 0;
 			for (String key : validationMap.keySet()) {
-				sb.append(key + ") " + validationMap.get(key) + "\n");
+				sb.append(++index + ") " + validationMap.get(key) + "\n");
 			}
 		}else{
-			sb.append(validationMap.get("1"));
+			if(!validationMap.isEmpty())
+				sb.append(new ArrayList<String>(validationMap.values()).get(0));
 		}
 		return sb.toString();
 	}
