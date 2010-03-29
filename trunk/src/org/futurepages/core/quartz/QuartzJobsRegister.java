@@ -39,9 +39,9 @@ public class QuartzJobsRegister extends ModulesAutomation{
 
 	private Trigger buildTrigger(String moduleName, Class<?> jobKlass) throws ParseException {
 		Trigger trigger = null;
-		final Class<org.futurepages.core.quartz.CronTrigger> cronTagClass = org.futurepages.core.quartz.CronTrigger.class;
+		final Class<CronTrigger> cronTagClass = CronTrigger.class;
 		if(jobKlass.isAnnotationPresent(cronTagClass)){
-			org.futurepages.core.quartz.CronTrigger cronAnot = jobKlass.getAnnotation(cronTagClass);
+			CronTrigger cronAnot = jobKlass.getAnnotation(cronTagClass);
 			String name = moduleName+"_"+jobKlass.getSimpleName();
 			trigger = new org.quartz.CronTrigger(name, Scheduler.DEFAULT_GROUP, cronAnot.expression());
 		}			
