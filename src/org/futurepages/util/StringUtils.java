@@ -4,15 +4,12 @@ import java.util.Map;
 
 public class StringUtils {
 
-	public String concat(String... args){
-		if(args.length > 0){
-			StringBuffer buffer = new StringBuffer();
-			for (String string : args) {
-				buffer.append(string);
-			}
-			return buffer.toString();
+	public static String concat(String... args){
+		StringBuilder sb = new StringBuilder();
+		for (String string : args) {
+			sb.append(string);
 		}
-		return "";
+		return sb.toString();
 	}
 
 	public static boolean isNotEmpty(String s) {
