@@ -1,6 +1,7 @@
 package org.futurepages.core.persistence;
 
 import org.futurepages.util.Is;
+import org.futurepages.util.StringUtils;
 
 /**
  * @author leandro
@@ -28,12 +29,12 @@ public class HQLProvider implements HQLable {
 	}
 
 	protected static String updateSetting(Class entityClass) {
-		return " UPDATE " + entityClass.getName() + " SET ";
+		return concat(" UPDATE " , entityClass.getName() , " SET ");
 	}
 
 	protected static String max(String maxClause) {
 		if (!Is.empty(maxClause)) {
-			return " MAX("+maxClause+")";
+			return concat(" MAX(",maxClause,")");
 		} else {
 			return "";
 		}
@@ -41,7 +42,7 @@ public class HQLProvider implements HQLable {
 
 	protected static String min(String minClause) {
 		if (!Is.empty(minClause)) {
-			return " MIN("+minClause+")";
+			return concat(" MIN(",minClause,")");
 		} else {
 			return "";
 		}
@@ -49,26 +50,26 @@ public class HQLProvider implements HQLable {
 
 	protected static String count(String countClause) {
 		if (!Is.empty(countClause)) {
-			return " COUNT("+countClause+")";
+			return concat(" COUNT(",countClause,")");
 		} else {
 			return "";
 		}
 	}
 
 	protected static HQLField day(String date) {
-		return new HQLField(" DAY("+date+")");
+		return new HQLField(concat(" DAY(",date,")"));
 	}
 
 	protected static HQLField month(String date) {
-		return new HQLField(" MONTH("+date+")");
+		return new HQLField(concat(" MONTH(",date,")"));
 	}
 
 	protected static HQLField year(String date) {
-		return new HQLField(" YEAR("+date+")");
+		return new HQLField(concat(" YEAR(",date,")"));
 	}
 
 	protected static HQLField date(String date) {
-		return new HQLField(" DATE("+date+")");
+		return new HQLField(concat(" DATE(",date,")"));
 	}
 
 	protected static String from(Class entityClass) {
@@ -81,7 +82,7 @@ public class HQLProvider implements HQLable {
 
 	protected static String from(Class entityClass,String alias) {
 		if (entityClass != null) {
-			return " FROM " + entityClass.getName()+" "+alias;
+			return concat(" FROM ",entityClass.getName()," ",alias);
 		} else {
 			return "";
 		}
@@ -112,11 +113,12 @@ public class HQLProvider implements HQLable {
 			}
 			else
 				if(fields.length>1){
-					String f =" ORDER BY ";
+					StringBuilder sb = new StringBuilder(" ORDER BY ");
 					for(String field : fields){
-						f = f+field+",";
+						sb.append(field).append(",");
 					}
-					return  f.substring(0, f.length()-1);
+					String result = sb.toString();
+					return  result.substring(0, result.length()-1);
 				}
 		}
 		return "";
@@ -178,7 +180,7 @@ public class HQLProvider implements HQLable {
 	protected static String and(String clause) {
 		if (Is.empty(clause))
 			return "";
-		return AND+"("+clause+")";
+		return concat(AND,"(",clause,")");
 	}
 	
 	protected static String ors(String... clauses) {
@@ -188,7 +190,7 @@ public class HQLProvider implements HQLable {
 	protected static String or(String clause) {
 		if (Is.empty(clause))
 			return "";
-		return OR+"("+clause+")";
+		return concat(OR,"(",clause,")");
 	}
 
 	protected static String groupBy(String groupClause) {
@@ -197,5 +199,9 @@ public class HQLProvider implements HQLable {
 		} else {
 			return "";
 		}
+	}
+
+	protected static String concat(String... args){
+	   return StringUtils.concat(args);
 	}
 }

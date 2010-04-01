@@ -15,6 +15,7 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 import org.futurepages.annotations.Tag;
 import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.tags.build.ContentTypeEnum;
+import org.futurepages.util.StringUtils;
 
 @Tag(bodyContent = ContentTypeEnum.SCRIPTLESS)
 public final class WebContainer extends SimpleTagSupport {
@@ -84,7 +85,7 @@ public final class WebContainer extends SimpleTagSupport {
 		StringBuffer headBufferEnd = new StringBuffer();
 		StringBuffer footerBuffer = new StringBuffer();
 
-		headBufferBegin.append("<html"+id+xmlns+lang+dir+"><head>");
+		headBufferBegin.append(StringUtils.concat("<html",id,xmlns,lang,dir,"><head>"));
 		
 		getJspBody().invoke(evalResult); //invoca o conteúdo dentro do container
 
@@ -132,7 +133,7 @@ public final class WebContainer extends SimpleTagSupport {
 	}
 
 	public void setLang(String lang) {
-		this.lang = " xml:lang=\""+ lang+"\" lang=\""+ lang+"\"";
+		this.lang = StringUtils.concat(" xml:lang=\"",lang,"\" lang=\"",lang+"\"");
 	}
 
 	public void setXmlns(String xmlns) {

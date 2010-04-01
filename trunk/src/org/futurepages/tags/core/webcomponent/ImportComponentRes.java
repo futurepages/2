@@ -9,6 +9,7 @@ import org.futurepages.annotations.Tag;
 import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.path.Paths;
 import org.futurepages.core.tags.build.ContentTypeEnum;
+import org.futurepages.util.StringUtils;
 
 @Tag(bodyContent = ContentTypeEnum.SCRIPTLESS)
 public final class ImportComponentRes extends SimpleTagSupport {
@@ -50,10 +51,10 @@ public final class ImportComponentRes extends SimpleTagSupport {
 		}
 		else {
 			if(!noJS){
-				getJspContext().getOut().print("<script type=\"text/javascript\">needResourceJS('"+this.getKey()+"','"+this.getVersion()+"');</script>");
+				getJspContext().getOut().print(StringUtils.concat("<script type=\"text/javascript\">needResourceJS('",this.getKey(),"','"+this.getVersion(),"');</script>"));
 			}
 			if(!noCSS){
-				getJspContext().getOut().print("<script type=\"text/javascript\">needResourceCSS('"+this.getKey()+"','"+this.getVersion()+"');</script>");
+				getJspContext().getOut().print(StringUtils.concat("<script type=\"text/javascript\">needResourceCSS('"+this.getKey(),"','",this.getVersion(),"');</script>"));
 			}
 		}
 	}
@@ -114,11 +115,11 @@ public final class ImportComponentRes extends SimpleTagSupport {
 	}
 
 	public void appendJSto(HttpServletRequest req, StringBuffer buffer) {
-		buffer.append("<script src=\"" + Paths.resource(req) + "/" + key + "/" + version + "/" + key + ".js\" type=\"text/javascript\"></script>");
+		buffer.append(StringUtils.concat("<script src=\"" , Paths.resource(req) , "/" , key , "/" , version , "/" , key , ".js\" type=\"text/javascript\"></script>"));
 	}
 
 	public void appendCSSto(HttpServletRequest req, StringBuffer buffer) {
-		buffer.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + Paths.resource(req) + "/" + key + "/" + version + "/" + key + ".css\" media=\"screen\"/>");
+		buffer.append(StringUtils.concat("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + Paths.resource(req) , "/" , key , "/" , version , "/" , key , ".css\" media=\"screen\"/>"));
 	}
 
 	@Override
