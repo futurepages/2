@@ -6,6 +6,7 @@ import org.futurepages.core.pagination.Pageable;
 import org.futurepages.core.path.Paths;
 import org.futurepages.core.config.Params;
 import org.futurepages.core.tags.PrintTag;
+import org.futurepages.util.StringUtils;
 
 
 public class Pagination extends PrintTag implements Pageable{
@@ -226,6 +227,6 @@ public class Pagination extends PrintTag implements Pageable{
 
 	private String adjImgButton(String type, boolean enabled) {
 		String enabledResult = enabled ? "" : "_disable";
-		return "<img src=\"" + Paths.theme(req) + "/res/"+cssClass+"/"+type+enabledResult+"."+IMAGE_FORMAT+"\"/>";
+		return StringUtils.concat("<img src=\"" , Paths.theme(req) , "/res/" , cssClass , "/" , type+enabledResult , "." , IMAGE_FORMAT , "\"/>");
 	}
 }
