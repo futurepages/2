@@ -3,23 +3,18 @@ package org.futurepages.core.control;
 import org.futurepages.core.consequence.Consequence;
 import org.futurepages.core.context.CookieContext;
 import org.futurepages.core.context.ApplicationContext;
-import org.futurepages.core.context.Context;
 import org.futurepages.core.context.SessionContext;
 import org.futurepages.core.filter.AfterConsequenceFilter;
 import org.futurepages.core.filter.GlobalFilterFree;
 import org.futurepages.core.filter.Filter;
-import org.futurepages.core.action.StickyAction;
-import org.futurepages.core.action.AbstractAction;
 import org.futurepages.exceptions.ActionException;
 import org.futurepages.core.action.Action;
 import org.futurepages.core.config.Params;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletConfig;
@@ -28,9 +23,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionBindingEvent;
-import javax.servlet.http.HttpSessionBindingListener;
 
 import org.futurepages.core.consequence.ConsequenceProvider;
 import org.futurepages.core.consequence.DefaultConsequenceProvider;
@@ -40,6 +32,7 @@ import org.futurepages.core.input.RequestInput;
 import org.futurepages.core.output.ResponseOutput;
 import org.futurepages.core.i18n.LocaleManager;
 import org.futurepages.core.list.ListManager;
+import org.futurepages.exceptions.FilterException;
 /**
  * The Mentawai central controller. Mentawai actions are intercepted and
  * executed by this controller. The controller is also responsable for creating
@@ -62,8 +55,7 @@ public class Controller extends HttpServlet {
     private static long lastModified = 0;
     static boolean reloadAppManager = false;
     static boolean autoView = true;
-    private static final String STICKY_KEY = "_stickyActions";
-
+	
     /**
      * Initialize the Controller, creating and starting the ApplicationManager.
      *
@@ -324,9 +316,7 @@ public class Controller extends HttpServlet {
         if (reloadAppManager) {
 			System.out.println("CUIDADO: reloadAppManager do Controller ligado.");
             synchronized (this) {
-
                 if (isAppMgrModified()) {
-
                     initApplicationManager();
                 }
             }
@@ -360,22 +350,7 @@ public class Controller extends HttpServlet {
             }
         }
 
-        Action action = null;
-
-        // sticky logic! Re-use instance if action is sticky (similar to
-        // continuations in other frameworks, but simpler!)
-        Class<? extends Object> actionClass = ac.getActionClass();
-        if (StickyAction.class.isAssignableFrom(actionClass)) {
-            HttpSession session = req.getSession(true);
-            StickyActionMap map = (StickyActionMap) session.getAttribute(STICKY_KEY);
-            if (map != null) {
-                action = map.get(actionClass);
-            }
-        }
-
-        if (action == null) {
-            action = ac.getAction(); // create an action instance here...
-        }
+        Action action = ac.getAction(); // create an action instance here...
 
         if (action == null) {
             throw new ServletException("Could not get an action instace: " + ac);
@@ -453,8 +428,7 @@ public class Controller extends HttpServlet {
 
         InvocationChain chain = createInvocationChain(ac, action, innerAction);
 
-        // copy all filters executed together with that action to the filters
-        // parameter...
+        // copy all filters executed together with that action to the filters parameter...
 
         if (filters == null || filters.size() != 0) {
 
@@ -478,12 +452,12 @@ public class Controller extends HttpServlet {
             c = ac.getConsequence(result, innerAction);
         }
 
-        // If not fount, try to get a consequene specific for that action
+        // If not found, try to get a consequene specific for that action
         if (c == null) {
             c = ac.getConsequence(result);
         }
 
-//      imprime pra deubug: action e consequência
+//      impressão pra deubug: action e consequência
 //		System.out.println("<#"+Thread.currentThread().getId()+"#>"+  ac.getName()+ ((innerAction!=null)?"."+innerAction:"")+"["+result.toUpperCase()+"] -> "+(c!=null?c.toString():" NULL"));
         // If not found, try to get a global consequence
 		if (c == null) {
@@ -580,57 +554,6 @@ public class Controller extends HttpServlet {
             chain.setInnerAction(innerAction);
         }
         return chain;
-    }
-
-    public static void adhere(StickyAction action, Class<? extends AbstractAction> actionClass) {
-        Context session = action.getSession();
-        StickyActionMap map = (StickyActionMap) session.getAttribute(STICKY_KEY);
-        if (map == null) {
-            map = new StickyActionMap(new HashMap<Object, StickyAction>());
-            session.setAttribute(STICKY_KEY, map);
-        }
-        map.put(actionClass, action);
-
-    }
-
-    public static void disjoin(StickyAction action, Class<? extends AbstractAction> actionClass) {
-        Context session = action.getSession();
-        StickyActionMap map = (StickyActionMap) session.getAttribute(STICKY_KEY);
-        if (map != null) {
-            map.remove(actionClass);
-        }
-    }
-
-    private static class StickyActionMap implements HttpSessionBindingListener {
-
-        private final Map<Object, StickyAction> map;
-
-        public StickyActionMap(Map<Object, StickyAction> map) {
-            this.map = map;
-        }
-
-        public void put(Object key, StickyAction value) {
-            map.put(key, value);
-        }
-
-        public StickyAction get(Object key) {
-            return map.get(key);
-        }
-
-        public StickyAction remove(Object key) {
-            return map.remove(key);
-        }
-
-        public void valueBound(HttpSessionBindingEvent evt) {
-        }
-
-        public void valueUnbound(HttpSessionBindingEvent evt) {
-            Iterator<StickyAction> iter = map.values().iterator();
-            while (iter.hasNext()) {
-                StickyAction sticky = iter.next();
-                sticky.onRemoved();
-            }
-        }
     }
 
     public static void setAppManager(AbstractApplicationManager applicationManager) {

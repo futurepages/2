@@ -45,7 +45,7 @@ public class LocaleManager {
 	private static long SCAN_TIME = 1000 * 60 * 5;
 	
 	private static final Map<String, SimpleDateFormat> simpleDateFormatters = new HashMap<String, SimpleDateFormat>();
-	
+
 	static {
 		
 		setDateMask(new Locale("en"), "MM/dd/yyyy");
@@ -55,11 +55,12 @@ public class LocaleManager {
 	}
 	
 	private static final Map<String, SimpleDateFormat> simpleTimeFormatters = new HashMap<String, SimpleDateFormat>();
-	
-	static {
-		
-		startLocaleScan();
-	}
+
+// Comentado enquanto não é utilizado
+//	static {
+//
+//		startLocaleScan();
+//	}
 	
 	private static void initThread() {
 		

@@ -107,10 +107,6 @@ public class PrettyURLController extends Controller {
 
 		String[] s = uri.split("/");
 
-// Para "/" da raiz, porém as imagens não funcionam.
-//        if(s.length==0){
-//            return Params.get("START_PAGE_NAME");
-//        }
         if(s.length==1){
             if(s[0].equals(Params.get("START_PAGE_NAME"))){
                 return s[0];
@@ -129,7 +125,6 @@ public class PrettyURLController extends Controller {
             }
 			return s[1];
 		}
-
 		return null;
 	}
 
