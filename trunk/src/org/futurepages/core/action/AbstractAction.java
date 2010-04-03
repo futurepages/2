@@ -15,7 +15,6 @@ import org.futurepages.consequences.AjaxConsequence;
 import org.futurepages.core.admin.DefaultUser;
 import org.futurepages.core.context.Context;
 import org.futurepages.core.context.SessionContext;
-import org.futurepages.core.control.Controller;
 import org.futurepages.core.i18n.LocaleManager;
 import org.futurepages.core.input.Input;
 import org.futurepages.core.output.Output;
@@ -30,7 +29,7 @@ import org.futurepages.util.HtmlMapChars;
 /**
  * Action Base
  */
-public abstract class AbstractAction implements Pageable, StickyAction {
+public abstract class AbstractAction implements Pageable, Action {
 
 	protected static final String USER_KEY = "user";
 	protected static final String LOCALE_KEY = LocaleManager.LOCALE_KEY;
@@ -331,20 +330,6 @@ public abstract class AbstractAction implements Pageable, StickyAction {
 
 	public static DefaultUser loggedUser(HttpSession session) {
 		return (DefaultUser) session.getAttribute(USER_KEY);
-	}
-
-	public void adhere() {
-
-		Controller.adhere(this, this.getClass());
-	}
-
-	public void disjoin() {
-
-		Controller.disjoin(this, this.getClass());
-	}
-
-	public void onRemoved() {
-		// subclasses can override this to trap this callback for sticky actions...
 	}
 
 	public String getContextPath() {

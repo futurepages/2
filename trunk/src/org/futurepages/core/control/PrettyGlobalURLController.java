@@ -56,10 +56,6 @@ public class PrettyGlobalURLController extends Controller {
 
 		String[] s = uri.split("/");
 
-// Para "/" da raiz, porém as imagens não funcionam.
-//        if(s.length==0){
-//            return Params.get("START_PAGE_NAME");
-//        }
 		return s[0];
 	}
 
