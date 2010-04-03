@@ -174,7 +174,7 @@ public class HQLProvider implements HQLable {
 	private static String expressionBuilder(String conector, String clause) {
 		if (Is.empty(clause))
 			return "";
-		return conector + "("+clause+")";
+		return concat(conector ,"(",clause,")");
 	}
 	
 	protected static String and(String clause) {
