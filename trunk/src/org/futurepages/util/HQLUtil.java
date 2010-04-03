@@ -37,7 +37,7 @@ public class HQLUtil {
 	public static String fieldHasWords(String field, String[] words, String logicalConect) {
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < words.length; i++) {
-			sb.append(field + " LIKE '%"+esc(words[i])+"%'"+needed(i,words," "+logicalConect+" "));
+			sb.append(StringUtils.concat(field , " LIKE '%",esc(words[i]),"%'",needed(i,words," "+logicalConect+" ")));
 		}
 		return sb.toString();
 	}
