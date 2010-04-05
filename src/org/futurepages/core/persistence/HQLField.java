@@ -1,5 +1,6 @@
 package org.futurepages.core.persistence;
 
+import org.futurepages.util.StringUtils;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -23,7 +24,7 @@ public class HQLField implements HQLable {
     }
 
     public String between(String dateBegin, String dateEnd) {
-        return "((" + fieldName + GREATER_EQUALS + "'" + esc(dateBegin) + "') " + AND + " (" + fieldName + LOWER_EQUALS + "'" + esc(dateEnd) + "'))";
+        return concat("((" , fieldName , GREATER_EQUALS , "'" , esc(dateBegin) , "') " , AND , " (" , fieldName , LOWER_EQUALS , "'" , esc(dateEnd) , "'))");
     }
 
     public String inDate(Date date) {
@@ -46,13 +47,10 @@ public class HQLField implements HQLable {
         cal.set(Calendar.SECOND, cal.getActualMinimum(Calendar.SECOND));
         String dateBegin = DateUtil.dbDateTime(cal.getTime());
 
-
         cal.set(Calendar.HOUR_OF_DAY, cal.getActualMaximum(Calendar.HOUR_OF_DAY));
         cal.set(Calendar.MINUTE, cal.getActualMaximum(Calendar.MINUTE));
         cal.set(Calendar.SECOND, cal.getActualMaximum(Calendar.SECOND));
         String dateEnd = DateUtil.dbDateTime(cal.getTime());
-
-
 
         return this.between(dateBegin, dateEnd);
     }
@@ -61,7 +59,7 @@ public class HQLField implements HQLable {
         if (Is.empty(value)) {
             return "";
         }
-        return fieldName + " = '" + escCote(value) + "'";
+        return concat(fieldName , " = '" , escCote(value) , "'");
     }
 
     /**
@@ -113,7 +111,7 @@ public class HQLField implements HQLable {
         if (Is.empty(value)) {
             return "";
         }
-        return fieldName + " != '" + esc(value) + "'";
+        return concat(fieldName , " != '" , esc(value) , "'");
     }
 
     public String differentFrom(int value) {
@@ -133,7 +131,7 @@ public class HQLField implements HQLable {
     }
 
     public String greaterThen(String value) {
-        return fieldName + GREATER + "'" + esc(value) + "'";
+        return concat(fieldName , GREATER , "'" , esc(value) , "'");
     }
 
     public String greaterThen(long value) {
@@ -141,7 +139,7 @@ public class HQLField implements HQLable {
     }
 
     public String greaterEqualsThen(String value) {
-        return fieldName + GREATER_EQUALS + "'" + esc(value) + "'";
+        return concat(fieldName , GREATER_EQUALS , "'" , esc(value) , "'");
     }
 
     public String greaterEqualsThen(long value) {
@@ -149,7 +147,7 @@ public class HQLField implements HQLable {
     }
 
     public String lowerThen(String value) {
-        return fieldName + LOWER + "'" + esc(value) + "'";
+        return concat(fieldName , LOWER , "'" , esc(value) , "'");
     }
 
     public String lowerThen(long value) {
@@ -157,7 +155,7 @@ public class HQLField implements HQLable {
     }
 
     public String lowerEqualsThen(String value) {
-        return fieldName + LOWER_EQUALS + "'" + esc(value) + "'";
+        return concat(fieldName , LOWER_EQUALS , "'" , esc(value) , "'");
     }
 
     public String lowerEqualsThen(long value) {
@@ -219,14 +217,14 @@ public class HQLField implements HQLable {
         if (tokens == null || tokens.length == 0) {
             return "";
         }
-        return fieldName + " " + logicConector + " (" + HQLUtil.imploded(tokens) + ")";
+        return concat(fieldName , " " , logicConector , " (" , HQLUtil.imploded(tokens) , ")");
     }
 
     private String buildlLongExpression(String logicConector, long... tokens) {
         if (tokens == null || tokens.length == 0) {
             return "";
         }
-        return fieldName + " " + logicConector + " (" + HQLUtil.imploded(tokens) + ")";
+        return concat(fieldName , " " , logicConector , " (" , HQLUtil.imploded(tokens) , ")");
     }
 
     public String in(String... tokens) {
@@ -234,10 +232,10 @@ public class HQLField implements HQLable {
     }
 
     public String inSubQuery(String subQuery) {
-        return fieldName + " IN " + "(" + subQuery + ")";
+        return concat(fieldName , " IN " , "(" , subQuery , ")");
     }
     public String notInSubQuery(String subQuery) {
-        return fieldName + " NOT  IN " + "(" + subQuery + ")";
+        return concat(fieldName , " NOT IN " , "(" , subQuery , ")");
     }
 
     public String in(long... tokens) {
@@ -249,11 +247,11 @@ public class HQLField implements HQLable {
     }
 
     public String notIn(List<String> elements) {
-        return fieldName + " NOT IN (" + HQLUtil.imploded(elements) + ")";
+        return concat(fieldName , " NOT IN (" , HQLUtil.imploded(elements) , ")");
     }
 
     public String notIn(String tokensStr) {
-        return fieldName + " NOT IN (" + HQLUtil.imploded(tokensStr) + ")";
+        return concat(fieldName , " NOT IN (" , HQLUtil.imploded(tokensStr) , ")");
     }
 
     public String notIn(long... tokens) {
@@ -264,21 +262,21 @@ public class HQLField implements HQLable {
         if (Is.empty(value)) {
             return "";
         }
-        return fieldName + LIKE + "'" + esc(value) + "%'";
+        return concat(fieldName , LIKE , "'" , esc(value) , "%'");
     }
 
     public String endsWith(String value) {
         if (Is.empty(value)) {
             return "";
         }
-        return fieldName + LIKE + "'%" + esc(value) + "'";
+        return concat(fieldName , LIKE , "'%" , esc(value) , "'");
     }
 
     public String contains(String value) {
         if (Is.empty(value)) {
             return "";
         }
-        return fieldName + LIKE + "'%" + esc(value) + "%'";
+        return concat(fieldName , LIKE , "'%" , esc(value) , "%'");
     }
 
     public String as(String alias) {
@@ -309,7 +307,7 @@ public class HQLField implements HQLable {
     }
 
     private String timeExpression(Calendar cal, String comparator) {
-        return fieldName + comparator + "'" + esc(DateUtil.dbDateTime(cal.getTime())) + "'";
+        return concat(fieldName , comparator , "'" , esc(DateUtil.dbDateTime(cal.getTime())) , "'");
     }
 
     public String greaterEqualsThen(Calendar cal) {
@@ -319,4 +317,8 @@ public class HQLField implements HQLable {
     public String lowerEqualsThen(Calendar cal) {
         return timeExpression(cal, LOWER_EQUALS);
     }
+
+	private String concat(String... str){
+		return StringUtils.concat(str);
+	}
 }
