@@ -12,6 +12,7 @@ import org.futurepages.core.install.InstallersManager;
 import org.futurepages.core.persistence.HibernateManager;
 import org.futurepages.core.persistence.SchemaGeneration;
 import org.futurepages.core.quartz.QuartzManager;
+import org.futurepages.core.resource.ResourceMinifier;
 import org.futurepages.core.session.SessionListenerManager;
 import org.futurepages.core.tags.build.TagLibBuilder;
 import org.futurepages.util.The;
@@ -89,6 +90,14 @@ public class ApplicationListener implements ServletContextListener {
                 log("Iniciando criação da Taglib.");
                 (new TagLibBuilder(modules)).build();
                 log("Taglib criada com sucesso.");
+            }
+
+			//Compacta recursos web
+			String minifyMode = Params.get("MINIFY_RESOURCE_MODE");
+            if (!minifyMode.equals("none")) {  //none, js, css, both
+                log("MINIFY RESOURCE MODE = "+minifyMode);
+                (new ResourceMinifier()).execute(minifyMode);
+                log("MINIFY RESOURCE DONE.");
             }
 
             log(servletContext.getServletContextName() + " inicializado.");

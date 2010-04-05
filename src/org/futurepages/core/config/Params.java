@@ -60,19 +60,19 @@ public class Params {
 		//só quando for dar suporte a mais de um banco de dados
 		paramsMap.put("CONNECT_EXTERNAL_MODULES", "false");
 		paramsMap.put("DATABASE_DIR_NAME", "database");
-		paramsMap.put("PAGE_ENCODING", "ISO-8859-1");
-
+		paramsMap.put("DYN_EXCEPTION_FILE_PATH", "/exceptions/dynException.jsp");
     	paramsMap.put("EMAIL_ACTIVE", "false");
 		paramsMap.put("EMAIL_DEFAULT_PORT", "25");
 		paramsMap.put("EMAIL_SSL_CONNECTION", "false");
+		paramsMap.put("EXCEPTION_FILE_PATH",     "/exceptions/exception.jsp");
 		paramsMap.put("GENERATE_TAGLIB",  "true");
 		paramsMap.put("GLOBAL_HEAD_TITLE","");
 		paramsMap.put("INIT_ACTION", "init.Index");
 		paramsMap.put("INIT_MANAGER_CLASS", "org.futurepages.core.InitManager");
 		paramsMap.put("INSTALL_MODE", "off");
+		paramsMap.put("PAGE_ENCODING", "ISO-8859-1");
 		paramsMap.put("PRETTY_URL", "false");
-		paramsMap.put("EXCEPTION_FILE_PATH",     "/exceptions/exception.jsp");
-		paramsMap.put("DYN_EXCEPTION_FILE_PATH", "/exceptions/dynException.jsp");
+		paramsMap.put("MINIFY_RESOURCE_MODE", "none"); //none, css, js, both
 		paramsMap.put("QUARTZ_MODE", "off");
 		paramsMap.put("SCHEMA_GENERATION_TYPE", "none");
 		paramsMap.put("START_PAGE_NAME", "Index");
