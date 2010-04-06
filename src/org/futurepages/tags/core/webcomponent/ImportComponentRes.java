@@ -9,7 +9,7 @@ import org.futurepages.annotations.Tag;
 import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.path.Paths;
 import org.futurepages.core.tags.build.ContentTypeEnum;
-import static org.futurepages.util.StringUtils.concat;;
+import static org.futurepages.util.StringUtils.concat;
 
 @Tag(bodyContent = ContentTypeEnum.SCRIPTLESS)
 public final class ImportComponentRes extends SimpleTagSupport {
