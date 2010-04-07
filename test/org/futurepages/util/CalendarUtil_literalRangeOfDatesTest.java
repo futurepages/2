@@ -72,9 +72,9 @@ public class CalendarUtil_literalRangeOfDatesTest {
 	 * dataInicio, dataFim, anoCorrente, saída esperada, msg 
 	 */
 	@Parameters
-	public static Collection parameters() {
+	public static Collection<Object[]> parameters() {
 		String mask = DateFormatEnum.DATE_PT_BR.getMask("/");
-		Collection col =  Arrays.asList(new Object[][] {
+		Collection<Object[]> col =  Arrays.asList(new Object[][] {
 
 			{mask, "01/01/2009", "01/01/2009 01:00:00", "01/01/2009", "1 de janeiro",					      "Tudo Igual."},
 			{mask, "20/01/2009", "20/01/2009", "19/01/2009", "20 de janeiro",								  "Tudo Igual. Data Corrente antes do evento."},
