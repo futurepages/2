@@ -405,11 +405,9 @@ public class BaseListData implements ListData {
 		}
 	}
 	
-	private static class IdComparator implements Comparator  {
+	private static class IdComparator implements Comparator<ListItem>  {
 		
-		public int compare(Object o1, Object o2) {
-			ListItem l1 = (ListItem) o1;
-			ListItem l2 = (ListItem) o2;
+		public int compare(ListItem l1, ListItem l2) {
 			
 			int id1 = -1;
 			int id2 = -1;
@@ -419,6 +417,7 @@ public class BaseListData implements ListData {
 			
 			return id1 - id2;
 		}
+
 	}
 	
 	private static class StringIdComparator extends StringComparator  {
