@@ -1,5 +1,8 @@
 package org.futurepages.util;
 
+import org.futurepages.util.html.HtmlMapCharsTest;
+import org.futurepages.util.html.HtmlRegexTest;
+import org.futurepages.util.html.HtmlStripperTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -16,6 +19,8 @@ import org.junit.runners.Suite.SuiteClasses;
     FileUtilTest.class,
     HQLUtilTest.class,
     HtmlMapCharsTest.class,
+	HtmlRegexTest.class,
+	HtmlStripperTest.class,
     IsTest.class,
     NumberUtilTest.class,
     ProbabilityUtilTest.class,
