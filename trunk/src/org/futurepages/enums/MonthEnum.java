@@ -1,8 +1,9 @@
 package org.futurepages.enums;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
-public enum MonthEnum {
+public enum MonthEnum implements Serializable {
 
 	JANEIRO  (1,  "janeiro"  ),
 	FEVEREIRO(2,  "fevereiro"),
