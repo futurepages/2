@@ -1,6 +1,6 @@
 package org.futurepages.formatters;
 
-import org.futurepages.util.HtmlMapChars;
+import org.futurepages.util.html.HtmlMapChars;
 import java.util.Locale;
 import org.futurepages.core.formatter.Formatter;
  

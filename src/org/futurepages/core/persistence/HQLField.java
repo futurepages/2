@@ -62,10 +62,6 @@ public class HQLField implements HQLable {
         return concat(fieldName , " = '" , escCote(value) , "'");
     }
 
-    /**
-     *
-     * Falta implementar o método {@link HQLField#matches(java.lang.String)}
-     */
     public String matches(String value) {
         if (Is.empty(value)) {
             return "";

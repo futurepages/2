@@ -1,5 +1,6 @@
 package org.futurepages.util;
 
+import org.futurepages.util.html.HtmlMapChars;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;

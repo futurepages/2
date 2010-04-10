@@ -24,7 +24,7 @@ import org.futurepages.core.pagination.Paginator;
 import org.futurepages.core.validation.Validator;
 import org.futurepages.exceptions.ErrorException;
 import org.futurepages.filters.HeadTitleFilter;
-import org.futurepages.util.HtmlMapChars;
+import org.futurepages.util.html.HtmlMapChars;
 
 /**
  * Action Base
