@@ -1,5 +1,6 @@
-package org.futurepages.util;
+package org.futurepages.util.html;
 
+import org.futurepages.util.html.HtmlMapChars;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
