@@ -1,6 +1,8 @@
 package org.futurepages.enums;
 
-public enum PathTypeEnum {
+import java.io.Serializable;
+
+public enum PathTypeEnum implements Serializable{
 
 	REAL, URL;
 
