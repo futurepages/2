@@ -1,8 +1,9 @@
 package org.futurepages.enums;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
-public enum UnitTimeEnum {
+public enum UnitTimeEnum implements Serializable {
 
 	YEAR  ("ano"    , "anos"    , "ano",            Calendar.YEAR         ,0),
 	MONTH ("mês"    , "meses"   , "mês",   "mes",	Calendar.MONTH        ,1),
