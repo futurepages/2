@@ -1,8 +1,9 @@
 package org.futurepages.enums;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
-public enum DayOfWeek {
+public enum DayOfWeek implements Serializable{
 	
 	SUNDAY(Calendar.SUNDAY,   	 "Domingo"       , "Domingo"),
 	MONDAY(Calendar.MONDAY,   	 "Segunda-feira" , "Segunda"),
