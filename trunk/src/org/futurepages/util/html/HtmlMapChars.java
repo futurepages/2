@@ -1,4 +1,4 @@
-package org.futurepages.util;
+package org.futurepages.util.html;
 
 import java.util.HashMap;
 
