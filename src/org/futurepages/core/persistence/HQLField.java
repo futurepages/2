@@ -193,6 +193,23 @@ public class HQLField implements HQLable {
         return HQLUtil.fieldHasWords(fieldName, tokens, OR);
     }
 
+    /*
+     * Separa a String em um array de Strings usando espaços
+     * ou tabulações como ponto de "quebra". Em seguida monta
+     * a parte da HQL usando este array de Strings.
+     */
+    public String hasAnyOfWords(String tokens) {
+        String [] arrayTokens;
+
+        if (Is.empty(tokens)) {
+            return "";
+        }
+        
+        arrayTokens = tokens.split("\\s+");
+
+        return HQLUtil.fieldHasWords(fieldName, arrayTokens, OR);
+    }
+
     public String isTrue() {
         return fieldName + " = true";
     }
