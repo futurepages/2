@@ -1,24 +1,35 @@
 
 package org.futurepages.util.html;
+import java.util.regex.Pattern;
 import static org.futurepages.util.StringUtils.concat;
 
 /**
- *
+ * Gerador de Regex Patterns para capturar padrões de tags
  * @author leandro
  */
 public class HtmlRegex {
+
+	private static Pattern COMPILED_TAGS_PATTERN;
 	/**
 	 * Casa padrão da tag com seu conteúdo
 	 * @param tagName
+	 *  xml  ==> <xml>.*</xml>
 	 * @return
 	 */
-	// tagName = xml  ==>   <xml>.*</xml>
-	public String tagWithContentPattern(String tagName){
+	public static String tagWithContentPattern(String tagName){
 		return concat("<",tagName,">.*?</",tagName,">");
 	}
 
-	public String emptyTagsPattern(){
+	public static String emptyTagsPattern(){
 		return "<([\\w]+\\b)[^>]*?></\\1>";
+	}
+
+	public static String tagNamePattern(){
+		return "([\\w]+)\\b";
+	}
+
+	public static String commentPattern() {
+		return "<!--.*?-->";
 	}
 
 	/**
@@ -37,6 +48,40 @@ public class HtmlRegex {
 		return concat(has?"</?":"<",tagNamesPattern(has,tagNames),".*?>");
 	}
 
+	//open or close tag
+	static String tag(String tagName){
+       return "<(/?"+tagName+"\\b)[^>]*?>";
+	}
+	
+	static String tag(){
+       return "<\\1>";
+	}
+
+	//open tag
+	static String otag(String tagName){
+       return "<("+tagName+"\\b).*?>";
+	}
+
+	static String otag(){
+       return "<\\1>";
+	}
+
+	//close tag
+	static String ctag(String tagName){
+       return "</("+tagName+"\\b).*?>";
+	}
+	
+	//close tag
+	static String ctag(){
+       return "</\\1>";
+	}
+
+	//simple tag
+	static String stag(String tagName){
+       return "<("+tagName+"\\b).*?/>";
+	}
+
+
 	private static String tagNamesPattern(boolean has, String... ids){
 		if(ids.length>0){
 			StringBuilder sb = new StringBuilder("(");
@@ -54,5 +99,12 @@ public class HtmlRegex {
 
 	private static String tagNamePattern(boolean has, String id) {
 		return has? id+"\\b" : "?!"+id+"\\b)(?!/"+id+"";
+	}
+
+	public static Pattern getCompiledTagsPattern() {
+		if(COMPILED_TAGS_PATTERN==null){
+			COMPILED_TAGS_PATTERN = Pattern.compile(tagsPattern(true));
+		}
+		return COMPILED_TAGS_PATTERN;
 	}
 }
