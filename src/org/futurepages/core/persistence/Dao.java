@@ -137,6 +137,11 @@ public class Dao extends HQLProvider {
         return query.list();
     }
 
+    public static <T extends Serializable> List<T> list(String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
+        Query query = query(select(entityAlias) + fromAndJoin + where(whereClause) + orderBy(orderClauses));
+        return query.list();
+    }
+
     public static <T extends Serializable> List<T> list(Class<T> entity, String whereClause, String... orderClauses) {
         return list( concat( from(entity) , where(whereClause) , orderBy(orderClauses)) );
     }
@@ -301,6 +306,15 @@ public class Dao extends HQLProvider {
             Class<T> reportClass, String fields, String joinClause, String whereClause, String group, String... orderClauses) {
 
         String fromAndJoin = fromAndJoin(entityAlias, entity, joinClause);
+        String strQuery = select(fields) + fromAndJoin + where(whereClause) + groupBy(group) + orderBy(orderClauses);
+        Query query = query(strQuery);
+        query.setResultTransformer(new AliasToBeanResultTransformer(reportClass));
+        query.setMaxResults(topSize);
+        return query.list();
+    }
+    public static <T extends Serializable> List<T> topReport(int topSize, String entityAlias, Class entity,
+            Class<T> reportClass, String fields, String fromAndJoin, String whereClause, String group, String... orderClauses) {
+
         String strQuery = select(fields) + fromAndJoin + where(whereClause) + groupBy(group) + orderBy(orderClauses);
         Query query = query(strQuery);
         query.setResultTransformer(new AliasToBeanResultTransformer(reportClass));
