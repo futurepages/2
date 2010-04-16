@@ -16,8 +16,31 @@ public class HtmlRegex {
 	 *  xml  ==> <xml>.*</xml>
 	 * @return
 	 */
-	public static String tagWithContentPattern(String tagName){
-		return concat("<",tagName,">.*?</",tagName,">");
+	public static String tagAndContentPattern(String tagName){
+		return concat("<",tagName,".*?>.*?</",tagName,"*>");
+	}
+
+////	(?i)<([^>]+)\b(?:class=["']?(?:(?:.(?!["']? +(?:class)=|[>"']))+.)["']?)(.*?)>
+////	(?i)<([\w]+)\b[^>]+(?:class *= *["']?[^ />"']+["']?) ?(.*?)>
+////	(?i)<([\w]+)\b[^>]+class *= *(["']?)[^\2>]+\2(.*?)>
+//	public static String tagsWithAttributePattern(String attribute){
+//		return "<([\\w]+)\\b(?:[^>]+"+attribute+" *= *[\"'][^'\">]+['\"])(.*?)>";
+////		return "(?i)<([\\w]+)\\b[^>]+(?:"+attribute+" *= *[\"']?[^ />\"']+[\"']?)(.*?)>";
+////		return "(?i)<([\\w]+)\\b[^>]+(?:"+attribute+" *= *[\"']?[^ />\"']+[\"']?) *(.*?)>";
+////		return "(?i)<([^>]+)\\b(?:"+attribute+"=[\"']?(?:(?:.(?![\"']? +(?:"+attribute+")=|[>\"']))+.)[\"']?)(.*?)>";
+//	}
+//	public static String tagsWithAttributeReplacement(){
+//		return "<$1$2>";
+//	}
+
+	//(?i)<span *style=".*?font-weight: *bold;?[^"]+".*?>(.*?)</span *>
+	//(?i)<span *style *= *"font-weight: *bold\b.*".*?>(.*?)</span *>
+	public static String spanWithStylePropertiePattern(String propertie, String value){
+		return "(?i)<span *style *= *\""+propertie+": *"+value+"\\b.*\".*?>(.*?)</span *>";
+	}
+
+	public static String tagWithContentReplacement(String tagName){
+		return "<"+tagName+">$1</"+tagName+">";
 	}
 
 	public static String emptyTagsPattern(){
@@ -30,6 +53,14 @@ public class HtmlRegex {
 
 	public static String commentPattern() {
 		return "<!--.*?-->";
+	}
+
+	public static String invalidAttrPattern() {
+		return " [\\w]+=[\\w]+\\b";
+	}
+
+	public static String attrPattern(String name) {
+		return " ?\\b"+name+" *= *\"[^\"]+\"";
 	}
 
 	/**
@@ -48,41 +79,7 @@ public class HtmlRegex {
 		return concat(has?"</?":"<",tagNamesPattern(has,tagNames),".*?>");
 	}
 
-	//open or close tag
-	static String tag(String tagName){
-       return "<(/?"+tagName+"\\b)[^>]*?>";
-	}
-	
-	static String tag(){
-       return "<\\1>";
-	}
-
-	//open tag
-	static String otag(String tagName){
-       return "<("+tagName+"\\b).*?>";
-	}
-
-	static String otag(){
-       return "<\\1>";
-	}
-
-	//close tag
-	static String ctag(String tagName){
-       return "</("+tagName+"\\b).*?>";
-	}
-	
-	//close tag
-	static String ctag(){
-       return "</\\1>";
-	}
-
-	//simple tag
-	static String stag(String tagName){
-       return "<("+tagName+"\\b).*?/>";
-	}
-
-
-	private static String tagNamesPattern(boolean has, String... ids){
+    private static String tagNamesPattern(boolean has, String... ids){
 		if(ids.length>0){
 			StringBuilder sb = new StringBuilder("(");
 			sb.append(tagNamePattern(has,ids[0]));
