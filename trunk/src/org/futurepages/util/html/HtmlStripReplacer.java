@@ -10,8 +10,10 @@ public class HtmlStripReplacer {
 
 	private String PLAIN_LI = "&nbsp; - ";
 
+
 	private Map<String, String> tagsToCare;
 
+	
 	public HtmlStripReplacer(boolean style, boolean lists, boolean image, boolean anchor, boolean table) {
 		if (style) {
 
