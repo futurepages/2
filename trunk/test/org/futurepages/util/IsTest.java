@@ -55,7 +55,7 @@ public class IsTest {
 
 	@Test
 	public void testValidStringKey_invalido_til() {
-		assertFalse("Com til e cedilha'~'- 'm~oasdfasdf'", Is.validStringKey("m~oasdfasdf"));
+		assertFalse("Com til'~'- 'm~oasdfasdf'", Is.validStringKey("m~oasdfasdf"));
 	}
 
 	@Test
