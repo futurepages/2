@@ -20,19 +20,6 @@ public class HtmlRegex {
 		return concat("<",tagName,".*?>.*?</",tagName,"*>");
 	}
 
-////	(?i)<([^>]+)\b(?:class=["']?(?:(?:.(?!["']? +(?:class)=|[>"']))+.)["']?)(.*?)>
-////	(?i)<([\w]+)\b[^>]+(?:class *= *["']?[^ />"']+["']?) ?(.*?)>
-////	(?i)<([\w]+)\b[^>]+class *= *(["']?)[^\2>]+\2(.*?)>
-//	public static String tagsWithAttributePattern(String attribute){
-//		return "<([\\w]+)\\b(?:[^>]+"+attribute+" *= *[\"'][^'\">]+['\"])(.*?)>";
-////		return "(?i)<([\\w]+)\\b[^>]+(?:"+attribute+" *= *[\"']?[^ />\"']+[\"']?)(.*?)>";
-////		return "(?i)<([\\w]+)\\b[^>]+(?:"+attribute+" *= *[\"']?[^ />\"']+[\"']?) *(.*?)>";
-////		return "(?i)<([^>]+)\\b(?:"+attribute+"=[\"']?(?:(?:.(?![\"']? +(?:"+attribute+")=|[>\"']))+.)[\"']?)(.*?)>";
-//	}
-//	public static String tagsWithAttributeReplacement(){
-//		return "<$1$2>";
-//	}
-
 	//(?i)<span *style=".*?font-weight: *bold;?[^"]+".*?>(.*?)</span *>
 	//(?i)<span *style *= *"font-weight: *bold\b.*".*?>(.*?)</span *>
 	public static String spanWithStylePropertiePattern(String propertie, String value){
@@ -55,6 +42,7 @@ public class HtmlRegex {
 		return "<!--.*?-->";
 	}
 
+	//atributos inválidos, ex.: class=exampleClass
 	public static String invalidAttrPattern() {
 		return " [\\w]+=[\\w]+\\b";
 	}
