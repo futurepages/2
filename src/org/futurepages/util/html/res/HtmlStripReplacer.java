@@ -1,4 +1,4 @@
-package org.futurepages.util.html;
+package org.futurepages.util.html.res;
 
 import java.util.Map;
 
