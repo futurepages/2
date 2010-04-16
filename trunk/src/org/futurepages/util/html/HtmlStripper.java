@@ -62,9 +62,11 @@ public class HtmlStripper {
 			strippedHtml = noTrashText(originalHtml);
 		}
 
+
 		//replace tags de acordo com os atributos
 		//@TODO
-		return "";
+		
+		return strippedHtml;
 	}
 
 
@@ -80,9 +82,10 @@ public class HtmlStripper {
 	 */
 	public static String replaceInTags(String str, String regex, String replacement){
 
-		Pattern tagsPattern = getCompiledTagsPattern();
-		Matcher matcher     = tagsPattern.matcher(str);
-		StringBuilder sb    = new StringBuilder();
+		Pattern tagsPattern  = getCompiledTagsPattern();
+		Matcher matcher      = tagsPattern.matcher(str);
+		Pattern regexPattern = Pattern.compile(regex);
+		StringBuilder sb     = new StringBuilder();
 
 		int pos = 0;
 		if (matcher.find()) {
@@ -90,7 +93,8 @@ public class HtmlStripper {
 				sb.append(str.substring(pos, matcher.start()));
 
 				String foundOne = str.substring(matcher.start(),matcher.end());
-				sb.append(foundOne.replaceAll(regex, replacement));
+
+				sb.append(regexPattern.matcher(foundOne).replaceAll(replacement));
 				
 				pos = matcher.end();
 
@@ -142,7 +146,7 @@ public class HtmlStripper {
 		htmlContent = replaceInTags(htmlContent, attrPattern("class"), "");
 		htmlContent = htmlContent.replaceAll(spanWithStylePropertiePattern("font-weight","bold"),tagWithContentReplacement("strong"))    //estilizados com negrito
 								 .replaceAll(spanWithStylePropertiePattern("text-decoration","underline"),tagWithContentReplacement("u"))//estilizados com sublinhado
-					             ;
+					  ;
 		htmlContent = replaceInTags(htmlContent, attrPattern("style"), "");
 		return htmlContent;
 	}
