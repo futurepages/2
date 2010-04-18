@@ -17,13 +17,13 @@ public class HtmlRegex {
 	 * @return
 	 */
 	public static String tagAndContentPattern(String tagName){
-		return concat("<",tagName,".*?>.*?</",tagName,"*>");
+		return concat("(?i)(?s)<",tagName,".*?>.*?</",tagName,"*>");
 	}
 
 	//(?i)<span *style=".*?font-weight: *bold;?[^"]+".*?>(.*?)</span *>
 	//(?i)<span *style *= *"font-weight: *bold\b.*".*?>(.*?)</span *>
 	public static String spanWithStylePropertiePattern(String propertie, String value){
-		return "(?i)<span *style *= *\""+propertie+": *"+value+"\\b.*\".*?>(.*?)</span *>";
+		return "(?s)(?i)<span *style *= *\""+propertie+": *"+value+"\\b.*\".*?>(.*?)</span *>";
 	}
 
 	public static String tagWithContentReplacement(String tagName){
@@ -31,7 +31,7 @@ public class HtmlRegex {
 	}
 
 	public static String emptyTagsPattern(){
-		return "<([\\w]+\\b)[^>]*?></\\1>";
+		return "(?s)<([\\w]+\\b)[^>]*?></\\1>";
 	}
 
 	public static String tagNamePattern(){
@@ -39,7 +39,7 @@ public class HtmlRegex {
 	}
 
 	public static String commentPattern() {
-		return "<!--.*?-->";
+		return "(?s)<!--.*?-->";
 	}
 
 	//atributos inválidos, ex.: class=exampleClass
@@ -64,7 +64,7 @@ public class HtmlRegex {
 		if(!has && tagNames.length==0){
 			return null;
 		}
-		return concat(has?"</?":"<",tagNamesPattern(has,tagNames),".*?>");
+		return concat(has?"(?s)(?i)</?":"<",tagNamesPattern(has,tagNames),".*?>");
 	}
 
     private static String tagNamesPattern(boolean has, String... ids){

@@ -202,8 +202,8 @@ public class The {
         return explodedName[explodedName.length - 2];
     }
 
-    public static String firstTokenAfter(String str, String descarte, String separator) {
-        String str2 = str.substring(str.indexOf(descarte)+descarte.length());
+    public static String firstTokenAfter(String str, String discarding, String separator) {
+        String str2 = str.substring(str.indexOf(discarding)+discarding.length());
         return firstTokenOf(str2, separator);
     }
     /**
