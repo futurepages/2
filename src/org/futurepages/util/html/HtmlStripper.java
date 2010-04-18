@@ -2,6 +2,7 @@ package org.futurepages.util.html;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.futurepages.util.FileUtil;
 import static org.futurepages.util.html.HtmlRegex.*;
 
 /**
@@ -29,7 +30,7 @@ public class HtmlStripper {
 
 	/**
 	 *
-	 * @return somente parágrafos <p></p>, negrito, itálico e nada mais.
+	 * @return somente parágrafos <p></p>, negrito <strong>, itálico <em>, sublinhado <span style="text-decoration:underline"> e nada mais.
 	 */
 	public String plainText() {
 		return richText(false, false, false, false, false);
@@ -38,7 +39,7 @@ public class HtmlStripper {
 	/**
 	 * 
 	 * Default: P with Bold, Italic & Underline + params
-	 * @param styles it's allowed: * style="" class="" , H1,...,H6
+	 * @param styles it's allowed: * style="" class="" , H1,...,H6 e tags <style>
 	 * @param lists it's allowed: UL OL LI BLOCKOTE
 	 * @param image it's allowed: IMG
 	 * @param anchor it's allowed: A
@@ -46,27 +47,49 @@ public class HtmlStripper {
 	 * @return the stripped html
 	 */
 	public static void main(String[] args){
-		String path = "D:/Users/leandro/PROJECTs/futurepages2/src/org/futurepages/util/html/res/testHTML";
+		String path = "D:/Users/leandro/Documents/ProjetosNB/futurepages2/src/org/futurepages/util/html/res/testHTML";
 		try {
-
+			String content = FileUtil.getStringContent(path);
+			System.out.println(
+					new HtmlStripper(content).richText(false, false, false, false, false)
+			)
+		;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 
 	public String richText(boolean styles, boolean lists, boolean image, boolean anchor, boolean table) {
-
+		long inicio = System.currentTimeMillis();
 		if(!styles){
 			strippedHtml = noStylesText(originalHtml);
 		} else {
 			strippedHtml = noTrashText(originalHtml);
 		}
 
+		HtmlTagReplacer tagRep = new HtmlTagReplacer(styles, lists, image, anchor, table);
 
-		//replace tags de acordo com os atributos
-		//@TODO
-		
-		return strippedHtml;
+		Pattern tagsPattern  = getCompiledTagsPattern();
+		Matcher matcher      = tagsPattern.matcher(strippedHtml);
+		StringBuilder sb     = new StringBuilder();
+
+		int pos = 0;
+		if (matcher.find()) {
+			do {
+				sb.append(strippedHtml.substring(pos, matcher.start()));
+
+				String foundOne = strippedHtml.substring(matcher.start(),matcher.end());
+
+				sb.append(tagRep.treated(foundOne));
+				pos = matcher.end();
+
+			} while (matcher.find());
+		}
+		sb.append(strippedHtml.substring(pos));
+
+		System.out.println((System.currentTimeMillis() - inicio) + "ms");
+		//RETIRAR ESPAÇOS, QUEBRAS DE LINHA E TAGS VAZIAS
+		return strippedHtml = sb.toString();
 	}
 
 
@@ -116,12 +139,14 @@ public class HtmlStripper {
 	public static String noTrashText(String htmlContent) {
 		String commentPattern   = commentPattern();
 		String xmlPattern       = tagAndContentPattern("xml");
+		String headPattern       = tagAndContentPattern("head");
 		String scriptPattern    = tagAndContentPattern("script");
 		String emptyTagsPattern = emptyTagsPattern();
 		
 
 		htmlContent =htmlContent.replaceAll(commentPattern   ,  "") //remove comentários
 								.replaceAll(xmlPattern       ,  "") //remove tag xml gerada pelo word
+								.replaceAll(headPattern      ,  "") //remove tag xml gerada pelo word
 								.replaceAll(scriptPattern    ,  "") //remove html script (javascript por exemplo)
 								.replaceAll(emptyTagsPattern ,  "") //remove tags vazias
 		;
