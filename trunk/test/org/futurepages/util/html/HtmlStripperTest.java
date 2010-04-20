@@ -54,7 +54,16 @@ public class HtmlStripperTest {
 	@Test
 	public void testNoTrashText() {
 
+		testNoTrashProcedure("<xml>  <abc> <a:bc/> \r\n erro <abc/>  </xml>"
+							,"");
+
+		testNoTrashProcedure("<XML>  <abc> <a:bc/> \r\n erro <abc/>  </xml>"
+							,"");
+
 		testNoTrashProcedure("<a class=kx class=xkp style=x align='right'>abc</a>#<ul></ul>#<p style=\"\"></p>def"
+							,"<a align=\"right\">abc</a>##def");
+
+		testNoTrashProcedure("<a CLASS=kx class=xkp style=x align='right'>abc</a>#<UL></ul>#<p style=\"\"></p>def"
 							,"<a align=\"right\">abc</a>##def");
 
 		testNoTrashProcedure("<a>#<xml>p:q/><a:c/></xml> abc </a>#<ul></ul><p style=\"\"></p>d<!-- comentário --><xml></xml>ef"
@@ -89,12 +98,19 @@ public class HtmlStripperTest {
 											"<a class=kxy>",
 											"<a class=kxy style=kgb>",
 											"<a style=kxy class=kgb style=may>",
+											"<a style=kxy class=kgb style=may>",
+											"<a style=kxy class=kgb style=may>",
+											"<a style=kxy class=kgb style=may>",
+											"<a style=kxy class=kgb style=may>",
 											"<a class=kxy style=xpto>",
 											"<a class=\"k\">",
 											"<a style=\"k\"class='topic'>",
 											"<a class='k'>",
 											"<a style='kx'>",
 											"<a style='kxy' class=\"mxp\">",
+											"<a style=\n\"kx\">",
+											"<a style=\t\"kx\">",
+											"<a style\n=\r\n\t\"kx\">",
 											"<a style=\"kx\">",
 											"<a style=\"kxy\">",
 											"<a style=k class=z>",
@@ -116,6 +132,7 @@ public class HtmlStripperTest {
 											"<a class = 'k' >",
 											"<a style = 'kx' >",
 											"<a style = 'kxy' class  =  \"sdfsdf sdf sd3f sdf sd3f sd_f sdfsdf fmxp\" >",
+											"<a style \r=\n 'kxy' class \n\r\t =  \"sdfsdf sdf sd3f sdf sd3f sd_f sdfsdf fmxp\" >",
 											"<a style=\"kx\" >",
 											"<a style    = \"kxy\" >",
 											"<a  class=z style=k>",
