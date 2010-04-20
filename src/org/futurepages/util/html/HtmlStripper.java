@@ -47,11 +47,11 @@ public class HtmlStripper {
 	 * @return the stripped html
 	 */
 	public static void main(String[] args){
-		String path = "D:/Users/leandro/Documents/ProjetosNB/futurepages2/src/org/futurepages/util/html/res/testHTML";
+		String path = "D:/Users/leandro/Documents/ProjetosNB/futurepages2/src/org/futurepages/util/html/res/testTable.html";
 		try {
 			String content = FileUtil.getStringContent(path);
 			System.out.println(
-					new HtmlStripper(content).richText(false, false, false, false, false)
+					new HtmlStripper(content).richText(false, false, true, false, true)
 			)
 		;
 		} catch (Exception ex) {
