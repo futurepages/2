@@ -23,7 +23,7 @@ public class HtmlRegex {
 	//(?i)<span *style=".*?font-weight: *bold;?[^"]+".*?>(.*?)</span *>
 	//(?i)<span *style *= *"font-weight: *bold\b.*".*?>(.*?)</span *>
 	public static String spanWithStylePropertiePattern(String propertie, String value){
-		return "(?s)(?i)<span *style *= *\""+propertie+": *"+value+"\\b.*\".*?>(.*?)</span *>";
+		return "(?s)(?i)<span\\s*style\\s*=\\s*\""+propertie+":\\s*"+value+"\\b.*\".*?>(.*?)</span\\s*>";
 	}
 
 	public static String tagWithContentReplacement(String tagName){
@@ -31,11 +31,7 @@ public class HtmlRegex {
 	}
 
 	public static String emptyTagsPattern(){
-		return "(?s)<([\\w]+\\b)[^>]*?></\\1>";
-	}
-
-	public static String tagNamePattern(){
-		return "([\\w]+)\\b";
+		return "(?s)(?i)<([\\w]+\\b)[^>]*?></\\1>";
 	}
 
 	public static String commentPattern() {
@@ -48,7 +44,11 @@ public class HtmlRegex {
 	}
 
 	public static String attrPattern(String name) {
-		return " ?\\b"+name+" *= *\"[^\"]+\"";
+		return "(?i)(?s) ?\\b"+name+"\\s*=\\s*\"[^\"]+\"";
+	}
+
+	public static String attrPatternWithGroups(String name) {
+		return "(?i)(?s)((?=.*)) ?\\b"+name+"\\s*=\\s*\"[^\"]+\"( ?(?=.*))";
 	}
 
 	/**
