@@ -46,6 +46,108 @@ public class InstallersManager extends ModulesAutomation {
 		new InstallersManager(modules).install();
 	}
 
+	public void installExamples() throws Exception {
+		if (modules != null) {
+			try {
+				if (HibernateManager.isRunning()) {
+					Dao.beginTransaction();
+				}
+				try {
+					Class exInstallerClass = Class.forName(INSTALL_DIR_NAME + ".Examples");
+					log(">>> Examples installing...  ");
+					Installer examples = (Installer) exInstallerClass.newInstance();
+					log(">>> Examples installed in " + examples.totalTime() + " secs.");
+				} catch (ClassNotFoundException ex) {
+					log(">>> installer of Examples not present.");
+				}
+				if (HibernateManager.isRunning()) {
+					Dao.commitTransaction();
+					Dao.close();
+				}
+			} catch (Exception ex) {
+				Dao.rollBackTransaction();
+				throw ex;
+			}
+		}
+	}
+
+	public void installProduction() throws Exception {
+		if (modules != null) {
+			try {
+				if (HibernateManager.isRunning()) {
+					Dao.beginTransaction();
+				}
+				try {
+					Class prodInstallerClass = Class.forName(INSTALL_DIR_NAME + ".Production");
+					log(">>> Production installing...  ");
+					Installer production = (Installer) prodInstallerClass.newInstance();
+					log(">>> Production installed in " + production.totalTime() + " secs.");
+				} catch (ClassNotFoundException ex) {
+					log(">>> installer of Production not present.");
+				}
+				if (HibernateManager.isRunning()) {
+					Dao.commitTransaction();
+					Dao.close();
+				}
+			} catch (Exception ex) {
+				Dao.rollBackTransaction();
+				throw ex;
+			}
+		}
+	}
+
+	public void installAllModules() throws Exception {
+		if (modules != null) {
+			try {
+				if (HibernateManager.isRunning()) {
+					Dao.beginTransaction();
+				}
+				Map<String, List<Class<Installer>>> classes = getModulesDirectoryClasses(Installer.class, null);
+				for (String moduleName : classes.keySet()) {
+					log("module '" + moduleName + "' installing...");
+					for (Class<?> installer : classes.get(moduleName)) {
+						log(">>> installer " + installer.getSimpleName() + " running...  ");
+						installer.newInstance();
+						log(">>> installer " + installer.getSimpleName() + " OK");
+					}
+					log("module '" + moduleName + "' installed.");
+				}
+				if (HibernateManager.isRunning()) {
+					Dao.commitTransaction();
+					Dao.close();
+				}
+			} catch (Exception ex) {
+				Dao.rollBackTransaction();
+				throw ex;
+			}
+		}
+	}
+
+	public void installResources() throws Exception {
+		if (modules != null) {
+			try {
+				if (HibernateManager.isRunning()) {
+					Dao.beginTransaction();
+				}
+				try {
+					Class resourcesInstaller = Class.forName(INSTALL_DIR_NAME + ".Resources");
+					log(">>> installer " + resourcesInstaller.getSimpleName() + " running...  ");
+					resourcesInstaller.newInstance();
+					log(">>>   Resources OK.");
+				} catch (ClassNotFoundException ex) {
+					log(">>> installer of Resources isn't present.");
+				}
+				if (HibernateManager.isRunning()) {
+					Dao.commitTransaction();
+					Dao.close();
+				}
+			} catch (Exception ex) {
+				Dao.rollBackTransaction();
+				throw ex;
+			}
+		}
+	}
+
 	/**
 	 *
 	 * Instalação do banco de dados.
