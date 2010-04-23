@@ -50,14 +50,20 @@ public class JPEGUtil{
      */
      public static void resizeImage(File file, int width, int height, int quality, String pathNewFile) throws MalformedURLException, FileNotFoundException, IOException{
             Image image = new ImageIcon(file.toURI().toURL()).getImage();
-            resize(image, width, height, quality , pathNewFile);
+            resize(image, width, height, quality , pathNewFile, true);
+            image.flush();
+    }
+
+	 public static void resizeImagePriorHeight(File file, int width, int height, int quality, String pathNewFile) throws MalformedURLException, FileNotFoundException, IOException{
+            Image image = new ImageIcon(file.toURI().toURL()).getImage();
+            resize(image, width, height, quality , pathNewFile, false);
             image.flush();
     }
     
     /**
-     * Redimensiona imagens (criar thubmnails)
+     * Redimensiona imagens (criar thubmnails) - prioriza a largura
      */
-    private static void resize(Image image, int width, int height, int quality, String pathNewFile) throws FileNotFoundException, IOException {
+    private static void resize(Image image, int width, int height, int quality, String pathNewFile, boolean priorWidth) throws FileNotFoundException, IOException {
         // Calculos necessários para manter as propoçoes da imagem, conhecido como "aspect ratio"
         double thumbRatio = (double) width / (double) height;
         int imageWidth = image.getWidth(null);
@@ -65,7 +71,7 @@ public class JPEGUtil{
         
         double imageRatio = (double) imageWidth / (double) imageHeight;
         
-        if (thumbRatio < imageRatio) {
+        if (thumbRatio < imageRatio && priorWidth) {
             height = (int) (width / imageRatio);
         } else {
             width = (int) (height * imageRatio);
