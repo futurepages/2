@@ -22,7 +22,7 @@ import org.quartz.SchedulerException;
  * É nesta classe onde o futurepages age sobre a aplicação,
  * gerando o necessário antes do deploy da aplicação
  * e desalocando o que for necessário no undeploy da mesma.
- * 
+ *
  * @author leandro
  */
 public class ApplicationListener implements ServletContextListener {
@@ -45,7 +45,7 @@ public class ApplicationListener implements ServletContextListener {
             log("Carregando módulos...");
             File[] modules = (new File(Params.get("MODULES_CLASSES_REAL_PATH"))).listFiles();
             log("Módulos OK");
-            
+
             if(HibernateManager.isRunning()){
 				log("Hibernate OK");
             	// Atualiza/gera esquema do banco como solicitado no arquivo de configuração.
@@ -59,28 +59,9 @@ public class ApplicationListener implements ServletContextListener {
 
                 //Se o modo de instalação estiver ligado, serão feitas as instalações de cada módulo.
 				String installMode = Params.get("INSTALL_MODE");
-                if (installMode.equals("on")) {
-                	log("Install Mode: ON");
-                    new InstallersManager(modules).install();
-                    log("Install Done");
-                } else if(installMode.equals("examples")) {
-					log("Install Mode: EXAMPLES");
-					new InstallersManager(modules).installExamples();
-					log("Install Done");
-				} else if(installMode.equals("production")) {
-					log("Install Mode: PRODUCTION");
-					new InstallersManager(modules).installProduction();
-					log("Install Done");
-				} else if(installMode.equals("modules")) {
-					log("Install Mode: MODULES");
-					new InstallersManager(modules).installAllModules();
-					log("Install Done");
-				} else if(installMode.equals("resources")) {
-					log("Install Mode: RESOURCES");
-					new InstallersManager(modules).installResources();
-					log("Install Done");
-				} else{
-                	log("Install Mode: off");
+                log("Install Mode: "+installMode);
+                if (!installMode.equals("off")) {
+					InstallersManager.initialize(modules,installMode);
                 }
             }
 

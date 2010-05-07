@@ -48,8 +48,7 @@ public final class ImportComponentRes extends SimpleTagSupport {
 			}
 			getJspContext().getOut().print(buffer);
 			addToContainer();
-		}
-		else {
+		} else { //container = null
 			if(!noJS){
 				getJspContext().getOut().print( concat("<script type=\"text/javascript\">needResourceJS('",this.getKey(),"','"+this.getVersion(),"');</script>"));
 			}

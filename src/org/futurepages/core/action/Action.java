@@ -56,5 +56,7 @@ public interface Action extends Manipulable {
 
 	public String getError();
 
+	public String getSuccess();
+
 	public boolean hasSuccess();
 }

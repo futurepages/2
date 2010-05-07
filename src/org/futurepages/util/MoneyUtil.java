@@ -1,5 +1,6 @@
 package org.futurepages.util;
 
+import java.math.BigDecimal;
 import java.text.NumberFormat;
 
 /**
@@ -23,12 +24,28 @@ public class MoneyUtil {
         }
     }
 
+	/**
+     * Recebe como entrada uma string do tipo 9.999,99 e retorna um BigDecimal
+     *
+     */
+    public static BigDecimal valueBigDecimalOf(String moneyFormat){
+            return BigDecimal.valueOf(valueOf(moneyFormat));
+    }
+
     /**
      * Recebe um double como entrada e converte para uma string no formato 9.999,99 (duas casas decimais)
      *
      */    
     public static String moneyFormat(Double value){
 	   return moneyFormat(value,2);
+    }
+
+	/**
+     * Recebe um double como entrada e converte para uma string no formato 9.999,99 (duas casas decimais)
+     *
+     */
+    public static String moneyFormat(BigDecimal value){
+	   return moneyFormat(value.doubleValue(),2);
     }
 
 

@@ -17,6 +17,7 @@ import org.futurepages.core.context.Context;
 import org.futurepages.core.context.SessionContext;
 import org.futurepages.core.i18n.LocaleManager;
 import org.futurepages.core.input.Input;
+import org.futurepages.core.output.MapOutput;
 import org.futurepages.core.output.Output;
 import org.futurepages.core.pagination.Pageable;
 import org.futurepages.core.pagination.PaginationSlice;
@@ -114,6 +115,11 @@ public abstract class AbstractAction implements Pageable, Action {
 		setOutputPaginationValues(pageSize, totalSize, totalPages, pageNum);
 	}
 
+	protected void setOutputWith(String key, Object obj){
+		output = new MapOutput();
+		output.setValue(key, obj);
+	}
+
 	/** @return Pega o numero da página corrente em uso */
 	protected int getPageNum() {
 		return getPaginator().getPageNum();
@@ -159,11 +165,15 @@ public abstract class AbstractAction implements Pageable, Action {
 	}
 
 	public boolean hasSuccess() {
-		return messages.get(Action.SUCCESS) != null;
+		return (messages.get(Action.SUCCESS) != null) || (getRequest().getParameter(Action.SUCCESS)!=null);
+	}
+
+	public String getSuccess() {
+		return messages.get(SUCCESS);
 	}
 
 	public boolean hasError() {
-		return messages.get(ERROR) != null;
+		return messages.get(ERROR) != null || (getRequest().getParameter(Action.ERROR)!=null);
 	}
 
 	public String getError() {

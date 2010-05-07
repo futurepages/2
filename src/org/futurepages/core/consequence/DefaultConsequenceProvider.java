@@ -20,8 +20,9 @@ public class DefaultConsequenceProvider implements ConsequenceProvider {
    public Consequence getConsequence(String action, Class<? extends Object> actionClass, String result, String innerAction) {
 
 	   StringBuilder sb = new StringBuilder(128);
+	   boolean isPretty = Params.get("PRETTY_URL").equals("true");
 
-       if(Params.get("PRETTY_URL").equals("true")){
+       if(isPretty){
             sb.append(Params.MODULES_PATH);
        }
 
@@ -30,7 +31,7 @@ public class DefaultConsequenceProvider implements ConsequenceProvider {
 
        if (innerAction != null) {
 
-		    sb.append(".").append(innerAction);
+		    sb.append(isPretty? "-":".").append(innerAction);
 
 		}
        

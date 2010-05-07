@@ -1,12 +1,15 @@
 package org.futurepages.util.html;
 
 import java.util.HashMap;
-
+/**
+ * Mapa de caracteres HTLM
+ *
+ */
 public class HtmlMapChars {
 
-    private static HashMap simpleTable    = new HashMap();
-    private static HashMap completeTable  = new HashMap();
-    private static HashMap textareaTable  = new HashMap();
+    private static HashMap<String, String> simpleTable    = new HashMap<String, String>();
+    private static HashMap<String, String> completeTable  = new HashMap<String, String>();
+    private static HashMap<Character, String> textareaTable  = new HashMap<Character, String>();
 
     static
     {
@@ -24,7 +27,7 @@ public class HtmlMapChars {
         simpleTable.put("<"  ,"&lt;");
         simpleTable.put(">"  ,"&gt;");
         simpleTable.put("&"  ,"&amp;");
-		
+
         //povoando tabela com todos os especiais alfabéticos.
         completeTable.putAll(simpleTable);
         completeTable.put("Á","&Aacute;");
@@ -84,29 +87,29 @@ public class HtmlMapChars {
         completeTable.put("Ñ","&Ntilde;");
         completeTable.put("ñ","&ntilde;");
     }
-    
+
     public static String getSimple(char ch){
-        return (String) simpleTable.get(String.valueOf(ch)); 
+        return simpleTable.get(String.valueOf(ch));
     }
 
     public static String getComplete(char ch){
-        return (String) completeTable.get(String.valueOf(ch)); 
+        return completeTable.get(String.valueOf(ch));
     }
 
     public static String getTextArea(char ch){
-        return (String) textareaTable.get(ch);
+        return textareaTable.get(ch);
     }
-    
+
     /**
      * Retorna o valor correspondente de uma String em condificação html;
      * somente para os caracteres mais críticos.
      * Exemplo: entrada: "leandro"  --> saída: (&)quot;leandro(&)quot; (sem os parenteses)
      * contempla somente os HTML Brakers: aspa dupla, menor que e maior que.
      * @return a string com os caracteres especiais críticos convertidos para a codificação HTML
-     */    
+     */
     public static String htmlSimpleValue(String strIn){
         if(strIn == null) return "&nbsp;";
-		
+
 		StringBuffer outBuffer = new StringBuffer();
         for(int i = 0; i < strIn.length();i++){
             String htmlValue = getSimple(strIn.charAt(i));
@@ -125,10 +128,10 @@ public class HtmlMapChars {
      * Exemplo: entrada: "leandro"  --> saída: (&)quot;leandro(&)quot; (sem os parenteses)
      * contempla HTML Brakers e caracteres alfabéticos acentuados e especiais.
      * @return a string com os caracteres especiais convertidos para a codificação HTML
-     */    
+     */
     public static String htmlValue(String strIn){
         if(strIn == null) return "&nbsp;";
-		
+
         StringBuffer outBuffer = new StringBuffer();
         for(int i = 0; i < strIn.length();i++){
             String htmlValue = getComplete(strIn.charAt(i));
@@ -160,4 +163,9 @@ public class HtmlMapChars {
         }
         return outBuffer.toString();
     }
+
+    public static String noHtmlTags(String in){
+        return in.replaceAll("<"  ,"&lt;");
+    }
+
 }

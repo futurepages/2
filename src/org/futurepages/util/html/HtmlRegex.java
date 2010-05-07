@@ -20,10 +20,9 @@ public class HtmlRegex {
 		return concat("(?i)(?s)<",tagName,".*?>.*?</",tagName,"*>");
 	}
 
-	//(?i)<span *style=".*?font-weight: *bold;?[^"]+".*?>(.*?)</span *>
-	//(?i)<span *style *= *"font-weight: *bold\b.*".*?>(.*?)</span *>
+	//(?s)(?i)<span\s*style\s*=\s*"text-decoration:\s*underline\b.*?"[^>]*>.*?</span\s*>
 	public static String spanWithStylePropertiePattern(String propertie, String value){
-		return "(?s)(?i)<span\\s*style\\s*=\\s*\""+propertie+":\\s*"+value+"\\b.*\".*?>(.*?)</span\\s*>";
+		return "(?s)(?i)<span\\s*style\\s*=\\s*\""+propertie+":\\s*"+value+"\\b.*?\"[^>]*>(.*?)</span\\s*>";
 	}
 
 	public static String tagWithContentReplacement(String tagName){
@@ -43,6 +42,7 @@ public class HtmlRegex {
 		return " [\\w]+=[\\w]+\\b";
 	}
 
+	//(?i)(?s) ?\bstyle\s*=\s*"[^"]+"
 	public static String attrPattern(String name) {
 		return "(?i)(?s) ?\\b"+name+"\\s*=\\s*\"[^\"]+\"";
 	}
@@ -64,7 +64,7 @@ public class HtmlRegex {
 		if(!has && tagNames.length==0){
 			return null;
 		}
-		return concat(has?"(?s)(?i)</?":"<",tagNamesPattern(has,tagNames),".*?>");
+		return concat(has ? "(?s)(?i)</?":"<",tagNamesPattern(has,tagNames),".*?>");
 	}
 
     private static String tagNamesPattern(boolean has, String... ids){
@@ -87,7 +87,7 @@ public class HtmlRegex {
 	}
 
 	public static Pattern getCompiledTagsPattern() {
-		if(COMPILED_TAGS_PATTERN==null){
+		if(COMPILED_TAGS_PATTERN == null){
 			COMPILED_TAGS_PATTERN = Pattern.compile(tagsPattern(true));
 		}
 		return COMPILED_TAGS_PATTERN;

@@ -17,99 +17,107 @@ import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGEncodeParam;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
-
 /**
  * Utilidades para manipulação de JPEG
  */
-public class JPEGUtil{
+public class JPEGUtil {
 
-    /**
-     * Retorna a largura em pixels da imagem.
-     * @param file
-     * @return
-     * @throws java.net.MalformedURLException
-     */
-    public static int getWidth(File file) throws MalformedURLException{
-        Image image = new ImageIcon(file.toURI().toURL()).getImage();
-        return image.getWidth(null);
-    }
+	/**
+	 * Retorna a largura em pixels da imagem.
+	 * @param file
+	 * @return
+	 * @throws java.net.MalformedURLException
+	 */
+	public static int getWidth(File file) throws MalformedURLException {
+		Image image = new ImageIcon(file.toURI().toURL()).getImage();
+		return image.getWidth(null);
+	}
 
-     /**
-      * Retorna a largura em pixels da imagem.
-      */
-    public static int getHeight(File file) throws MalformedURLException{
-        Image image = new ImageIcon(file.toURI().toURL()).getImage();
-        return image.getHeight(null);
-    }
-    
-    /**
-     * Redimensiona arquivo (File) e retorna a imagem redimensionada (pathNewFile)
-     * File: Arquivo de entrada
-     * width, height: largura e altura da nova imagem
-     * pathNewFile: endereço real completo incluindo o nome do arquivo
-     */
-     public static void resizeImage(File file, int width, int height, int quality, String pathNewFile) throws MalformedURLException, FileNotFoundException, IOException{
-            Image image = new ImageIcon(file.toURI().toURL()).getImage();
-            resize(image, width, height, quality , pathNewFile, true);
-            image.flush();
-    }
+	/**
+	 * Retorna a largura em pixels da imagem.
+	 */
+	public static int getHeight(File file) throws MalformedURLException {
+		Image image = new ImageIcon(file.toURI().toURL()).getImage();
+		return image.getHeight(null);
+	}
 
-	 public static void resizeImagePriorHeight(File file, int width, int height, int quality, String pathNewFile) throws MalformedURLException, FileNotFoundException, IOException{
-            Image image = new ImageIcon(file.toURI().toURL()).getImage();
-            resize(image, width, height, quality , pathNewFile, false);
-            image.flush();
-    }
-    
-    /**
-     * Redimensiona imagens (criar thubmnails) - prioriza a largura
-     */
-    private static void resize(Image image, int width, int height, int quality, String pathNewFile, boolean priorWidth) throws FileNotFoundException, IOException {
-        // Calculos necessários para manter as propoçoes da imagem, conhecido como "aspect ratio"
-        double thumbRatio = (double) width / (double) height;
-        int imageWidth = image.getWidth(null);
-        int imageHeight = image.getHeight(null);
-        
-        double imageRatio = (double) imageWidth / (double) imageHeight;
-        
-        if (thumbRatio < imageRatio && priorWidth) {
-            height = (int) (width / imageRatio);
-        } else {
-            width = (int) (height * imageRatio);
-        }
-        // Fim do cálculo
-        
-        BufferedImage thumbImage = new BufferedImage(width, height,BufferedImage.TYPE_INT_RGB);
+	/**
+	 * Redimensiona arquivo (File) e retorna a imagem redimensionada (pathNewFile)
+	 * File: Arquivo de entrada
+	 * width, height: largura e altura da nova imagem
+	 * pathNewFile: endereço real completo incluindo o nome do arquivo
+	 */
+	public static void resizeImage(File file, int width, int height, int quality, String pathNewFile) throws MalformedURLException, FileNotFoundException, IOException {
+		Image image = new ImageIcon(file.toURI().toURL()).getImage();
+		resize(image, width, height, quality, pathNewFile, true);
+		image.flush();
+	}
 
-        Graphics2D graphics2D = thumbImage.createGraphics();
+	public static void resizeImagePriorHeight(File file, int width, int height, int quality, String pathNewFile) throws MalformedURLException, FileNotFoundException, IOException {
+		Image image = new ImageIcon(file.toURI().toURL()).getImage();
+		resize(image, width, height, quality, pathNewFile, false);
+		image.flush();
+	}
 
-        graphics2D.setRenderingHint(
-                RenderingHints.KEY_ALPHA_INTERPOLATION,
-                RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-        graphics2D.setRenderingHint(
-                RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-        graphics2D.setRenderingHint(
-                RenderingHints.KEY_RENDERING,
-                RenderingHints.VALUE_RENDER_QUALITY);
-        graphics2D.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION,
-                RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+	/**
+	 * Redimensiona imagens (criar thubmnails) - prioriza a largura
+	 */
+	private static void resize(Image image, int width, int height, int quality, String pathNewFile, boolean priorWidth) throws FileNotFoundException, IOException {
+		// Calculos necessários para manter as propoçoes da imagem, conhecido como "aspect ratio"
+		double thumbRatio = (double) width / (double) height;
+		int imageWidth = image.getWidth(null);
+		int imageHeight = image.getHeight(null);
 
-        graphics2D.drawImage(image, 0, 0, width, height, null);
+		double imageRatio = (double) imageWidth / (double) imageHeight;
+
+		if (priorWidth) {
+			if (thumbRatio < imageRatio) {
+				height = (int) (width / imageRatio);
+			} else {
+				width = (int) (height * imageRatio);
+			}
+		}else{
+			if (thumbRatio < imageRatio) {
+				width = (int) (height * imageRatio);
+			} else {
+				height = (int) (width / imageRatio);
+			}
+		}
+
+		// Fim do cálculo
+
+		BufferedImage thumbImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+		Graphics2D graphics2D = thumbImage.createGraphics();
+
+		graphics2D.setRenderingHint(
+				RenderingHints.KEY_ALPHA_INTERPOLATION,
+				RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+		graphics2D.setRenderingHint(
+				RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		graphics2D.setRenderingHint(
+				RenderingHints.KEY_RENDERING,
+				RenderingHints.VALUE_RENDER_QUALITY);
+		graphics2D.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION,
+				RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+
+		graphics2D.drawImage(image, 0, 0, width, height, null);
 		graphics2D.dispose();
-        
-        FileOutputStream fos = new FileOutputStream(pathNewFile);
-        BufferedOutputStream out = new BufferedOutputStream(fos);
-        
-        JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-        JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(thumbImage);
-        quality = Math.max(0, Math.min(quality, 100));
-        param.setQuality((float) quality / 100.0f, false);
-        encoder.setJPEGEncodeParam(param);
-        encoder.encode(thumbImage);
-        thumbImage.flush();
-        out.flush();
-        fos.flush();
-        fos.close();
-        out.close();
-    }
+
+		FileOutputStream fos = new FileOutputStream(pathNewFile);
+		BufferedOutputStream out = new BufferedOutputStream(fos);
+
+		JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
+		JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(thumbImage);
+		quality = Math.max(0, Math.min(quality, 100));
+		param.setQuality((float) quality / 100.0f, false);
+		encoder.setJPEGEncodeParam(param);
+		encoder.encode(thumbImage);
+		thumbImage.flush();
+		out.flush();
+		fos.flush();
+		fos.close();
+		out.close();
+	}
 }

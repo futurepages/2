@@ -48,7 +48,9 @@ public class IfTag extends ConditionalTag {
 				}
 			} catch (Exception ex) {
 				//by Leandro
-				obj = action.getInput().getValue(test);
+				if(action!=null){
+					obj = action.getInput().getValue(test);
+				}
 			}
 			Object dynObj = null;
 
