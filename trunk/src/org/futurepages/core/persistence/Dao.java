@@ -17,20 +17,20 @@ import org.hibernate.Session;
 
 public class Dao extends HQLProvider {
 
-	//privado propositalmente para encapsular o hibernate
+    //privado propositalmente para encapsular o hibernate
     private static Session session() {
         return HibernateManager.getSession();
     }
-    
+
     public static void clearSession() {
         Session session = session();
-		if (session.isDirty()) {        	
+        if (session.isDirty()) {
             session.clear();
         }
     }
 
     public static void open() {
-        if (!session().isOpen()) {        	
+        if (!session().isOpen()) {
             session().getSessionFactory().openSession();
         }
     }
@@ -45,7 +45,7 @@ public class Dao extends HQLProvider {
         return session().createCriteria(entityClass);
     }
 
-	public static Query query(String hqlQuery) {
+    public static Query query(String hqlQuery) {
         return session().createQuery(hqlQuery).setCacheable(true);
     }
 
@@ -86,7 +86,7 @@ public class Dao extends HQLProvider {
     }
 
     public static Object updateField(Class entity, String field, String expression, String whereClause) {
-		String hql = concat(updateSetting(entity) , field , EQUALS , expression , where(whereClause));
+        String hql = concat(updateSetting(entity), field, EQUALS, expression, where(whereClause));
         query(hql).executeUpdate();
         return query(select(field) + from(entity) + where(whereClause)).uniqueResult();
     }
@@ -143,7 +143,7 @@ public class Dao extends HQLProvider {
     }
 
     public static <T extends Serializable> List<T> list(Class<T> entity, String whereClause, String... orderClauses) {
-        return list( concat( from(entity) , where(whereClause) , orderBy(orderClauses)) );
+        return list(concat(from(entity), where(whereClause), orderBy(orderClauses)));
     }
 
     public static <T extends Serializable> List<T> list(String hqlQuery) {
@@ -167,11 +167,11 @@ public class Dao extends HQLProvider {
         final long numRows = Dao.numRows(entity, whereClause);
         int totalPages = calcNumPages(numRows, pageSize);
         page = calcPage(page, totalPages);
-        List<T> list = listPage(page, pageSize, concat(from(entity) , where(whereClause) , orderBy(orderClauses)));
+        List<T> list = listPage(page, pageSize, concat(from(entity), where(whereClause), orderBy(orderClauses)));
         return new PaginationSlice<T>(numRows, pageSize, totalPages, page, list);
     }
 
-    public static <T extends Serializable> PaginationSlice<T> paginationSlice(int page, int pageSize,String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
+    public static <T extends Serializable> PaginationSlice<T> paginationSlice(int page, int pageSize, String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
         final long numRows = Dao.numRows(fromAndJoin, whereClause);
         int totalPages = calcNumPages(numRows, pageSize);
         page = calcPage(page, totalPages);
@@ -211,7 +211,7 @@ public class Dao extends HQLProvider {
 
     public static <T extends Serializable> List<T> topListWithJoin(int topSize, String entityAlias, Class<T> entity, String joinClause, String where, String... order) {
         String fromAndJoin = fromAndJoin(entityAlias, entity, joinClause);
-        String strQuery = concat( select(entityAlias) , fromAndJoin , where(where) , orderBy(order) );
+        String strQuery = concat(select(entityAlias), fromAndJoin, where(where), orderBy(order));
         Query query = query(strQuery);
         query.setMaxResults(topSize);
         return query.list();
@@ -219,16 +219,15 @@ public class Dao extends HQLProvider {
     }
 
     public static <T extends Serializable> List<T> topList(int topSize, String entityAlias, String fromAndJoin, String where, String... order) {
-        String strQuery = concat( select(entityAlias) , fromAndJoin , where(where) , orderBy(order));
+        String strQuery = concat(select(entityAlias), fromAndJoin, where(where), orderBy(order));
         Query query = query(strQuery);
         query.setMaxResults(topSize);
         return query.list();
 
     }
 
-
     public static <T extends Serializable> List<T> topList(int topSize, Class<T> entity, String where, String... order) {
-        Query query = query( concat( from(entity) , where(where) , orderBy(order)) );
+        Query query = query(concat(from(entity), where(where), orderBy(order)));
         query.setMaxResults(topSize);
         return query.list();
     }
@@ -240,7 +239,7 @@ public class Dao extends HQLProvider {
     }
 
     public static <T extends Serializable> List<T> listReports(Class entity, Class<T> reportClass, String fields, String where, String group, String... order) {
-        Query query = query( concat( select(fields) , from(entity) , where(where) , groupBy(group) , orderBy(order)) );
+        Query query = query(concat(select(fields), from(entity), where(where), groupBy(group), orderBy(order)));
         query.setResultTransformer(new AliasToBeanResultTransformer(reportClass));
         return query.list();
     }
@@ -252,7 +251,7 @@ public class Dao extends HQLProvider {
     }
 
     public static <T extends Serializable> LinkedHashMap map(Class<T> entity, String key, String value, String where, String... order) {
-        Query query = query( concat(select(key + "," + value) , from(entity) , where(where) , orderBy(order)) );
+        Query query = query(concat(select(key + "," + value), from(entity), where(where), orderBy(order)));
         List<Object[]> results = query.list();
         LinkedHashMap map = new LinkedHashMap();
         for (Object[] result : results) {
@@ -273,6 +272,16 @@ public class Dao extends HQLProvider {
 
     public static <T extends Serializable> Map mapGrouped(Class<T> entity, String entityAlias, String join, String key, String value, String where) {
         Query query = query(select(key + "," + value) + from(entity) + as(entityAlias) + join(join) + where(where) + groupBy(key));
+        List<Object[]> results = query.list();
+        Map map = new HashMap();
+        for (Object[] result : results) {
+            map.put(result[0], result[1]);
+        }
+        return map;
+    }
+
+    public static Map mapGrouped(String entityAlias, String fromAndjoin, String key, String value, String where) {
+        Query query = query(select(key + "," + value) + fromAndjoin + where(where) + groupBy(key));
         List<Object[]> results = query.list();
         Map map = new HashMap();
         for (Object[] result : results) {
@@ -312,6 +321,7 @@ public class Dao extends HQLProvider {
         query.setMaxResults(topSize);
         return query.list();
     }
+
     public static <T extends Serializable> List<T> topReport(int topSize, String entityAlias, Class entity,
             Class<T> reportClass, String fields, String fromAndJoin, String whereClause, String group, String... orderClauses) {
 
@@ -336,17 +346,17 @@ public class Dao extends HQLProvider {
     }
 
     public static long numRows(Class entity, String whereClause) {
-        Long res = (Long) query(concat( select(count("*")) , from(entity) , where(whereClause) )).uniqueResult();
+        Long res = (Long) query(concat(select(count("*")), from(entity), where(whereClause))).uniqueResult();
         return res.longValue();
     }
 
     public static long numRows(String fromAndJoins, String whereClause) {
-        Long res = (Long) query( concat( select(count("*")) , fromAndJoins , where(whereClause))).uniqueResult();
+        Long res = (Long) query(concat(select(count("*")), fromAndJoins, where(whereClause))).uniqueResult();
         return res.longValue();
     }
 
     public static long numRows(String whereClause, String group, Class entity) {
-        Long res = (Long) query( concat( select(count(distinct(group))) , from(entity) , where(whereClause)) ).uniqueResult();
+        Long res = (Long) query(concat(select(count(distinct(group))), from(entity), where(whereClause))).uniqueResult();
         return res.longValue();
     }
 

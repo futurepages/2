@@ -53,6 +53,11 @@ public class FileUtil {
 		return new String(buffer);
 	}
 
+	public static String getStringContent(Class cls, String path) throws FileNotFoundException, IOException {
+		return getStringContent(classRealPath(cls)+"/"+path);
+	}
+
+
 	public static String[] getStringLines(String path) throws FileNotFoundException, IOException {
 		return getStringContent(path).split("\r\n");
 	}

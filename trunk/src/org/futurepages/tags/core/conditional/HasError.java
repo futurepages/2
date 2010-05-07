@@ -1,6 +1,7 @@
 package org.futurepages.tags.core.conditional;
 
 import javax.servlet.jsp.JspException;
+import org.futurepages.core.action.Action;
 import org.futurepages.core.tags.ConditionalTag;
 
 /**
@@ -12,6 +13,10 @@ public class HasError extends ConditionalTag {
 
 	@Override
 	public boolean testCondition() throws JspException {
-		return (action!=null)? action.hasError() : false;
+		if(action!=null){
+			return action.hasError();
+		} else {
+			return req.getParameter(Action.ERROR) != null;
+		}
 	}
 }

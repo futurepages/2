@@ -1,22 +1,26 @@
 package org.futurepages.util.html;
 
+import static org.futurepages.util.html.HtmlRegex.attrPattern;
+import static org.futurepages.util.html.HtmlRegex.commentPattern;
+import static org.futurepages.util.html.HtmlRegex.getCompiledTagsPattern;
+import static org.futurepages.util.html.HtmlRegex.invalidAttrPattern;
+import static org.futurepages.util.html.HtmlRegex.spanWithStylePropertiePattern;
+import static org.futurepages.util.html.HtmlRegex.tagAndContentPattern;
+import static org.futurepages.util.html.HtmlRegex.tagWithContentReplacement;
+import static org.futurepages.util.html.HtmlRegex.tagsPattern;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.futurepages.util.FileUtil;
-import static org.futurepages.util.html.HtmlRegex.*;
 
 /**
  * Aplicação de filtro em strings originalmente HTML
- * 
- * @author leandro
+ *
+ * @author Leandro
  */
 public class HtmlStripper {
 
 	private String originalHtml;
 	private String strippedHtml;
-
-	private HtmlStripper() {
-	}
 
 	public HtmlStripper(String htmlToStrip) {
 		this.originalHtml = htmlToStrip;
@@ -36,31 +40,20 @@ public class HtmlStripper {
 		return richText(false, false, false, false, false);
 	}
 
-	/**
-	 * 
-	 * Default: P with Bold, Italic & Underline + params
-	 * @param styles it's allowed: * style="" class="" , H1,...,H6 e tags <style>
-	 * @param lists it's allowed: UL OL LI BLOCKOTE
-	 * @param image it's allowed: IMG
-	 * @param anchor it's allowed: A
-	 * @param table it's allowed: TABLE, TR, TD, TH, TBODY
-	 * @return the stripped html
-	 */
-	public static void main(String[] args){
-		String path = "D:/Users/leandro/Documents/ProjetosNB/futurepages2/src/org/futurepages/util/html/res/testTable.html";
-		try {
-			String content = FileUtil.getStringContent(path);
-			System.out.println(
-					new HtmlStripper(content).richText(false, false, true, false, true)
-			)
-		;
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
+//	public static void main(String[] args){
+//		String path = "D:/Users/leandro/Documents/ProjetosNB/futurepages2/src/org/futurepages/util/html/res/htmlStrip1.html";
+//		try {
+//			String content = FileUtil.getStringContent(path);
+//			System.out.println(
+//					new HtmlStripper(content).richText(false, false, false, false, false)
+//			)
+//		;
+//		} catch (Exception ex) {
+//			ex.printStackTrace();
+//		}
+//	}
 
 	public String richText(boolean styles, boolean lists, boolean image, boolean anchor, boolean table) {
-		long inicio = System.currentTimeMillis();
 		if(!styles){
 			strippedHtml = noStylesText(originalHtml);
 		} else {
@@ -87,7 +80,6 @@ public class HtmlStripper {
 		}
 		sb.append(strippedHtml.substring(pos));
 
-		System.out.println((System.currentTimeMillis() - inicio) + "ms");
 		//RETIRAR ESPAÇOS, QUEBRAS DE LINHA E TAGS VAZIAS
 		return strippedHtml = sb.toString();
 	}
@@ -96,7 +88,7 @@ public class HtmlStripper {
 	/**
 	 * Substitui texto 'str' encontrado somente dentro das tags pela regex
 	 * com o valor do atributo 'replacement'
-	 * 
+	 *
 	 * @param str texto html a ser varrido
 	 * @param regex padrão para substituição
 	 * @param replacement novo valor
@@ -118,7 +110,7 @@ public class HtmlStripper {
 				String foundOne = str.substring(matcher.start(),matcher.end());
 
 				sb.append(regexPattern.matcher(foundOne).replaceAll(replacement));
-				
+
 				pos = matcher.end();
 
 			} while (matcher.find());
@@ -141,15 +133,17 @@ public class HtmlStripper {
 		String xmlPattern       = tagAndContentPattern("xml");
 		String headPattern       = tagAndContentPattern("head");
 		String scriptPattern    = tagAndContentPattern("script");
-		String emptyTagsPattern = emptyTagsPattern();
-		
 
-		htmlContent =htmlContent.replaceAll(commentPattern   ,  "") //remove comentários
-								.replaceAll(xmlPattern       ,  "") //remove tag xml gerada pelo word
-								.replaceAll(headPattern      ,  "") //remove tag xml gerada pelo word
-								.replaceAll(scriptPattern    ,  "") //remove html script (javascript por exemplo)
-								.replaceAll(emptyTagsPattern ,  "") //remove tags vazias
-		;
+
+		htmlContent =htmlContent.replaceAll(commentPattern   ,  ""); //remove comentários
+		htmlContent =htmlContent.replaceAll(xmlPattern       ,  ""); //remove tag xml gerada pelo word
+		htmlContent =htmlContent.replaceAll(headPattern      ,  ""); //remove tag xml gerada pelo word
+		htmlContent =htmlContent.replaceAll(scriptPattern    ,  ""); //remove html script (javascript por exemplo)
+	
+		//Comentado - decidiu-se não tirar tags vazias
+		//String emptyTagsPattern = emptyTagsPattern();
+		//htmlContent =htmlContent.replaceAll(emptyTagsPattern ,  ""); //remove tags vazias
+		
 		htmlContent = replaceInTags(htmlContent, "'" , "\"");                 //aspas simples por aspas duplas
 		htmlContent = replaceInTags(htmlContent, invalidAttrPattern()  ,  "");//atributos inválidos
 
@@ -169,8 +163,8 @@ public class HtmlStripper {
 		htmlContent = htmlContent.replaceAll(tagAndContentPattern("style") , "");
 
 		htmlContent = replaceInTags(htmlContent, attrPattern("class"), "");
-		htmlContent = htmlContent.replaceAll(spanWithStylePropertiePattern("font-weight","bold"),tagWithContentReplacement("strong"))    //estilizados com negrito
-								 .replaceAll(spanWithStylePropertiePattern("text-decoration","underline"),tagWithContentReplacement("u"))//estilizados com sublinhado
+		htmlContent = htmlContent.replaceAll(spanWithStylePropertiePattern("font-weight","bold"),tagWithContentReplacement("strong"));    //estilizados com negrito
+		htmlContent = htmlContent.replaceAll(spanWithStylePropertiePattern("text-decoration","underline"),tagWithContentReplacement("u"))//estilizados com sublinhado
 					  ;
 		htmlContent = replaceInTags(htmlContent, attrPattern("style"), "");
 		return htmlContent;

@@ -8,7 +8,7 @@ import static org.futurepages.util.StringUtils.concat;
 
 /**
  *
- * @author leandro
+ * @author Leandro
  */
 public class HtmlTagReplacer {
 
@@ -52,8 +52,9 @@ public class HtmlTagReplacer {
 	 *
 	 */
 	private void makeTagsToCare() {
-
+		reduce("br");
 		if (styles) {
+			keep("div");
 			keep("p");
 			keep("strong", "strong");
 			keep("i", "em");
@@ -69,8 +70,9 @@ public class HtmlTagReplacer {
 			keep("h6");
 
 		} else {
+			reduce("div","p");
 			reduce("p");
-			reduce("strong", "strong");
+			reduce("strong");
 			reduce("i", "em");
 			reduce("u", "span " + STYLE_UNDERLINE, "span");
 			reduce("address", "em");
@@ -103,8 +105,12 @@ public class HtmlTagReplacer {
 		}
 
 		if (image) {
+			keep("img");
+			keep("object");
+			keep("embed");
+			keep("param");
+			keep("iframe");
 			if(styles){
-				keep("img");
 			} else {
 				reduce("img", attrs("src","alt"));
 			}
@@ -114,7 +120,7 @@ public class HtmlTagReplacer {
 			if(styles){
 				keep("a");
 			} else {
-				reduce("a",attrs("href,target"));
+				reduce("a",attrs("href","target"));
 			}
 		} else {
 			reduce("a", "span "+STYLE_UNDERLINE, "span");
@@ -164,12 +170,14 @@ public class HtmlTagReplacer {
 	public String treated(String tag) {
 		boolean isClosing = isClosingTag(tag);
 		String[] tagParts = tagParts(tag, isClosing);
-
+		String treated ;
 		TagReplacement tagRep = tagsToCare.get(tagParts[0]);
 		if (tagRep == null) {
-			return "";
+			treated = "";
+		}else{
+			treated = treat(tagParts, isClosing, tagRep);
 		}
-		return treat(tagParts, isClosing, tagRep);
+		return treated;
 	}
 
 	private String treat(String[] tagParts, boolean closing, TagReplacement tagRep) {
@@ -299,6 +307,7 @@ class TagReplacement {
 		} else { //has attributes to care
 			if(reduce){ //need to keep some attributes when reducing
 				String attributes = "";
+
 				for(String attr : attributesToCare){
 					Matcher matcher = Pattern.compile(regexAttr(attr)).matcher(tagSecondPart);
 					if(matcher.find()){

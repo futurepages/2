@@ -7,6 +7,7 @@ import java.util.Map;
 import org.futurepages.core.persistence.Dao;
 import org.futurepages.core.persistence.HibernateManager;
 import org.futurepages.core.tags.build.ModulesAutomation;
+import org.futurepages.util.The;
 
 /**
  * Classe responsável pela automatização da instalação dos módulos.
@@ -20,30 +21,32 @@ import org.futurepages.core.tags.build.ModulesAutomation;
 public class InstallersManager extends ModulesAutomation {
 
 	private static final String INSTALL_DIR_NAME = "install";
+	private String installMode;
 
-	public InstallersManager(File[] modules) {
+	public InstallersManager(File[] modules, String installMode) {
 		super(modules, INSTALL_DIR_NAME);
+		this.installMode = installMode;
 	}
 
 	/**
 	 * Inicializa os Instaladores do banco de dados.
-	 * 
+	 *
 	 * @throws java.lang.Exception
 	 */
 	public void install() throws Exception {
 		log("BEGIN...");
-		installModules(modules);
+		install(modules);
 		log("END.");
 	}
 
 	/**
 	 *
 	 * @param modules são as pastas de módulos que serão varridas para instalação.
-	 * 
+	 *
 	 * @throws Exception
 	 */
-	public static void initialize(File[] modules) throws Exception {
-		new InstallersManager(modules).install();
+	public static void initialize(File[] modules, String installMode) throws Exception {
+		new InstallersManager(modules, installMode).install();
 	}
 
 	public void installExamples() throws Exception {
@@ -153,27 +156,30 @@ public class InstallersManager extends ModulesAutomation {
 	 * Instalação do banco de dados.
 	 *
 	 * 1) Instala os Recursos (se houver: install.Resources)
-	 * 2) Instala os módulos em ordem alfabética (dentro de uma única transação)
-	 * 3) Instala os exemplos da aplicação (se houver: install.Examples)
-	 *
+	 * 2) Instala dentro de uma mesma transação:
+	 * 3)	- Instala os módulos em ordem alfabética
+	 * 4)	- Dependendo do modo de instalação...
+	 *			- Instala os dados de exemplos da aplicação (se existir: install.Examples e (INSTALL_MODE = "examples" ou "on")
+	 *			- Instala os dados de produção  da aplicação (se existir: install.Production e INSTALL_MODE = "production")
+	 *			- Se estiver no modo "modules" não será instalado
 	 * @param modules
-	 * @throws Exception 
+	 * @throws Exception
 	 * @throws java.lang.Exception
 	 */
-	private void installModules(File[] modules) throws Exception {
-		if (modules != null) {
+	private void install(File[] modules) throws Exception {
+		if (modules != null && !installMode.equals("off")) {
 			try {
 				if (HibernateManager.isRunning()) {
 					Dao.beginTransaction();
 				}
 
 				//Initial Resources Installer
-				try{
-					Class resourcesInstaller = Class.forName(INSTALL_DIR_NAME+".Resources");
+				try {
+					Class resourcesInstaller = Class.forName(INSTALL_DIR_NAME + ".Resources");
 					log(">>> installer " + resourcesInstaller.getSimpleName() + " running...  ");
 					resourcesInstaller.newInstance();
 					log(">>>   Resources OK.");
-				} catch(ClassNotFoundException ex){
+				} catch (ClassNotFoundException ex) {
 					log(">>> installer of Resources isn't present.");
 				}
 
@@ -188,14 +194,26 @@ public class InstallersManager extends ModulesAutomation {
 					}
 					log("module '" + moduleName + "' installed.");
 				}
-				//Examples Installer
-				try{
-					Class exInstallerClass = Class.forName(INSTALL_DIR_NAME+".Examples");
-					log(">>> Examples installing...  ");
-					Installer examples = (Installer) exInstallerClass.newInstance();
-					log(">>> Examples installed in "+examples.totalTime()+" secs.");
-				} catch(ClassNotFoundException ex){
-					log(">>> installer of Examples not present.");
+
+				//ExtraInstaller
+				String extraInstaller = null;
+				if (!installMode.equals("modules")){
+					if(installMode.equals("on")) {
+						extraInstaller = "Examples";
+					} else {
+					extraInstaller = The.capitalizedWord(installMode);
+				}
+				}
+
+				if (extraInstaller != null) {
+					try {
+						Class exInstallerClass = Class.forName(INSTALL_DIR_NAME + "."+extraInstaller);
+						log(">>> " + extraInstaller + " installing...  ");
+						Installer extras = (Installer) exInstallerClass.newInstance();
+						log(">>> " + extras + " installed in " + extras.totalTime() + " secs.");
+					} catch (ClassNotFoundException ex) {
+						log(">>> installer of " + extraInstaller + " not present.");
+					}
 				}
 
 				if (HibernateManager.isRunning()) {
