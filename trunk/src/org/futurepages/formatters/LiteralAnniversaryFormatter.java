@@ -13,10 +13,11 @@ import org.futurepages.util.DateUtil;
 public class LiteralAnniversaryFormatter implements Formatter {
 
     public String format(Object value, Locale loc) {
-		Calendar cal = (Calendar) value;
-
-		String retornoFormater = DateUtil.format(cal, "d")+" de "+MonthEnum.get(cal);
-
+    	String retornoFormater = "";
+    	if(value!= null){
+    		Calendar cal = (Calendar) value;
+    		retornoFormater = DateUtil.format(cal, "d")+" de "+MonthEnum.get(cal);
+    	}
 		return retornoFormater;
     }
 
