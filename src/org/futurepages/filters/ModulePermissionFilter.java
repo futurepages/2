@@ -1,15 +1,13 @@
 package org.futurepages.filters;
 
-import org.futurepages.core.action.AbstractAction;
-import org.futurepages.core.control.AbstractModuleManager;
-import org.futurepages.core.admin.AllModulesFree;
-import org.futurepages.core.config.Params;
-import org.futurepages.util.The;
 import org.futurepages.actions.AjaxAction;
+import org.futurepages.core.action.AbstractAction;
 import org.futurepages.core.action.Action;
-import org.futurepages.core.filter.Filter;
-import org.futurepages.core.control.InvocationChain;
+import org.futurepages.core.admin.AllModulesFree;
 import org.futurepages.core.admin.AuthenticationFree;
+import org.futurepages.core.control.AbstractModuleManager;
+import org.futurepages.core.control.InvocationChain;
+import org.futurepages.core.filter.Filter;
 
 /**
  * Use este filtro de forma global. Ele verificará em todas actions se trata-se
@@ -26,7 +24,7 @@ public class ModulePermissionFilter implements Filter {
     }
 
     public String filter(InvocationChain chain) throws Exception {
-
+    	
         if (chain.getAction() instanceof AbstractAction) {
 
             AbstractAction action = (AbstractAction) chain.getAction();
