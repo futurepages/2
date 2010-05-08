@@ -118,6 +118,7 @@ public final class WebContainer extends SimpleTagSupport {
 
 		bodyEvaluated = true;
 		threadLocal.set(null);
+		threadLocal.remove();
 	}
 
 	public void setHeadFile(String headFile) {

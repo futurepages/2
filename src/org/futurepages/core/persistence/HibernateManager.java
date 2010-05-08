@@ -100,9 +100,9 @@ public class HibernateManager {
 					sTL.remove();
 				}
 			}
-			for (SessionFactory sfTL : factories.values()) {
-				if (sfTL != null && !sfTL.isClosed()) { //se a fabrica de sessao não estiver fechada fecha ela
-					sfTL.close();
+			for (SessionFactory sf : factories.values()) {
+				if (sf != null && !sf.isClosed()) { //se a fabrica de sessao não estiver fechada fecha ela
+					sf.close();
 				}
 			}
 			log("sessions killed.");
