@@ -55,9 +55,8 @@ public class ClassTagAnnotationReader {
 
     	List<TagAttributeBean> allAttributes = new ArrayList<TagAttributeBean>();
     	Class superKlass = klass.getSuperclass();
-    	if(superKlass.isAnnotationPresent(SuperTag.class)){
-    		Field[] superFields = superKlass.getDeclaredFields();
-    		allAttributes.addAll(filterAnnotatedFields(superFields));
+    	if(!superKlass.equals(Object.class)){
+    		allAttributes.addAll(colectAttributes(superKlass));
     	}
 
         Field[] subFields = klass.getDeclaredFields();
