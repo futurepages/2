@@ -61,7 +61,8 @@ public class HtmlStripperTest {
 	
 	@Test
 	public void testeRichTextCleanWithStyle() throws FileNotFoundException, IOException{
-		richTextTestProcedure(true, false, false, false, false, "org/futurepages/util/html/res/expectedCleanStyle.html",
+		richTextTestProcedure(true, false, false, false, false, 
+				"org/futurepages/util/html/res/expectedCleanStyle.html",
 				"limpar tudo mas manter style");
 	}
 
