@@ -200,7 +200,7 @@ public class DateUtil {
 			dia = ((String) in).substring(8, 10);
 			mes = ((String) in).substring(5, 7);
 			ano = ((String) in).substring(0, 4);
-			horas = ((String) in).substring(11);
+			horas = ((String) in).substring(11,16);
 			return dia + "/" + mes + "/" + ano + " - " + horas;
 		} else if (in instanceof Date) {
 			return new SimpleDateFormat("dd/MM/yyyy - HH:mm").format((Date) in).toString();
