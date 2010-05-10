@@ -74,7 +74,9 @@ public class HtmlTagReplacerTest_treated {
 	@Parameters
 	public static Collection parameters() {
 		Collection col =  Arrays.asList(new Object[][] {
+			
 			{noStyles(),	"<a/>", 		"<span style=\"text-decoration:underline;\"/>", 	"tag <a> com style."},
+			
 			{styles(), 		"<a/>", 		"<span style=\"text-decoration:underline;\"/>", 	"tag <a> com style."},
 			{styles(), 		"<td>", 		"&nbsp; - ",	 									"tag <td> sem tables com style."},
 
@@ -143,6 +145,7 @@ public class HtmlTagReplacerTest_treated {
 			{noTable(true), "<tr roswpan=\"q\">", 		"<p roswpan=\"q\">","tag <tr> sem tables com style."},
 			{noTable(false),"<tr roswpan=\"qwer\">",	"<p>", 				"tag <tr> sem tables sem style."},
 			{noTable(false),"<th>",	 					"<p>", 				"tag <th> sem tables."},
+			
 
 		});
 		return col;
