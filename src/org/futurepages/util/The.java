@@ -230,14 +230,14 @@ public class The {
     }
 
     /**
-     * 
+     * Remove caracteres especiais.
      * @param str
      * @return
      */
 	 public static String stringKeyIn(String str){
         String[] specials = new String[]{":",";",",","!","?","(",")","\\","/",
                                          "\"","'","%","#","{","}","[","]","º","ª",
-                                         "<",">","´","`"," ","\\t","\\n","\\r","\\h"};
+                                         "<",">","´","`","~"," ","\\t","\\n","\\r","\\h"};
 		return wordWithoutSpecials(specials, str,"");
 
     }
