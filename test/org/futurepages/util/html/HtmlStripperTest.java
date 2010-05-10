@@ -40,6 +40,7 @@ public class HtmlStripperTest {
 		String root = this.getResourcePath();
 		String dirtyContent = FileUtil.getStringContent(originalPath);
 		String stripped = new HtmlStripper(dirtyContent).richText(styles, lists, image, anchor, table);
+		System.out.println(stripped);
 		assertEquals(expectedPath, msg, root, originalPath, dirtyContent, stripped);
 	}
 
@@ -98,6 +99,13 @@ public class HtmlStripperTest {
 		String path = getResourcePath()+"org/futurepages/util/html/res/longHtml.html";
 		richTextTestProcedure(false, false, false, false, false, path,
 				"org/futurepages/util/html/res/expectedLongHtml.html", "html quebrado(tags não fechadas, aspas nao fechadas)");
+	}
+	
+	@Test
+	public void testeRichText_longHtmlTable_span() throws FileNotFoundException, IOException{
+		String path = getResourcePath()+"org/futurepages/util/html/res/longTableSpan.html";
+		richTextTestProcedure(false, false, false, false, false, path,
+				"org/futurepages/util/html/res/expectedLongTableSpan.html", "html quebrado(tags não fechadas, aspas nao fechadas)");
 	}
 	
 }
