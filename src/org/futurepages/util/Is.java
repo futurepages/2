@@ -162,6 +162,9 @@ public class Is {
 	 */
 	public static boolean validStringKey(String str) {
 
+		if(str.length()< 4 || str.length() >= 50){
+			return false;
+		}
 		String loginVerify = The.stringKeyIn(str);//TIRA CARACTERES ESPECIAIS
 		loginVerify = SEOUtil.stringKeyValid(loginVerify);//TIRA ACENTOS E Ç
 		
