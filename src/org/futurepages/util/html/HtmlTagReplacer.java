@@ -15,6 +15,9 @@ public class HtmlTagReplacer {
 	private String PLAIN_LI = "&nbsp; - ";
 	private String STYLE_UNDERLINE = "style=\"text-decoration:underline;\"";
 	private String BREAK_LINE = "<br/>";
+	private String P_STRONG_OPEN  = "<p><strong>";
+	private String P_STRONG_CLOSE = "</strong></p>";
+
 	private Pattern NON_WORD_REGEX_PATTERN;
 	private boolean styles;
 	private boolean lists;
@@ -78,12 +81,12 @@ public class HtmlTagReplacer {
 			reduce("address", "em");
 			reduce("b", "strong");
 			reduce("big", "strong");
-			reduce("h1", "p");
-			reduce("h2", "p");
-			reduce("h3", "p");
-			reduce("h4", "p");
-			reduce("h5", "p");
-			reduce("h6", "p");
+			replace("h1", P_STRONG_OPEN , P_STRONG_CLOSE);
+			replace("h2", P_STRONG_OPEN , P_STRONG_CLOSE);
+			replace("h3", P_STRONG_OPEN , P_STRONG_CLOSE);
+			replace("h4", P_STRONG_OPEN , P_STRONG_CLOSE);
+			replace("h5", P_STRONG_OPEN , P_STRONG_CLOSE);
+			replace("h6", P_STRONG_OPEN , P_STRONG_CLOSE);
 		}
 
 		if (lists) {
