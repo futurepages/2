@@ -40,7 +40,6 @@ public class HtmlStripperTest {
 		String root = this.getResourcePath();
 		String dirtyContent = FileUtil.getStringContent(originalPath);
 		String stripped = new HtmlStripper(dirtyContent).richText(styles, lists, image, anchor, table);
-		System.out.println(stripped);
 		assertEquals(expectedPath, msg, root, originalPath, dirtyContent, stripped);
 	}
 
