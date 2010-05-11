@@ -89,11 +89,13 @@ public class HtmlTagReplacerTest_treated {
 			{styles(), 		"<h1/>",	 				"<h1/>", 								"tag <h1> com style."},
 			{styles(), 		"<h2/>",			 		"<h2/>", 								"tag <h2> com style."},
 			{styles(), 		"<h3/>", 					"<h3/>", 								"tag <h3> com style."},
-			{styles(), 		"<h4/>", 					"<h4/>", 								"tag <h4> sem style."},
-			{noStyles(), 	"<h1 alt=\"1\"/>", 			"<p/>", 								"tag <h1> sem style."},
-			{noStyles(), 	"<h2 alt=\"1\"/>", 			"<p/>", 								"tag <h2> sem style."},
-			{noStyles(), 	"<h3 alt=\"1\"/>", 			"<p/>",	 								"tag <h3> sem style."},
-			{noStyles(), 	"<h4 alt=\"1\"/>", 			"<p/>", 								"tag <h4> sem style."},
+			{styles(), 		"<h4 style=\"1\"/>", 		"<h4 style=\"1\"/>", 					"tag <h4> sem style."},
+
+			{noStyles(), 	"<h1>", 					"<p><strong>", 							"tag <h1> sem style."},
+			{noStyles(), 	"</h1>", 					"</strong></p>", 							"tag <h1> sem style."},
+			{noStyles(), 	"<h2 alt=\"1\"/>", 			"<p><strong>", 							"tag <h2> sem style."},
+			{noStyles(), 	"<h3 alt=\"1\"/>", 			"<p><strong>",	 						"tag <h3> sem style."},
+			{noStyles(), 	"<h4 alt=\"1\"/>", 			"<p><strong>", 							"tag <h4> sem style."},
 			
 			{lists(true), 	"<ul alt=\"1\"/>", 			"<ul alt=\"1\"/>", 						"tag <ul> com style."},
 			{lists(true), 	"<ol alt=\"1\"/>", 			"<ol alt=\"1\"/>", 						"tag <ol> com style."},
@@ -106,7 +108,8 @@ public class HtmlTagReplacerTest_treated {
 			{lists(false), 	"<blockote  alt=\"1\"/>", 	"<blockote/>", 							"tag <blockote/> sem style."},
 			{lists(false), 	"<ul alt=\"1\"/>", 			"<ul/>", 								"tag <ul> sem style."},
 			
-			{noLists(), 	"<ul/>", 					"<p/>", 								"tag <ul> sem lists."},
+			{noLists(), 	"<ul>", 					"<p>", 									"tag <ul> sem lists."},
+			{noLists(), 	"<ul/>", 					"<p/>", 								"tag <ul/> sem lists."},
 			{noLists(), 	"<ol/>", 					"<p/>", 								"tag <ol> sem lists."},
 			{noLists(), 	"<li/>", 					"&nbsp; - ", 							"tag <li> sem lists."},
 			
