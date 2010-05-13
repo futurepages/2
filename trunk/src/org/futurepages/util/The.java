@@ -81,6 +81,30 @@ public class The {
     	return null;
     }
 
+	public static String strWithRightSpaces(String s, int len){
+        // converts integer to left-zero padded string, len  chars long.
+        if (s.length() > len) {
+            return s.substring(0, len);
+        } else if (s.length() < len) // pad on left with zeros
+        {
+            return s + "                                                        ".substring(0, len - s.length());
+        } else {
+            return s.substring(0,len);
+        }
+	}
+
+	public static String strWithLeftSpaces(String s, int len){
+        // converts integer to left-zero padded string, len  chars long.
+        if (s.length() > len) {
+            return s.substring(0, len);
+        } else if (s.length() < len) // pad on left with zeros
+        {
+            return "                                                                             ".substring(0, len - s.length())+s;
+        } else {
+            return s.substring(0,len);
+        }
+	}
+
     /**
      * Retorna o array com os tokens separados pelo 'separator'
      */
