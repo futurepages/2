@@ -1,4 +1,4 @@
-package org.futurepages.util.iterator;
+package org.futurepages.util.iterator.string;
 
 
 public class MatchedToken {
@@ -27,6 +27,6 @@ public class MatchedToken {
 	}
 	@Override
 	public String toString() {
-		return "before: "+before  +"  token: "+matched;
+		return "before: "+before+"  token: "+matched;
 	}
 }
