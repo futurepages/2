@@ -13,7 +13,8 @@ import org.junit.runners.Suite.SuiteClasses;
 	HtmlStripperTest_noStyleText.class,
 	HtmlStripperTest_noTrashText.class,
 	HtmlStripperTest_poorText.class,
-	HtmlStripperTest_replaceInTags.class
+	HtmlStripperTest_replaceInTags.class,
+	ParagraphApplierTest.class
 	
 })
 public class HtmlUtilTestSuite {}

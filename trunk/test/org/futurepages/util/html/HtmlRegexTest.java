@@ -1,5 +1,6 @@
 package org.futurepages.util.html;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -10,6 +11,7 @@ import static org.junit.Assert.*;
 public class HtmlRegexTest {
 
 	@Test
+	@Ignore
 	public void testTagsPattern() {
 		//0 tags
 		assertEquals(HtmlRegex.tagsPattern(false), null);

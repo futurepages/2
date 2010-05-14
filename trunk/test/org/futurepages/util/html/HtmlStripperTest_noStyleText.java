@@ -77,7 +77,7 @@ public class HtmlStripperTest_noStyleText {
 				{"<a >", "<a style = \"k\"  style = \"k\" class=\"k1 k2 k3\">"}	,
 				
 				{"<a href=\"http://www.class/\">\\n<u>clique\\n</u> no <em>link</em> do \\n <strong>site\\n</strong>\\n</a>\\n",
-					"<a style='text-decoration:underline' href=\"http://www.class/\" class=xpto>\\n<span style='text-decoration: underline;'>clique\\n</span> no <em>link</em> do \\n <span style=\"font-weight:bold;\">site\\n</span>\\n</a>\\n"},
+				"<a style='text-decoration:underline' href=\"http://www.class/\" class=xpto>\\n<span style='text-decoration: underline;'>clique\\n</span> no <em>link</em> do \\n <span style=\"font-weight:bold;\">site\\n</span>\\n</a>\\n"},
 				
 				{"<a href=\"http://www.class/\"><u>clique</u> no <em>link</em> do <strong>site</strong></a>",
 					"<a style='text-decoration:underline' href=\"http://www.class/\" class=xpto><span style='text-decoration: underline;'>clique</span> no <em>link</em> do <span style=\"font-weight:bold;\">site</span></a>"},
