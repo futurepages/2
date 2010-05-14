@@ -9,8 +9,10 @@ import static org.futurepages.util.html.HtmlRegex.tagAndContentPattern;
 import static org.futurepages.util.html.HtmlRegex.tagWithContentReplacement;
 import static org.futurepages.util.html.HtmlRegex.tagsPattern;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.futurepages.util.iterator.IterableString;
+import org.futurepages.util.iterator.MatchedToken;
 
 /**
  * Aplicação de filtro em strings originalmente HTML
@@ -40,19 +42,6 @@ public class HtmlStripper {
 		return richText(false, false, false, false, false);
 	}
 
-//	public static void main(String[] args){
-//		String path = "D:/Users/leandro/Documents/ProjetosNB/futurepages2/src/org/futurepages/util/html/res/htmlStrip1.html";
-//		try {
-//			String content = FileUtil.getStringContent(path);
-//			System.out.println(
-//					new HtmlStripper(content).richText(false, false, false, false, false)
-//			)
-//		;
-//		} catch (Exception ex) {
-//			ex.printStackTrace();
-//		}
-//	}
-
 	public String richText(boolean styles, boolean lists, boolean image, boolean anchor, boolean table) {
 		if(!styles){
 			strippedHtml = noStylesText(originalHtml);
@@ -61,29 +50,18 @@ public class HtmlStripper {
 		}
 
 		HtmlTagReplacer tagRep = new HtmlTagReplacer(styles, lists, image, anchor, table);
-
 		Pattern tagsPattern  = getCompiledTagsPattern();
-		Matcher matcher      = tagsPattern.matcher(strippedHtml);
+		IterableString iter = new IterableString(tagsPattern, strippedHtml);
 		StringBuilder sb     = new StringBuilder();
-
-		int pos = 0;
-		if (matcher.find()) {
-			do {
-				sb.append(strippedHtml.substring(pos, matcher.start()));
-
-				String foundOne = strippedHtml.substring(matcher.start(),matcher.end());
-
-				sb.append(tagRep.treated(foundOne));
-				pos = matcher.end();
-
-			} while (matcher.find());
+		String end = "";
+		for (MatchedToken token : iter) {
+			sb.append(token.getBefore());
+			sb.append(tagRep.treated(token.getMatched()));
+			end = token.getAfter();
 		}
-		sb.append(strippedHtml.substring(pos));
-
-		//RETIRAR ESPAÇOS, QUEBRAS DE LINHA E TAGS VAZIAS
-		return strippedHtml = sb.toString();
+		sb.append(end);
+		return sb.toString();
 	}
-
 
 	/**
 	 * Substitui texto 'str' encontrado somente dentro das tags pela regex
@@ -97,25 +75,19 @@ public class HtmlStripper {
 	 */
 	public static String replaceInTags(String str, String regex, String replacement){
 
+
 		Pattern tagsPattern  = getCompiledTagsPattern();
-		Matcher matcher      = tagsPattern.matcher(str);
+		IterableString iter = new IterableString(tagsPattern, str);
+
+		String end = "";
 		Pattern regexPattern = Pattern.compile(regex);
 		StringBuilder sb     = new StringBuilder();
-
-		int pos = 0;
-		if (matcher.find()) {
-			do {
-				sb.append(str.substring(pos, matcher.start()));
-
-				String foundOne = str.substring(matcher.start(),matcher.end());
-
-				sb.append(regexPattern.matcher(foundOne).replaceAll(replacement));
-
-				pos = matcher.end();
-
-			} while (matcher.find());
+		for (MatchedToken token : iter) {
+			sb.append(token.getBefore());
+			sb.append(regexPattern.matcher(token.getMatched()).replaceAll(replacement));
+			end = token.getAfter();
 		}
-		sb.append(str.substring(pos));
+		sb.append(end);
 		return sb.toString();
 	}
 
@@ -139,11 +111,11 @@ public class HtmlStripper {
 		htmlContent =htmlContent.replaceAll(xmlPattern       ,  ""); //remove tag xml gerada pelo word
 		htmlContent =htmlContent.replaceAll(headPattern      ,  ""); //remove tag xml gerada pelo word
 		htmlContent =htmlContent.replaceAll(scriptPattern    ,  ""); //remove html script (javascript por exemplo)
-	
+
 		//Comentado - decidiu-se não tirar tags vazias
 		//String emptyTagsPattern = emptyTagsPattern();
 		//htmlContent =htmlContent.replaceAll(emptyTagsPattern ,  ""); //remove tags vazias
-		
+
 		htmlContent = replaceInTags(htmlContent, "'" , "\"");                 //aspas simples por aspas duplas
 		htmlContent = replaceInTags(htmlContent, invalidAttrPattern()  ,  "");//atributos inválidos
 
@@ -165,7 +137,7 @@ public class HtmlStripper {
 		htmlContent = replaceInTags(htmlContent, attrPattern("class"), "");
 		htmlContent = htmlContent.replaceAll(spanWithStylePropertiePattern("font-weight","bold"),tagWithContentReplacement("strong"));    //estilizados com negrito
 		htmlContent = htmlContent.replaceAll(spanWithStylePropertiePattern("text-decoration","underline"),tagWithContentReplacement("u"))//estilizados com sublinhado
-					  ;
+		;
 		htmlContent = replaceInTags(htmlContent, attrPattern("style"), "");
 		return htmlContent;
 	}
