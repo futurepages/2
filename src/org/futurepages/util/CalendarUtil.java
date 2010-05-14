@@ -92,12 +92,16 @@ public class CalendarUtil {
         }
         long m1 = start.getTimeInMillis();
         long m2 = end.getTimeInMillis();
-        long diff = (m2 - m1);
+        return getDifference(m1, m2, millisecondsFactor);
+    }
+
+	public static int getDifference(long start, long end, double millisecondsFactor) {
+		long diff = (end - start);
         if (diff < 0) {
             diff *= -1;
         }
         return new Long(Math.round(diff / millisecondsFactor)).intValue();
-    }
+	}
 
     public static Calendar buildCalendar(int field, int addValue) {
         Calendar dataInicial = Calendar.getInstance();
