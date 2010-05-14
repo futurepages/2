@@ -20,6 +20,7 @@ public class TheTest {
         The.firstTokenOf("", null);
     }
 
+    @Test
     public void testeFirstTokenOf_null_vazia() {
         Assert.assertNull("Era pra ser null",The.firstTokenOf(null, ""));
     }

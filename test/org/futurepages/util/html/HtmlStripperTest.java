@@ -5,13 +5,32 @@ import java.io.IOException;
 
 import junit.framework.Assert;
 
+import org.futurepages.util.CalendarUtil;
+import org.futurepages.util.DateUtil;
 import org.futurepages.util.FileUtil;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
  * @author leandro
  */
 public class HtmlStripperTest {
+
+	static long start;
+	static long end;
+	
+	@BeforeClass
+	public static void beforeClass(){
+		start = System.currentTimeMillis();
+	}
+	
+	@AfterClass
+	public static void afterClass(){
+		end = System.currentTimeMillis();
+		long time = CalendarUtil.getDifference(start, end, 1);
+		System.out.println("HtmlStripperTest.afterClass() Tempo gasto (ms) :"+ time);
+	}
 
 	private String getResourcePath(){
 		String root = "/home/danilo/workspace/futurepages/test/";
