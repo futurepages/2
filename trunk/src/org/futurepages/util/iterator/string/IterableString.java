@@ -1,4 +1,4 @@
-package org.futurepages.util.iterator;
+package org.futurepages.util.iterator.string;
 
 import java.util.Iterator;
 import java.util.regex.Matcher;
@@ -56,20 +56,20 @@ public class IterableString implements Iterator<MatchedToken>, Iterable<MatchedT
 		if(hasNext()){
 			int start = matcher.start();
 			int end = matcher.end();
-			String antes = antes(start);
+			String antes = before(start);
 			String matched = content.substring(start,end);
 			pos = end;
 			used = true;
-			String depois = depois(end);
-			cacheAntes = depois; 
-			MatchedToken token = new MatchedToken(matched, antes, depois);
+			String after = after(end);
+			cacheAntes = after;
+			MatchedToken token = new MatchedToken(matched, antes, after);
 			return token;
 		}else{
 			return null;
 		}
 	}
 	
-	private String depois(int end) {
+	private String after(int end) {
 		int start;
 		String depois = ""; 
 		if(hasNext()){
@@ -81,12 +81,11 @@ public class IterableString implements Iterator<MatchedToken>, Iterable<MatchedT
 		return depois;
 	}
 
-	private String antes(int start) {
+	private String before(int start) {
 		String antes = cacheAntes;
 		if(cacheAntes == null){
 			antes = content.substring(pos, start);
 		}
 		return antes;
 	}
-
 }

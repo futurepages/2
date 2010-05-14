@@ -11,8 +11,8 @@ import static org.futurepages.util.html.HtmlRegex.tagsPattern;
 
 import java.util.regex.Pattern;
 
-import org.futurepages.util.iterator.IterableString;
-import org.futurepages.util.iterator.MatchedToken;
+import org.futurepages.util.iterator.string.IterableString;
+import org.futurepages.util.iterator.string.MatchedToken;
 
 /**
  * Aplicação de filtro em strings originalmente HTML
