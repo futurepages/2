@@ -14,6 +14,9 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
+import org.futurepages.annotations.SuperTag;
+import org.futurepages.annotations.Tag;
+import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.action.Action;
 import org.futurepages.core.consequence.Forward;
 import org.futurepages.core.i18n.LocaleManager;
@@ -25,6 +28,7 @@ import org.futurepages.core.tags.cerne.Context;
  *
  * @author Sergio Oliveira
  */
+@SuperTag
 public abstract class PrintTag extends BodyTagSupport {
     
 	protected ServletContext application = null;
@@ -34,10 +38,10 @@ public abstract class PrintTag extends BodyTagSupport {
 	protected Action action = null;
 	protected Locale loc = null;
     
+	@TagAttribute(name  = "max")
     protected int maxToPrint = -1;
     
     public void setMax(int maxToPrint) {
-        
         this.maxToPrint = maxToPrint;
     }
     

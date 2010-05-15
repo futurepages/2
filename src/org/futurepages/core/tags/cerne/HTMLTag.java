@@ -5,21 +5,26 @@ import java.util.Iterator;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
-import org.futurepages.core.tags.PrintTag;
 
+import org.futurepages.annotations.SuperTag;
+import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.input.Input;
 import org.futurepages.core.output.Output;
+import org.futurepages.core.tags.PrintTag;
 import org.futurepages.tags.Out;
 
 /**
  * @author Sergio Oliveira
  */
+@SuperTag
 public abstract class HTMLTag extends PrintTag {
     
     private static final String SEPARATOR = "#";
     
+    @TagAttribute
     private String extra;
     
+    @TagAttribute
     private String separator = SEPARATOR;
     
     public void setExtra(String extra) {

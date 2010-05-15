@@ -13,6 +13,7 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
+import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.action.Action;
 import org.futurepages.core.consequence.Forward;
 import org.futurepages.core.i18n.LocaleManager;
@@ -33,7 +34,8 @@ public abstract class AbstractListContext extends BodyTagSupport implements List
     protected Locale loc = null;
 
     protected Action action = null;
-
+    
+    @TagAttribute
     protected String var = null;
 
     public void setVar(String var) {

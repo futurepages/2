@@ -10,17 +10,23 @@ import java.util.Set;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
 
+import org.futurepages.annotations.SuperTag;
+import org.futurepages.annotations.TagAttribute;
 import org.futurepages.tags.Out;
 
 /**
  * @author Sergio Oliveira
  */
+@SuperTag
 public abstract class AbstractListTag extends AbstractListContext {
 
+	@TagAttribute(required = true)
    private String value;
-
+	
+	@TagAttribute
    private String orderBy = null;
 
+	@TagAttribute
    private boolean desc = false;
 
    public void setValue(String value) {
