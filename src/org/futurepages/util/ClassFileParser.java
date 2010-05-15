@@ -61,9 +61,9 @@ class ClassFileParser <K extends Object> extends FileParser<Class<K>>{
 	 */
 	@Override
 	Class<K> parse(File classFile) {
-
-		String comparation = StringUtils.difference(classesPath.replace("\\","/"), classFile.getAbsolutePath().replace("\\","/"));
-
+		String classPath = classesPath.replace("\\","/");
+		String absolute = classFile.getAbsolutePath().replace("\\","/");
+		String comparation = StringUtils.difference(classPath, absolute);
 		String className = comparation.replace(".class", "").replace("/", ".");
 		Class<?> klass = null;
 
