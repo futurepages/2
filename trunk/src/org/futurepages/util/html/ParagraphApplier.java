@@ -1,8 +1,8 @@
 package org.futurepages.util.html;
 
 import org.futurepages.util.Is;
-import org.futurepages.util.iterator.IterableString;
-import org.futurepages.util.iterator.MatchedToken;
+import org.futurepages.util.iterator.string.IterableString;
+import org.futurepages.util.iterator.string.MatchedToken;
 /**
  * Encapsula uma string em blocos <p></p> e torna consistente os grupos <p>*</p> existentes 
  * @author Danilo Medeiros
