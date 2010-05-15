@@ -39,6 +39,7 @@ public class ParagraphApplierTest {
 				
 			{"asdf",				"<p>asdf</p>",				"conteúdo simples sem <p>"},
 			{"<p style=\"a\">asdf",	"<p style=\"a\">asdf</p>", 	"não fechada mais externa com estilo"},
+			{"<p style=\"a\"  >asdf" ,	"<p style=\"a\"  >asdf</p>", 	"não fechada mais externa com estilo e espaço"},
 			{"asdf</p>",			"<p>asdf</p>", 				"não aberta mais externa"},
 			{"as<p>df",				"<p>as</p><p>df</p>", 		"abertura no meio do conteúdo sem fechamento"},
 			{"as</p>df",			"<p>as</p><p>df</p>", 		"fechameno no meio do conteúdo sem abertura"},
@@ -56,11 +57,11 @@ public class ParagraphApplierTest {
 			{"<p>A<p>B<p>C<p>D<p>E<p>F<p>G<p>", 		"<p>A</p><p>B</p><p>C</p><p>D</p><p>E</p><p>F</p><p>G</p>", "vários abrindo sem fechamento"},
 			{"</p>A</p>B</p>C</p>D</p>E</p>F</p>G</p>", "<p>A</p><p>B</p><p>C</p><p>D</p><p>E</p><p>F</p><p>G</p>", "vários fechamentos sem abrir"},
 
-			{"<pp>ansdf",	"<p><pp>ansdf</p>",			"com falsos <p>"},
+			{"<pp>a<e>nsdf",	"<p><pp>a<e>nsdf</p>",			"com falsos <p> e tag estranha"},
 			{"<p\\>",		"",			"com falsos <p>"},
 			{"<p\\>aa",		"<p\\>aa</p>",			"com <p> mutante '\'"},
 			{"<p style='b'/>aa",		"<p style='b'/>aa</p>",			"com <p> mutante '/' e estilo"},
 		});
 		return col;
 	}
-}
+}	
