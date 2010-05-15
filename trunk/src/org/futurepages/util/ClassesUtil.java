@@ -17,8 +17,8 @@ public class ClassesUtil {
 		return instance;
 	}
 	
-	public <S extends Object> Collection<Class<S>> listClassesFromDirectory(File directory, String srcPath,Class<S> superClass,Class annotation,  boolean recursive) {
+	public <S extends Object> Collection<Class<S>> listClassesFromDirectory(File directory, String srcPath, Class<S> superClass, Class annotation,  boolean deep) {
 		ClassFileParser classParser = new ClassFileParser(srcPath, superClass, annotation);
-		return new HashSet<Class<S>>(FileUtil.getInstance().listResourcesFromDirectory(directory, classParser, recursive));
+		return new HashSet<Class<S>>(FileUtil.getInstance().listResourcesFromDirectory(directory, classParser, deep));
 	}
 }
