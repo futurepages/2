@@ -3,6 +3,9 @@ package org.futurepages.tags;
 import javax.servlet.jsp.JspException;
 
 import org.futurepages.util.The;
+import org.futurepages.annotations.Tag;
+import org.futurepages.annotations.TagAttribute;
+import org.futurepages.core.tags.build.ContentTypeEnum;
 import org.futurepages.core.tags.cerne.HTMLTag;
 
 /**
@@ -11,16 +14,34 @@ import org.futurepages.core.tags.cerne.HTMLTag;
  * @deprecated utilize o inputText
  */
 @Deprecated
+@Tag(bodyContent = ContentTypeEnum.EMPTY)
 public class Input extends HTMLTag {
 
+	@TagAttribute(required = true)
     private String name;
+	
+	@TagAttribute
     private String id = null;
+	
+	@TagAttribute
     private String klass = null;
+	
+	@TagAttribute
     private String style = null;
+	
+	@TagAttribute
     private String onblur = null;
+    
+    @TagAttribute
     private int size = -1;
+    
+    @TagAttribute
     private int maxlength = -1;
+    
+    @TagAttribute
     private String type = "text"; // default
+    
+    @TagAttribute
     private String value = null;
 
     public void setName(String name) {

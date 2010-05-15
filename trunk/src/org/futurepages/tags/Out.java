@@ -9,6 +9,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
 
+import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.action.Action;
 import org.futurepages.core.tags.PrintTag;
 import org.futurepages.core.input.Input;
@@ -18,24 +19,41 @@ import org.futurepages.core.formatter.FormatterManager;
 import org.futurepages.core.i18n.LocaleManager;
 import org.futurepages.core.list.ListData;
 import org.futurepages.core.list.ListManager;
+import org.futurepages.core.tags.build.ContentTypeEnum;
 import org.futurepages.core.tags.cerne.Context;
 
 /**
  * @author Sergio Oliveira
+ * @deprecated utilizar EL e a tag {@link ValueFormatter} para uso com formatadores e max
  */
+@Deprecated // utilizar EL 
+@org.futurepages.annotations.Tag(bodyContent = ContentTypeEnum.JSP)
 public class Out extends PrintTag {
 
+	@TagAttribute
 	private String value = null;
+
+	@TagAttribute
     private String list = null;
+	
+	@TagAttribute
     private String formatter = null;
+	
+	@TagAttribute
     private String onBlank = null;
+	
+	@TagAttribute
     private String onFalse = null;
+	
+	@TagAttribute
     private String onTrue = null;
+	
+	@TagAttribute
     private boolean includeTime = false;
-    private boolean onlyTime = false;
+    
+	private boolean onlyTime = false;
     
     public void setOnlyTime(boolean onlyTime) {
-    	
     	this.onlyTime = onlyTime;
     }
     

@@ -2,8 +2,11 @@ package org.futurepages.tags;
 
 import javax.servlet.jsp.JspException;
 
+import org.futurepages.annotations.Tag;
+import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.pagination.Pageable;
 import org.futurepages.core.tags.PrintTag;
+import org.futurepages.core.tags.build.ContentTypeEnum;
 import org.futurepages.util.StringUtils;
 
 /**
@@ -15,11 +18,17 @@ import org.futurepages.util.StringUtils;
  * 
  * @author Danilo
  */
+@Tag(bodyContent = ContentTypeEnum.JSP)
 public class AdjacentPage extends PrintTag implements Pageable {
 
+	@TagAttribute(required = true)
     private String type;
+    
+    @TagAttribute(required = true)
 	private String href;//Não pode ser vazio!
-	private String title;
+	
+    @TagAttribute(rtexprvalue = false)
+    private String title;
 	
 	@Override
 	public String getStringToPrint() throws JspException {

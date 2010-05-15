@@ -7,15 +7,19 @@ import java.util.Map;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
 
+import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.tags.ConditionalTag;
+import org.futurepages.core.tags.build.ContentTypeEnum;
 import org.futurepages.core.tags.cerne.ListContext;
 import org.futurepages.tags.Out;
 
 /**
  * @author Sergio Oliveira
  */
+@org.futurepages.annotations.Tag(bodyContent = ContentTypeEnum.JSP)
 public class IsEmpty extends ConditionalTag {
 	
+	@TagAttribute
 	private String test = null;
 	
 	public void setTest(String test) {

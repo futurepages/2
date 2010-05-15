@@ -2,16 +2,23 @@ package org.futurepages.tags;
 
 import javax.servlet.jsp.JspException;
 
+import org.futurepages.annotations.Tag;
+import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.tags.PrintTag;
+import org.futurepages.core.tags.build.ContentTypeEnum;
 import org.futurepages.core.formatter.Formatter;
 import org.futurepages.core.formatter.FormatterManager;
 
 /**
  * @author Leandro
  */
+@Tag(bodyContent = ContentTypeEnum.EMPTY)
 public class ValueFormatter extends PrintTag {
 
+	@TagAttribute(required = true)
 	private Object object;
+	
+	@TagAttribute
 	private String formatter;
 
 	public String getStringToPrint() throws JspException {

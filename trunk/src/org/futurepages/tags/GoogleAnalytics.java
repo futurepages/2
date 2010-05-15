@@ -2,14 +2,19 @@ package org.futurepages.tags;
 
 import javax.servlet.jsp.JspException;
 
+import org.futurepages.annotations.Tag;
+import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.tags.PrintTag;
+import org.futurepages.core.tags.build.ContentTypeEnum;
 
 /**
  *
  * @author Leandro
  */
+@Tag(bodyContent = ContentTypeEnum.JSP)
 public class GoogleAnalytics extends PrintTag{
-    
+   
+	@TagAttribute(required = true)
     private String account_id;
     
     public String getStringToPrint() throws JspException {

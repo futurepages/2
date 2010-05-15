@@ -1,22 +1,32 @@
 package org.futurepages.tags;
 
-
 import javax.servlet.jsp.JspException;
 
+import org.futurepages.annotations.Tag;
+import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.tags.PrintTag;
-
+import org.futurepages.core.tags.build.ContentTypeEnum;
 
 /**
  * @author Leandro
  */
+@Tag(bodyContent = ContentTypeEnum.EMPTY)
 public class PluralOrSingular extends PrintTag{
    
+	@TagAttribute(required = true)
 	private long value;
-
+	
+	@TagAttribute
     private boolean valueBefore;
-    private String singular;
+	
+	@TagAttribute(required = true)
+	private String singular;
+	
+	@TagAttribute(required = true)
     private String plural;
-    private String zero;
+
+	@TagAttribute
+	private String zero;
 	    
 	public String getStringToPrint() throws JspException {
 		String before = valueBefore ? value+" " : "" ;

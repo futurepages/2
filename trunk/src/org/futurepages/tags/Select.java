@@ -5,25 +5,54 @@ import javax.persistence.Entity;
 
 import javax.servlet.jsp.JspException;
 
+import org.futurepages.annotations.Tag;
+import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.persistence.Dao;
 import org.futurepages.util.ReflectionUtil;
 import org.futurepages.core.context.Context;
+import org.futurepages.core.tags.build.ContentTypeEnum;
 import org.futurepages.core.tags.cerne.HTMLTag;
 
+@Tag(bodyContent = ContentTypeEnum.JSP)
 public class Select extends HTMLTag {
 
+	@TagAttribute
     private String list;
+    
+    @TagAttribute
     private String selected = null;
+
+    @TagAttribute
     private String id = "";
+    
+    @TagAttribute
     private String klass = "";
+    
+    @TagAttribute(required = true)
     private String name = "";
+    
+    @TagAttribute
     private String style = "";
+    
+    @TagAttribute
     private String onblur = "";
+    
+    @TagAttribute
     private String onchange = "";
+    
+    @TagAttribute
     private String extra = "";
+    
+    @TagAttribute
     private String idName = null;
+    
+    @TagAttribute
     private String showAttr = null;
+    
+    @TagAttribute
     private String defaultText = null;
+    
+    @TagAttribute
     private String defaultValue = "0";
 
     public String getStringToPrint() throws JspException {
