@@ -4,6 +4,7 @@ import org.futurepages.tags.Out;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
 
+import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.tags.cerne.AbstractContext;
 import org.futurepages.core.tags.cerne.Context;
 
@@ -12,6 +13,7 @@ import org.futurepages.core.tags.cerne.Context;
  */
 public class Bean extends AbstractContext {
 	
+	@TagAttribute(required = true)
 	private String value;
 	
 	public void setValue(String value) {

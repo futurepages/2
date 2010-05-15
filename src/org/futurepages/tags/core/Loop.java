@@ -6,6 +6,8 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.Tag;
 
+import org.futurepages.annotations.TagAttribute;
+import org.futurepages.core.tags.build.ContentTypeEnum;
 import org.futurepages.core.tags.cerne.Context;
 import org.futurepages.core.tags.cerne.ListContext;
 import org.futurepages.core.tags.cerne.LoopTag;
@@ -13,6 +15,7 @@ import org.futurepages.core.tags.cerne.LoopTag;
 /**
  * @author Sergio Oliveira
  */
+@org.futurepages.annotations.Tag(bodyContent = ContentTypeEnum.JSP)
 public class Loop extends LoopTag implements Context {
 
     private static final String COUNTER_VAR = "counter";
@@ -21,8 +24,10 @@ public class Loop extends LoopTag implements Context {
 
     private int currIndex = -1;
 
+    @TagAttribute(name = "var")
     private String varname = null;
 
+    @TagAttribute
     private String counter = COUNTER_VAR;
 
     public void setVar(String var) {

@@ -4,7 +4,9 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
 
 import org.futurepages.core.tags.ConditionalTag;
+import org.futurepages.core.tags.build.ContentTypeEnum;
 
+@org.futurepages.annotations.Tag(bodyContent = ContentTypeEnum.JSP)
 public class Else extends IfTag {
 
 	@Override

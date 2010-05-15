@@ -15,7 +15,7 @@ import org.futurepages.util.FileUtil;
  * Inclui o corpo html retornado por uma requisição http a uma url.
  * @author leandro
  */
-@Tag(bodyContent = ContentTypeEnum.JSP)
+@Tag(bodyContent = ContentTypeEnum.EMPTY)
 public class IncludeExternal extends PrintTag {
 
 	@TagAttribute(required=true)

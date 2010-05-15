@@ -2,18 +2,34 @@ package org.futurepages.tags;
 
 import javax.servlet.jsp.JspException;
 
+import org.futurepages.annotations.Tag;
+import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.pagination.Pageable;
 import org.futurepages.util.The;
+import org.futurepages.core.tags.build.ContentTypeEnum;
 import org.futurepages.core.tags.cerne.HTMLTag;
-
+@Tag(bodyContent = ContentTypeEnum.EMPTY)
 public class SelectPageSizes extends HTMLTag implements Pageable {
-
+    
+    @TagAttribute
     private String id = "";
+    
+    @TagAttribute
     private String klass = "";
+    
+    @TagAttribute
     private String style = "";
+    
+    @TagAttribute    
     private String onblur = "";
+    
+    @TagAttribute
     private String onchange = "";
+    
+    @TagAttribute
     private String extra = "";
+    
+    @TagAttribute(required = true)
     private String sizes = "";
 
     public String getStringToPrint() throws JspException {

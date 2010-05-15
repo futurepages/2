@@ -2,23 +2,44 @@ package org.futurepages.tags;
 
 import javax.servlet.jsp.JspException;
 
+import org.futurepages.annotations.Tag;
+import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.pagination.Pageable;
 import org.futurepages.core.path.Paths;
 import org.futurepages.core.config.Params;
 import org.futurepages.core.tags.PrintTag;
+import org.futurepages.core.tags.build.ContentTypeEnum;
 import org.futurepages.util.StringUtils;
 
-
+@Tag(bodyContent = ContentTypeEnum.JSP)
 public class Pagination extends PrintTag implements Pageable{
     
+	@TagAttribute(required = true)
     private String url = null;
+	
+	
+	@TagAttribute
     private String params  = "";
+    
+    @TagAttribute
     private int maxShowing  = 20;
+    
+    @TagAttribute
     private boolean justTop = false;
+    
+    @TagAttribute
     private String target  = "";
+    
+    @TagAttribute
     private String cssClass  = "pagination";
+    
+    @TagAttribute
 	private String nextLabel      = "&raquo;";
+	
+	@TagAttribute
 	private String previousLabel  = "&laquo;";
+	
+	@TagAttribute
 	private boolean useImages     = false;
 
 	private static final String NEXT_PAGE         = "nextpage";

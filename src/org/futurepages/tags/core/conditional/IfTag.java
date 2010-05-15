@@ -3,7 +3,10 @@ package org.futurepages.tags.core.conditional;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
 
+import org.futurepages.annotations.SuperTag;
+import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.tags.ConditionalTag;
+import org.futurepages.core.tags.build.ContentTypeEnum;
 import org.futurepages.core.tags.cerne.Context;
 import org.futurepages.tags.Out;
 import org.futurepages.util.Is;
@@ -11,10 +14,17 @@ import org.futurepages.util.Is;
 /**
  * @author Sergio Oliveira, Modified by Leandro
  */
+@org.futurepages.annotations.Tag(bodyContent = ContentTypeEnum.JSP)
+@SuperTag
 public class IfTag extends ConditionalTag {
 
+	@TagAttribute
 	private String test = null;
+	
+	@TagAttribute
 	private String value = null;
+	
+	@TagAttribute
 	private String dynValue = null;
 
 	public void setTest(String test) {
