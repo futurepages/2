@@ -1,5 +1,6 @@
-package org.futurepages.util.iterator;
+package org.futurepages.util.iterator.string;
 
+import org.futurepages.util.iterator.string.IterableString;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,7 +1,6 @@
 package org.futurepages.util;
 
 import org.futurepages.util.html.HtmlUtilTestSuite;
-import org.futurepages.util.iterator.IterableStringTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
@@ -19,7 +18,6 @@ import org.junit.runners.Suite.SuiteClasses;
     HQLUtilTest.class,
     HtmlUtilTestSuite.class,
 	IsTest.class,
-	IterableStringTest.class,
     NumberUtilTest.class,
     ProbabilityUtilTest.class,
     SecurityTest.class,
