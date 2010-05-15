@@ -23,7 +23,7 @@ import org.junit.runners.Suite.SuiteClasses;
     SecurityTest.class,
     SEOUtilTest.class,
     StringUtilTest.class,
-    TheTest.class,
+    TheTest.class
 })
 public class UtilTestSuite {
 }
