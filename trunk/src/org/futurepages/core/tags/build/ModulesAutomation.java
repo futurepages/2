@@ -35,10 +35,12 @@ public abstract class ModulesAutomation {
 	}
 
 	protected <S extends Object> List<Class<S>> getApplicationClasses(Class<S> superKlass, Class<? extends Annotation> annotation) {
-		if (applicationClasses == null) {
-			applicationClasses = new ArrayList<Class<S>>();
-			File dirr = new File(Params.get("CLASSES_PATH") + this.getDirName());
+		File dirr = new File(Params.get("CLASSES_PATH") + this.getDirName());
+		return getClasses(dirr, superKlass, annotation);
+	}
 
+	protected <S extends Object> List<Class<S>> getClasses(File dirr, Class<S> superKlass, Class<? extends Annotation> annotation) {
+		if (applicationClasses == null) {
 			applicationClasses = new ArrayList<Class<S>>(ClassesUtil.getInstance().listClassesFromDirectory(
 					dirr, Params.get("CLASSES_PATH"), superKlass, annotation, true));
 		}

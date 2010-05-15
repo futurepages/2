@@ -3,6 +3,7 @@ package org.futurepages.core.tags.build;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -20,8 +21,9 @@ import org.futurepages.util.The;
  */
 public class TagLibBuilder extends ModulesAutomation{
 
-	private final String BASE_TAGLIB_URL = "/META-INF/futurepages.tld";
+	protected static final String BASE_TAGLIB_URL = "/META-INF/futurepages.tld";
 	private final String APP_TAGLIB_NAME = "taglib.tld";
+
 	private final String TAGS_REPLACE_CONSTANT = "<!-- ${TAGS_REPLACE} -->";
 	private final String TAGSFILE_REPLACE_CONSTANT = "<!-- ${TAGSFILE_REPLACE} -->";
 	private final String TAGLIB_BASE_URI = "<uri>http://futurepages.org/taglib.tld</uri>";
@@ -33,6 +35,7 @@ public class TagLibBuilder extends ModulesAutomation{
 	public TagLibBuilder(File[] modules) {
 		super(modules, "tags");
 	}
+	
 
 	/**
 	 * Construção da definição geral da declaração do arquivo taglib.tld
@@ -57,18 +60,23 @@ public class TagLibBuilder extends ModulesAutomation{
 	}
 
 	private String buildTagLibsContentFromApp() {
+		TagBean tag;
+		List<Class<Object>> classes = super.getApplicationClasses(null,Tag.class);
+		StringBuilder tagDeclarations = tagsDeclaration(classes);
+		return "\n   <!-- Generated Application Tags From Root Application -->\n\n" + tagDeclarations.toString();
+	}
+
+	public static StringBuilder tagsDeclaration(Collection<Class<Object>> classes) {
+		TagBean tag;
 		StringBuilder tagDeclarations = new StringBuilder();
 		ClassTagAnnotationReader reader = new ClassTagAnnotationReader();
-		TagBean tag;
-		tagDeclarations.append("\n   <!-- Generated Application Tags From Root Application -->\n\n");
-		for (Class<?> tagClass : super.getApplicationClasses(null,Tag.class)) {
-
+		for (Class<?> tagClass : classes) {
 			tag = reader.readTag(tagClass);
 			if (tag != null) {
 				tagDeclarations.append(TagDeclarationBuilder.build(tag));
 			}
 		}
-		return tagDeclarations.toString();
+		return tagDeclarations;
 	}
 
 	/**

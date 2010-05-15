@@ -29,14 +29,17 @@ public abstract class ConditionalTag extends BodyTagSupport {
 
 	@TagAttribute
 	protected boolean print = false;
-	
+
+	@TagAttribute (rtexprvalue = false)
+	protected boolean skip = false;
+
 	protected ServletContext application = null;
 	protected HttpSession session = null;
 	protected HttpServletRequest req = null;
 	protected HttpServletResponse res = null;
 	protected Action action = null;
 	protected Locale loc = null;
-	private boolean itsAllowed;
+	private boolean condition;
 
 	public void setNegate(boolean negate) {
 		this.negate = negate;
@@ -44,6 +47,14 @@ public abstract class ConditionalTag extends BodyTagSupport {
 
 	public void setPrint(boolean print) {
 		this.print = print;
+	}
+
+	public void setSkip(boolean skip) {
+		this.skip = skip;
+	}
+
+	public boolean isCondition() {
+		return condition;
 	}
 
 	public abstract boolean testCondition() throws JspException;
@@ -56,20 +67,24 @@ public abstract class ConditionalTag extends BodyTagSupport {
 		this.res = (HttpServletResponse) pageContext.getResponse();
 		this.action = (Action) req.getAttribute(Forward.ACTION_REQUEST);
 		this.loc = LocaleManager.getLocale(req);
-		itsAllowed = (!negate) ? testCondition() : !testCondition();
-		if (!print) {
-			if (itsAllowed) {
-				return EVAL_BODY_BUFFERED;
+		condition = (!negate) ? testCondition() : !testCondition();
+
+		if ( ! skip) {
+			if (!print) {
+				if (condition) {
+					return EVAL_BODY_BUFFERED;
+				}
 			}
 		}
 		return SKIP_BODY;
 	}
 
-    @Override
+	@Override
 	public int doAfterBody() throws JspException {
 		if (getBodyContent() != null) {
 			try {
-				getBodyContent().writeOut(getBodyContent().getEnclosingWriter());
+				getBodyContent()
+				.writeOut(getBodyContent().getEnclosingWriter());
 			} catch (IOException ex) {
 				throw new JspException(ex);
 			} finally {
@@ -83,7 +98,7 @@ public abstract class ConditionalTag extends BodyTagSupport {
 	public int doEndTag() throws JspException {
 		if (print) {
 			try {
-				pageContext.getOut().print(String.valueOf(itsAllowed));
+				pageContext.getOut().print(String.valueOf(condition));
 			} catch (IOException e) {
 				throw new JspException(e);
 			}
@@ -91,9 +106,9 @@ public abstract class ConditionalTag extends BodyTagSupport {
 		return EVAL_PAGE;
 	}
 
-	protected Object findValue(
-			String expression) throws JspException {
-		javax.servlet.jsp.tagext.Tag parent = findAncestorWithClass(this, Context.class);
+	protected Object findValue(String expression) throws JspException {
+		javax.servlet.jsp.tagext.Tag parent = findAncestorWithClass(this,
+				Context.class);
 		return Out.getValue(parent, expression, pageContext, true);
 	}
 }
