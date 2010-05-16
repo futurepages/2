@@ -19,5 +19,4 @@ public class Then extends IfTag{
 			throw new JspException("Then not enclosed by a Conditinal tag!");
 		}
 	}
-
 }

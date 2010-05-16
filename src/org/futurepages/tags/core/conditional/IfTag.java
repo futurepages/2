@@ -6,6 +6,7 @@ import javax.servlet.jsp.tagext.Tag;
 import org.futurepages.annotations.SuperTag;
 import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.tags.ConditionalTag;
+import org.futurepages.core.tags.PrintTag;
 import org.futurepages.core.tags.build.ContentTypeEnum;
 import org.futurepages.core.tags.cerne.Context;
 import org.futurepages.tags.Out;
@@ -14,8 +15,8 @@ import org.futurepages.util.Is;
 /**
  * @author Sergio Oliveira, Modified by Leandro
  */
-@org.futurepages.annotations.Tag(bodyContent = ContentTypeEnum.JSP)
 @SuperTag
+@org.futurepages.annotations.Tag(bodyContent = ContentTypeEnum.JSP,name="if")
 public class IfTag extends ConditionalTag {
 
 	@TagAttribute
@@ -39,6 +40,7 @@ public class IfTag extends ConditionalTag {
 		this.dynValue = dynValue;
 	}
 
+	@Override
 	public boolean testCondition() throws JspException {
 		if (Is.empty(test)) {
 			return Boolean.parseBoolean(value);
@@ -52,7 +54,7 @@ public class IfTag extends ConditionalTag {
 			Object obj = null;
 
 			try {
-				obj = Out.getValue(parent, test, pageContext, true);
+				obj = PrintTag.getValue(test, pageContext, true);
 				if (obj == null) {
 					obj = action.getInput().getValue(test);
 				}
@@ -100,7 +102,6 @@ public class IfTag extends ConditionalTag {
 				return obj.equals(dynObj);
 
 			} else {
-
 				if (obj instanceof Boolean) {
 					Boolean b = (Boolean) obj;
 					if (value != null) {
@@ -132,10 +133,13 @@ public class IfTag extends ConditionalTag {
 					}
 
 					return c.charValue() == value.charAt(0);
-
 				} else {
 					if (value == null) {
-						throw new JspException("Invalid IfTag: value must be present: " + test);
+						if(obj instanceof String){
+							return Boolean.parseBoolean((String)obj);
+						} else {
+							throw new JspException("Invalid IfTag: value must be present: " + test);
+						}
 					}
 					return value.equals(obj);
 				}
