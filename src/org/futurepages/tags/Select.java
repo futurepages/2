@@ -55,6 +55,7 @@ public class Select extends HTMLTag {
     @TagAttribute
     private String defaultValue = "0";
 
+	@Override
     public String getStringToPrint() throws JspException {
         String[] values = findValues(name);
         StringBuffer sb = new StringBuffer();
