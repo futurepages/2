@@ -9,13 +9,13 @@ import java.util.Map;
 import org.futurepages.annotations.Tag;
 import org.futurepages.util.ClassesUtil;
 import org.futurepages.util.FileUtil;
-import org.junit.Test;
+//import org.junit.Test;
 
 public class NativeTagLibBuilder {
 	
 	private final String NATIVE_TAGS_REPLACE_CONSTANT = "<!-- ${NATIVE_TAGS_REPLACE} -->";
 	
-	@Test
+//	@Test
 	public void generateTagLib() throws Exception{
 		
 		String absolutePath = FileUtil.classRealPath(this.getClass()).substring(1);

@@ -20,168 +20,180 @@ import org.futurepages.tags.Out;
 @SuperTag
 public abstract class AbstractListTag extends AbstractListContext {
 
-	@TagAttribute(required = true)
-   private String value;
-	
-	@TagAttribute
-   private String orderBy = null;
+	@TagAttribute(required = false)  //@TODO - não ficar aqui, deveria estar na tag List
+	private String value;
 
 	@TagAttribute
-   private boolean desc = false;
+	private String orderBy = null;
 
-   public void setValue(String value) {
-      this.value = value;
-   }
+	@TagAttribute
+	private boolean desc = false;
 
-   public void setOrderBy(String orderBy) {
-      this.orderBy = orderBy;
-   }
+	public void setValue(String value) {
+		this.value = value;
+	}
 
-   public void setDesc(boolean decreasing) {
-      this.desc = decreasing;
-   }
+	public void setOrderBy(String orderBy) {
+		this.orderBy = orderBy;
+	}
 
-   protected String getName() {
-      return value;
-   }
+	public void setDesc(boolean decreasing) {
+		this.desc = decreasing;
+	}
 
-   public List<Object> getList() throws JspException {
-      Tag parent = findAncestorWithClass(this, Context.class);
+	@Override
+	protected String getName() {
+		return value;
+	}
 
-      if (parent != null) {
-         Context ctx = (Context) parent;
-         Object obj = ctx.getObject();
-         if (obj != null) {
-            Object object = Out.getValue(obj, value, false);
-            if (object instanceof List) {
+	@Override
+	public List<Object> getList() throws JspException {
+		Tag parent = findAncestorWithClass(this, Context.class);
 
-               if (orderBy != null)
-                  return ListSorter.sort((List<Object>) object, orderBy, desc);
+		if (parent != null) {
+			Context ctx = (Context) parent;
+			Object obj = ctx.getObject();
+			if (obj != null) {
+				Object object = Out.getValue(obj, value, false);
+				if (object instanceof List) {
 
-               return (List<Object>) object;
+					if (orderBy != null) {
+						return ListSorter.sort((List<Object>) object, orderBy, desc);
+					}
 
-            } else if (object instanceof Object[]) {
+					return (List<Object>) object;
 
-               if (orderBy != null)
-                  return ListSorter.sort(Arrays.asList((Object[]) object), orderBy, desc);
+				} else if (object instanceof Object[]) {
 
-               return Arrays.asList((Object[]) object);
+					if (orderBy != null) {
+						return ListSorter.sort(Arrays.asList((Object[]) object), orderBy, desc);
+					}
 
-            } else if (object instanceof Set) {
+					return Arrays.asList((Object[]) object);
 
-               // TODO:
-               // this is not good, but for now let's do it to support sets...
-               // A ListWrapper for a Set would be better to avoid copying...
+				} else if (object instanceof Set) {
 
-               Set set = (Set) object;
+					// TODO:
+					// this is not good, but for now let's do it to support sets...
+					// A ListWrapper for a Set would be better to avoid copying...
 
-               List<Object> list = new ArrayList<Object>(set);
+					Set set = (Set) object;
 
-               if (orderBy != null)
-                  return ListSorter.sort(list, orderBy, desc);
+					List<Object> list = new ArrayList<Object>(set);
 
-               return list;
+					if (orderBy != null) {
+						return ListSorter.sort(list, orderBy, desc);
+					}
 
-            } else if (object instanceof Collection) {
+					return list;
 
-               // TODO:
-               // this is not good, but for now let's do it to support sets...
-               // A CollectionWrapper for a Collection would be better to avoid
-               // copying...
+				} else if (object instanceof Collection) {
 
-               Collection coll = (Collection) object;
+					// TODO:
+					// this is not good, but for now let's do it to support sets...
+					// A CollectionWrapper for a Collection would be better to avoid
+					// copying...
 
-               List<Object> list = new ArrayList<Object>(coll);
+					Collection coll = (Collection) object;
 
-               if (orderBy != null)
-                  return ListSorter.sort(list, orderBy, desc);
+					List<Object> list = new ArrayList<Object>(coll);
 
-               return list;
-               
-            } else if( object instanceof Map) {
-            	
-				Collection coll = ((Map) object).values();
-            	
-				List<Object> list = new ArrayList<Object>(coll);
+					if (orderBy != null) {
+						return ListSorter.sort(list, orderBy, desc);
+					}
 
-	               if (orderBy != null)
-	                  return ListSorter.sort(list, orderBy, desc);
+					return list;
 
-	               return list;
-            }
-         }
-      }
+				} else if (object instanceof Map) {
 
-      /*
-       * if (action != null) { Output output = action.getOutput(); Object obj =
-       * output.getValue(value); if (obj instanceof List) { return (List) obj; }
-       * else if (obj instanceof Object[]) { return Arrays.asList((Object[])
-       * obj); } }
-       */
+					Collection coll = ((Map) object).values();
 
-      Object obj = Out.getValue(value, pageContext, false);
+					List<Object> list = new ArrayList<Object>(coll);
 
-      if (obj == null)
-         return null;
+					if (orderBy != null) {
+						return ListSorter.sort(list, orderBy, desc);
+					}
 
-      if (obj instanceof List) {
+					return list;
+				}
+			}
+		}
 
-         if (orderBy != null)
-            return ListSorter.sort((List<Object>) obj, orderBy, desc);
+		/*
+		 * if (action != null) { Output output = action.getOutput(); Object obj =
+		 * output.getValue(value); if (obj instanceof List) { return (List) obj; }
+		 * else if (obj instanceof Object[]) { return Arrays.asList((Object[])
+		 * obj); } }
+		 */
 
-         return (List<Object>) obj;
+		Object obj = Out.getValue(value, pageContext, false);
 
-      } else if (obj instanceof Object[]) {
+		if (obj == null) {
+			return null;
+		}
 
-         if (orderBy != null)
-            return ListSorter.sort(Arrays.asList((Object[]) obj), orderBy, desc);
+		if (obj instanceof List) {
 
-         return Arrays.asList((Object[]) obj);
+			if (orderBy != null) {
+				return ListSorter.sort((List<Object>) obj, orderBy, desc);
+			}
 
-      } else if (obj instanceof Set) {
+			return (List<Object>) obj;
 
-         // TODO:
-         // this is not good, but for now let's do it to support sets...
-         // A ListWrapper for a Set would be better to avoid copying...
+		} else if (obj instanceof Object[]) {
 
-         Set set = (Set) obj;
+			if (orderBy != null) {
+				return ListSorter.sort(Arrays.asList((Object[]) obj), orderBy, desc);
+			}
 
-         List<Object> list = new ArrayList<Object>(set);
+			return Arrays.asList((Object[]) obj);
 
-         if (orderBy != null)
-            return ListSorter.sort(list, orderBy, desc);
+		} else if (obj instanceof Set) {
 
-         return list;
+			// TODO:
+			// this is not good, but for now let's do it to support sets...
+			// A ListWrapper for a Set would be better to avoid copying...
 
-      } else if (obj instanceof Collection) {
+			Set set = (Set) obj;
 
-         // TODO:
-         // this is not good, but for now let's do it to support collection...
-         // A CollectionWrapper for a Collection would be better to avoid
-         // copying...
+			List<Object> list = new ArrayList<Object>(set);
 
-         Collection coll = (Collection) obj;
+			if (orderBy != null) {
+				return ListSorter.sort(list, orderBy, desc);
+			}
 
-         List<Object> list = new ArrayList<Object>(coll);
+			return list;
 
-         if (orderBy != null)
-            return ListSorter.sort(list, orderBy, desc);
+		} else if (obj instanceof Collection) {
 
-         return list;
+			// TODO:
+			// this is not good, but for now let's do it to support collection...
+			// A CollectionWrapper for a Collection would be better to avoid
+			// copying...
 
-      } else if( obj instanceof Map) {
-      	
-			Collection coll = ((Map) obj).values();
-      	
+			Collection coll = (Collection) obj;
+
 			List<Object> list = new ArrayList<Object>(coll);
 
-             if (orderBy != null)
-                return ListSorter.sort(list, orderBy, desc);
+			if (orderBy != null) {
+				return ListSorter.sort(list, orderBy, desc);
+			}
 
-             return list;
-      }
+			return list;
 
-      throw new JspException("Tag List: Value " + value + " (" + obj.getClass().getName() + ") is not an instance of List or Object[], List or Set!");
-   }
+		} else if (obj instanceof Map) {
 
+			Collection coll = ((Map) obj).values();
+
+			List<Object> list = new ArrayList<Object>(coll);
+
+			if (orderBy != null) {
+				return ListSorter.sort(list, orderBy, desc);
+			}
+
+			return list;
+		}
+
+		throw new JspException("Tag List: Value " + value + " (" + obj.getClass().getName() + ") is not an instance of List or Object[], List or Set!");
+	}
 }
