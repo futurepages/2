@@ -31,7 +31,7 @@ public abstract class ConditionalTag extends BodyTagSupport {
 	protected boolean print = false;
 
 	@TagAttribute (rtexprvalue = false)
-	protected boolean skip = false;
+	protected boolean context = false;
 
 	protected ServletContext application = null;
 	protected HttpSession session = null;
@@ -49,8 +49,8 @@ public abstract class ConditionalTag extends BodyTagSupport {
 		this.print = print;
 	}
 
-	public void setSkip(boolean skip) {
-		this.skip = skip;
+	public void setContext(boolean context) {
+		this.context = context;
 	}
 
 	public boolean isCondition() {
@@ -69,12 +69,14 @@ public abstract class ConditionalTag extends BodyTagSupport {
 		this.loc = LocaleManager.getLocale(req);
 		condition = (!negate) ? testCondition() : !testCondition();
 
-		if ( ! skip) {
+		if (!context) {
 			if (!print) {
 				if (condition) {
 					return EVAL_BODY_BUFFERED;
 				}
 			}
+		} else {
+			return EVAL_BODY_BUFFERED;
 		}
 		return SKIP_BODY;
 	}
