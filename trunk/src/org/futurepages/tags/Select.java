@@ -13,7 +13,7 @@ import org.futurepages.core.context.Context;
 import org.futurepages.core.tags.build.ContentTypeEnum;
 import org.futurepages.core.tags.cerne.HTMLTag;
 
-@Tag(bodyContent = ContentTypeEnum.JSP)
+@Tag(bodyContent = ContentTypeEnum.JSP,name="Select")
 public class Select extends HTMLTag {
 
 	@TagAttribute
