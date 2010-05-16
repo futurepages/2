@@ -51,6 +51,7 @@ public class PermissionFilter implements Filter {
 		}
     }
 
+	@Override
     public String filter(InvocationChain chain) throws Exception {
 
         AbstractAction action = (AbstractAction) chain.getAction();
@@ -94,6 +95,7 @@ public class PermissionFilter implements Filter {
         return ACCESS_DENIED;
     }
 
+	@Override
     public void destroy() {
     }
 }
