@@ -458,7 +458,7 @@ public class Controller extends HttpServlet {
         }
 
 //      impressão pra deubug: action e consequência
-		System.out.println("<#"+Thread.currentThread().getId()+"#>"+  ac.getName()+ ((innerAction!=null)?"."+innerAction:"")+"["+result.toUpperCase()+"] -> "+(c!=null?c.toString():" NULL"));
+//		System.out.println("<#"+Thread.currentThread().getId()+"#>"+  ac.getName()+ ((innerAction!=null)?"."+innerAction:"")+"["+result.toUpperCase()+"] -> "+(c!=null?c.toString():" NULL"));
         // If not found, try to get a global consequence
 		if (c == null) {
             c = appManager.getGlobalConsequence(result);
