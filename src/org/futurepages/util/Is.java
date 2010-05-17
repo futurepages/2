@@ -129,12 +129,8 @@ public class Is {
      */
     public static boolean validURL(String urlStr) {
         if (urlStr != null) {
-            if (urlStr.startsWith("http://") || urlStr.startsWith("https://") ||
-                urlStr.startsWith("HTTPS://") || urlStr.startsWith("HTTP://") && urlStr.contains(".")) {
-                return true;
-            } else {
-                return false;
-            }
+            return urlStr.contains(".") && ((urlStr.startsWith("http://") || urlStr.startsWith("https://") ||
+                urlStr.startsWith("HTTPS://") || urlStr.startsWith("HTTP://")));
         } else {
             return false;
         }
