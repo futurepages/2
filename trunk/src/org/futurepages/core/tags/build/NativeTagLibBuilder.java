@@ -23,7 +23,7 @@ public class NativeTagLibBuilder {
 	
 	@Test
 	public void generateTagLib() throws Exception{
-		String absolutePath = FileUtil.classRealPath(this.getClass());
+		String absolutePath = FileUtil.classRealPath(this.getClass()).substring(1);
 		String packagePath = this.getClass().getPackage().getName().replace(".","\\").replace("\\","/");
 		String pathname = packagePath.replaceAll("/core/tags/build", "/tags");
 		String srcPath = absolutePath.replace(packagePath, "");
