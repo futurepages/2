@@ -78,4 +78,18 @@ public class IsTest {
 		assertFalse("Com espacos 'sad _asd' INVÁLIDO", Is.validStringKey("sad _asd"));
 	}
 
+  	@Test
+  	public void testValidURL_SEM_PONTO() {
+		assertFalse("sem ponto INVÁLIDO", Is.validURL("http://wwworkutcom"));
+	}
+  	
+  	@Test
+  	public void testValidURL_SEM_http() {
+		assertFalse("com ponto sem http", Is.validURL("www.orkut.com"));
+	}
+
+  	@Test
+  	public void testValidURL_COM_https() {
+		assertTrue("com ponto com https", Is.validURL("https://www.orkut.com"));
+	}
 }
