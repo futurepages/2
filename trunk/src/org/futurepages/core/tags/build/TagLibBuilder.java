@@ -3,8 +3,8 @@ package org.futurepages.core.tags.build;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,10 +66,18 @@ public class TagLibBuilder extends ModulesAutomation{
 		return "\n   <!-- Generated Application Tags From Root Application -->\n\n" + tagDeclarations.toString();
 	}
 
-	public static StringBuilder tagsDeclaration(Collection<Class<Object>> classes) {
+	public static StringBuilder tagsDeclaration(List<Class<Object>> classes) {
 		TagBean tag;
 		StringBuilder tagDeclarations = new StringBuilder();
 		ClassTagAnnotationReader reader = new ClassTagAnnotationReader();
+		
+		Collections.sort(classes, new Comparator<Class>(){
+			@Override
+			public int compare(Class c1, Class c2) {
+				return c1.getSimpleName().compareTo(c2.getSimpleName());
+			}
+		});
+		
 		for (Class<?> tagClass : classes) {
 			tag = reader.readTag(tagClass);
 			if (tag != null) {
