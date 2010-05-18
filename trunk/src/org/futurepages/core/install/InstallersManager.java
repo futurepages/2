@@ -197,12 +197,12 @@ public class InstallersManager extends ModulesAutomation {
 
 				//ExtraInstaller
 				String extraInstaller = null;
-				if (!installMode.equals("modules")){
-					if(installMode.equals("on")) {
+				if (!installMode.equals("modules")) {
+					if (installMode.equals("on")) {
 						extraInstaller = "Examples";
 					} else {
-					extraInstaller = The.capitalizedWord(installMode);
-				}
+						extraInstaller = The.capitalizedWord(installMode);
+					}
 				}
 
 				if (extraInstaller != null) {
