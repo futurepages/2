@@ -491,8 +491,7 @@ public class CalendarUtil {
 
 	public static int getDifferenceInMonths(Calendar date1, Calendar date2) {
 		int[] elapsed = getElapsedTime(date1, date2);
-
-		return (12*elapsed[0]+elapsed[1] + ( (elapsed[2]>0 || elapsed[3]>0 || elapsed[4]>0) ? 1 : 0) );
+		return (12*elapsed[0] + elapsed[1] + ( (elapsed[2]>0 || elapsed[3]>0 || elapsed[4]>0) ? 1 : 0) );
 	}
 
 	public static class TooBigDateException extends Exception {
