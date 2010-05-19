@@ -32,6 +32,7 @@ import org.futurepages.filters.InjectionFilter;
 import org.futurepages.core.formatter.FormatterManager;
 import org.futurepages.core.i18n.LocaleManager;
 import org.futurepages.formatters.CollectionSizeFormatter;
+import org.futurepages.formatters.UrlFormatter;
 
 /**
  * ApplicationManager que gerencia a Ação Inicial e os filtros Globais
@@ -96,5 +97,6 @@ public class InitManager extends AbstractApplicationManager{
         FormatterManager.addFormatter("noSpecials"  	   , new NoSpecialsFormatter());
         FormatterManager.addFormatter("textarea"		   , new TextAreaFormatter());
         FormatterManager.addFormatter("uppercase"		   , new UpperCaseFormatter());
+		FormatterManager.addFormatter("url"                , new UrlFormatter());
     }
 }
