@@ -6,23 +6,24 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ThreadPoolExecutor.AbortPolicy;
 
 import org.futurepages.annotations.Tag;
 import org.futurepages.util.ClassesUtil;
 import org.futurepages.util.FileUtil;
 import org.junit.Test;
 
-public class NativeTagLibBuilder {
+public class NativeTagLibBuilder{
 	
+
+
 	private final String NATIVE_TAGS_REPLACE_CONSTANT = "<!-- ${NATIVE_TAGS_REPLACE} -->";
 	
-	public static void main(String[] args) {
-		
+	public static void main(String[] args) throws Exception {
+		new NativeTagLibBuilder().execute();
 	}
 	
 	@Test
-	public void generateTagLib() throws Exception{
+	public void execute() throws Exception{
 		String absolutePath = FileUtil.classRealPath(this.getClass()).substring(1);
 		String packagePath = this.getClass().getPackage().getName().replace(".","\\").replace("\\","/");
 		String pathname = packagePath.replaceAll("/core/tags/build", "/tags");
