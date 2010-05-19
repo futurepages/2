@@ -2,12 +2,19 @@ package org.futurepages.tags.core;
 
 import javax.servlet.jsp.JspException;
 
+import org.futurepages.annotations.Tag;
+import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.config.Params;
 import org.futurepages.core.tags.PrintTag;
+import org.futurepages.core.tags.build.ContentTypeEnum;
 
+@Tag(bodyContent = ContentTypeEnum.EMPTY)
 public class App extends PrintTag{
-
+	
+	@TagAttribute
     private String attribute;
+	
+	@TagAttribute
     private String param;
     
     public void setAttribute(String attribute) {
