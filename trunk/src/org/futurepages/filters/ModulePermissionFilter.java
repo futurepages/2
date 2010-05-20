@@ -23,6 +23,7 @@ public class ModulePermissionFilter implements Filter {
     public ModulePermissionFilter() {
     }
 
+	@Override
     public String filter(InvocationChain chain) throws Exception {
     	
         if (chain.getAction() instanceof AbstractAction) {
@@ -54,6 +55,7 @@ public class ModulePermissionFilter implements Filter {
         return ACCESS_DENIED;
     }
 
+	@Override
     public void destroy() {
     }
 }
