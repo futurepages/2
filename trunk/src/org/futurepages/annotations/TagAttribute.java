@@ -16,7 +16,7 @@ public @interface TagAttribute {
 
     String name() default "";
     
-    String displayName() default "";
+    String description() default "";
     
     boolean required() default false;
 
