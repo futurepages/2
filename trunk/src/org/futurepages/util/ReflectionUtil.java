@@ -65,6 +65,21 @@ public final class ReflectionUtil {
 		return invokeGetMethodOf(target, fieldName);
 	}
 
+	
+	public static Field getObjectField(String name, Class klass){
+		if(klass == null){
+			return null;
+		}else{
+			try {
+				Field f = klass.getDeclaredField(name);
+				if( f != null){
+					return f;
+				}
+			} catch (Exception e) {
+			}
+			return getObjectField(name, klass.getSuperclass());
+		}
+	}
 	/**
 	 * Invokes a Set method from a object with the given name.
 	 * @param object
@@ -429,6 +444,15 @@ public final class ReflectionUtil {
 				parameterTypes);
 	}
 
+	public static boolean isSomeAnnotationPresent(Class classe, Class... annotations) {
+		for (Class anot : annotations) {
+			if(classe.isAnnotationPresent(anot)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	/**
 	 * Internal method to find the most specific applicable method
 	 */
