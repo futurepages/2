@@ -26,9 +26,6 @@ public class SelectPageSizes extends HTMLTag implements Pageable {
     @TagAttribute
     private String onchange = "";
     
-    @TagAttribute
-    private String extra = "";
-    
     @TagAttribute(required = true)
     private String sizes = "";
 

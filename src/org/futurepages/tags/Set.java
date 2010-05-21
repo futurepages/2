@@ -3,6 +3,8 @@ package org.futurepages.tags;
 import org.apache.taglibs.standard.tag.common.core.SetSupport;
 import org.futurepages.annotations.Tag;
 import org.futurepages.annotations.TagAttribute;
+import org.futurepages.annotations.TagAttributeOverride;
+import org.futurepages.annotations.TagAttributeOverrides;
 import org.futurepages.core.tags.build.ContentTypeEnum;
 
 /**
@@ -10,22 +12,14 @@ import org.futurepages.core.tags.build.ContentTypeEnum;
  * // pageContext.setAttribute(var, value);
  */
 @Tag(bodyContent = ContentTypeEnum.JSP)
+@TagAttributeOverrides({
+	@TagAttributeOverride(name = "var", 	tagAttribute = @TagAttribute(name="var", rtexprvalue =false)),
+	@TagAttributeOverride(name = "value", 	tagAttribute = @TagAttribute(name  = "value")),
+	@TagAttributeOverride(name = "target",	tagAttribute = @TagAttribute(name  = "target")),
+	@TagAttributeOverride(name = "property",tagAttribute = @TagAttribute(name  = "property")),
+	@TagAttributeOverride(name = "scope", 	tagAttribute = @TagAttribute(name  = "scope", required = false))
+})
 public class Set extends SetSupport {
-
-	@TagAttribute(rtexprvalue =false)
-	private String var;
-	
-	@TagAttribute(name  = "value")
-	private String valueF;
-
-	@TagAttribute(name  = "target")
-	private String targetF;
-
-	@TagAttribute(name  = "property")
-	private String propertyF;
-
-	@TagAttribute(rtexprvalue = false)
-	private String scope;
 
 	public void setValue(Object v) {
 		this.value = v;
