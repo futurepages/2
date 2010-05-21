@@ -22,7 +22,7 @@ public abstract class HTMLTag extends PrintTag {
     private static final String SEPARATOR = "#";
     
     @TagAttribute
-    private String extra;
+    protected String extra;
     
     @TagAttribute
     private String separator = SEPARATOR;

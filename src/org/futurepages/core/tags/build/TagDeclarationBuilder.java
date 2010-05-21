@@ -24,12 +24,12 @@ public class TagDeclarationBuilder {
 
     public static String build(TagBean tag) {
         StringBuilder builder = new StringBuilder();
-        builder.append("    <"+ TAG + ">\n ");
+        builder.append("    <"+ TAG + ">\n");
         builder.append("        "+buildTagElement(NAME,         tag.getName())+"\n");
         builder.append("        "+buildTagElement(TAG_CLASS,    tag.getTagClass().getName())+"\n");
         builder.append("        "+buildTagElement(BODY_CONTENT, tag.getContentType().descricao)+"\n");
         builder.append("        "+buildTagElement(DISPLAY_NAME, tag.getDisplayName())+"\n");
-        for (TagAttributeBean att : tag.getAttributes()) {
+        for (TagAttributeBean att : tag.getSortedAttributes()) {
             builder.append(builderAttributeDeclaration(att));
         }
         builder.append("    </"+TAG+">\n");
