@@ -41,9 +41,6 @@ public class Select extends HTMLTag {
     private String onchange = "";
     
     @TagAttribute
-    private String extra = "";
-    
-    @TagAttribute
     private String idName = null;
     
     @TagAttribute
@@ -129,11 +126,6 @@ public class Select extends HTMLTag {
 
     public void setKlass(String klass) {
         this.klass = "class=\"" + klass + "\"";
-    }
-
-    @Override
-    public void setExtra(String extra) {
-        this.extra = extra;
     }
 
     @Override
