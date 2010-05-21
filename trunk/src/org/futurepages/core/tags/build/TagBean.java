@@ -1,7 +1,10 @@
 package org.futurepages.core.tags.build;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Tag jsp
@@ -9,14 +12,15 @@ import java.util.List;
  */
 public class TagBean {
 
-    private List<TagAttributeBean> attributes;
+    private Map<String, TagAttributeBean> attributes;
+    private List<TagAttributeBean> sortedAttributes;
     private String name;
     private String displayName;
     private ContentTypeEnum contentType;
     private Class tagClass;
 
     public TagBean() {
-        this.attributes = new ArrayList<TagAttributeBean>();
+        this.attributes = new HashMap<String,TagAttributeBean>();
     }
 
     public TagBean(String name, String displayName, Class type, ContentTypeEnum contentType) {
@@ -24,7 +28,7 @@ public class TagBean {
         this.displayName = displayName;
         this.contentType = contentType;
         this.tagClass = type;
-        this.attributes = new ArrayList<TagAttributeBean>();
+        this.attributes = new HashMap<String,TagAttributeBean>();
     }
 
     public void setTagClass(Class tagType) {
@@ -35,15 +39,23 @@ public class TagBean {
         return tagClass;
     }
 
-    public List<TagAttributeBean> getAttributes() {
-        return attributes;
+    public List<TagAttributeBean> getSortedAttributes(){
+    	if(this.sortedAttributes == null){
+    		this.sortedAttributes = new ArrayList<TagAttributeBean>(this.getAttributes().values());
+    		Collections.sort(this.sortedAttributes);
+    	}
+    	return this.sortedAttributes;
     }
+    
+    public Map<String, TagAttributeBean> getAttributes() {
+		return attributes;
+	}
 
-    public void setAttributes(List<TagAttributeBean> attributes) {
-        this.attributes = attributes;
-    }
+	public void setAttributes(Map<String, TagAttributeBean> attributes) {
+		this.attributes = attributes;
+	}
 
-    public ContentTypeEnum getContentType() {
+	public ContentTypeEnum getContentType() {
         return contentType;
     }
 

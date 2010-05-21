@@ -4,7 +4,7 @@ package org.futurepages.core.tags.build;
  * Atributo de uma Tag jsp
  * @author Danilo
  */
-public class TagAttributeBean {
+public class TagAttributeBean implements Comparable<TagAttributeBean>{
 
     private String name;
     private boolean required;
@@ -52,6 +52,11 @@ public class TagAttributeBean {
     public void setType(Class type) {
         this.type = type;
     }
+
+	@Override
+	public int compareTo(TagAttributeBean other) {
+		return this.getName().compareTo(other.getName());
+	}
     
     
 }
