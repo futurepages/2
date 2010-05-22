@@ -14,7 +14,7 @@ import org.futurepages.core.tags.build.ContentTypeEnum;
 @Tag(bodyContent = ContentTypeEnum.JSP)
 @TagAttributeOverrides({
 	@TagAttributeOverride(name = "var", 	tagAttribute = @TagAttribute(name="var", rtexprvalue =false)),
-	@TagAttributeOverride(name = "value", 	tagAttribute = @TagAttribute(name  = "value")),
+	@TagAttributeOverride(name = "value", 	tagAttribute = @TagAttribute(name  = "value", rtexprvalue=true)),
 	@TagAttributeOverride(name = "target",	tagAttribute = @TagAttribute(name  = "target")),
 	@TagAttributeOverride(name = "property",tagAttribute = @TagAttribute(name  = "property")),
 	@TagAttributeOverride(name = "scope", 	tagAttribute = @TagAttribute(name  = "scope", required = false))
