@@ -62,7 +62,7 @@ public class Forward implements Consequence {
 			
 			this.url = putSlash(viewDir) + this.url; 
 		}
-		
+
 	}
     
     private String putSlash(String url) {
