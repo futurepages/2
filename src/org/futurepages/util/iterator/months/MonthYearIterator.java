@@ -24,9 +24,17 @@ public class MonthYearIterator implements Iterator<MonthYear>, Iterable<MonthYea
 		init();
 	}
 
+	public MonthYearIterator(MonthYear initial, MonthYear end) {
+		this.initialYear = initial.getYear();
+		this.initialMonth = initial.getMonth();
+		this.endYear = end.getYear();
+		this.endMonth = end.getMonth();
+		init();
+	}
+
 
 	private void init() {
-		year = initialYear;
+		year  = initialYear;
 		month = initialMonth;
 	}
 	
