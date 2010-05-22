@@ -1,3 +1,4 @@
+[Migrando para o Futurepages2]
 - prefixo de tags: mtw -> fpg
 - dao().metodo() passa a ser Dao.metodo()
 - tr_save() -> save()
