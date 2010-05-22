@@ -239,6 +239,7 @@ public class Redirect implements Consequence {
     * 
     * @return a string representation of the redirect.
     */
+   @Override
    public String toString() {
       
       StringBuilder s = new StringBuilder();
