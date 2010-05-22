@@ -69,12 +69,12 @@ public class ActionConfig {
             
             throw new IllegalArgumentException("Bad action name: " + name);
          }
-         
+
          this.name = cutSlash(st.nextToken());
          this.innerAction = st.nextToken();
          
       } else {
-         
+
          this.name = cutSlash(name);
       }
 		
