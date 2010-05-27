@@ -42,8 +42,12 @@ public class DateUtil {
 	 * @return - a data por extenso em caracteres todos mínusculos.
 	 * @throws java.lang.Exception
 	 */
-	public static String literal(Date date) throws Exception {
-		return literal(viewDate(date));
+	public static String literal(Date date) {
+		try{
+			return literal(viewDate(date));
+		}catch(Exception ex){
+			return null;
+		}
 	}
 
 	public static String literalDayOfWeek(Date date) {
