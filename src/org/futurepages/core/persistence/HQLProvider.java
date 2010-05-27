@@ -56,6 +56,14 @@ public class HQLProvider implements HQLable {
 		}
 	}
 
+	protected static String sum(String sumClause) {
+		if (!Is.empty(sumClause)) {
+			return concat(" SUM(",sumClause,")");
+		} else {
+			return "";
+		}
+	}
+
 	protected static HQLField day(String date) {
 		return new HQLField(concat(" DAY(",date,")"));
 	}
