@@ -120,6 +120,12 @@ public abstract class AbstractAction implements Pageable, Action {
 		output.setValue(key, obj);
 	}
 
+	protected String onlySuccess(String msg){
+		setOutputWith(SUCCESS, msg);
+		return SUCCESS;
+
+	}
+
 	/** @return Pega o numero da página corrente em uso */
 	protected int getPageNum() {
 		return getPaginator().getPageNum();
