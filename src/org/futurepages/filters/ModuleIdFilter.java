@@ -39,6 +39,7 @@ public class ModuleIdFilter implements Filter {
 		this.returnValue = returnValue;
 	}
 
+	@Override
     public String filter(InvocationChain chain) throws Exception {
 		//Quando definido localmente para uma consequencia
 		if(correctModuleId!=null){
