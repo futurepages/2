@@ -11,10 +11,15 @@ public class Then extends IfTag{
 
 	@Override
 	public boolean testCondition() throws JspException {
+		System.out.println("Then.testCondition()");
 		Tag parent = findAncestorWithClass(this, ConditionalTag.class);
 		if (parent != null) {
 			ConditionalTag conditional = (ConditionalTag) parent;
-			return conditional.isCondition();
+			if(Else.class.isAssignableFrom(conditional.getClass())){
+				return !conditional.isCondition();
+			}else{
+				return conditional.isCondition();
+			}
 		} else {
 			throw new JspException("Then not enclosed by a Conditinal tag!");
 		}
