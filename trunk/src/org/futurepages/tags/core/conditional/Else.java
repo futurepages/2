@@ -11,10 +11,15 @@ public class Else extends IfTag {
 
 	@Override
 	public boolean testCondition() throws JspException {
+		System.out.println("Else.testCondition() SUPER ALTERADO");
 		Tag parent = findAncestorWithClass(this, ConditionalTag.class);
 		if (parent != null) {
 			ConditionalTag conditional = (ConditionalTag) parent;
-			return !conditional.isCondition();
+			if(Else.class.isAssignableFrom(conditional.getClass())){
+				return conditional.isCondition();
+			}else{
+				return !conditional.isCondition();
+			}
 		} else {
 			throw new JspException("Else not enclosed by a Conditionaltag!");
 		}
