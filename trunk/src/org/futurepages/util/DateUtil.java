@@ -131,6 +131,10 @@ public class DateUtil {
 		}
 	}
 
+	public static String literalDate(Date date) {
+		return literalDateFromView(viewDate(date));
+	}
+
 	/**
 	 * Formato da entrada: DD/MM/YYYY
 	 * Formato da saída: YYYY-MM-DD
