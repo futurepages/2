@@ -121,6 +121,7 @@ public abstract class AbstractAction implements Pageable, Action {
 	}
 
 	protected String onlySuccess(String msg){
+		output = new MapOutput();
 		putMessage(SUCCESS, msg);
 		return SUCCESS;
 
