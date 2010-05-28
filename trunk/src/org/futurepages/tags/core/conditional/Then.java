@@ -11,7 +11,6 @@ public class Then extends IfTag{
 
 	@Override
 	public boolean testCondition() throws JspException {
-		System.out.println("Then.testCondition()");
 		Tag parent = findAncestorWithClass(this, ConditionalTag.class);
 		if (parent != null) {
 			ConditionalTag conditional = (ConditionalTag) parent;
