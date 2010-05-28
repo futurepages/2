@@ -137,7 +137,7 @@ public class ClassTagAnnotationReader {
 	private TagAttributeBean createTagAttribute(TagAttribute nova, TagAttributeBean oldTag) {
 		oldTag.setName(nova.name());
 		oldTag.setRequired(nova.required());
-		oldTag.setRtexprvalue(nova.required());
+		oldTag.setRtexprvalue(nova.rtexprvalue());
 		return oldTag;
 	}
 
