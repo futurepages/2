@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 import org.futurepages.enums.DayOfWeek;
 import org.futurepages.enums.MonthEnum;
 import org.futurepages.enums.UnitTimeEnum;
+import org.futurepages.util.iterator.months.MonthYear;
 
 public class CalendarUtil {
 
@@ -492,6 +493,13 @@ public class CalendarUtil {
 	public static int getDifferenceInMonths(Calendar date1, Calendar date2) {
 		int[] elapsed = getElapsedTime(date1, date2);
 		return (12*elapsed[0] + elapsed[1] + ( (elapsed[2]>0 || elapsed[3]>0 || elapsed[4]>0) ? 1 : 0) );
+	}
+
+	public static int getDifferenceInMonths(MonthYear mYearIni, MonthYear mYearFim) {
+		Calendar calIni = new GregorianCalendar(mYearIni.getYear(),mYearIni.getMonth()-1 , 1);
+		Calendar calFim = new GregorianCalendar(mYearFim.getYear(),mYearFim.getMonth()-1,1);
+		return 	CalendarUtil.getDifferenceInMonths(calIni, calFim);
+
 	}
 
 	public static class TooBigDateException extends Exception {
