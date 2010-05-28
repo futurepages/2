@@ -11,7 +11,6 @@ public class Else extends IfTag {
 
 	@Override
 	public boolean testCondition() throws JspException {
-		System.out.println("Else.testCondition() SUPER ALTERADO");
 		Tag parent = findAncestorWithClass(this, ConditionalTag.class);
 		if (parent != null) {
 			ConditionalTag conditional = (ConditionalTag) parent;
