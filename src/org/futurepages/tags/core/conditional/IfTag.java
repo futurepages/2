@@ -21,10 +21,10 @@ public class IfTag extends ConditionalTag {
 
 	@TagAttribute
 	private String test = null;
-	
+
 	@TagAttribute
 	private String value = null;
-	
+
 	@TagAttribute
 	private String dynValue = null;
 
@@ -41,12 +41,36 @@ public class IfTag extends ConditionalTag {
 	}
 
 	@Override
+	public int doStartTag() throws JspException {
+		init();
+		eval();
+		if (context) {
+			return EVAL_BODY_BUFFERED;
+		} else {
+			if (!print) {
+				if (this.testCondition()) {
+					return EVAL_BODY_BUFFERED;
+				}
+			}
+		}
+		return SKIP_BODY;
+	}
+
+	protected void eval() throws JspException {
+		boolean cond =  (!negate) ? evaluateExpression() :! evaluateExpression() ;
+		setCondition(cond);
+	}
+
+	@Override
 	public boolean testCondition() throws JspException {
+		return this.isCondition();
+	}
+
+	private boolean evaluateExpression() throws JspException {
 		if (Is.empty(test)) {
 			return Boolean.parseBoolean(value);
 		} else {
 			if (dynValue != null && value != null) {
-
 				throw new JspException("Invalid IfTag: cannot have value and dynValue at the same time!");
 			}
 
@@ -143,7 +167,6 @@ public class IfTag extends ConditionalTag {
 					}
 					return value.equals(obj);
 				}
-
 			}
 		}
 	}

@@ -15,8 +15,8 @@ import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.action.Action;
 import org.futurepages.core.consequence.Forward;
 import org.futurepages.core.i18n.LocaleManager;
-import org.futurepages.tags.Out;
 import org.futurepages.core.tags.cerne.Context;
+import org.futurepages.tags.Out;
 
 /**
  * @author Sergio Oliveira
@@ -32,7 +32,7 @@ public abstract class ConditionalTag extends BodyTagSupport {
 
 	@TagAttribute (rtexprvalue = false)
 	protected boolean context = false;
-
+	
 	protected ServletContext application = null;
 	protected HttpSession session = null;
 	protected HttpServletRequest req = null;
@@ -40,6 +40,15 @@ public abstract class ConditionalTag extends BodyTagSupport {
 	protected Action action = null;
 	protected Locale loc = null;
 	private boolean condition;
+
+	protected void init() {
+		this.application = pageContext.getServletContext();
+		this.session = pageContext.getSession();
+		this.req = (HttpServletRequest) pageContext.getRequest();
+		this.res = (HttpServletResponse) pageContext.getResponse();
+		this.action = (Action) req.getAttribute(Forward.ACTION_REQUEST);
+		this.loc = LocaleManager.getLocale(req);
+	}
 
 	public void setNegate(boolean negate) {
 		this.negate = negate;
@@ -57,18 +66,20 @@ public abstract class ConditionalTag extends BodyTagSupport {
 		return condition;
 	}
 
+	public void setCondition(boolean condition) {
+		this.condition = condition;
+	}
+
+	public boolean isContext() {
+		return context;
+	}
+
 	public abstract boolean testCondition() throws JspException;
 
 	@Override
 	public int doStartTag() throws JspException {
-		this.application = pageContext.getServletContext();
-		this.session = pageContext.getSession();
-		this.req = (HttpServletRequest) pageContext.getRequest();
-		this.res = (HttpServletResponse) pageContext.getResponse();
-		this.action = (Action) req.getAttribute(Forward.ACTION_REQUEST);
-		this.loc = LocaleManager.getLocale(req);
+		init();
 		condition = (!negate) ? testCondition() : !testCondition();
-
 		if (!context) {
 			if (!print) {
 				if (condition) {
@@ -80,6 +91,7 @@ public abstract class ConditionalTag extends BodyTagSupport {
 		}
 		return SKIP_BODY;
 	}
+
 
 	@Override
 	public int doAfterBody() throws JspException {
