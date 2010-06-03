@@ -41,6 +41,10 @@ public class Dao extends HQLProvider {
         }
     }
 
+	public static void evict(Class entity){
+		session().getSessionFactory().evict(entity);
+	}
+
     public static Criteria createCriteria(Class entityClass) {
         return session().createCriteria(entityClass);
     }
