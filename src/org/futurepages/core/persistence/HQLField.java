@@ -134,12 +134,20 @@ public class HQLField implements HQLable {
         return fieldName + GREATER + value;
     }
 
+	public String greaterThen(double value) {
+        return fieldName + GREATER + value;
+    }
+
     public String greaterEqualsThen(String value) {
         return concat(fieldName , GREATER_EQUALS , "'" , esc(value) , "'");
     }
 
     public String greaterEqualsThen(long value) {
         return fieldName + GREATER_EQUALS + value;
+    }
+
+	public String greaterEqualsThen(double value) {
+        return fieldName + GREATER + value;
     }
 
     public String lowerThen(String value) {
@@ -150,12 +158,20 @@ public class HQLField implements HQLable {
         return fieldName + LOWER + value;
     }
 
+	public String lowerThen(double value) {
+        return fieldName + LOWER + value;
+    }
+
     public String lowerEqualsThen(String value) {
         return concat(fieldName , LOWER_EQUALS , "'" , esc(value) , "'");
     }
 
     public String lowerEqualsThen(long value) {
         return fieldName + LOWER_EQUALS + value;
+    }
+
+	public String lowerEqualsThen(double value) {
+        return fieldName + LOWER + value;
     }
 
     public String hasAllWordsInSameSequence(String[] words) {
