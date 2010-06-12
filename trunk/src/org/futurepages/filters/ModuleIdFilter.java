@@ -30,7 +30,7 @@ public class ModuleIdFilter implements Filter {
     public ModuleIdFilter() {}
 
 	public ModuleIdFilter(String correctModuleId) {
-		this.correctModuleId = correctModuleId;
+			this.correctModuleId = correctModuleId;
 		this.returnValue = null;
 	}
 
@@ -55,5 +55,6 @@ public class ModuleIdFilter implements Filter {
         return chain.invoke();
     }
 
+	@Override
     public void destroy() { }
 }
