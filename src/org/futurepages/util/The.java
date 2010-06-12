@@ -291,4 +291,17 @@ public class The {
 		}
 		return wIn;
 	}
+
+	public static String javascriptText(Object value) {
+		if(((String)value).contains("\n")){
+			value = ((String)value).replaceAll("\n", "\\\\n");
+		}
+		if(((String)value).contains("\r")){
+			value = ((String)value).replaceAll("\r", "\\\\r");
+		}
+		if(((String)value).contains("'")){
+			value = ((String)value).replaceAll("'", "\\\\'");
+		}
+		return value.toString();
+	}
 }
