@@ -2,6 +2,7 @@ package org.futurepages.formatters;
 
 import java.util.Locale;
 import org.futurepages.core.formatter.Formatter;
+import org.futurepages.util.The;
 
 /**
  * Formata textos para exibir em páginas HTML sem erros,
@@ -10,16 +11,8 @@ import org.futurepages.core.formatter.Formatter;
  */
 public class JavascriptFormatter implements Formatter {
     
+	@Override
     public String format(Object value, Locale loc) {
-		if(((String)value).contains("\n")){
-			value = ((String)value).replaceAll("\n", "\\\\n");
-		}
-		if(((String)value).contains("\r")){
-			value = ((String)value).replaceAll("\r", "\\\\r");
-		}
-		if(((String)value).contains("'")){
-			value = ((String)value).replaceAll("'", "\\\\'");
-		}
-        return ((String) value);
+        return The.javascriptText(value);
     }
 }
