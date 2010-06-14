@@ -147,7 +147,7 @@ public class HQLField implements HQLable {
     }
 
 	public String greaterEqualsThen(double value) {
-        return fieldName + GREATER + value;
+        return fieldName + GREATER_EQUALS + value;
     }
 
     public String lowerThen(String value) {

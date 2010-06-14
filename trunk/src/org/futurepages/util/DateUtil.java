@@ -27,11 +27,11 @@ public class DateUtil {
 	 * @throws java.lang.Exception
 	 */
 	public static String literal(String date) throws Exception {
-		return NumberUtil.dezenaPorExtenso(date.substring(0, 2)) +
-				" de " +
-				MonthEnum.get(Integer.parseInt(date.substring(3, 5))) +
-				" de " +
-				NumberUtil.milharPorExtenso(date.substring(6, 10));
+		return NumberUtil.dezenaPorExtenso(date.substring(0, 2))
+				+ " de "
+				+ MonthEnum.get(Integer.parseInt(date.substring(3, 5)))
+				+ " de "
+				+ NumberUtil.milharPorExtenso(date.substring(6, 10));
 	}
 
 	/**
@@ -43,9 +43,9 @@ public class DateUtil {
 	 * @throws java.lang.Exception
 	 */
 	public static String literal(Date date) {
-		try{
+		try {
 			return literal(viewDate(date));
-		}catch(Exception ex){
+		} catch (Exception ex) {
 			return null;
 		}
 	}
@@ -83,12 +83,11 @@ public class DateUtil {
 
 	public static Calendar dbDateTimeToCalendar(String in) {
 		return new GregorianCalendar(Integer.parseInt(in.substring(0, 4)),
-									 Integer.parseInt(in.substring(5, 7)) - 1,
-									 Integer.parseInt(in.substring(8, 10)),
-									 Integer.parseInt(in.substring(11, 13)),
-									 Integer.parseInt(in.substring(14, 16)),
-									 Integer.parseInt(in.substring(17, 19))
-									 );
+				Integer.parseInt(in.substring(5, 7)) - 1,
+				Integer.parseInt(in.substring(8, 10)),
+				Integer.parseInt(in.substring(11, 13)),
+				Integer.parseInt(in.substring(14, 16)),
+				Integer.parseInt(in.substring(17, 19)));
 	}
 
 	public static Calendar viewDateToCalendar(String in) {
@@ -109,7 +108,7 @@ public class DateUtil {
 
 		try {
 			int dia = Integer.parseInt(value.substring(8, 10));
-			return  dia +((dia==1)? "º" : "")+ " de " + MonthEnum.get(Integer.parseInt(value.substring(5, 7))) + " de " + value.substring(0, 4);
+			return dia + ((dia == 1) ? "º" : "") + " de " + MonthEnum.get(Integer.parseInt(value.substring(5, 7))) + " de " + value.substring(0, 4);
 		} catch (Exception e) {
 			return "<Erro de Conversão>"; //TODO: fazer exception
 		}
@@ -180,20 +179,23 @@ public class DateUtil {
 	 * Formato da saída: DD/MM/YYYY
 	 */
 	public static String viewDate(Object in) {
-		if (in instanceof String) {
-			String strIn = (String) in;
-			String dia, mes, ano, data;
-			dia = strIn.substring(8, 10);
-			mes = strIn.substring(5, 7);
-			ano = strIn.substring(0, 4);
-			data = dia + "/" + mes + "/" + ano;
-			return data;
-		} else if (in instanceof Date) {
-			return new SimpleDateFormat("dd/MM/yyyy").format((Date) in).toString();
-		}
-		if (in instanceof GregorianCalendar) {
-			GregorianCalendar date = (GregorianCalendar) in;
-			return new SimpleDateFormat("dd/MM/yyyy").format((Date) date.getTime()).toString();
+		try {
+			if (in instanceof String) {
+				String strIn = (String) in;
+				String dia, mes, ano, data;
+				dia = strIn.substring(8, 10);
+				mes = strIn.substring(5, 7);
+				ano = strIn.substring(0, 4);
+				data = dia + "/" + mes + "/" + ano;
+				return data;
+			} else if (in instanceof Date) {
+				return new SimpleDateFormat("dd/MM/yyyy").format((Date) in).toString();
+			}
+			if (in instanceof GregorianCalendar) {
+				GregorianCalendar date = (GregorianCalendar) in;
+				return new SimpleDateFormat("dd/MM/yyyy").format((Date) date.getTime()).toString();
+			}
+		} catch (Exception ex) {
 		}
 		return null;
 	}
@@ -208,15 +210,14 @@ public class DateUtil {
 			dia = ((String) in).substring(8, 10);
 			mes = ((String) in).substring(5, 7);
 			ano = ((String) in).substring(0, 4);
-			horas = ((String) in).substring(11,16);
+			horas = ((String) in).substring(11, 16);
 			return dia + "/" + mes + "/" + ano + " - " + horas;
 		} else if (in instanceof Date) {
 			return new SimpleDateFormat("dd/MM/yyyy - HH:mm").format((Date) in).toString();
 		} else if (in instanceof Calendar) {
 			return new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(((GregorianCalendar) in).getTime()).toString();
-		}
-		else if (in instanceof Long) {
-			return new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(new Date((Long)in)).toString();
+		} else if (in instanceof Long) {
+			return new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(new Date((Long) in)).toString();
 		}
 		return null;
 	}
@@ -329,9 +330,9 @@ public class DateUtil {
 		if (formatString == null) {
 			formatString = DateFormatEnum.DATE;
 		}
-		return parse(dateString,formatString.getMask());
+		return parse(dateString, formatString.getMask());
 	}
-	
+
 	public static Date parse(String dateString, String formatString) {
 		Date data = null;
 		if (!Is.empty(dateString)) {
@@ -371,7 +372,7 @@ public class DateUtil {
 	 */
 	public static String format(Calendar calendar, String mask) {
 		Date date = null;
-		if(calendar != null){
+		if (calendar != null) {
 			date = calendar.getTime();
 		}
 		return format(date, mask);
@@ -399,7 +400,7 @@ public class DateUtil {
 	}
 
 	public static String viewHourMin(Date date) {
-			return (new SimpleDateFormat("HH:mm").format(date).toString());
+		return (new SimpleDateFormat("HH:mm").format(date).toString());
 	}
 
 	public static Calendar dateTimeToCalendar(Date date) {

@@ -16,6 +16,7 @@ import org.futurepages.filters.ModuleIdFilter;
 @Tag(bodyContent = ContentTypeEnum.EMPTY)
 public class IncludeModuleFunctions extends PrintTag{
    
+	@Override
 	public String getStringToPrint() throws JspException {
 		try{
 			String moduleId =ModuleIdFilter.getModuleId(action);
