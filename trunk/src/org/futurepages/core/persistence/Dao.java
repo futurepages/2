@@ -141,6 +141,12 @@ public class Dao extends HQLProvider {
         return query.list();
     }
 
+    public static <T extends Serializable> List<T> listDistinctWithJoin(String entityAlias, Class<T> entity, String joinClause, String whereClause, String... orderClauses) {
+        String fromAndJoin = fromAndJoin(entityAlias, entity, joinClause);
+        Query query = query(select(distinct(entityAlias)) + fromAndJoin + where(whereClause) + orderBy(orderClauses));
+        return query.list();
+    }
+
     public static <T extends Serializable> List<T> list(String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
         Query query = query(select(entityAlias) + fromAndJoin + where(whereClause) + orderBy(orderClauses));
         return query.list();
