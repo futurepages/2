@@ -29,6 +29,7 @@ public class ApplicationListener implements ServletContextListener {
 
 	private String contextName;
 
+	@Override
     public void contextInitialized(ServletContextEvent evt) {
         try {
             ServletContext servletContext = evt.getServletContext();
@@ -105,6 +106,7 @@ public class ApplicationListener implements ServletContextListener {
         }
     }
 
+	@Override
     public void contextDestroyed(ServletContextEvent evt) {
         log("Parando: " + evt.getServletContext().getServletContextName());
         if (Params.get("QUARTZ_MODE").equals("on")) {
