@@ -30,6 +30,7 @@ public class AuthenticationFilter implements Filter {
     public AuthenticationFilter() {
     }
 
+	@Override
     public String filter(InvocationChain chain) throws Exception {
         Action action = chain.getAction();
         String innerAction = chain.getInnerAction();

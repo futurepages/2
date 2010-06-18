@@ -30,7 +30,7 @@ public class ModulePermissionFilter implements Filter {
 
             AbstractAction action = (AbstractAction) chain.getAction();
 
-            boolean shouldByPass = true;
+            boolean shouldByPass = false;
             if(action instanceof AuthenticationFree){
                 AuthenticationFree ac = (AuthenticationFree) action;
                 shouldByPass = ac.bypassAuthentication(chain.getInnerAction());

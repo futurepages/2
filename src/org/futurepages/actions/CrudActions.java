@@ -55,6 +55,7 @@ public abstract class CrudActions extends AbstractAction implements RedirectAfte
     *  A exibição do bean é desprotegido.
     *  @param innerAction
     */
+	@Override
     public boolean bypassAuthentication(String innerAction) {
         if (innerAction == null) {
             if (input.getStringValue(TYPE) == null) {
@@ -80,6 +81,7 @@ public abstract class CrudActions extends AbstractAction implements RedirectAfte
     /**
      * Os innerActions não redirecionam, somente o execute()
      */
+	@Override
     public boolean shouldRedirect(String inner) {
         if (inner == null || inner.equals("execute")) {
             return true;
