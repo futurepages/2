@@ -25,8 +25,8 @@ public class ModulePermissionFilter implements Filter {
 
 	@Override
     public String filter(InvocationChain chain) throws Exception {
-    	
-        if (chain.getAction() instanceof AbstractAction) {
+
+		if (chain.getAction() instanceof AbstractAction) {
 
             AbstractAction action = (AbstractAction) chain.getAction();
 
@@ -36,7 +36,7 @@ public class ModulePermissionFilter implements Filter {
                 shouldByPass = ac.bypassAuthentication(chain.getInnerAction());
             }
 			if(!shouldByPass){
-				if(!(action instanceof AllModulesFree)){
+				if(!(action instanceof AllModulesFree)) {
 					String moduleId = AbstractModuleManager.moduleId(action.getClass());
 					if (!action.loggedUser().hasModule(moduleId)) {
 							return denied(action);
