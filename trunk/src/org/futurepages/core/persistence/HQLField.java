@@ -54,6 +54,13 @@ public class HQLField implements HQLable {
 
         return this.between(dateBegin, dateEnd);
     }
+    
+    public String equalsTo(Enum<?> enumeration) {
+    	if (Is.empty(enumeration)) {
+    		return "";
+    	}
+        return concat(fieldName , " = '" , esc(enumeration.name()) , "'");
+    }
 
     public String equalsTo(String value) {
         if (Is.empty(value)) {
