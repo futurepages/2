@@ -45,9 +45,9 @@ public class SVNUTIL {
 
 	private static void removeDeleted(String sufixo, File origem, File destino) throws IOException {
 
-		boolean tDestino = destino.exists();
+		boolean temDestino = destino.exists();
 		boolean naoTemOrigem = !origem.exists();
-		if(tDestino && naoTemOrigem){
+		if(temDestino && naoTemOrigem){
 			destino.delete();
 		}else{
 			if(origem.isDirectory()){
