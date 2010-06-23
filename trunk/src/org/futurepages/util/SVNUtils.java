@@ -50,7 +50,7 @@ public class SVNUtils {
 		if(temDestino && naoTemOrigem){
 			destino.delete();
 		}else{
-			if(origem.isDirectory()){
+			if(origem.isDirectory() && !origem.getName()	.equals(".svn")){
 				for (File filho : destino.listFiles()) {
 					String novoSuf = filho.getName();
 					removeDeleted(novoSuf, origem.getAbsolutePath()  ,filho);
