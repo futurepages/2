@@ -44,16 +44,17 @@ public class SVNUtils {
 	}
 
 	private static void removeDeleted(String sufixo, File origem, File destino) throws IOException {
-
-		boolean temDestino = destino.exists();
-		boolean naoTemOrigem = !origem.exists();
-		if(temDestino && naoTemOrigem && !destino.getName().equals(".svn")){
-			destino.delete();
-		}else{
-			if(destino.isDirectory() ){
-				for (File filho : destino.listFiles()) {
-					String novoSuf = filho.getName();
-					removeDeleted(novoSuf, origem.getAbsolutePath()  ,filho);
+		if(!destino.getName().equals(".svn")){
+			boolean temDestino = destino.exists();
+			boolean naoTemOrigem = !origem.exists();
+			if(temDestino && naoTemOrigem ){
+				destino.delete();
+			}else{
+				if(destino.isDirectory() ){
+					for (File filho : destino.listFiles()) {
+						String novoSuf = filho.getName();
+						removeDeleted(novoSuf, origem.getAbsolutePath()  ,filho);
+					}
 				}
 			}
 		}
