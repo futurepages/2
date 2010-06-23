@@ -3,7 +3,7 @@ package org.futurepages.util;
 import java.io.File;
 import java.io.IOException;
 
-public class SVNUTIL {
+public class SVNUtils {
 
 	public static void cleanCopy(String source, String target) throws IOException {
 		File origem = new File(source);
