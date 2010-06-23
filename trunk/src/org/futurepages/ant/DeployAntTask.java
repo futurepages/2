@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
-import org.futurepages.util.SVNUTIL;
+import org.futurepages.util.SVNUtils;
 
 public class DeployAntTask extends Task {
 
@@ -18,7 +18,7 @@ public class DeployAntTask extends Task {
 		System.out.println("target: "+target);
 	
 		try {
-			SVNUTIL.cleanCopy(source, target);
+			SVNUtils.cleanCopy(source, target);
 		} catch (IOException e) {
 			System.out.println("Falha ao copiar.");
 			e.printStackTrace();
