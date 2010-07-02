@@ -21,6 +21,7 @@ public class ValueFormatter extends PrintTag {
 	@TagAttribute
 	private String formatter;
 
+	@Override
 	public String getStringToPrint() throws JspException {
 		if (formatter != null) {
 
@@ -31,7 +32,7 @@ public class ValueFormatter extends PrintTag {
 			return f.format(object, action.getLocale());
 		}
 		else{
-			return object.toString();
+			return (object!=null)? object.toString() : "";
 		}
 	}
 
