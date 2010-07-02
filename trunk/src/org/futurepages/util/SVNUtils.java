@@ -5,7 +5,7 @@ import java.io.IOException;
 
 public class SVNUtils {
 
-	private static String SEPARATOR = File.pathSeparator;
+	private static String SEPARATOR = File.separator;
 
 	public static void cleanCopy(String source, String target) throws IOException {
 		File origem = new File(source);
