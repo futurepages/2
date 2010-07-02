@@ -30,103 +30,105 @@ public class ApplicationListener implements ServletContextListener {
 	private String contextName;
 
 	@Override
-    public void contextInitialized(ServletContextEvent evt) {
-        try {
-            ServletContext servletContext = evt.getServletContext();
+	public void contextInitialized(ServletContextEvent evt) {
+		try {
+			ServletContext servletContext = evt.getServletContext();
 			String name = The.tokenAt(1, servletContext.getResource("/").getPath(), "/");
-            contextName = (name!=null ? name : "ROOT");
+			contextName = (name != null ? name : "ROOT");
 
-            log("Inicializando " + servletContext.getServletContextName() + "...");
-            String realPath = servletContext.getRealPath("/");
+			log("Inicializando " + servletContext.getServletContextName() + "...");
+			String realPath = servletContext.getRealPath("/");
 
-            log("Inicializando Parâmetros...");
-            Params.initialize(realPath, contextName);
-            log("Parâmetros OK");
+			log("Inicializando Parâmetros...");
+			Params.initialize(realPath, contextName);
+			log("Parâmetros OK");
 
-            log("Carregando módulos...");
-            File[] modules = (new File(Params.get("MODULES_CLASSES_REAL_PATH"))).listFiles();
-            log("Módulos OK");
+			log("Carregando módulos...");
+			File[] modules = (new File(Params.get("MODULES_CLASSES_REAL_PATH"))).listFiles();
+			log("Módulos OK");
 
-            if(HibernateManager.isRunning()){
+			if (HibernateManager.isRunning()) {
 				log("Hibernate OK");
-            	// Atualiza/gera esquema do banco como solicitado no arquivo de configuração.
-                if (Params.get("SCHEMA_GENERATION_TYPE").equals("update")) {
+				// Atualiza/gera esquema do banco como solicitado no arquivo de configuração.
+				if (Params.get("SCHEMA_GENERATION_TYPE").equals("update")) {
 					log("SCHEMA UPDATE Begin");
-                    SchemaGeneration.update();
-                } else if (Params.get("SCHEMA_GENERATION_TYPE").equals("export")) {
+					SchemaGeneration.update();
+				} else if (Params.get("SCHEMA_GENERATION_TYPE").equals("export")) {
 					log("SCHEMA EXPORT Begin");
 					SchemaGeneration.export();
-                }
+				}
 
-                //Se o modo de instalação estiver ligado, serão feitas as instalações de cada módulo.
+				//Se o modo de instalação estiver ligado, serão feitas as instalações de cada módulo.
 				String installMode = Params.get("INSTALL_MODE");
-                log("Install Mode: "+installMode);
-                if (!installMode.equals("off")) {
-					InstallersManager.initialize(modules,installMode);
-                }
-            }
+				log("Install Mode: " + installMode);
+				if (!installMode.equals("off")) {
+					InstallersManager.initialize(modules, installMode);
+				}
+			}
 
-            log("Session Listenter...: ");
+			log("Session Listenter...: ");
 			new SessionListenerManager(modules).initialize();
 			log("Session Listenter...: OK ");
 
-            //Inicializa o gerenciador do Quartz (Agendador de Tarefas) caso solicitado.
-            if (Params.get("QUARTZ_MODE").equals("on")) {
-                log("Iniciando Quartz...");
-                QuartzManager.initialize(modules);
-                log("Quartz Inicializado.");
-            }
+			//Inicializa o gerenciador do Quartz (Agendador de Tarefas) caso solicitado.
+			if (Params.get("QUARTZ_MODE").equals("on")) {
+				log("Iniciando Quartz...");
+				QuartzManager.initialize(modules);
+				log("Quartz Inicializado.");
+			}
 
-            //Inicializa os parâmetros de configuração de Email se solicitado.
-            if (Params.get("EMAIL_ACTIVE").equals("true")) {
+			//Inicializa os parâmetros de configuração de Email se solicitado.
+			if (Params.get("EMAIL_ACTIVE").equals("true")) {
 				log("Configurando Email...: ");
-                MailConfig.initialize();
+				MailConfig.initialize();
 				log("Config Email OK");
-            }
+			}
 
-            //Por padrão gera o arquivo taglib.tld com as tags dos módulos da aplicação
-            if (Params.get("GENERATE_TAGLIB").equals("true")) {
-                log("Iniciando criação da Taglib.");
-                (new TagLibBuilder(modules)).build();
-                log("Taglib criada com sucesso.");
-            }
+			//Por padrão gera o arquivo taglib.tld com as tags dos módulos da aplicação
+			if (Params.get("GENERATE_TAGLIB").equals("true")) {
+				log("Iniciando criação da Taglib.");
+				(new TagLibBuilder(modules)).build();
+				log("Taglib criada com sucesso.");
+			}
 
 			//Compacta recursos web
 			String minifyMode = Params.get("MINIFY_RESOURCE_MODE");
-            if (!minifyMode.equals("none")) {  //none, js, css, both
-                log("MINIFY RESOURCE MODE = "+minifyMode);
-                (new ResourceMinifier()).execute(minifyMode);
-                log("MINIFY RESOURCE DONE.");
-            }
+			if (!minifyMode.equals("none")) {  //none, js, css, both
+				log("MINIFY RESOURCE MODE = " + minifyMode);
+				(new ResourceMinifier()).execute(minifyMode);
+				log("MINIFY RESOURCE DONE.");
+			}
 
-            log(servletContext.getServletContextName() + " inicializado.");
-        } catch (Exception ex) {
-            log("Erro ao inicializar contexto.");
-            ex.printStackTrace();
-        }
-    }
+			log(servletContext.getServletContextName() + " inicializado.");
+		} catch (Exception ex) {
+			log("Erro ao inicializar contexto.");
+			ex.printStackTrace();
+		}
+	}
 
 	@Override
-    public void contextDestroyed(ServletContextEvent evt) {
-        log("Parando: " + evt.getServletContext().getServletContextName());
-        if (Params.get("QUARTZ_MODE").equals("on")) {
-            try {
-                QuartzManager.shutdown();
-                log("Schedulers do Quartz parado.");
-            } catch (SchedulerException ex) {
-                log("Erro ao tentar parar Schedulers do Quartz: " + ex.getMessage());
-                ex.printStackTrace();
-            }
-        }
-        HibernateManager.shutdown();
-        log("Aplicação parada: " + evt.getServletContext().getServletContextName());
-    }
+	public void contextDestroyed(ServletContextEvent evt) {
+		log("Parando: " + evt.getServletContext().getServletContextName());
+		if (Params.get("QUARTZ_MODE").equals("on")) {
+			try {
+				QuartzManager.shutdown();
+				log("Schedulers do Quartz parado.");
+			} catch (SchedulerException ex) {
+				log("Erro ao tentar parar Schedulers do Quartz: " + ex.getMessage());
+				ex.printStackTrace();
+			}
+		}
+		if (HibernateManager.isRunning()) {
+			HibernateManager.shutdown();
+		}
+		log("Aplicação parada: " + evt.getServletContext().getServletContextName());
+	}
 
-    /**
-     * Mensagem de log padrão do listener.
-     * @param logText
-     */
-    private void log(String logText) {
-        System.out.println("[::"+contextName+"::] " + logText);
-    }
+	/**
+	 * Mensagem de log padrão do listener.
+	 * @param logText
+	 */
+	private void log(String logText) {
+		System.out.println("[::" + contextName + "::] " + logText);
+	}
 }
