@@ -5,6 +5,8 @@ import java.io.IOException;
 
 public class SVNUtils {
 
+	private static String SEPARATOR = File.pathSeparator;
+
 	public static void cleanCopy(String source, String target) throws IOException {
 		File origem = new File(source);
 		cleanCopy("",  target, origem.listFiles());
@@ -15,11 +17,11 @@ public class SVNUtils {
 
 		for (File origem : contents) {
 			if (origem.isFile()) {
-				copy(origem, target + "\\" + deep);
+				copy(origem, target + SEPARATOR + deep);
 			} else {
 				String nomeFile = origem.getName();
 				if (!nomeFile.equals(".svn") ) {
-					cleanCopy(deep + "\\" + nomeFile, target, origem.listFiles());
+					cleanCopy(deep + SEPARATOR + nomeFile, target, origem.listFiles());
 				}
 			}
 		}
@@ -39,7 +41,7 @@ public class SVNUtils {
 	}
 
 	private static void removeDeleted(String sufixo, String source, File destino) throws IOException {
-		File origem = new File(source+"\\"+sufixo);
+		File origem = new File(source+SEPARATOR+sufixo);
 		removeDeleted(sufixo, origem, destino);
 	}
 
