@@ -34,6 +34,20 @@ public class The {
 		return out.toString();
 	}
 
+	public static String implodedArray(Object[] array, String delim, String quote) {
+		if(quote == null){
+			quote = "";
+		}
+		StringBuffer out = new StringBuffer("");
+		for (int i = 0; i < array.length; i++) {
+			if (i != 0) {
+				out.append(delim);
+			}
+			out.append(quote+array[i].toString()+quote);
+		}
+		return out.toString();
+	}
+
     public static String implodedArray(long[] array, String delim, String quote) {
 		if(quote == null){
 			quote = "";

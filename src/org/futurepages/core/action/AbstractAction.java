@@ -56,7 +56,7 @@ public abstract class AbstractAction implements Pageable, Action {
 	}
 
 	public String putMessage(String key, String message) {
-		output.setValue(key, HtmlMapChars.htmlValue(message));
+		output(key, HtmlMapChars.htmlValue(message));
 		messages.put(key, message);
 		return key;
 	}
@@ -116,16 +116,43 @@ public abstract class AbstractAction implements Pageable, Action {
 		setOutputPaginationValues(pageSize, totalSize, totalPages, pageNum);
 	}
 
-	protected void setOutputWith(String key, Object obj){
-		output = new MapOutput();
+	protected Object input(String key){
+		return input.getValue(key);
+	}
+	
+	protected void output(String key, Object obj){
 		output.setValue(key, obj);
+	}
+	protected void outputOnly(String key, Object obj){
+		clearOutput();
+		output(key, obj);
+	}
+
+	protected void outputPrettyUrlParams(Object... params){
+		output(PRETTY_URL_PARAMS, params);
+	}
+
+
+	protected void clearOutput(){
+		output = new MapOutput();
 	}
 
 	protected String onlySuccess(String msg){
-		output = new MapOutput();
+		clearOutput();
 		putMessage(SUCCESS, msg);
 		return SUCCESS;
+	}
 
+	protected String redir(String url) {
+		return redir(url,false);
+	}
+
+	protected String redir(String url, boolean preservOutput) {
+		if(!preservOutput){
+			clearOutput();
+		}
+		output(REDIR_URL, url);
+		return REDIR;
 	}
 
 	/** @return Pega o numero da página corrente em uso */
@@ -144,7 +171,7 @@ public abstract class AbstractAction implements Pageable, Action {
 	 * @param key nome da chave do input que irá pro output.
 	 */
 	protected void fwdValue(String key) {
-		output.setValue(key, input.getValue(key));
+		output(key, input.getValue(key));
 	}
 
 	public void setSessionTime(int minutes) {
@@ -152,19 +179,19 @@ public abstract class AbstractAction implements Pageable, Action {
 	}
 
 	protected void headTitle(String headTitle) {
-		output.setValue(HEAD_TITLE, headTitle);
+		output(HEAD_TITLE, headTitle);
 	}
 
     public void headTitleAppend(String headTitle) {
-        output.setValue(HEAD_TITLE, StringUtils.concat((String)output.getValue(HEAD_TITLE) , HeadTitleFilter.SEPARATOR , headTitle));
+        output(HEAD_TITLE, StringUtils.concat((String)output.getValue(HEAD_TITLE) , HeadTitleFilter.SEPARATOR , headTitle));
     }
 
 	public void headTitleAppendToRoot(String headTitle) {
-        output.setValue(HEAD_TITLE, StringUtils.concat(HeadTitleFilter.SEPARATOR , headTitle));
+        output(HEAD_TITLE, StringUtils.concat(HeadTitleFilter.SEPARATOR , headTitle));
     }
 
 	protected void outputAjax(Map map) {
-		output.setValue(AjaxConsequence.KEY, map);
+		output(AjaxConsequence.KEY, map);
 	}
 
 	public void doListDependencies() {
@@ -176,18 +203,22 @@ public abstract class AbstractAction implements Pageable, Action {
 	protected void listDependencies() {
 	}
 
+	@Override
 	public boolean hasSuccess() {
 		return (messages.get(Action.SUCCESS) != null) || (getRequest().getParameter(Action.SUCCESS)!=null);
 	}
 
+	@Override
 	public String getSuccess() {
 		return messages.get(SUCCESS);
 	}
 
+	@Override
 	public boolean hasError() {
 		return messages.get(ERROR) != null || (getRequest().getParameter(Action.ERROR)!=null);
 	}
 
+	@Override
 	public String getError() {
 		return messages.get(ERROR);
 	}
@@ -200,6 +231,7 @@ public abstract class AbstractAction implements Pageable, Action {
 		return ((SessionContext) session).getResponse();
 	}
 
+	@Override
 	public HttpSession getHttpSession() {
 		return ((SessionContext) session).getSession();
 	}
@@ -219,6 +251,7 @@ public abstract class AbstractAction implements Pageable, Action {
 	 * Verifica se possui usuário logado.
 	 * @return true se está logado.
 	 */
+	@Override
 	public boolean isLogged() {
 		return isLogged(session);
 	}
@@ -229,6 +262,7 @@ public abstract class AbstractAction implements Pageable, Action {
 	 *
 	 * @return O usuário logado.
 	 */
+	@Override
 	public DefaultUser loggedUser() {
 		return loggedUser(session);
 	}
@@ -259,7 +293,7 @@ public abstract class AbstractAction implements Pageable, Action {
 		if(this instanceof AjaxAction){
 			outputAjax(errorException.getValidationMap());
 		}else{
-			output.setValue("errorList", errorException.getValidationMap());
+			output("errorList", errorException.getValidationMap());
 		}
 
 		if (listDependencies && !listingDependencies) {
@@ -286,50 +320,62 @@ public abstract class AbstractAction implements Pageable, Action {
 		return isPost;
 	}
 
+	@Override
 	public void setInput(Input input) {
 		this.input = input;
 	}
 
+	@Override
 	public void setOutput(Output output) {
 		this.output = output;
 	}
 
+	@Override
 	public void setSession(Context context) {
 		this.session = context;
 	}
 
+	@Override
 	public void setApplication(Context context) {
 		this.application = context;
 	}
 
+	@Override
 	public void setCookies(Context context) {
 		this.cookies = context;
 	}
 
+	@Override
 	public void setLocale(Locale loc) {
 		this.loc = loc;
 	}
 
+	@Override
 	public Input getInput() {
 		return input;
 	}
 
+	@Override
 	public Output getOutput() {
 		return output;
 	}
 
+	@Override
 	public Context getSession() {
 		return session;
 	}
 
+	@Override
 	public Context getApplication() {
 		return application;
 	}
 
+	@Override
 	public Context getCookies() {
 		return cookies;
 	}
 
+	@Override
 	public Locale getLocale() {
 		return loc;
 	}
