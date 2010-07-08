@@ -20,7 +20,11 @@ import org.futurepages.core.output.Output;
  */
 public interface Action extends Manipulable {
 
-	public static final String HEAD_TITLE = "headTitle";
+	public static final String HEAD_TITLE        = "headTitle";
+	public static final String MODULE_ID_KEY     = "actionModuleId";
+	public static final String REDIR_URL         = "_fpg_redirect_url";
+	public static final String PRETTY_URL_PARAMS = "_fpg_redirect_url";
+
 
 	public DefaultUser loggedUser();
 

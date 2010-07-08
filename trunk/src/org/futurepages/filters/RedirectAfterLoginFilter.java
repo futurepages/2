@@ -22,6 +22,7 @@ public class RedirectAfterLoginFilter implements Filter {
      */
 	public RedirectAfterLoginFilter() { }
 	
+	@Override
 	public String filter(InvocationChain chain) throws Exception {
 		Action action = chain.getAction();
 		Context session = action.getSession();
@@ -29,12 +30,13 @@ public class RedirectAfterLoginFilter implements Filter {
 		String result = chain.invoke();
 		if (callback != null && !result.equals(AbstractAction.ERROR)) {
 			Output output = action.getOutput();
-			output.setValue(Redirect.REDIRURL_PARAM, callback);
+			output.setValue(Redirect.REDIR_URL, callback);
 			return REDIR;
 		}
 		return result;
 	}
     
+	@Override
     public void destroy() { }
 }
 		

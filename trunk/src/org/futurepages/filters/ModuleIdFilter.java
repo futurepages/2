@@ -14,7 +14,7 @@ import org.futurepages.core.control.InvocationChain;
  */
 public class ModuleIdFilter implements Filter {
 
-    public static final String MODULE_ID_KEY = "actionModuleId";
+    public static final String MODULE_ID_KEY = Action.MODULE_ID_KEY;
 
 	public String correctModuleId;
 	public String returnValue;
