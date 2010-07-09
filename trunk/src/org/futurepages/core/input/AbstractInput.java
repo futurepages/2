@@ -15,6 +15,7 @@ public abstract class AbstractInput implements Input {
 	/**
      * Calls getStringValue() and tries to convert the string to boolean.
      */
+	@Override
     public boolean getBooleanValue(String name) {
         
         String value = getStringValue(name);
@@ -43,6 +44,7 @@ public abstract class AbstractInput implements Input {
         throw new InputException("Could not convert input to boolean: " + name + " (" + value + ")");
     }
 	
+	@Override
 	public boolean getBooleanValue(String name, boolean def) {
         
         String value = getStringValue(name);
@@ -56,14 +58,17 @@ public abstract class AbstractInput implements Input {
         
     }
 	
+	@Override
 	public Date getDate(String name) {
 		return getDate(name, null, DateFormat.SHORT);
 	}
 	
+	@Override
 	public Date getDate(String name, int style) {
 		return getDate(name, null, style);
 	}
 
+	@Override
 	public Date getDate(String name, String pattern) {
 		return getDate(name, pattern, -1);
 	}
@@ -119,6 +124,7 @@ public abstract class AbstractInput implements Input {
     /**
      * Calls getStringValue() and tries to convert the string to a double.
      */
+	@Override
     public double getDoubleValue(String name) {
         
         String value = getStringValue(name);
@@ -138,6 +144,7 @@ public abstract class AbstractInput implements Input {
         }
     }
     
+	@Override
     public double getDoubleValue(String name, double def) {
         
         String value = getStringValue(name);
@@ -153,6 +160,7 @@ public abstract class AbstractInput implements Input {
     /**
      * Calls getStringValue() and tries to convert the string to a float.
      */
+	@Override
     public float getFloatValue(String name) {
         
         String value = getStringValue(name);
@@ -172,6 +180,7 @@ public abstract class AbstractInput implements Input {
         }
     }
     
+	@Override
     public float getFloatValue(String name, float def) {
         
         String value = getStringValue(name);
@@ -185,6 +194,7 @@ public abstract class AbstractInput implements Input {
 
     }
     
+	@Override
     public int getIntValue(String name) {
         String value = getStringValue(name);
         if (value == null || value.trim().equals("")) {
@@ -201,6 +211,7 @@ public abstract class AbstractInput implements Input {
         }
     }
     
+	@Override
     public int getIntValue(String name, int def) {
         
         String value = getStringValue(name);
@@ -213,6 +224,7 @@ public abstract class AbstractInput implements Input {
 
     }
     
+	@Override
     public int[] getIntValues(String name) {
 		String[] values = getStringValues(name);
 
@@ -242,6 +254,7 @@ public abstract class AbstractInput implements Input {
     /**
      * Calls getStringValue() and tries to convert the string to a long.
      */
+	@Override
     public long getLongValue(String name) {
         String value = getStringValue(name);
 
