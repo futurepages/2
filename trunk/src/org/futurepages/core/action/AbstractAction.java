@@ -26,6 +26,7 @@ import org.futurepages.core.validation.Validator;
 import org.futurepages.exceptions.ErrorException;
 import org.futurepages.filters.HeadTitleFilter;
 import org.futurepages.util.StringUtils;
+import org.futurepages.util.The;
 import org.futurepages.util.html.HtmlMapChars;
 
 /**
@@ -139,18 +140,22 @@ public abstract class AbstractAction implements Pageable, Action {
 
 	protected String onlySuccess(String msg){
 		clearOutput();
-		putMessage(SUCCESS, msg);
-		return SUCCESS;
+		return success(msg);
+	}
+
+	
+	protected String onlyError(String msg){
+		clearOutput();
+		return error(msg);
+	}
+
+	protected String onlyError(Exception ex){
+		clearOutput();
+		return error(ex.getMessage());
 	}
 
 	protected String redir(String url) {
-		return redir(url,false);
-	}
-
-	protected String redir(String url, boolean preservOutput) {
-		if(!preservOutput){
-			clearOutput();
-		}
+		clearOutput();
 		output(REDIR_URL, url);
 		return REDIR;
 	}
@@ -312,6 +317,16 @@ public abstract class AbstractAction implements Pageable, Action {
 
 	public String info(AbstractAction action, String infoMsg) {
 		return action.putMessage(INFO, infoMsg);
+	}
+
+
+	@Override
+	public boolean hasNoCache(){
+		return The.bool((Boolean)session.getAttribute("noCache"));
+	}
+
+	protected void setNoCache(){
+		session.setAttribute("noCache", true);
 	}
 
 	public boolean isPost() {

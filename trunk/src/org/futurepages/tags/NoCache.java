@@ -13,10 +13,11 @@ import org.futurepages.util.HttpUtil;
 @Tag(bodyContent = ContentTypeEnum.EMPTY)
 public class NoCache extends PrintTag {
     
+	@Override
 	public String getStringToPrint() throws JspException {
-		
-		HttpUtil.disableCache(res);
-		
+		if(action.hasNoCache()){
+			HttpUtil.disableCache(res);
+		}
         return null;
     }
 }

@@ -701,12 +701,6 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
         <tag-class>org.futurepages.tags.NoCache</tag-class>
         <body-content>empty</body-content>
         <display-name>NoCache</display-name>
-        <attribute>
-            <name>max</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-            <type>int</type>
-        </attribute>
     </tag>
     <tag>
         <name>out</name>
