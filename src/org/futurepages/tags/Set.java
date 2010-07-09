@@ -4,7 +4,7 @@ import org.apache.taglibs.standard.tag.common.core.SetSupport;
 import org.futurepages.annotations.Tag;
 import org.futurepages.annotations.TagAttribute;
 import org.futurepages.annotations.TagAttributeOverride;
-import org.futurepages.annotations.TagAttributeOverrides;
+import org.futurepages.annotations.TagAttributeOverrideArray;
 import org.futurepages.core.tags.build.ContentTypeEnum;
 
 /**
@@ -12,7 +12,7 @@ import org.futurepages.core.tags.build.ContentTypeEnum;
  * // pageContext.setAttribute(var, value);
  */
 @Tag(bodyContent = ContentTypeEnum.JSP)
-@TagAttributeOverrides({
+@TagAttributeOverrideArray({
 	@TagAttributeOverride(name = "var", 	tagAttribute = @TagAttribute(name="var", rtexprvalue =false)),
 	@TagAttributeOverride(name = "value", 	tagAttribute = @TagAttribute(name  = "value", rtexprvalue=true)),
 	@TagAttributeOverride(name = "target",	tagAttribute = @TagAttribute(name  = "target")),

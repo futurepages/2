@@ -7,7 +7,7 @@ import java.util.Map;
 import org.futurepages.annotations.Tag;
 import org.futurepages.annotations.TagAttribute;
 import org.futurepages.annotations.TagAttributeOverride;
-import org.futurepages.annotations.TagAttributeOverrides;
+import org.futurepages.annotations.TagAttributeOverrideArray;
 import org.futurepages.util.Is;
 import org.futurepages.util.ReflectionUtil;
 import org.futurepages.util.The;
@@ -101,8 +101,8 @@ public class ClassTagAnnotationReader {
 	 * @param existentes
 	 */
 	private void applyAttributesOverrided(Class klass, Map<String, TagAttributeBean> existentes) {
-		if(ReflectionUtil.isSomeAnnotationPresent(klass, TagAttributeOverrides.class)){
-			TagAttributeOverrides tag = (TagAttributeOverrides) klass.getAnnotation(TagAttributeOverrides.class);
+		if(ReflectionUtil.isSomeAnnotationPresent(klass, TagAttributeOverrideArray.class)){
+			TagAttributeOverrideArray tag = (TagAttributeOverrideArray) klass.getAnnotation(TagAttributeOverrideArray.class);
 			for (TagAttributeOverride over : tag.value()) {
 				String nomeAntiga = over.name();
 				if(over.tagAttribute() == null || over.tagAttribute().name().equals("")){
