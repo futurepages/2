@@ -63,4 +63,6 @@ public interface Action extends Manipulable {
 	public String getSuccess();
 
 	public boolean hasSuccess();
+
+	public boolean hasNoCache();
 }
