@@ -5,13 +5,13 @@ import javax.servlet.jsp.JspException;
 import org.futurepages.annotations.Tag;
 import org.futurepages.annotations.TagAttribute;
 import org.futurepages.annotations.TagAttributeOverride;
-import org.futurepages.annotations.TagAttributeOverrides;
+import org.futurepages.annotations.TagAttributeOverrideArray;
 import org.futurepages.core.config.Params;
 import org.futurepages.core.tags.PrintTag;
 import org.futurepages.core.tags.build.ContentTypeEnum;
 
 @Tag(bodyContent = ContentTypeEnum.EMPTY)
-@TagAttributeOverrides({@TagAttributeOverride (name = "max")})
+@TagAttributeOverrideArray({@TagAttributeOverride (name = "max")})
 public class App extends PrintTag{
 	
 	@TagAttribute
