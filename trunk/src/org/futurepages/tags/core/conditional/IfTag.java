@@ -56,6 +56,10 @@ public class IfTag extends ConditionalTag {
 		return SKIP_BODY;
 	}
 
+	protected boolean isTestValueSet(){
+		return value != null || test != null;
+	}
+
 	protected void eval() throws JspException {
 		boolean cond =  (!negate) ? evaluateExpression() :! evaluateExpression() ;
 		setCondition(cond);
