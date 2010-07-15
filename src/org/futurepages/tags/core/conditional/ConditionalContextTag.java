@@ -10,9 +10,11 @@ public abstract class ConditionalContextTag  extends IfTag{
 	public int doStartTag() throws JspException {
 		init();
 		eval();
-		if(this.testCondition() && (this.context || !print)){
+		boolean testCondition = this.testCondition();
+		if(testCondition && (this.context || localCondition())){
 			return EVAL_BODY_BUFFERED;
 		}
+	
 		return SKIP_BODY;
 	}
 	
@@ -29,4 +31,12 @@ public abstract class ConditionalContextTag  extends IfTag{
 	}
 
 	protected abstract boolean contextualCondition(ConditionalTag conditional) ;
+
+	private boolean localCondition(){
+		if(!isTestValueSet()){
+			return true;
+		}else{
+			return isCondition();
+		}
+	}
 }
