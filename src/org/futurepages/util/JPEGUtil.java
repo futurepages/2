@@ -16,6 +16,8 @@ import javax.swing.ImageIcon;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGEncodeParam;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
+import javax.imageio.ImageIO;
+import org.jdesktop.swingx.graphics.GraphicsUtilities;
 
 /**
  * Utilidades para manipulação de JPEG
@@ -48,13 +50,13 @@ public class JPEGUtil {
 	 * pathNewFile: endereço real completo incluindo o nome do arquivo
 	 */
 	public static void resizeImage(File file, int width, int height, int quality, String pathNewFile) throws MalformedURLException, FileNotFoundException, IOException {
-		Image image = new ImageIcon(file.toURI().toURL()).getImage();
+		BufferedImage image = ImageIO.read(file);
 		resize(image, width, height, quality, pathNewFile, true);
 		image.flush();
 	}
 
 	public static void resizeImagePriorHeight(File file, int width, int height, int quality, String pathNewFile) throws MalformedURLException, FileNotFoundException, IOException {
-		Image image = new ImageIcon(file.toURI().toURL()).getImage();
+		BufferedImage image = ImageIO.read(file);
 		resize(image, width, height, quality, pathNewFile, false);
 		image.flush();
 	}
@@ -62,7 +64,7 @@ public class JPEGUtil {
 	/**
 	 * Redimensiona imagens (criar thubmnails) - prioriza a largura
 	 */
-	private static void resize(Image image, int width, int height, int quality, String pathNewFile, boolean priorWidth) throws FileNotFoundException, IOException {
+	private static void resize(BufferedImage image, int width, int height, int quality, String pathNewFile, boolean priorWidth) throws FileNotFoundException, IOException {
 		// Calculos necessários para manter as propoçoes da imagem, conhecido como "aspect ratio"
 		double thumbRatio = (double) width / (double) height;
 		int imageWidth = image.getWidth(null);
@@ -85,39 +87,24 @@ public class JPEGUtil {
 		}
 
 		// Fim do cálculo
-
-		BufferedImage thumbImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-
-		Graphics2D graphics2D = thumbImage.createGraphics();
-
-		graphics2D.setRenderingHint(
-				RenderingHints.KEY_ALPHA_INTERPOLATION,
-				RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-		graphics2D.setRenderingHint(
-				RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
-		graphics2D.setRenderingHint(
-				RenderingHints.KEY_RENDERING,
-				RenderingHints.VALUE_RENDER_QUALITY);
-		graphics2D.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION,
-				RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-
-		graphics2D.drawImage(image, 0, 0, width, height, null);
-		graphics2D.dispose();
+		
+		image = GraphicsUtilities.createThumbnail(image,  width, height);
 
 		FileOutputStream fos = new FileOutputStream(pathNewFile);
 		BufferedOutputStream out = new BufferedOutputStream(fos);
 
 		JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-		JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(thumbImage);
+		JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(image);
 		quality = Math.max(0, Math.min(quality, 100));
 		param.setQuality((float) quality / 100.0f, false);
 		encoder.setJPEGEncodeParam(param);
-		encoder.encode(thumbImage);
-		thumbImage.flush();
+		encoder.encode(image);
+
+		image.flush();
 		out.flush();
 		fos.flush();
 		fos.close();
 		out.close();
+//		System.gc();
 	}
 }
