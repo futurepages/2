@@ -32,7 +32,7 @@ public class HQLUtil {
 
 	/**
 	 * Exemplo, sendo field = 'name' e logicalConect = 'AND':
-	 * retorno = "field like '%word1%' AND field like '%word%'
+	 * retorno = "field like '%word1%' AND field like '%word2%'
 	 */
 	public static String fieldHasWords(String field, String[] words, String logicalConect) {
 		StringBuffer sb = new StringBuffer();

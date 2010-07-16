@@ -8,6 +8,7 @@ import org.futurepages.core.admin.AuthenticationFree;
  */
 public abstract class FreeAction extends AbstractAction implements AuthenticationFree{
 
+	@Override
     public boolean bypassAuthentication(String innerAction) {
         return true;
     }

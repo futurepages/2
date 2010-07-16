@@ -17,6 +17,7 @@ public class NoCache extends PrintTag {
 	public String getStringToPrint() throws JspException {
 		if(action.hasNoCache()){
 			HttpUtil.disableCache(res);
+			session.removeAttribute("noCache");
 		}
         return null;
     }
