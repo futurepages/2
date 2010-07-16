@@ -21,19 +21,6 @@ public class Is {
         return false;
     }
 
-    /*
-     * Se a string possui algum token de tamanho 1 retorna 'false'
-     */
-    public static boolean anyWordInvalidIn(String str) {
-        StringTokenizer st = new StringTokenizer(str, " ");
-        while (st.hasMoreTokens()) {
-            if (st.nextToken().length() == 1) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     /**
      * Retorna true se um campo numérico foi selecionado
      * ou seja, não é nem nulo e nem -1.
