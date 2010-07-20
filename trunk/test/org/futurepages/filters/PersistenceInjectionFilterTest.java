@@ -7,10 +7,8 @@ import modules.escola.beans.Turma;
 import org.futurepages.core.control.InvocationChain;
 import org.futurepages.core.input.Input;
 import org.futurepages.core.input.MapInput;
-import org.futurepages.core.persistence.SchemaGeneration;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class PersistenceInjectionFilterTest {
@@ -19,10 +17,6 @@ public class PersistenceInjectionFilterTest {
 	private InvocationChain chain;
 	private PersistenceInjectionFilterTestPopulator populator;
 	
-	@BeforeClass
-	public static void setUpClass(){ 
-		SchemaGeneration.export();
-	}
 	
 	@Before
 	public void setUp(){
