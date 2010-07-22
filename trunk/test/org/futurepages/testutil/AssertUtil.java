@@ -1,6 +1,7 @@
 package org.futurepages.testutil;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
@@ -41,6 +42,10 @@ public class AssertUtil {
 	public static <T extends Object> void  assertCollectionEquals(String message, Collection<T> expected, Collection<T> atual){
 		Assert.assertEquals(message+" The 'expected' and 'actual' lists have different size (number of elements).",expected.size(), atual.size());
 		Assert.assertTrue(message+" (Expected collection does not contain all elemements from atual collection.)",expected.containsAll(atual));
+	}
+	
+	public static <T extends Object> void  assertArrayEquals(String message, Object[] expected, Object[] atual){
+		assertListEquals(message, Arrays.asList(expected), Arrays.asList(atual));
 	}
 	
 	public static void assertCalendarTimeEquals(String message, Calendar expected, Calendar actual){
