@@ -55,8 +55,8 @@ public class Select extends HTMLTag {
 	@Override
     public String getStringToPrint() throws JspException {
         String[] values = findValues(name);
-        StringBuffer sb = new StringBuffer();
-        sb.append("<select " + klass + " " + id + " name=\"" + name + "\" " + onchange + " " + style + " " + onblur + " " + extra + ">");
+        StringBuilder sb = new StringBuilder();
+        sb.append("<select ").append(klass).append(" ").append(id).append(" name=\"").append(name).append("\" ").append(onchange).append(" ").append(style).append(" ").append(onblur).append(" ").append(getExtraAttributes()).append(">");
 
         if (list != null) {
 
@@ -66,7 +66,7 @@ public class Select extends HTMLTag {
             //List actionList = (List) action.getOutput().getValue(list);
             String value_id = "";
             if (defaultText != null) {
-                sb.append("<option value=\""+defaultValue+"\">" + defaultText + "</option>");
+                sb.append("<option value=\"").append(defaultValue).append("\">").append(defaultText).append("</option>");
             }
 
             if (actionList.size() > 0) {
@@ -82,7 +82,7 @@ public class Select extends HTMLTag {
 						value_id = actionList.get(i).toString();
 					}
 
-                    sb.append("<option value=\"" + value_id + "\"");
+                    sb.append("<option value=\"").append(value_id).append("\"");
 
                     if ((values == null || values.length == 0) && selected != null && selected.equals(value_id)) {
                         sb.append(" selected=\"true\" ");
@@ -101,6 +101,7 @@ public class Select extends HTMLTag {
         }
         sb.append("</select>");
         idName = null; //Nao entendi por que, mas coloquei aqui pra corrigir um bug!
+		
         return sb.toString();
     }
 
