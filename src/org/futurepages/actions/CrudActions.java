@@ -12,7 +12,7 @@ public abstract class CrudActions extends AbstractAction implements RedirectAfte
 
     @Override
     public String execute() {
-        String type = input.getStringValue(TYPE);
+        String type = getType();
         if (type == null) {
             type = SHOW;
         }
@@ -37,6 +37,10 @@ public abstract class CrudActions extends AbstractAction implements RedirectAfte
         }
         return type;
     }
+
+	protected String getType() {
+		return  input.getStringValue(TYPE);
+	}
 
 	@Override
     public void doListDependencies() {
