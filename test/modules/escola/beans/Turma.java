@@ -14,7 +14,7 @@ public class Turma implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;
 
-	private String turma;
+	private String nome;
 
 	public long getId() {
 		return id;
@@ -24,14 +24,12 @@ public class Turma implements Serializable{
 		this.id = id;
 	}
 
-	public String getTurma() {
-		return turma;
+	public String getNome() {
+		return nome;
 	}
 
-	public void setTurma(String turma) {
-		this.turma = turma;
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
-	
-
 	
 }
