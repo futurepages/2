@@ -38,7 +38,7 @@ public abstract class HTMLTag extends PrintTag {
         this.separator = separator;
         
     }
-    
+
     protected String getExtraAttributes() {
         
         if (extra == null) return "";
