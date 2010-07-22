@@ -5,12 +5,10 @@ import java.io.Serializable;
 import org.futurepages.core.control.InvocationChain;
 import org.futurepages.core.filter.Filter;
 import org.futurepages.core.input.Input;
+import org.futurepages.core.input.InputHunter;
 import org.futurepages.core.persistence.Dao;
 import org.futurepages.util.ReflectionUtil;
 import org.futurepages.util.The;
-import org.hibernate.type.IntegerType;
-import org.hibernate.type.LongType;
-import org.hibernate.type.StringType;
 
 /**
  * Filtro de injeção de dependência de elementos persistentes.
@@ -65,7 +63,7 @@ public class PersistenceInjectionFilter implements Filter{
 		if(idKey == null){
 			idKey = tokenedPath[tokenedPath.length-1];
 		}
-		Serializable keyValue = getInputFromKey(input);
+		Serializable keyValue = getInputFromKey(input, idKey);
 		Object obj = null;
 		if(keyValue!= null){
 			obj = Dao.get(classe, keyValue);
@@ -73,33 +71,19 @@ public class PersistenceInjectionFilter implements Filter{
 		return obj;
 	}
 
-	private Serializable getInputFromKey(Input input) {
-
+	private Serializable getInputFromKey(Input input, String idKey) {
 		Class<?> pkType = Dao.getIdType(classe);
-		Serializable keyValue = null;
-		if(pkType != null){
-			if (pkType.equals(StringType.class)) {
-				keyValue =  input.getStringValue(idKey);
-
-			} else if(pkType.equals(LongType.class)) {
-				keyValue = input.getLongValue(idKey);
-
-			} else if(pkType.equals(IntegerType.class)) {
-				keyValue = input.getIntValue(idKey);
-			}
-			return keyValue;
-		}
-		return (Serializable) input.getValue(idKey);
+		return InputHunter.getInputFromKey(input, pkType, idKey);
 	}
 
 	private void inject(Object injecao, Input input) {
 
 		int size = tokenedPath.length;
-		String nomeDoente = tokenedPath[0];
+		String nomeDoEnte = tokenedPath[0];
 		if(size == 1){
-			input.setValue(nomeDoente, injecao);
+			input.setValue(nomeDoEnte, injecao);
 		}else{
-			Object doente = input.getValue(nomeDoente);
+			Object doente = input.getValue(nomeDoEnte);
 			if(doente !=  null){
 				String nomeParteCorpo = tokenedPath[tokenedPath.length-1];
 				ReflectionUtil.setField(doente, nomeParteCorpo, injecao);
