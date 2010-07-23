@@ -1,8 +1,6 @@
 package org.futurepages.util;
 
-import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -16,8 +14,9 @@ import javax.swing.ImageIcon;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGEncodeParam;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import javax.imageio.ImageIO;
-import org.jdesktop.swingx.graphics.GraphicsUtilities;
 
 /**
  * Utilidades para manipulação de JPEG
@@ -78,7 +77,7 @@ public class JPEGUtil {
 			} else {
 				width = (int) (height * imageRatio);
 			}
-		}else{
+		} else {
 			if (thumbRatio < imageRatio) {
 				width = (int) (height * imageRatio);
 			} else {
@@ -87,24 +86,66 @@ public class JPEGUtil {
 		}
 
 		// Fim do cálculo
-		
-		image = GraphicsUtilities.createThumbnail(image,  width, height);
+		System.out.println(imageWidth + " x " + imageHeight + " => " + width + "x" + height);
+
+		if (width >= imageWidth || height >= imageHeight) {
+			//quando imagem é menor que o resultado final, faz um resizer pobre
+			poorResize(image, width, height, quality, pathNewFile);
+		} else {
+			image = GraphicsUtilities.createThumbnail(image, width, height);
+
+			FileOutputStream fos = new FileOutputStream(pathNewFile);
+			BufferedOutputStream out = new BufferedOutputStream(fos);
+
+			JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
+			JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(image);
+			quality = Math.max(0, Math.min(quality, 100));
+			param.setQuality((float) quality / 100.0f, false);
+			encoder.setJPEGEncodeParam(param);
+			encoder.encode(image);
+
+			image.flush();
+			out.flush();
+			fos.flush();
+			fos.close();
+			out.close();
+		}
+	}
+
+	//TODO - Refatorar no futuro. (leandro)
+	private static void poorResize(Image image, int width, int height, int quality, String pathNewFile) throws FileNotFoundException, IOException {
+
+		BufferedImage thumbImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+		Graphics2D graphics2D = thumbImage.createGraphics();
+
+		graphics2D.setRenderingHint(
+				RenderingHints.KEY_INTERPOLATION,
+				RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+		graphics2D.setRenderingHint(
+				RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		graphics2D.setRenderingHint(
+				RenderingHints.KEY_RENDERING,
+				RenderingHints.VALUE_RENDER_QUALITY);
+		graphics2D.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION,
+				RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+
+		graphics2D.drawImage(image, 0, 0, width, height, null);
 
 		FileOutputStream fos = new FileOutputStream(pathNewFile);
 		BufferedOutputStream out = new BufferedOutputStream(fos);
 
 		JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-		JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(image);
+		JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(thumbImage);
 		quality = Math.max(0, Math.min(quality, 100));
 		param.setQuality((float) quality / 100.0f, false);
 		encoder.setJPEGEncodeParam(param);
-		encoder.encode(image);
-
-		image.flush();
+		encoder.encode(thumbImage);
+		thumbImage.flush();
 		out.flush();
 		fos.flush();
 		fos.close();
 		out.close();
-//		System.gc();
 	}
 }
