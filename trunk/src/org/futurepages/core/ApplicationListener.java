@@ -52,10 +52,10 @@ public class ApplicationListener implements ServletContextListener {
 				// Atualiza/gera esquema do banco como solicitado no arquivo de configuração.
 				if (Params.get("SCHEMA_GENERATION_TYPE").equals("update")) {
 					log("SCHEMA UPDATE Begin");
-					SchemaGeneration.update();
+					SchemaGeneration.update(modules);
 				} else if (Params.get("SCHEMA_GENERATION_TYPE").equals("export")) {
 					log("SCHEMA EXPORT Begin");
-					SchemaGeneration.export();
+					SchemaGeneration.export(modules);
 				}
 
 				//Se o modo de instalação estiver ligado, serão feitas as instalações de cada módulo.

@@ -26,6 +26,7 @@ public class PLIFilter extends HQLProvider implements Filter {
 
     }
 
+	@Override
     public String filter(InvocationChain chain) throws Exception {
         Input input = chain.getAction().getInput();
         String[] keyValues = input.getStringValues(keyToInject);
@@ -44,6 +45,7 @@ public class PLIFilter extends HQLProvider implements Filter {
         return chain.invoke();
     }
 
+	@Override
     public void destroy() {
     }
 
