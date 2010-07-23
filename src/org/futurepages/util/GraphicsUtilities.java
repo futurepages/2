@@ -103,8 +103,7 @@ public class GraphicsUtilities {
     /**
      * Converts the specified image into a compatible buffered image.
      * 
-     * @param img
-     *            the image to convert
+     * @param img the image to convert
      * @return a compatible buffered image of the input
      */
     public static BufferedImage convertToBufferedImage(Image img) {
