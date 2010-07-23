@@ -15,7 +15,7 @@ public class HibernateManager {
 	public static final String FACTORY_KEY = HibernateManager.DEFAULT;
 	public static final String DEFAULT = "default";
 	private static boolean running = false;
-	private static Map<String, Configuration> configurations;
+	private static Map<String, Configurations> configurationsMap;
 	private static Map<String, SessionFactory> factories = new HashMap<String, SessionFactory>();
 	private static Map<String, ThreadLocal<Session>> sessionTL = new HashMap<String, ThreadLocal<Session>>();
 
@@ -24,12 +24,11 @@ public class HibernateManager {
 	 */
 	static {
 		try {
-			configurations = HibernateConfigurationFactory.getInstance().getApplicationConfigurations();
-			Configuration config;
-			if (!configurations.isEmpty()) {
-				for (String configurationName : configurations.keySet()) {
-					config = configurations.get(configurationName);
-
+			configurationsMap = HibernateConfigurationFactory.getInstance().getApplicationConfigurations();
+			if (!configurationsMap.isEmpty()) {
+				for (String configurationName : configurationsMap.keySet()) {
+					Configuration config;
+					config = configurationsMap.get(configurationName).getEntitiesConfig();
 					factories.put(configurationName, config.buildSessionFactory());
 					sessionTL.put(configurationName, new ThreadLocal<Session>());
 				}
@@ -53,20 +52,24 @@ public class HibernateManager {
 		return factories.get(sessionFactoryKey);
 	}
 
-	public static Configuration getConfiguration(String configurationKey) {
-		return configurations.get(configurationKey);
+	public static Configurations getConfigurations(String configurationKey) {
+		return configurationsMap.get(configurationKey);
 	}
 
-	public static Configuration getConfiguration() {
-		return getConfiguration(DEFAULT);
+	public static Configurations getConfigurations() {
+		return getConfigurations(DEFAULT);
 	}
 
-	public static Map<String, Configuration> getConfigurations() {
-		return configurations;
+	public static Map<String, Configurations> getConfigurationsMap() {
+		return configurationsMap;
 	}
 
 	static Session getSession() {
-		Session session = getSessionTL(DEFAULT).get();
+		return getSession(DEFAULT);
+	}
+
+	static Session getSession(String databaseKey) {
+		Session session = getSessionTL(databaseKey).get();
 
 		if (session != null) {
 			if (session.isOpen()) {
@@ -75,7 +78,7 @@ public class HibernateManager {
 		}
 
 		session = getSessionFactory().openSession();
-		HibernateManager.getSessionTL(DEFAULT).set(session);
+		HibernateManager.getSessionTL(databaseKey).set(session);
 		return session;
 	}
 

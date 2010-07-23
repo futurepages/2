@@ -15,6 +15,7 @@ public class HibernateFilter implements AfterConsequenceFilter {
 	public HibernateFilter() {
 	}
 
+	@Override
 	public String filter(InvocationChain chain) throws Exception {
 
 		boolean hasError = true;
@@ -24,17 +25,12 @@ public class HibernateFilter implements AfterConsequenceFilter {
 			if (isTransactional) {
 				Dao.beginTransaction();
 			}
-
 			String result = chain.invoke();
-
 			hasError = false;
-
 			return result;
-
+			
 		} catch (Throwable throwable) {
-
 			return ExceptionFilter.treatedException(chain.getAction(), null, throwable);
-
 		} finally {
 
 			if (Dao.isTransactionActive()) {
@@ -49,10 +45,12 @@ public class HibernateFilter implements AfterConsequenceFilter {
 		}
 	}
 
+	@Override
 	public void destroy() {
 		Dao.close();
 	}
 
+	@Override
 	public void afterConsequence(Action action, Consequence c, boolean conseqExecuted, boolean actionExecuted, String result) {
 		Dao.close();
 	}
