@@ -18,9 +18,7 @@ public abstract class SchemaGenerator {
 
     public SchemaGenerator() {
 		try {
-			System.out.println("começou a executar...");
 			this.execute();
-			System.out.println("executou.");
 		} catch (Exception ex) {
 			System.out.println("[::schema::] Error exporting... "+this.getClass().getName());
 			ex.printStackTrace();
@@ -36,11 +34,8 @@ public abstract class SchemaGenerator {
 	}
 
 	protected void executeSQLFromFile(String path) throws FileNotFoundException, IOException{
-		System.out.println("vou carregar o arquivo no path >> "+path);
 		String script = FileUtil.getStringContent(this.getClass(), path);
-		System.out.println("carreguei o arquivo.");
 		String[] commands = script.split(";");
-		System.out.println("len: "+commands.length);
 		for(String command : commands){
 			executeSQL(command);
 		}
