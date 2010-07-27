@@ -2,6 +2,10 @@ package org.futurepages.util;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Calendar;
+
+import junit.framework.Assert;
+
 import org.junit.Test;
 
 /**
@@ -26,4 +30,17 @@ public class DateUtilTest {
         String out = DateUtil.literal(in);
         assertEquals("Erro no número por extenso com a entrada "+in, expOut, out);
     }
+    
+    @Test
+    public void testViewDateTime(){
+    	viewDateTimeTestProcedure(CalendarUtil.buildCalendar(1984, 9, 14),"14/09/1984 - 00:00", "erro");
+    	viewDateTimeTestProcedure(CalendarUtil.buildCalendar(1984, 9, 14).getTime(),"14/09/1984 - 00:00", "erro");
+    	viewDateTimeTestProcedure(CalendarUtil.buildCalendar(2999, 9, 14).getTime(),"14/09/2999 - 00:00", "erro");
+    }
+
+	private void viewDateTimeTestProcedure(Object entrada,
+			String esperado, String msg) {
+		String result = DateUtil.viewDateTime(entrada);
+		Assert.assertEquals(msg, esperado, result);
+	}
 }
