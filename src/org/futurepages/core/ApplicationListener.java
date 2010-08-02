@@ -61,7 +61,7 @@ public class ApplicationListener implements ServletContextListener {
 				//Se o modo de instalação estiver ligado, serão feitas as instalações de cada módulo.
 				String installMode = Params.get("INSTALL_MODE");
 				log("Install Mode: " + installMode);
-				if (!installMode.equals("off")) {
+				if (!installMode.equals("off")&&!installMode.equals("none")) {
 					InstallersManager.initialize(modules, installMode);
 				}
 			}

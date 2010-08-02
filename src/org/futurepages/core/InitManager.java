@@ -32,6 +32,7 @@ import org.futurepages.filters.InjectionFilter;
 import org.futurepages.core.formatter.FormatterManager;
 import org.futurepages.core.i18n.LocaleManager;
 import org.futurepages.formatters.CollectionSizeFormatter;
+import org.futurepages.formatters.RemainingTimeFormatter;
 import org.futurepages.formatters.UrlFormatter;
 
 /**
@@ -84,6 +85,7 @@ public class InitManager extends AbstractApplicationManager{
         FormatterManager.addFormatter("date"         	   , new DateFormatter());
         FormatterManager.addFormatter("dateTime"     	   , new DateTimeFormatter());
         FormatterManager.addFormatter("elapsedTime"   	   , new ElapsedTimeFormatter());
+        FormatterManager.addFormatter("remainingTime"	   , new RemainingTimeFormatter());
         FormatterManager.addFormatter("html"        	   , new HTMLFormatter());
         FormatterManager.addFormatter("javascript"         , new JavascriptFormatter());
         FormatterManager.addFormatter("literalDate" 	   , new LiteralDateFormatter());
