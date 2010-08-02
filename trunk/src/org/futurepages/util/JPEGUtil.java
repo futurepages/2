@@ -85,9 +85,6 @@ public class JPEGUtil {
 			}
 		}
 
-		// Fim do cálculo
-		System.out.println(imageWidth + " x " + imageHeight + " => " + width + "x" + height);
-
 		if (width >= imageWidth || height >= imageHeight) {
 			//quando imagem é menor que o resultado final, faz um resizer pobre
 			poorResize(image, width, height, quality, pathNewFile);
