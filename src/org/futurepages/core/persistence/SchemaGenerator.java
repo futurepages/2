@@ -41,6 +41,6 @@ public abstract class SchemaGenerator {
 		}
 	}
 
-	public void execute() throws Exception {}
+	public abstract void execute() throws Exception;
 	
 }
