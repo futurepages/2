@@ -384,7 +384,10 @@ public class CalendarUtil {
 	 * @param end
 	 * @return array int[ano,mes,dia, minuto, segundo]
 	 */
-	public static int[] getElapsedTime(Calendar start, Calendar end) {
+	public static int[] getElapsedTime(Calendar startI, Calendar endI) {
+
+		Calendar start = (Calendar) startI.clone();
+		Calendar end = (Calendar) endI.clone();
 
 		if (start == null) {
 			return new int[]{0, 0, 0, 0, 0};
