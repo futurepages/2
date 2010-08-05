@@ -8,11 +8,11 @@ import org.futurepages.util.StringUtils;
  */
 public class HQLProvider implements HQLable {
 
-	protected static HQLField field(String fieldName){
+	public static HQLField field(String fieldName){
 		return new HQLField(fieldName);
 	}
 
-	protected static String distinct(String selectClause) {
+	public static String distinct(String selectClause) {
 		if (!Is.empty(selectClause)) {
 			return " DISTINCT " + selectClause;
 		} else {
@@ -20,7 +20,7 @@ public class HQLProvider implements HQLable {
 		}
 	}
 
-	protected static String select(String selectClause) {
+	public static String select(String selectClause) {
 		if (!Is.empty(selectClause)) {
 			return " SELECT " + selectClause;
 		} else {
@@ -28,11 +28,11 @@ public class HQLProvider implements HQLable {
 		}
 	}
 
-	protected static String updateSetting(Class entityClass) {
+	public static String updateSetting(Class entityClass) {
 		return concat(" UPDATE " , entityClass.getName() , " SET ");
 	}
 
-	protected static String max(String maxClause) {
+	public static String max(String maxClause) {
 		if (!Is.empty(maxClause)) {
 			return concat(" MAX(",maxClause,")");
 		} else {
@@ -40,7 +40,7 @@ public class HQLProvider implements HQLable {
 		}
 	}
 
-	protected static String min(String minClause) {
+	public static String min(String minClause) {
 		if (!Is.empty(minClause)) {
 			return concat(" MIN(",minClause,")");
 		} else {
@@ -48,7 +48,7 @@ public class HQLProvider implements HQLable {
 		}
 	}
 
-	protected static String count(String countClause) {
+	public static String count(String countClause) {
 		if (!Is.empty(countClause)) {
 			return concat(" COUNT(",countClause,")");
 		} else {
@@ -56,7 +56,7 @@ public class HQLProvider implements HQLable {
 		}
 	}
 
-	protected static String sum(String sumClause) {
+	public static String sum(String sumClause) {
 		if (!Is.empty(sumClause)) {
 			return concat(" SUM(",sumClause,")");
 		} else {
@@ -64,23 +64,23 @@ public class HQLProvider implements HQLable {
 		}
 	}
 
-	protected static HQLField day(String date) {
+	public static HQLField day(String date) {
 		return new HQLField(concat(" DAY(",date,")"));
 	}
 
-	protected static HQLField month(String date) {
+	public static HQLField month(String date) {
 		return new HQLField(concat(" MONTH(",date,")"));
 	}
 
-	protected static HQLField year(String date) {
+	public static HQLField year(String date) {
 		return new HQLField(concat(" YEAR(",date,")"));
 	}
 
-	protected static HQLField date(String date) {
+	public static HQLField date(String date) {
 		return new HQLField(concat(" DATE(",date,")"));
 	}
 
-	protected static String from(Class entityClass) {
+	public static String from(Class entityClass) {
 		if (entityClass != null) {
 			return " FROM " + entityClass.getName();
 		} else {
@@ -88,7 +88,7 @@ public class HQLProvider implements HQLable {
 		}
 	}
 
-	protected static String from(Class entityClass,String alias) {
+	public static String from(Class entityClass,String alias) {
 		if (entityClass != null) {
 			return concat(" FROM ",entityClass.getName()," ",alias);
 		} else {
@@ -96,7 +96,7 @@ public class HQLProvider implements HQLable {
 		}
 	}
 
-	protected static String join(String joinClause) {
+	public static String join(String joinClause) {
 		if (!Is.empty(joinClause)) {
 			return " JOIN " + joinClause;
 		} else {
@@ -104,7 +104,7 @@ public class HQLProvider implements HQLable {
 		}
 	}
 
-	protected static String where(String whereClause) {
+	public static String where(String whereClause) {
 		if (!Is.empty(whereClause)) {
 			return " WHERE " + whereClause;
 		} else {
@@ -112,7 +112,7 @@ public class HQLProvider implements HQLable {
 		}
 	}
 
-	protected static String orderBy(String... fields) {
+	public static String orderBy(String... fields) {
 		if (fields != null) {
 			if(fields.length==1){
 				if(!Is.empty(fields[0])){
@@ -132,7 +132,7 @@ public class HQLProvider implements HQLable {
 		return "";
 	}
 
-	protected static String as(String alias) {
+	public static String as(String alias) {
 		if (!Is.empty(alias)) {
 			return AS+alias;
 		} else {
@@ -140,11 +140,11 @@ public class HQLProvider implements HQLable {
 		}
 	}
 
-	protected static String asc(String field) {
+	public static String asc(String field) {
 		return field+" ASC";
 	}
 
-	protected static String desc(String field) {
+	public static String desc(String field) {
 		return field+" DESC";
 	}
 	/**
@@ -152,7 +152,7 @@ public class HQLProvider implements HQLable {
 	 * @param clauses : array de expressões booleanas
 	 * @return (clauses[0]) AND (clauses[1]) AND ... AND (clauses[length-1]) 
 	 */
-	protected static String ands(String... clauses) {
+	public static String ands(String... clauses) {
 		return connectClauses(AND, clauses);
 	}
 
@@ -185,23 +185,23 @@ public class HQLProvider implements HQLable {
 		return concat(conector ,"(",clause,")");
 	}
 	
-	protected static String and(String clause) {
+	public static String and(String clause) {
 		if (Is.empty(clause))
 			return "";
 		return concat(AND,"(",clause,")");
 	}
 	
-	protected static String ors(String... clauses) {
+	public static String ors(String... clauses) {
 		return connectClauses(OR, clauses);
 	}
 
-	protected static String or(String clause) {
+	public static String or(String clause) {
 		if (Is.empty(clause))
 			return "";
 		return concat(OR,"(",clause,")");
 	}
 
-	protected static String groupBy(String groupClause) {
+	public static String groupBy(String groupClause) {
 		if (!Is.empty(groupClause)) {
 			return " GROUP BY " + groupClause;
 		} else {
@@ -209,7 +209,7 @@ public class HQLProvider implements HQLable {
 		}
 	}
 
-	protected static String concat(String... args){
+	public static String concat(String... args){
 	   return StringUtils.concat(args);
 	}
 }
