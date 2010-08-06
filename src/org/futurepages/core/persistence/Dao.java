@@ -50,7 +50,8 @@ public class Dao extends HQLProvider {
     }
 
     public static Query query(String hqlQuery) {
-        return session().createQuery(hqlQuery).setCacheable(true);
+		Query query = session().createQuery(hqlQuery).setCacheable(true);
+        return query;
     }
 
     public static String getIdName(Class entity) {
