@@ -742,8 +742,8 @@ public class InjectionUtils {
 					Class<?> type = m.getParameterTypes()[0];
 
 					if (!type.getName().startsWith("java.lang.") && !type.isPrimitive() && hasDefaultConstructor(type)) {
-
-						if(Modifier.isAbstract(type.getModifiers())){
+						System.out.println("paramx "+type);
+						if(!Modifier.isAbstract(type.getModifiers())){
 							Object param = type.newInstance();
 							InjectionUtils.getObject(param, input, loc, true, prefix, true, true, false); // no recursion...
 							inject(m, target, param, loc, false, false);
