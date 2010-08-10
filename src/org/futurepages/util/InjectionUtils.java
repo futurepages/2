@@ -1,6 +1,5 @@
 package org.futurepages.util;
 
-import org.futurepages.util.StringUtils;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -12,11 +11,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.lang.Exception;
+import java.lang.reflect.Modifier;
 
 import java.util.Calendar;
 import java.util.Date;
-import org.futurepages.util.ReflectionUtil;
 import org.futurepages.core.input.Input;
 import org.futurepages.core.output.Output;
 import org.futurepages.core.i18n.LocaleManager;
@@ -745,11 +743,11 @@ public class InjectionUtils {
 
 					if (!type.getName().startsWith("java.lang.") && !type.isPrimitive() && hasDefaultConstructor(type)) {
 
-						Object param = type.newInstance();
-
-						InjectionUtils.getObject(param, input, loc, true, prefix, true, true, false); // no recursion...
-
-						inject(m, target, param, loc, false, false);
+						if(Modifier.isAbstract(type.getModifiers())){
+							Object param = type.newInstance();
+							InjectionUtils.getObject(param, input, loc, true, prefix, true, true, false); // no recursion...
+							inject(m, target, param, loc, false, false);
+						}
 					}
 				}
 
