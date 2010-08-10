@@ -489,6 +489,11 @@ public class Dao extends HQLProvider {
         return obj;
     }
 
+	public synchronized static <T extends Serializable> T syncSaveOrUpdate(T obj) {
+		session().saveOrUpdate(obj);
+		return obj;
+	}
+
     public static <T extends Serializable> T get(Class<T> entity, Serializable id) {
         return (T) session().get(entity, id);
     }
