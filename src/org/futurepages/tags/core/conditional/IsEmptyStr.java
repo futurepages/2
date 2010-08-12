@@ -21,6 +21,7 @@ public class IsEmptyStr extends ConditionalTag {
         this.test = test;
     }
     
+	@Override
     public boolean testCondition() throws JspException {
     	return (Is.empty(findValue(test)));
     }
