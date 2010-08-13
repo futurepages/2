@@ -1,6 +1,7 @@
 package org.futurepages.core.install;
 
 import java.io.File;
+import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Map;
 
@@ -86,9 +87,11 @@ public class InstallersManager extends ModulesAutomation {
 				for (String moduleName : classes.keySet()) {
 					log("module '" + moduleName + "' installing...");
 					for (Class<?> installer : classes.get(moduleName)) {
-						log(">>> installer " + installer.getSimpleName() + " running...  ");
-						installer.newInstance();
-						log(">>> installer " + installer.getSimpleName() + " OK");
+						if(!Modifier.isAbstract(installer.getModifiers())){
+							log(">>> installer " + installer.getSimpleName() + " running...  ");
+							installer.newInstance();
+							log(">>> installer " + installer.getSimpleName() + " OK");
+						}
 					}
 					log("module '" + moduleName + "' installed.");
 				}
