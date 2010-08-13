@@ -35,7 +35,7 @@ public abstract class SchemaGenerator {
 
 	protected void executeSQLFromFile(String path) throws FileNotFoundException, IOException{
 		String script = FileUtil.getStringContent(this.getClass(), path);
-		String[] commands = script.split(";$");
+		String[] commands = script.split(";");
 		for(String command : commands){
 			executeSQL(command);
 		}
