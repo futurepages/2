@@ -1,6 +1,7 @@
 package org.futurepages.core.tags.build;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,6 +14,8 @@ import org.futurepages.core.config.Params;
 import org.futurepages.exceptions.NotModuleException;
 import org.futurepages.util.ClassesUtil;
 import org.futurepages.util.FileUtil;
+import org.futurepages.util.Is;
+import org.futurepages.util.ModuleUtil;
 
 public abstract class ModulesAutomation {
 
@@ -35,14 +38,15 @@ public abstract class ModulesAutomation {
 	}
 
 	protected <S extends Object> List<Class<S>> getApplicationClasses(Class<S> superKlass, Class<? extends Annotation> annotation) {
-		File dirr = new File(Params.get("CLASSES_PATH") + this.getDirName());
+		
+		File dirr = new File(getClassPath() + this.getDirName());
 		return getClasses(dirr, superKlass, annotation);
 	}
 
 	protected <S extends Object> List<Class<S>> getClasses(File dirr, Class<S> superKlass, Class<? extends Annotation> annotation) {
 		if (applicationClasses == null) {
 			applicationClasses = new ArrayList<Class<S>>(ClassesUtil.getInstance().listClassesFromDirectory(
-					dirr, Params.get("CLASSES_PATH"), superKlass, annotation, true));
+					dirr, getClassPath(), superKlass, annotation, true));
 		}
 		return applicationClasses;
 	}
@@ -58,7 +62,7 @@ public abstract class ModulesAutomation {
 
 					final File dir = getSubFile(module, getDirName());
 					classes = new ArrayList<Class<S>>(ClassesUtil.getInstance().listClassesFromDirectory(
-							dir, Params.get("CLASSES_PATH"), superKlass, annotation, true));
+							dir, getClassPath(), superKlass, annotation, true));
 
 					sortClassList(classes);
 					modulesClasses.put(module.getName(), classes);
@@ -69,6 +73,17 @@ public abstract class ModulesAutomation {
 			}
 		}
 		return modulesClasses;
+	}
+
+	private String getClassPath() {
+		String classPath = Params.get("CLASSES_PATH");
+		if(Is.empty(classPath)){
+			try {
+				classPath = ModuleUtil.getClassPath();
+			} catch (UnsupportedEncodingException e) {
+			}
+		}
+		return classPath;
 	}
 
 	private <S extends Object> void sortClassList(List<Class<S>> classes) {
