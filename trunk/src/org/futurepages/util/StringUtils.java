@@ -2,8 +2,6 @@ package org.futurepages.util;
 
 import java.util.Map;
 
-import org.junit.Test;
-
 public class StringUtils {
 
 	public static String concat(String... args){
