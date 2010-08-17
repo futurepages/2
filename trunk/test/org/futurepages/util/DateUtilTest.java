@@ -35,6 +35,7 @@ public class DateUtilTest {
     public void testViewDateTime(){
     	viewDateTimeTestProcedure(CalendarUtil.buildCalendar(1984, 9, 14),"14/09/1984 - 00:00", "erro");
     	viewDateTimeTestProcedure(CalendarUtil.buildCalendar(1984, 9, 14).getTime(),"14/09/1984 - 00:00", "erro");
+    	viewDateTimeTestProcedure(CalendarUtil.buildCalendar(1984, 9, 14).getTimeInMillis(),"14/09/1984 - 00:00", "erro");
     	viewDateTimeTestProcedure(CalendarUtil.buildCalendar(2999, 9, 14).getTime(),"14/09/2999 - 00:00", "erro");
     }
 
