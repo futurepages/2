@@ -6,9 +6,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.futurepages.core.mail.MailConfig;
 import org.futurepages.core.config.Params;
 import org.futurepages.core.install.InstallersManager;
+import org.futurepages.core.mail.MailConfig;
 import org.futurepages.core.persistence.HibernateManager;
 import org.futurepages.core.persistence.SchemaGeneration;
 import org.futurepages.core.quartz.QuartzManager;
@@ -52,10 +52,10 @@ public class ApplicationListener implements ServletContextListener {
 				// Atualiza/gera esquema do banco como solicitado no arquivo de configuração.
 				if (Params.get("SCHEMA_GENERATION_TYPE").equals("update")) {
 					log("SCHEMA UPDATE Begin");
-					SchemaGeneration.update(modules);
+					SchemaGeneration.update();
 				} else if (Params.get("SCHEMA_GENERATION_TYPE").equals("export")) {
 					log("SCHEMA EXPORT Begin");
-					SchemaGeneration.export(modules);
+					SchemaGeneration.export();
 				}
 
 				//Se o modo de instalação estiver ligado, serão feitas as instalações de cada módulo.
