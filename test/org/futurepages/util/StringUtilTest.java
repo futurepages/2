@@ -46,6 +46,18 @@ public class StringUtilTest {
 		specials.put('@', "_");
 		specials.put('g', "G");
 		return specials;
-
 	}
+	
+	@Test
+	public void testConcatWith(){
+		String result = StringUtils.concatWith(" - ","A","B","C");
+		Assert.assertEquals("A strings não foram concatenadas corretamente", "A - B - C", result );
+	}
+
+	@Test
+	public void testConcatWith_nenhumaString(){
+		String result = StringUtils.concatWith(" - ");
+		Assert.assertEquals("A strings não foram concatenadas corretamente","", result );
+	}
+
 }
