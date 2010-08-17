@@ -2,6 +2,8 @@ package org.futurepages.util;
 
 import java.util.Map;
 
+import org.junit.Test;
+
 public class StringUtils {
 
 	public static String concat(String... args){
@@ -11,7 +13,22 @@ public class StringUtils {
 		}
 		return sb.toString();
 	}
-
+	
+	public static String concatWith(String inserted, String... array) {
+		if(inserted == null){
+			return concat(array);
+		}else{
+			StringBuffer out = new StringBuffer();
+			for (int i = 0; i < array.length; i++) {
+				if (i != 0) {
+					out.append(inserted);
+				}
+				out.append(array[i]);
+			}
+			return out.toString();
+		}
+	}
+	
 	public static boolean isNotEmpty(String s) {
 		return s != null && s.length() > 0;
 	}
@@ -37,5 +54,6 @@ public class StringUtils {
 		}
 		return outBuffer.toString();
 	}
+
 
 }

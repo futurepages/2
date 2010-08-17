@@ -435,9 +435,7 @@ public final class ReflectionUtil {
 	 * @param name Name of method to find
 	 * @param parameterTypes Parameter types to search for
 	 */
-	public static Method getDeclaredMethod(Class source,
-			String name,
-			Class[] parameterTypes)
+	public static Method getDeclaredMethod(Class source, String name, Class[] parameterTypes)
 			throws NoSuchMethodException {
 		return internalFind(source.getDeclaredMethods(),
 				name,

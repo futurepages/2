@@ -1,9 +1,21 @@
 package org.futurepages.util;
 
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+
 import org.futurepages.core.config.Params;
 
 public class ModuleUtil {
 
+	private File[] modules;
+	public static File rootDir;
+
+	private static ModuleUtil INSTANCE = new ModuleUtil();
+
+	public static ModuleUtil getIstance() {
+		return INSTANCE;
+	}
+	
 	public static String moduleId(Class klass){
 		String className = klass.getName();
 		if(!className.startsWith(Params.MODULES_PACK)){
@@ -12,22 +24,21 @@ public class ModuleUtil {
 		return The.firstTokenAfter(className, Params.MODULES_PACK , ".");
 	}
 
-//	/**
-//	 * Varredura dos diretórios "modules/ ** / identificação dos diretórios 'tags'"
-//	 * @return Map<String,List<File>> com os diretórios modules / ** /tags
-//	 */
-//	public static Map<String, List<File>> getDirectoriesFromModules(File[] modules , String dirName) {
-//		Map<String, List<File>> tagFilesFound = new HashMap<String, List<File>>();
-//		if (modules != null) {
-//			for (File module : modules) {
-//				for (File moduleElement : module.listFiles()) {
-//					if (moduleElement.getName().equals(dirName)) {
-//						tagFilesFound.put(module.getName(), Arrays.asList(moduleElement.listFiles()));
-//					}
-//				}
-//			}
-//		}
-//		return tagFilesFound;
-//	}
+	public File[] getModules() throws UnsupportedEncodingException {
+
+		if(modules == null){
+			getClassPath();
+			
+			File modulesDir = new File(rootDir + "/" + Params.MODULES_PATH);
+			modules = modulesDir.listFiles();
+		}
+		return modules;
+	}
+
+	public static String getClassPath() throws UnsupportedEncodingException{
+		String classPath = ModuleUtil.class.getResource("/").getPath();
+		rootDir = new File(EncodingUtil.correctPath(classPath));
+		return rootDir.getAbsolutePath();
+	}
 
 }
