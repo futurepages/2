@@ -29,6 +29,15 @@ public class MonthYear {
 		this.year = year;
 	}
 
-
-
+	public MonthYear getNext() {
+		int nextMonth;
+		int nextYear = year;
+		if (month != 12) {
+			nextMonth = month+1;
+		} else {
+			nextYear = year+1;
+			nextMonth = 1;
+		}
+		return new MonthYear(nextMonth, nextYear);
+	}
 }
