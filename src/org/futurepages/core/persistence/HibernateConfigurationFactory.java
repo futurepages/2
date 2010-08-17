@@ -11,12 +11,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.persistence.Entity;
-import org.futurepages.annotations.View;
 
+import org.futurepages.annotations.View;
 import org.futurepages.core.config.Mapper;
 import org.futurepages.core.config.Params;
 import org.futurepages.exceptions.BadFormedConfigFileException;
@@ -58,10 +56,16 @@ public class HibernateConfigurationFactory extends Mapper {
 	 * @throws JDOMException 
 	 */
 	public Map<String, Configurations> getApplicationConfigurations() throws ConfigFileNotFoundException, UnsupportedEncodingException {
+		File[] modules = getModules();
+		return config(modules);
+	}
+
+	private File[] getModules() throws UnsupportedEncodingException {
 		String classPath = this.getClass().getResource("/").getPath();
 		rootDir = new File(EncodingUtil.correctPath(classPath));
 		File modulesDir = new File(rootDir + "/" + Params.MODULES_PATH);
-		return config(modulesDir.listFiles());
+		File[] modules = modulesDir.listFiles();
+		return modules;
 	}
 
 	/**
