@@ -110,8 +110,8 @@ public class HQLUtilTest {
     }
     
     private void esc_TestProcedure(String initial, String expected){
-    	String atual = HQLUtil.esc(initial);
-    	Assert.assertEquals("Erro no escpa de :", expected, atual);
+    	String atual = HQLUtil.escLike(initial);
+    	Assert.assertEquals("Erro no escape de :", expected, atual);
     }
     
     @Test
