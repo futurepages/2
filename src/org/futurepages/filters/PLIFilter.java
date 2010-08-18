@@ -38,8 +38,6 @@ public class PLIFilter extends HQLProvider implements Filter {
             }
         }
 
-        List aux = keyObjects(keyValues, classToInject);
-
         ReflectionUtil.setField(targetObject, keyToInject, keyObjects(keyValues, classToInject));
 
         return chain.invoke();
