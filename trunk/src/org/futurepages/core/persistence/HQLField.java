@@ -350,6 +350,10 @@ public class HQLField implements HQLable {
         return timeExpression(cal, GREATER_EQUALS);
     }
 
+    public String greaterThen(Calendar cal) {
+        return timeExpression(cal, GREATER);
+    }
+
     public String lowerEqualsThen(Calendar cal) {
         return timeExpression(cal, LOWER_EQUALS);
     }
