@@ -23,7 +23,7 @@ public class HQLUtil {
 		if(words!=null && words.length!=0){
 			sb.append(field + " LIKE '");
 			for (int i = 0; i < words.length; i++) {
-				sb.append("%"+esc(words[i]));
+				sb.append("%"+escLike(words[i]));
 			}
 			sb.append("%'");
 		}
@@ -37,7 +37,7 @@ public class HQLUtil {
 	public static String fieldHasWords(String field, String[] words, String logicalConect) {
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < words.length; i++) {
-			sb.append(StringUtils.concat(field , " LIKE '%",esc(words[i]),"%'",needed(i,words," "+logicalConect+" ")));
+			sb.append(StringUtils.concat(field , " LIKE '%",escLike(words[i]),"%'",needed(i,words," "+logicalConect+" ")));
 		}
 		return sb.toString();
 	}
@@ -51,7 +51,7 @@ public class HQLUtil {
 		StringBuffer out = new StringBuffer();
 		out.append(field+ " LIKE '");
 		while (in.hasMoreTokens()) {
-			out.append("%" + esc(in.nextToken()));
+			out.append("%" + escLike(in.nextToken()));
 		}
 		out.append("%'");
 
@@ -63,7 +63,7 @@ public class HQLUtil {
 		String virgula = "";
 		for (String element : elements) {
 			out.append(virgula);
-			out.append("'" + esc(element) + "'");
+			out.append("'" + escQuote(element) + "'");
 			if(virgula.equals(""))  virgula = "," ;
 		}
 		return out.toString();
@@ -83,18 +83,18 @@ public class HQLUtil {
 	}
 
 	/**
-	 * Escape de HQL/SQL para evitar Injections
+	 * Escape de HQL/SQL para evitar Injections em campos LIKE
 	 *
 	 * @param original HQL de entrada
 	 * @return
 	 */
-	public static String esc(String original) {
+	public static String escLike(String original) {
 		original = escQuote(original);
 		original = original.replace("%","\\%");
 		original = original.replace("_","\\_");
 		return original;
 	}
-	
+
 	/**
 	 * Escape simple cote '
 	 * Escape de HQL/SQL para evitar Injections
@@ -111,7 +111,7 @@ public class HQLUtil {
 			if (i != 0) {
 				out.append(",");
 			}
-			out.append("'" + esc(array[i]) + "'");
+			out.append("'" + escQuote(array[i]) + "'");
 		}
 		return out.toString();
 	}
@@ -146,6 +146,7 @@ public class HQLUtil {
 	 *   AND campo NOT LIKE '%caramba%'
 	 */	
 	public static String matches(String field, String value) {
+		value = escLike(value);
 		value = value.replaceAll("\\*[\\*]*", "*");
 		final int TAMANHO_MINIMO_TOKEN = 2;
 		Pattern aspasPattern = Pattern.compile("\".*?\"");

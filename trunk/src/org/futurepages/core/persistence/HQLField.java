@@ -24,7 +24,7 @@ public class HQLField implements HQLable {
     }
 
     public String between(String dateBegin, String dateEnd) {
-        return concat("((" , fieldName , GREATER_EQUALS , "'" , esc(dateBegin) , "') " , AND , " (" , fieldName , LOWER_EQUALS , "'" , esc(dateEnd) , "'))");
+        return concat("((" , fieldName , GREATER_EQUALS , "'" , escQuote(dateBegin) , "') " , AND , " (" , fieldName , LOWER_EQUALS , "'" , escQuote(dateEnd) , "'))");
     }
 
     public String inDate(Date date) {
@@ -59,21 +59,21 @@ public class HQLField implements HQLable {
     	if (Is.empty(enumeration)) {
     		return "";
     	}
-        return concat(fieldName , " = '" , esc(enumeration.name()) , "'");
+        return concat(fieldName , " = '" , escQuote(enumeration.name()) , "'");
     }
 
     public String equalsTo(String value) {
         if (Is.empty(value)) {
             return "";
         }
-        return concat(fieldName , " = '" , escCote(value) , "'");
+        return concat(fieldName , " = '" , escQuote(value) , "'");
     }
 
     public String matches(String value) {
         if (Is.empty(value)) {
             return "";
         }
-        return HQLUtil.matches(fieldName, esc(value));
+        return HQLUtil.matches(fieldName, value);
     }
 
     public String is(Boolean bool) {
@@ -114,7 +114,7 @@ public class HQLField implements HQLable {
         if (Is.empty(value)) {
             return "";
         }
-        return concat(fieldName , " != '" , esc(value) , "'");
+        return concat(fieldName , " != '" , escQuote(value) , "'");
     }
 
     public String differentFrom(int value) {
@@ -134,7 +134,7 @@ public class HQLField implements HQLable {
     }
 
     public String greaterThen(String value) {
-        return concat(fieldName , GREATER , "'" , esc(value) , "'");
+        return concat(fieldName , GREATER , "'" , escQuote(value) , "'");
     }
 
     public String greaterThen(long value) {
@@ -146,7 +146,7 @@ public class HQLField implements HQLable {
     }
 
     public String greaterEqualsThen(String value) {
-        return concat(fieldName , GREATER_EQUALS , "'" , esc(value) , "'");
+        return concat(fieldName , GREATER_EQUALS , "'" , escQuote(value) , "'");
     }
 
     public String greaterEqualsThen(long value) {
@@ -158,7 +158,7 @@ public class HQLField implements HQLable {
     }
 
     public String lowerThen(String value) {
-        return concat(fieldName , LOWER , "'" , esc(value) , "'");
+        return concat(fieldName , LOWER , "'" , escQuote(value) , "'");
     }
 
     public String lowerThen(long value) {
@@ -170,7 +170,7 @@ public class HQLField implements HQLable {
     }
 
     public String lowerEqualsThen(String value) {
-        return concat(fieldName , LOWER_EQUALS , "'" , esc(value) , "'");
+        return concat(fieldName , LOWER_EQUALS , "'" , escQuote(value) , "'");
     }
 
     public String lowerEqualsThen(long value) {
@@ -298,21 +298,21 @@ public class HQLField implements HQLable {
         if (Is.empty(value)) {
             return "";
         }
-        return concat(fieldName , LIKE , "'" , esc(value) , "%'");
+        return concat(fieldName , LIKE , "'" , escLike(value) , "%'");
     }
 
     public String endsWith(String value) {
         if (Is.empty(value)) {
             return "";
         }
-        return concat(fieldName , LIKE , "'%" , esc(value) , "'");
+        return concat(fieldName , LIKE , "'%" , escLike(value) , "'");
     }
 
     public String contains(String value) {
         if (Is.empty(value)) {
             return "";
         }
-        return concat(fieldName , LIKE , "'%" , esc(value) , "%'");
+        return concat(fieldName , LIKE , "'%" , escLike(value) , "%'");
     }
 
     public String as(String alias) {
@@ -324,11 +324,11 @@ public class HQLField implements HQLable {
         return this.fieldName;
     }
 
-    private String esc(String hql) {
-        return HQLUtil.esc(hql);
+    private String escLike(String hql) {
+        return HQLUtil.escLike(hql);
     }
 
-    private String escCote(String hql) {
+    private String escQuote(String hql) {
         return HQLUtil.escQuote(hql);
     }
 
@@ -343,7 +343,7 @@ public class HQLField implements HQLable {
     }
 
     private String timeExpression(Calendar cal, String comparator) {
-        return concat(fieldName , comparator , "'" , esc(DateUtil.dbDateTime(cal.getTime())) , "'");
+        return concat(fieldName , comparator , "'" , escQuote(DateUtil.dbDateTime(cal.getTime())) , "'");
     }
 
     public String greaterEqualsThen(Calendar cal) {
