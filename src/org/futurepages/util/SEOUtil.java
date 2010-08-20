@@ -29,11 +29,11 @@ public class SEOUtil {
         specials.put('(', empty);
         specials.put(')', empty);
         specials.put('\'', empty);
-        specials.put('\'',empty);
-        specials.put('\\',empty);
-        specials.put('/',"-");
-        specials.put('<',empty);
-        specials.put('>',empty);
+        specials.put('"', empty);
+        specials.put('\\', empty);
+        specials.put('/', "-");
+        specials.put('<', empty);
+        specials.put('>', empty);
         specials.put('\t',empty);
         specials.put('\n',empty);
         specials.put('\r',empty);
