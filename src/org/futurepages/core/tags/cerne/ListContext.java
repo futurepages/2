@@ -7,8 +7,8 @@ import javax.servlet.jsp.JspException;
 /**
  * @author Sergio Oliveira
  */
-public interface ListContext {
+public interface ListContext<T extends Object> {
     
-    public List<Object> getList() throws JspException;
+    public List<T> getList() throws JspException;
     
 }

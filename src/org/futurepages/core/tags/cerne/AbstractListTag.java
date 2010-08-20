@@ -18,7 +18,7 @@ import org.futurepages.tags.Out;
  * @author Sergio Oliveira
  */
 @SuperTag
-public abstract class AbstractListTag extends AbstractListContext {
+public abstract class AbstractListTag<T extends Object> extends AbstractListContext<T> {
 
 	@TagAttribute(required = false)  //@TODO - não ficar aqui, deveria estar na tag List
 	private String value;
@@ -47,7 +47,7 @@ public abstract class AbstractListTag extends AbstractListContext {
 	}
 
 	@Override
-	public List<Object> getList() throws JspException {
+	public List<T> getList() throws JspException {
 		Tag parent = findAncestorWithClass(this, Context.class);
 
 		if (parent != null) {
@@ -58,18 +58,18 @@ public abstract class AbstractListTag extends AbstractListContext {
 				if (object instanceof List) {
 
 					if (orderBy != null) {
-						return ListSorter.sort((List<Object>) object, orderBy, desc);
+						return (List<T>) ListSorter.sort((List<Object>) (List<T>) object, orderBy, desc);
 					}
 
-					return (List<Object>) object;
+					return (List<T>) object;
 
 				} else if (object instanceof Object[]) {
 
 					if (orderBy != null) {
-						return ListSorter.sort(Arrays.asList((Object[]) object), orderBy, desc);
+						return (List<T>) ListSorter.sort((List<Object>) Arrays.asList((T[]) object), orderBy, desc);
 					}
 
-					return Arrays.asList((Object[]) object);
+					return Arrays.asList((T[]) object);
 
 				} else if (object instanceof Set) {
 
@@ -79,10 +79,10 @@ public abstract class AbstractListTag extends AbstractListContext {
 
 					Set set = (Set) object;
 
-					List<Object> list = new ArrayList<Object>(set);
+					List<T> list = new ArrayList<T>(set);
 
 					if (orderBy != null) {
-						return ListSorter.sort(list, orderBy, desc);
+						return (List<T>) ListSorter.sort((List<Object>) list,orderBy,desc);
 					}
 
 					return list;
@@ -96,10 +96,10 @@ public abstract class AbstractListTag extends AbstractListContext {
 
 					Collection coll = (Collection) object;
 
-					List<Object> list = new ArrayList<Object>(coll);
+					List<T> list = new ArrayList<T>(coll);
 
 					if (orderBy != null) {
-						return ListSorter.sort(list, orderBy, desc);
+						return (List<T>) ListSorter.sort((List<Object>) list,orderBy, desc);
 					}
 
 					return list;
@@ -108,10 +108,10 @@ public abstract class AbstractListTag extends AbstractListContext {
 
 					Collection coll = ((Map) object).values();
 
-					List<Object> list = new ArrayList<Object>(coll);
+					List<T> list = new ArrayList<T>(coll);
 
 					if (orderBy != null) {
-						return ListSorter.sort(list, orderBy, desc);
+						return (List<T>) ListSorter.sort((List<Object>) list,orderBy, desc);
 					}
 
 					return list;
@@ -135,18 +135,18 @@ public abstract class AbstractListTag extends AbstractListContext {
 		if (obj instanceof List) {
 
 			if (orderBy != null) {
-				return ListSorter.sort((List<Object>) obj, orderBy, desc);
+				return (List<T>) ListSorter.sort((List<Object>) (List<T>) obj, orderBy, desc);
 			}
 
-			return (List<Object>) obj;
+			return (List<T>) obj;
 
 		} else if (obj instanceof Object[]) {
 
 			if (orderBy != null) {
-				return ListSorter.sort(Arrays.asList((Object[]) obj), orderBy, desc);
+				return (List<T>) ListSorter.sort((List<Object>) Arrays.asList((T[]) obj), orderBy, desc);
 			}
 
-			return Arrays.asList((Object[]) obj);
+			return Arrays.asList((T[]) obj);
 
 		} else if (obj instanceof Set) {
 
@@ -156,10 +156,10 @@ public abstract class AbstractListTag extends AbstractListContext {
 
 			Set set = (Set) obj;
 
-			List<Object> list = new ArrayList<Object>(set);
+			List<T> list = new ArrayList<T>(set);
 
 			if (orderBy != null) {
-				return ListSorter.sort(list, orderBy, desc);
+				return (List<T>) ListSorter.sort((List<Object>) list,orderBy, desc);
 			}
 
 			return list;
@@ -173,10 +173,10 @@ public abstract class AbstractListTag extends AbstractListContext {
 
 			Collection coll = (Collection) obj;
 
-			List<Object> list = new ArrayList<Object>(coll);
+			List<T> list = new ArrayList<T>(coll);
 
 			if (orderBy != null) {
-				return ListSorter.sort(list, orderBy, desc);
+				return (List<T>) ListSorter.sort((List<Object>) list,orderBy, desc);
 			}
 
 			return list;
@@ -185,10 +185,10 @@ public abstract class AbstractListTag extends AbstractListContext {
 
 			Collection coll = ((Map) obj).values();
 
-			List<Object> list = new ArrayList<Object>(coll);
+			List<T> list = new ArrayList<T>(coll);
 
 			if (orderBy != null) {
-				return ListSorter.sort(list, orderBy, desc);
+				return (List<T>) ListSorter.sort((List<Object>) list,orderBy, desc);
 			}
 
 			return list;

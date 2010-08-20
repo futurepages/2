@@ -69,6 +69,7 @@ public class Loop extends LoopTag implements Context {
         }
     }
 
+	@Override
     public boolean loopCondition() {
         if (hasMore()) {
             setNext();
@@ -77,6 +78,7 @@ public class Loop extends LoopTag implements Context {
         return false;
     }
 
+	@Override
     public void afterEachLoop() throws JspException {
 
         // no need to do anything...
