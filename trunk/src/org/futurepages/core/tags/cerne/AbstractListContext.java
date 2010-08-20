@@ -21,7 +21,7 @@ import org.futurepages.core.i18n.LocaleManager;
 /**
  * @author Sergio Oliveira
  */
-public abstract class AbstractListContext extends BodyTagSupport implements ListContext {
+public abstract class AbstractListContext<T extends Object> extends BodyTagSupport implements ListContext<T> {
 
     protected ServletContext application = null;
 
@@ -59,7 +59,7 @@ public abstract class AbstractListContext extends BodyTagSupport implements List
         this.loc = LocaleManager.getLocale(req);
         this.action = (Action) req.getAttribute(Forward.ACTION_REQUEST);
 
-        List<Object> list = getList();
+        List<T> list = getList();
         if (list != null) {
             pageContext.setAttribute(getVar(), list, PageContext.PAGE_SCOPE);
         }
