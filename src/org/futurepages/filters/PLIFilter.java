@@ -10,7 +10,8 @@ import org.futurepages.core.filter.Filter;
 import org.futurepages.core.control.InvocationChain;
 
 /**
- *
+ * Injeta uma coleção de objetos persistentes
+ * Similar ao {@link PIFilter}, para uma lista
  * @author diogenes
  */
 public class PLIFilter extends HQLProvider implements Filter {
