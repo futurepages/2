@@ -386,12 +386,13 @@ public class CalendarUtil {
 	 */
 	public static int[] getElapsedTime(Calendar startI, Calendar endI) {
 
-		Calendar start = (Calendar) startI.clone();
-		Calendar end = (Calendar) endI.clone();
 
-		if (start == null) {
+		if (startI == null) {
 			return new int[]{0, 0, 0, 0, 0};
 		}
+
+		Calendar start = (Calendar) startI.clone();
+		Calendar end = (Calendar) endI.clone();
 
 		if (start.compareTo(end) > 0) {
 			Calendar temp = start;
