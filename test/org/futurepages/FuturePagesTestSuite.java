@@ -13,6 +13,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({
+	BeforeTestSuite.class,
 	EnumTestSuite.class,
 	FilterTestSuite.class,
 	UtilTestSuite.class,
