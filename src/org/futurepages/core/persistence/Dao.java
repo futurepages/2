@@ -388,6 +388,10 @@ public class Dao extends HQLProvider {
         session().getTransaction().commit();
     }
 
+    public static void flush() {
+        session().flush();
+    }
+
     public static <T extends Serializable> T saveTransaction(T obj) {
         Dao.beginTransaction();
         session().save(obj);
