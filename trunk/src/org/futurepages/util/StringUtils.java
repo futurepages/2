@@ -39,7 +39,7 @@ public class StringUtils {
 	public static String replace(String strIn, Map<Character, String> dirt) {
 		if(Is.empty(strIn)) return "";
 
-		StringBuffer outBuffer = new StringBuffer();
+		StringBuilder outBuffer = new StringBuilder();
 		String clean;
 		for (Character charDirty : strIn.toCharArray()) {
 
