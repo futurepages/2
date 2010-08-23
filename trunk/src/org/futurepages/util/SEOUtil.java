@@ -79,7 +79,7 @@ public class SEOUtil {
     }
     
     public static String get(Character ch){
-        return  urlDirt.get(ch.toString()).toString();
+        return  urlDirt.get(ch).toString();
     }
 
     /**
