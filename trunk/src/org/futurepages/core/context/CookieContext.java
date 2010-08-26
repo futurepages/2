@@ -43,6 +43,7 @@ public class CookieContext implements Context, Map<String, Object> {
      * @param name The name of the cookie to return
      * @return The cookie value as a String. 
      */
+	@Override
     public Object getAttribute(String name) {
         
         Cookie[] cookies = req.getCookies();
@@ -61,6 +62,7 @@ public class CookieContext implements Context, Map<String, Object> {
         return null;
     }
     
+	@Override
     public Iterator<String> keys() {
     	
     	List<String> list = new ArrayList<String>();
@@ -94,6 +96,7 @@ public class CookieContext implements Context, Map<String, Object> {
      * @param name The name of this cookie
      * @param value The cookie object or the value of the cookie as a String
      */
+	@Override
     public void setAttribute(String name, Object value) {
         
         if (value instanceof Cookie) {
@@ -117,6 +120,7 @@ public class CookieContext implements Context, Map<String, Object> {
      * 
      * @param name The name of the cookie to remove.
      */
+	@Override
     public void removeAttribute(String name) {
         
         Cookie c = new Cookie(name, "");
@@ -125,11 +129,13 @@ public class CookieContext implements Context, Map<String, Object> {
         res.addCookie(c);
     }
     
+	@Override
     public void reset() {
         
         throw new UnsupportedOperationException("reset() is not supported by CookieContext !");
     }
     
+	@Override
     public boolean hasAttribute(String name) {
         
         return getAttribute(name) != null;
@@ -138,16 +144,19 @@ public class CookieContext implements Context, Map<String, Object> {
     
     //// Map methods...
     
+	@Override
     public void clear() {
     	
     	throw new UnsupportedOperationException();
     }
     
+	@Override
     public boolean containsKey(Object key) {
     	
     	return getAttribute(key.toString()) != null;
     }
     
+	@Override
     public boolean containsValue(Object value) {
     	
     	if (!(value instanceof String)) return false;
@@ -172,11 +181,13 @@ public class CookieContext implements Context, Map<String, Object> {
         return false;
     }
     
+	@Override
     public Set<Map.Entry<String,Object>> entrySet() {
     	
     	throw new UnsupportedOperationException();
     }
     
+	@Override
     public Object get(Object key) {
     	
     	if (key == null) return null;
@@ -188,6 +199,7 @@ public class CookieContext implements Context, Map<String, Object> {
     	return value.toString();
     }
     
+	@Override
     public boolean isEmpty() {
     	
     	Cookie[] cookies = req.getCookies();
@@ -195,6 +207,7 @@ public class CookieContext implements Context, Map<String, Object> {
     	return cookies == null || cookies.length == 0;
     }
     
+	@Override
     public Set<String> keySet() {
     	
     	Set<String> keys = new HashSet<String>();
@@ -209,6 +222,7 @@ public class CookieContext implements Context, Map<String, Object> {
     	return keys;
     }
     
+	@Override
     public String put(String key, Object value) {
     	
     	setAttribute(key, value);
@@ -216,11 +230,13 @@ public class CookieContext implements Context, Map<String, Object> {
     	return null;
     }
     
+	@Override
     public void putAll(Map<? extends String,? extends Object> t) {
     	
     	throw new UnsupportedOperationException();
     }
     
+	@Override
     public String remove(Object key) {
     	
     	removeAttribute(key.toString());
@@ -228,6 +244,7 @@ public class CookieContext implements Context, Map<String, Object> {
     	return null;
     }
     
+	@Override
     public int size() {
     	
     	Cookie[] cookies = req.getCookies();
@@ -237,6 +254,7 @@ public class CookieContext implements Context, Map<String, Object> {
     	return cookies.length;
     }
     
+	@Override
     public Collection<Object> values() {
     	
     	Cookie[] cookies = req.getCookies();
