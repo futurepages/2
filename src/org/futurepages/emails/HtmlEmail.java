@@ -151,7 +151,9 @@ public class HtmlEmail extends MultiPartEmail {
         setTextMsg(msg);
 
         setHtmlMsg(
-            new StringBuffer().append("<html><body><pre>").append(msg).append("</pre></body></html>").toString());
+            //new StringBuffer().append("<html><body><pre>").append(msg).append("</pre></body></html>").toString());
+			// sem o <pre></pre> dá problemas?
+            new StringBuffer().append("<html><body>").append(msg).append("</body></html>").toString());
 
         return this;
     }
