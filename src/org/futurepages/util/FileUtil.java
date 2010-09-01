@@ -57,6 +57,9 @@ public class FileUtil {
 		return getStringContent(classRealPath(cls)+"/"+path);
 	}
 
+	public static String[] getStringLines(Class cls, String path) throws FileNotFoundException, IOException {
+		return getStringLines(classRealPath(cls)+"/"+path);
+	}
 
 	public static String[] getStringLines(String path) throws FileNotFoundException, IOException {
 		return getStringContent(path).split("\r\n");
@@ -162,6 +165,21 @@ public class FileUtil {
 			byte[] content = replaceAll(map, sourceUrl).getBytes();
 			target = new FileOutputStream(targetUrl);
 			target.write(content);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (target != null) {
+				target.close();
+			}
+		}
+	}
+
+	public static void createTextFile(String content, String targetUrl) throws Exception {
+		FileOutputStream target = null;
+		try {
+			byte[] contentBytes = content.getBytes();
+			target = new FileOutputStream(targetUrl);
+			target.write(contentBytes);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
