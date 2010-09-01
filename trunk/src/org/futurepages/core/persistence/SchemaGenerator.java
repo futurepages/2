@@ -19,14 +19,14 @@ public abstract class SchemaGenerator {
 		try {
 			this.execute();
 		} catch (Exception ex) {
-			System.out.println("[::schema::] Error exporting... " + this.getClass().getName());
+			System.out.println("[::schema-generator::] Error exporting... " + this.getClass().getName());
 			ex.printStackTrace();
 		}
 	}
 
 	protected void executeSQL(String sql) {
 		if (!Is.empty(sql)) {
-			System.out.println("[::schema::] " + sql);
+			System.out.println("[::schema-generator::] " + sql);
 			SQLQuery sqlQuery = HibernateManager.getSession().createSQLQuery(sql);
 			sqlQuery.executeUpdate();
 		}
