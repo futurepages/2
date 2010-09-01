@@ -14,8 +14,16 @@ public class SchemaGeneration {
             schemaUpdate.execute(true, true);
 			
             File[] modules = ModuleUtil.getIstance().getModules();
+			
             (new SchemaGeneratorsManager(modules)).execute();
-			log("Found Exceptions while updating: \n"+schemaUpdate.getExceptions().toString());
+			if(schemaUpdate.getExceptions().size()>0){
+				log("Found "+schemaUpdate.getExceptions().size()+" Exception(s) while updating:");
+				for (Object obj : schemaUpdate.getExceptions()) {
+					if(!((Exception)obj).getMessage().contains("doesn't exist")){
+						log("  "+((Exception)obj).getMessage());
+					}
+				}
+			}
             log("Schema-Generation UPDATE ---- END ----");
     }
 
@@ -24,11 +32,19 @@ public class SchemaGeneration {
             SchemaExport schemaExport = new SchemaExport(HibernateManager.getConfigurations().getTablesConfig());
             schemaExport.create(true, true);
 			(new SchemaGeneratorsManager(ModuleUtil.getIstance().getModules())).execute();
-			log("Found Exceptions while exporting: \n"+schemaExport.getExceptions().toString());
+
+			if(schemaExport.getExceptions().size()>0){
+				log("Found "+schemaExport.getExceptions().size()+" Exception(s) while exporting:");
+				for (Object obj : schemaExport.getExceptions()) {
+					if(!((Exception)obj).getMessage().contains("doesn't exist")){
+						log("  "+((Exception)obj).getMessage());
+					}
+				}
+			}
             log("Schema-Generation EXPORT ---- END ----");
     }
 
 	private static void log(String msg){
-		System.out.println("[::schema::] "+msg);
+		System.out.println("[::schema-generation::] "+msg);
 	}
 }

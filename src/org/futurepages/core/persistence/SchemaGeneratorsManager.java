@@ -40,19 +40,19 @@ public class SchemaGeneratorsManager extends ModulesAutomation {
 	}
 
 	private void executeSQLAfterModules() throws Exception {
-				final String SCHEMA_SCRIPTS_NAME =  SCHEMA_DIR_NAME + ".SchemaScripts";
-				try {
-					Class schemaGenerator = Class.forName(SCHEMA_SCRIPTS_NAME);
-					log(">>> " + schemaGenerator.getSimpleName() + " running...  ");
-					schemaGenerator.newInstance();
-					log(">>>  SchemaScripts DONE.");
-				} catch (ClassNotFoundException ex) {
-					log(">>> "+SCHEMA_SCRIPTS_NAME+" not present.");
-				}
+			final String SCHEMA_SCRIPTS_NAME =  SCHEMA_DIR_NAME + ".SchemaScripts";
+			try {
+				Class schemaGenerator = Class.forName(SCHEMA_SCRIPTS_NAME);
+				log(">>> " + schemaGenerator.getSimpleName() + " running...  ");
+				schemaGenerator.newInstance();
+				log(">>>  SchemaScripts DONE.");
+			} catch (ClassNotFoundException ex) {
+				log(">>> "+SCHEMA_SCRIPTS_NAME+" not present.");
+			}
 	}
 
 
 	private void log(String msg) {
-		System.out.println("[:schema:] " + msg);
+		System.out.println("[::schema-manager::] " + msg);
 	}
 }
