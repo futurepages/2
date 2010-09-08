@@ -1,9 +1,8 @@
 package org.futurepages.filters;
 
-import org.futurepages.actions.AjaxAction;
 import org.futurepages.core.action.AbstractAction;
-import org.futurepages.core.action.Action;
 import org.futurepages.core.admin.AllModulesFree;
+import org.futurepages.core.admin.Authentication;
 import org.futurepages.core.admin.AuthenticationFree;
 import org.futurepages.core.control.AbstractModuleManager;
 import org.futurepages.core.control.InvocationChain;
@@ -39,7 +38,7 @@ public class ModulePermissionFilter implements Filter {
 				if(!(action instanceof AllModulesFree)) {
 					String moduleId = AbstractModuleManager.moduleId(action.getClass());
 					if (!action.loggedUser().hasModule(moduleId)) {
-							return denied(action);
+							return Authentication.accessDenied(action);
 					}
 				}
 			}
@@ -47,13 +46,7 @@ public class ModulePermissionFilter implements Filter {
         return chain.invoke();
     }
 
-    private String denied(Action action) {
-        if (action instanceof AjaxAction) {
-            return AJAX_DENIED;
-        }
-
-        return ACCESS_DENIED;
-    }
+   
 
 	@Override
     public void destroy() {
