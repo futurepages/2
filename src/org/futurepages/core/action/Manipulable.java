@@ -34,6 +34,7 @@ public interface Manipulable {
     public static final String LOGIN = "login";
     public static final String DYN_LOGIN = "dynLogin";
     public static final String ACCESS_DENIED = "accessDenied";
+    public static final String DYN_DENIED = "dynDenied";
     public static final String AJAX_DENIED = "ajaxDenied";
     public static final String EXCEPTION = "exception";
     public static String DYN_EXCEPTION = "dynException";
