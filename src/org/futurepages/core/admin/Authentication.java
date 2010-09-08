@@ -5,10 +5,6 @@ import org.futurepages.actions.DynAction;
 import org.futurepages.core.action.Action;
 import org.futurepages.core.action.Manipulable;
 
-/**
- *
- * @author leandro
- */
 public class Authentication implements Manipulable {
 
 //    private String accessDenied(Action action) {
