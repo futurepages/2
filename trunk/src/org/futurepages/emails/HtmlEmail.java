@@ -143,17 +143,15 @@ public class HtmlEmail extends MultiPartEmail {
      * @throws EmailException see javax.mail.internet.MimeBodyPart
      *  for defintions
      */
+	@Override
     public Email setMsg(String msg) throws EmailException {
         if (StringUtils.isEmpty(msg)) {
             throw new EmailException("Invalid message supplied");
         }
-
         setTextMsg(msg);
-
-        setHtmlMsg(
+        setHtmlMsg(StringUtils.concat("<html><body>",msg,"</body></html>"));
+			// Antes tinha essa tag <PRE>. Não sei por que que tinha isto.
             //new StringBuffer().append("<html><body><pre>").append(msg).append("</pre></body></html>").toString());
-			// sem o <pre></pre> dá problemas?
-            new StringBuffer().append("<html><body>").append(msg).append("</body></html>").toString());
 
         return this;
     }
