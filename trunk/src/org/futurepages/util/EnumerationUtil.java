@@ -14,15 +14,11 @@ public class EnumerationUtil {
 	   return new Iterator() {
 		   
 		   public boolean hasNext() {
-			   
 			   return en.hasMoreElements();
-			   
 		   }
 		   
 		   public Object next() {
-			   
 			   return en.nextElement();
-			   
 		   }
 		   
 		   public void remove() {
