@@ -50,6 +50,7 @@ public class Dao extends HQLProvider {
     }
 
     public static Query query(String hqlQuery) {
+//		System.out.println("HQL: "+hqlQuery);
 		Query query = session().createQuery(hqlQuery).setCacheable(true);
         return query;
     }
@@ -356,13 +357,13 @@ public class Dao extends HQLProvider {
         return topReport(null, entity, reportClass, fields, where, group, order);
     }
 
-    public static long numRows(Class entity, String whereClause) {
-        Long res = (Long) query(concat(select(count("*")), from(entity), where(whereClause))).uniqueResult();
+    public static long numRows(Class entity, String where) {
+        Long res = (Long) query(concat(select(count("*")), from(entity), where(where))).uniqueResult();
         return res.longValue();
     }
 
-    public static long numRows(String fromAndJoins, String whereClause) {
-        Long res = (Long) query(concat(select(count("*")), fromAndJoins, where(whereClause))).uniqueResult();
+    public static long numRows(String fromClause, String where) {
+        Long res = (Long) query(concat(select(count("*")), fromClause, where(where))).uniqueResult();
         return res.longValue();
     }
 
