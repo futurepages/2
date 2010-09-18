@@ -58,12 +58,12 @@ public class HQLUtil {
 		return out.toString();
 	}
 	
-	public static String imploded(List<String> elements) {
+	public static String imploded(List elements) {
 		StringBuffer out = new StringBuffer("");
 		String virgula = "";
-		for (String element : elements) {
+		for (Object element : elements) {
 			out.append(virgula);
-			out.append("'" + escQuote(element) + "'");
+			out.append("'" + escQuote(element.toString()) + "'");
 			if(virgula.equals(""))  virgula = "," ;
 		}
 		return out.toString();
