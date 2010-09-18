@@ -253,25 +253,33 @@ public class HQLField implements HQLable {
         if (tokens == null || tokens.length == 0) {
             return "";
         }
-        return concat(fieldName , " " , logicConector , " (" , HQLUtil.imploded(tokens) , ")");
+        return concat(fieldName , logicConector , "(" , HQLUtil.imploded(tokens) , ")");
     }
 
     private String buildlLongExpression(String logicConector, long... tokens) {
         if (tokens == null || tokens.length == 0) {
             return "";
         }
-        return concat(fieldName , " " , logicConector , " (" , HQLUtil.imploded(tokens) , ")");
+        return concat(fieldName ,logicConector , "(" , HQLUtil.imploded(tokens) , ")");
     }
 
     public String in(String... tokens) {
-        return buildlStringExpression("IN", tokens);
+        return buildlStringExpression(IN, tokens);
+    }
+
+    public String inList(List list) {
+		return concat(fieldName , IN , "(" , HQLUtil.imploded(list) , ")");
+    }
+
+    public String notInList(List list) {
+		return concat(fieldName , NOT_IN , "(" , HQLUtil.imploded(list) , ")");
     }
 
     public String inSubQuery(String subQuery) {
-        return concat(fieldName , " IN " , "(" , subQuery , ")");
+        return concat(fieldName , IN , "(" , subQuery , ")");
     }
     public String notInSubQuery(String subQuery) {
-        return concat(fieldName , " NOT IN " , "(" , subQuery , ")");
+        return concat(fieldName , NOT_IN , "(" , subQuery , ")");
     }
 
     public String in(long... tokens) {
@@ -334,7 +342,6 @@ public class HQLField implements HQLable {
 
     /**
      * utilize o #equalsTo()
-     *
      */
     @Override
     @Deprecated

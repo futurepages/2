@@ -98,7 +98,7 @@ public class HQLProvider implements HQLable {
 
 	public static String join(String joinClause) {
 		if (!Is.empty(joinClause)) {
-			return " JOIN " + joinClause;
+			return JOIN + joinClause;
 		} else {
 			return "";
 		}
@@ -106,7 +106,7 @@ public class HQLProvider implements HQLable {
 
 	public static String where(String whereClause) {
 		if (!Is.empty(whereClause)) {
-			return " WHERE " + whereClause;
+			return WHERE + whereClause;
 		} else {
 			return "";
 		}
@@ -116,12 +116,12 @@ public class HQLProvider implements HQLable {
 		if (fields != null) {
 			if(fields.length==1){
 				if(!Is.empty(fields[0])){
-					return " ORDER BY "+fields[0];
+					return ORDER_BY+fields[0];
 				}
 			}
 			else
 				if(fields.length>1){
-					StringBuilder sb = new StringBuilder(" ORDER BY ");
+					StringBuilder sb = new StringBuilder(ORDER_BY);
 					for(String field : fields){
 						sb.append(field).append(",");
 					}
@@ -141,11 +141,11 @@ public class HQLProvider implements HQLable {
 	}
 
 	public static String asc(String field) {
-		return field+" ASC";
+		return field+ASC;
 	}
 
 	public static String desc(String field) {
-		return field+" DESC";
+		return field+DESC;
 	}
 	/**
 	 * Monta conjunções com as expresões passadas 
@@ -161,9 +161,9 @@ public class HQLProvider implements HQLable {
 	 * @return
 	 */
 	private static String connectClauses(String connector, String... clauses) {
-		if (clauses == null || clauses.length == 0)
+		if (clauses == null || clauses.length == 0) {
 			return "";
-		
+		}
 		StringBuffer st = new StringBuffer();
 		boolean primeiro = true;
 		for (String clause : clauses) {
@@ -203,7 +203,7 @@ public class HQLProvider implements HQLable {
 
 	public static String groupBy(String groupClause) {
 		if (!Is.empty(groupClause)) {
-			return " GROUP BY " + groupClause;
+			return GROUP_BY + groupClause;
 		} else {
 			return "";
 		}
