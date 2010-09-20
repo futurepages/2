@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.futurepages.consequences.AjaxConsequence;
+import org.futurepages.core.action.Manipulable;
 import org.futurepages.core.ajax.AjaxRenderer;
 
 /**
@@ -512,7 +513,7 @@ public class ActionConfig {
         Iterator<Object[]> iter = filters.iterator();
         while(iter.hasNext()) {
             Object [] array = iter.next();
-            if (array[0] == null || array[0].equals(innerAction)) {
+            if (array[0] == null || array[0].equals(innerAction) || (innerAction == null && array[0].equals(Manipulable.EXECUTE))) {
                 list.add((Filter) array[1]);
             }
         }
