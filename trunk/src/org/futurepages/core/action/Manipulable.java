@@ -9,6 +9,7 @@ public interface Manipulable {
     public static final String DOWNLOAD = "download";
     public static final String ERROR = "error";
     public static final String EXPLORE = "explore";
+    public static final String EXECUTE = "execute";
     public static final String FAIL = "fail";
     public static final String FIND = "find";
     public static final String INDEX = "index";
