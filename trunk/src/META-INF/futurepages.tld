@@ -169,6 +169,24 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
         </attribute>
     </tag>
     <tag>
+        <name>cookie</name>
+        <tag-class>org.futurepages.tags.Cookie</tag-class>
+        <body-content>empty</body-content>
+        <display-name>Cookie</display-name>
+        <attribute>
+            <name>key</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <name>user</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>boolean</type>
+        </attribute>
+    </tag>
+    <tag>
         <name>dateTime</name>
         <tag-class>org.futurepages.tags.DateTime</tag-class>
         <body-content>empty</body-content>
