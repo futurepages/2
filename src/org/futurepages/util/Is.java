@@ -37,41 +37,6 @@ public class Is {
         return (fieldName != null) && (fieldName > 0);
     }
 
-    public static String validGoogleMapURL(String googleMapsURL) {
-
-        if ((googleMapsURL.startsWith("http://maps.google.com.br/") ||
-                googleMapsURL.startsWith("HTTP://maps.google.com.br/")) &&
-                googleMapsURL.contains(".")) {
-            try {
-                if (!googleMapsURL.contains("&output=embed")) {
-                    googleMapsURL += "&output=embed";
-                }
-
-                return googleMapsURL;
-            } catch (Exception exc) {
-                throw new ErrorException("Informe uma url válida do GoogleMaps");
-            }
-
-        } else {
-
-            if ((googleMapsURL.toLowerCase().startsWith("<iframe"))) {
-                try {
-                    String extracaoDaUrl = "";//variavel que armazenara a url valida para acessar o mapa
-
-                    int inicioIndice = googleMapsURL.lastIndexOf("src=\"") + 5;
-                    int finalIndice = googleMapsURL.indexOf("\"></iframe>");
-                    extracaoDaUrl = googleMapsURL.substring(inicioIndice, finalIndice);
-
-                    return extracaoDaUrl;
-                } catch (Exception exc) {
-                    throw new ErrorException("Informe uma url válida do GoogleMaps");
-                }
-            } else {
-                throw new ErrorException("Informe uma url válida do GoogleMaps");
-            }
-        }
-    }
-
     /**
      * Verifica a valiade do email dado com entrada
      * @param mailStr email de entrada
