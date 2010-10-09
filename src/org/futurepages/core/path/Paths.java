@@ -2,6 +2,7 @@ package org.futurepages.core.path;
 
 import org.futurepages.core.config.Params;
 import javax.servlet.http.HttpServletRequest;
+import org.futurepages.util.StringUtils;
 
 /**
  * Retorna os endereços (URL) absolutos da aplicação.
@@ -31,7 +32,15 @@ public class Paths {
      * @return a url completa da pasta de recursos da aplicação
      */
     public static String resource(HttpServletRequest req) {
-        return context(req)+"/"+Params.get("RESOURCE_PATH");
+        return StringUtils.concat(context(req),"/",Params.get("RESOURCE_PATH"));
+    }
+
+	/**
+     * @param req Requisição
+     * @return a url completa da pasta de recursos da aplicação
+     */
+    public static String resource(HttpServletRequest req, String module) {
+        return StringUtils.concat(module(req,module),"/",Params.get("RESOURCE_PATH"));
     }
 
     /**
