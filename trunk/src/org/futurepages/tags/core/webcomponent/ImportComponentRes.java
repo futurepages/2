@@ -29,6 +29,9 @@ public final class ImportComponentRes extends SimpleTagSupport {
 	@TagAttribute
 	private boolean jsInHead = false;
 
+	@TagAttribute
+	private String moduleId = null;
+
 	private WebContainer myContainer;
 
 	@Override
@@ -109,16 +112,28 @@ public final class ImportComponentRes extends SimpleTagSupport {
 		this.jsInHead = jsInHead;
 	}
 
+	public String getModuleId() {
+		return moduleId;
+	}
+
+	public void setModuleId(String moduleId) {
+		this.moduleId = moduleId;
+	}
+
 	private String uniqueKey() {
 		return this.key + ">" + this.version;
 	}
 
 	public void appendJSto(HttpServletRequest req, StringBuffer buffer) {
-		buffer.append( concat("<script src=\"" , Paths.resource(req) , "/" , key , "/" , version , "/" , key , ".js\" type=\"text/javascript\"></script>"));
+		buffer.append( concat("<script src=\"" , resPath(req) , "/" , key , "/" , version , "/" , key , ".js\" type=\"text/javascript\"></script>"));
 	}
 
 	public void appendCSSto(HttpServletRequest req, StringBuffer buffer) {
-		buffer.append( concat("<link rel=\"stylesheet\" type=\"text/css\" href=\"" + Paths.resource(req) , "/" , key , "/" , version , "/" , key , ".css\" media=\"screen\"/>"));
+		buffer.append( concat("<link rel=\"stylesheet\" type=\"text/css\" href=\"" , resPath(req) , "/" , key , "/" , version , "/" , key , ".css\" media=\"screen\"/>"));
+	}
+
+	private String resPath(HttpServletRequest req){
+		return (moduleId==null)?Paths.resource(req) : Paths.resource(req,moduleId);
 	}
 
 	@Override
