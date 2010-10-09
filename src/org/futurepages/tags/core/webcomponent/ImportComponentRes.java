@@ -17,7 +17,7 @@ public final class ImportComponentRes extends SimpleTagSupport {
 	@TagAttribute(required = true)
 	private String key;
 
-	@TagAttribute(required = false)
+	@TagAttribute(required = true)
 	private String version;
 
 	@TagAttribute
