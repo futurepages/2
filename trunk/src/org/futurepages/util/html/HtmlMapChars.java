@@ -86,6 +86,11 @@ public class HtmlMapChars {
         completeTable.put("ç","&ccedil;");
         completeTable.put("Ñ","&Ntilde;");
         completeTable.put("ñ","&ntilde;");
+
+		completeTable.put("º","&ordm;");
+		completeTable.put("°","&deg;");
+		completeTable.put("ª","&ordf;");
+		completeTable.put("§","&sect;");
     }
 
     public static String getSimple(char ch){
