@@ -10,6 +10,9 @@ public class ObjectContainer<VALUETYPE1, VALUETYPE2> {
 		this.value2 = value2;
 	}
 
+    public ObjectContainer() {
+    }
+
 	public VALUETYPE1 getValue1() {
 		return value1;
 	}
