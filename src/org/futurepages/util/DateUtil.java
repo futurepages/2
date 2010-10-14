@@ -200,11 +200,11 @@ public class DateUtil {
 		return null;
 	}
 
-	/**
+    /**
 	 * Formato da entrada: YYYY-MM-DD
 	 * Formato da saída: DD/MM/YYYY
 	 */
-	public static String viewDateTime(Object in) {
+	public static String viewDateTime(Object in, String mask) {
 		if (in instanceof String) {
 			String dia, mes, ano, horas;
 			dia = ((String) in).substring(8, 10);
@@ -213,13 +213,21 @@ public class DateUtil {
 			horas = ((String) in).substring(11, 16);
 			return dia + "/" + mes + "/" + ano + " - " + horas;
 		} else if (in instanceof Date) {
-			return new SimpleDateFormat("dd/MM/yyyy - HH:mm").format((Date) in).toString();
+			return new SimpleDateFormat(mask).format((Date) in).toString();
 		} else if (in instanceof Calendar) {
-			return new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(((GregorianCalendar) in).getTime()).toString();
+			return new SimpleDateFormat(mask).format(((GregorianCalendar) in).getTime()).toString();
 		} else if (in instanceof Long) {
-			return new SimpleDateFormat("dd/MM/yyyy - HH:mm").format(new Date((Long) in)).toString();
+			return new SimpleDateFormat(mask).format(new Date((Long) in)).toString();
 		}
 		return null;
+	}
+
+	/**
+	 * Formato da entrada: YYYY-MM-DD
+	 * Formato da saída: DD/MM/YYYY
+	 */
+	public static String viewDateTime(Object in) {
+		return viewDateTime(in, "dd/MM/yyyy - HH:mm");
 	}
 
 	/**
