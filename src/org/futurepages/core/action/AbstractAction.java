@@ -292,6 +292,10 @@ public abstract class AbstractAction implements Pageable, Action {
         return this.putError(true, ex);
     }
 
+	protected ErrorException errorEx(String message) {
+        return new ErrorException(message);
+    }
+
     public String putError(boolean listDependencies, ErrorException errorException) {
         this.putMessage(ERROR, errorException.getMessage());
 
