@@ -311,12 +311,15 @@ public class The {
 			valor = (String) value;
 			if ((valor).contains("\n")) {
 				valor = valor.replaceAll("\n", "\\\\n");
-		}
-		if(((String)value).contains("\r")){
-				valor = valor.replaceAll("\r", "\\\\r");
-		}
-		if(((String)value).contains("'")){
-				valor = valor.replaceAll("'", "\\\\'");
+			}
+			if(((String)value).contains("\r")){
+					valor = valor.replaceAll("\r", "\\\\r");
+			}
+			if(((String)value).contains("'")){
+					valor = valor.replaceAll("'", "\\\\'");
+			}
+			if(((String)value).contains("</script>")){
+					valor = valor.replaceAll("</script>", "&lt;/script>");
 			}
 		}else{
 			valor = value.toString();
