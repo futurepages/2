@@ -9,6 +9,7 @@ import org.futurepages.core.formatter.Formatter;
  */
  public class TextAreaFormatter implements Formatter {
  	
+	@Override
  	public String format(Object value, Locale loc) {
             return HtmlMapChars.textAreaValue((String) value);
  	}
