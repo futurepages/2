@@ -191,6 +191,20 @@ public class Dao extends HQLProvider {
         return new PaginationSlice<T>(numRows, pageSize, totalPages, page, list);
     }
 
+
+	 public static long numRowsWithDistinct(String entityAlias, String fromClause, String where) {
+        Long res = (Long) query(concat(select(count(distinct(entityAlias))), fromClause, where(where))).uniqueResult();
+        return res.longValue();
+    }
+
+    public static <T extends Serializable> PaginationSlice<T> paginationSliceWithDistinct(int page, int pageSize, String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
+        final long numRows = Dao.numRowsWithDistinct(entityAlias, fromAndJoin, whereClause);
+        int totalPages = calcNumPages(numRows, pageSize);
+        page = calcPage(page, totalPages);
+        List<T> list = listPage(page, pageSize, select(distinct( entityAlias)) + fromAndJoin + where(whereClause) + orderBy(orderClauses));
+        return new PaginationSlice<T>(numRows, pageSize, totalPages, page, list);
+    }
+
     public static <T extends Serializable> PaginationSlice<T> paginationSliceWithJoin(int page, int pageSize, Class<T> entity, String joinClause, String whereClause, String... orderClauses) {
         return paginationSliceWithJoin(page, pageSize, entity.getSimpleName().toLowerCase(), entity, joinClause, whereClause, orderClauses);
     }
