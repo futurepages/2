@@ -100,7 +100,7 @@ public class Controller extends HttpServlet {
 
         // not thread-safe on purpouse...
         if (appManagerFile == null) {
-            StringBuffer sb = new StringBuffer(AbstractApplicationManager.getRealPath());
+            StringBuilder sb = new StringBuilder(AbstractApplicationManager.getRealPath());
             sb.append(SEP).append("WEB-INF").append(SEP).append("classes").append(SEP);
             sb.append(appMgrClassname.replace('.', SEP)).append(".class");
             appManagerFile = new File(sb.toString());
@@ -430,7 +430,7 @@ public class Controller extends HttpServlet {
 
         // copy all filters executed together with that action to the filters parameter...
 
-        if (filters == null || filters.size() != 0) {
+        if (filters == null || !filters.isEmpty()) {
 
             throw new IllegalArgumentException(
                     "filters parameter should be non-null and a zero-sized list!");
