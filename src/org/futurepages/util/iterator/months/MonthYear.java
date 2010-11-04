@@ -8,6 +8,9 @@ public class MonthYear {
 	private int month;
 	private int year;
 
+	public MonthYear(){
+	}
+
 	public MonthYear(int month, int year) {
 		this.month = month;
 		this.year = year;
