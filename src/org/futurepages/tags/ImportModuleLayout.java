@@ -14,16 +14,19 @@ import org.futurepages.filters.ModuleIdFilter;
 @Tag(bodyContent = ContentTypeEnum.EMPTY)
 public class ImportModuleLayout extends PrintTag{
    
+	@Override
 	public String getStringToPrint() throws JspException {
 		try{
+			StringBuffer sb = new StringBuffer();
+			sb.append("<link rel=\"stylesheet\" type=\"text/css\" href=\""+Paths.module(req,"portal")+"/template/layout.css\" media=\"all\"/>");
 			String moduleId = ModuleIdFilter.getModuleId(action);
-			if(moduleId!=null){
-				return "<link rel=\"stylesheet\" type=\"text/css\" href=\""+Paths.module(req, moduleId)+"/template/layout.css\" media=\"all\"/>";
+			if(moduleId!=null && !moduleId.equals("portal")){
+				sb.append("<link rel=\"stylesheet\" type=\"text/css\" href=\""+Paths.module(req, moduleId)+"/template/layout.css\" media=\"all\"/>");
 			}
+			return sb.toString();
 		}
 		catch(Exception ex){
 			return "";
 		}
-		return "";
     }
 }
