@@ -353,7 +353,7 @@ public class Controller extends HttpServlet {
         Action action = ac.getAction(); // create an action instance here...
 
         if (action == null) {
-            throw new ServletException("Could not get an action instace: " + ac);
+            throw new ServletException("Could not get an action instance: " + ac);
         }
 
         prepareAction(action, req, res);
