@@ -159,11 +159,13 @@ public abstract class AbstractAction implements Pageable, Action {
 	}
 
 	protected String redir(String url, boolean keepOutput) {
+		String howToRedir = REDIR_APPEND_OUTPUT;
 		if(!keepOutput){
 			clearOutput();
+			howToRedir = REDIR;
 		}
 		output(REDIR_URL, url);
-		return REDIR;
+		return howToRedir;
 	}
 
 	/** @return Pega o numero da página corrente em uso */

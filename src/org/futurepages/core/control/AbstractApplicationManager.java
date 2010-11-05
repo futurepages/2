@@ -539,9 +539,9 @@ public abstract class AbstractApplicationManager  implements Manipulable{
      *
      * This is shorter than new Redirect().
      */
-    public static Consequence redir(boolean flag) {
+    public static Consequence redir(boolean appendOutput) {
 
-        return new Redirect(flag);
+        return new Redirect(appendOutput);
 
     }
 

@@ -61,6 +61,7 @@ public class InitManager extends AbstractApplicationManager{
 			on(EXCEPTION, fwd(Params.get("EXCEPTION_FILE_PATH")));
 			on(DYN_EXCEPTION, fwd(Params.get("DYN_EXCEPTION_FILE_PATH")));
 			on(REDIR, redir());
+			on(REDIR_APPEND_OUTPUT, redir(true));
 
             //Ação Inicial Padrão
             try {
