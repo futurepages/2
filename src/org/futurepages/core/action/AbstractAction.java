@@ -155,7 +155,13 @@ public abstract class AbstractAction implements Pageable, Action {
 	}
 
 	protected String redir(String url) {
-		clearOutput();
+		return redir(url,false);
+	}
+
+	protected String redir(String url, boolean keepOutput) {
+		if(!keepOutput){
+			clearOutput();
+		}
 		output(REDIR_URL, url);
 		return REDIR;
 	}

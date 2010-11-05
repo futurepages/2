@@ -1,6 +1,7 @@
 package org.futurepages.core.input;
 
 import javax.servlet.http.HttpServletRequest;
+import org.futurepages.util.EncodingUtil;
 
 public class PrettyURLRequestInput extends RequestInput {
 	
@@ -48,8 +49,9 @@ public class PrettyURLRequestInput extends RequestInput {
 			int total = s.length - 2;
 			
 			for(int i=0;i<total;i++) {
-				map.put(String.valueOf(i), s[i + 2]);
-				keys.add(String.valueOf(i));
+				String theKey = String.valueOf(i);
+				map.put(theKey, EncodingUtil.decodeUrl(s[i + 2]));
+				keys.add(theKey);
 			}
 		}
 	}

@@ -3,212 +3,175 @@ package org.futurepages.core.consequence;
 import org.futurepages.exceptions.ConsequenceException;
 import org.futurepages.core.action.Action;
 import java.net.URI;
-import java.net.URLEncoder;
 import java.util.Iterator;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.futurepages.core.output.Output;
-import org.futurepages.util.StringUtils;
+import org.futurepages.util.EncodingUtil;
+import org.futurepages.util.Is;
+import static org.futurepages.util.StringUtils.*;
 import org.futurepages.util.The;
 
 /**
  * A redirect consequence that has the following features:
- * 
- * <ol>
- * <li>Paths starting with "//" are relative to the webserver root.
- * <li>Paths containing "://" are absolute paths.
- * <li>All other paths (starting with "/" or not) are related to the context path.
- * <li>Supports dynamic URLs and dynamic parameters, with the dynamic values will come from action output.
- * <li>Dynamic parameters will be encoded. Static parameters (hardcoded in the URL) are assumed to be encoded.
- * </ol>
- * 
- * @author Sergio Oliveira Jr.
- * @author Alan Burlison Alan.Burlison@sun.com
  *
+ * - Paths starting with "//" are relative to the webserver root.
+ * - Paths containing "://" are absolute paths.
+ * - All other paths (starting with "/" or not) are related to the context path.
+ * - Supports dynamic URLs and dynamic parameters, with the dynamic values will come from action output.
+ * - Dynamic parameters will be encoded. Static parameters (hardcoded in the URL) are assumed to be encoded.
  */
 public class Redirect implements Consequence {
 
-   /** The parameter's name in the output containing the URL to redirect to. */
-   public static final String REDIR_URL = Action.REDIR_URL;
-
-	/** The target URL of the redirect. */
+	public static final String REDIR_URL = Action.REDIR_URL;
 	private String url = null;
-
-	/** True if the {@link Output} values are to be appended to the URL. */
 	private boolean appendOutput = false;
+	private boolean fromOutput = false;
 
 	/** True if the URL is to be obtained from the {@link Output}. */
-	private boolean dynamicUrl = false;
-
-	/**
-	 * Creates a normal redirect for the given url. The supplied URL fully
-	 * specifies the target of the redirect.
-	 *
-	 * @param url
-	 *           is the url for this redirect.
-	 */
 	public Redirect(String url) {
 		this.url = url;
 	}
 
-	/**
-	 * Creates a redirect for the given url with dynamic parameters. The URL
-	 * query parameters are obtained from the {@link Output} object for the
-	 * {@link Action}. All the parameters are appended to the URL query string.
-	 *
-	 * @param url
-	 *           is the url for this redirect.
-	 * @param appendOutput
-	 *           is true if this redirect is to use dynamic parameters.
-	 */
 	public Redirect(String url, boolean appendOutput) {
 		this.url = url;
 		this.appendOutput = appendOutput;
 	}
 
-	/**
-	 * Creates a redirect with a dynamic url.
-	 *
-	 * The redirect url is obtained from the action output through the key
-	 * REDIR_URL.
-	 *
-	 */
 	public Redirect() {
-		this.dynamicUrl = true;
+		this.fromOutput = true;
 	}
 
 	/**
-	 * Creates a redirect with a dynamic URL and dynamic parameters.
-	 *
 	 * The redirect url is obtained from the action output.
 	 *
 	 * The URL query parameters are obtained from the {@link Output} object for
 	 * the {@link Action}. All the parameters are appended to the URL query
 	 * string.
 	 *
-	 * @param appendOutput
-	 *           is true if this redirect is to use dynamic parameters.
+	 * @param appendOutput is true if this redirect is to use dynamic parameters.
 	 */
 	public Redirect(boolean appendOutput) {
-		this.dynamicUrl = true;
+		this.fromOutput = true;
 		this.appendOutput = appendOutput;
 	}
 
 	/**
 	 * Execute the redirect consequence. The URL to redirect to is built up as
 	 * necessary, depending on the type of redirection that is required - see the
-	 * constructirs for this class for the various flavours of redirections that
+	 * constructors for this class for the various flavours of redirections that
 	 * are supported.
-	 *
-	 * @param act
-	 *           action to be redirected.
-	 * @param req
-	 *           request object.
-	 * @param res
-	 *           response object
-	 * @throws ConsequenceException
-	 *          if an error is detected during construction of the redirection URL.
 	 */
 	@Override
 	public void execute(Action act, HttpServletRequest req, HttpServletResponse res) throws ConsequenceException {
 		try {
 			Output output = act != null ? act.getOutput() : null;
-			String path;
-			if (dynamicUrl && output != null) {
-				// URL should be taken from action output (dynamic redirect)
-				path = (String) output.getValue(REDIR_URL);
+			String theURL;
+			if (fromOutput && output != null) {
+				theURL = (String) output.getValue(REDIR_URL);
 			} else {
-				// URL was passed in the constructor (static redirect)
-				if(output.getValue(Action.PRETTY_URL_PARAMS)!=null){
-					Object[] prettyParams = (Object[])  output.getValue(Action.PRETTY_URL_PARAMS);
-					path = StringUtils.concat(this.url,"/",The.implodedArray(prettyParams, "/", null));
-				} else {
-					path = this.url;
-				}
+				theURL = this.url;
 			}
 
-			if (path == null || path.length() == 0) {
-				throw new ConsequenceException("Missing url for redirect!");
-			}
-
-			StringBuilder sb = new StringBuilder(64);
-			if (path.indexOf("://") > 0) {
-				// absolute URL: there is no need to add the context path...
-				sb.append(path);
-			} else if (path.startsWith("//")) {
-				// url relative to the ROOT of the web server...
-				sb.append(path.substring(1, path.length()));
-			} else {
-				// url relative to the context path...
-				sb.append(req.getContextPath());
-				if (!path.startsWith("/")) {
-					// we do not support request-related redirect... 99.9999% of the cases this is not needed...
-					// (you can implement your own consequence if you want this...)
-					sb.append("/");
-				}
-				sb.append(path);
-			}
+			theURL = fixedURLByType(theURL, req);
 
 			// Check whether the redirect already have a query string (some parameters)
-			URI uri = new URI(path);
-			String urlQueryString = uri.getQuery();
+			URI uri = new URI(theURL);
 
-			// If we have dynamic parameters, append them to the query string.
-			if (appendOutput && output != null) {
+			String urlPath = pathWithPrettyParams(uri.getPath(), output);
+			String urlQuery = uri.getQuery();
+			
+			StringBuilder urlToRedir = builBasicUrlToRedir(uri);
 
-				StringBuilder queryString = new StringBuilder(64);
+			urlToRedir.append(urlPath);
 
-				// Build the parameters into a query string.
-				Iterator<String> iter = output.keys();
-
-				while (iter.hasNext()) {
-					String key = (String) iter.next();
-
-					// Skip the REDIR_URL if present.
-					if (key.equals(Action.REDIR_URL)
-					 || key.equals(Action.HEAD_TITLE)
-					 || key.equals(Action.MODULE_ID_KEY)
-					 || key.equals(Action.PRETTY_URL_PARAMS)
-					 ) {
-						continue;
-					}
-
-					Object value = output.getValue(key);
-
-					// Skip null values.
-					if (value == null) {
-						continue;
-					}
-					if (queryString.length() > 0) {
-						queryString.append('&');
-					}
-					queryString.append(key);
-					queryString.append("=");
-					queryString.append(URLEncoder.encode(value.toString(), "UTF-8"));
-				}
-				if (queryString.length() > 0) {
-					if (urlQueryString == null) {
-						// no query string...
-						sb.append('?').append(queryString);
-					} else if (urlQueryString.equals("")) {
-						// empty query string ('?' is already there!)
-						sb.append(queryString);
-					} else {
-						// query string is already there, so append with '&'
-						sb.append('&').append(queryString);
-					}
-				}
+			String querySeparator = "?";
+			if(!Is.empty(urlQuery)) {
+				urlToRedir.append("?").append(urlQuery);
+				querySeparator = "&";
 			}
-			res.sendRedirect(sb.toString());
+
+			if (appendOutput && output != null) {
+				appendOutputToURL(urlToRedir, output, querySeparator);
+			}
+
+			res.sendRedirect(urlToRedir.toString());
 		} catch (Exception e) {
 			throw new ConsequenceException(e);
 		}
 	}
 
+	private String pathWithPrettyParams(String urlPath, Output output) {
+		if (output != null && output.getValue(Action.PRETTY_URL_PARAMS) != null) {
+			Object[] prettyParams = (Object[]) output.getValue(Action.PRETTY_URL_PARAMS);
+			for (int i = 0; i < prettyParams.length; i++) {
+				prettyParams[i] = EncodingUtil.encodeUrl(prettyParams[i].toString());
+			}
+			String fstSlash = (urlPath.charAt(urlPath.length()-1)) != '/' ? "/" : "";
+			return concat(urlPath, fstSlash, The.implodedArray(prettyParams, "/", null));
+		}
+		return urlPath;
+	}
+
+	private String fixedURLByType(String theURL, HttpServletRequest req) throws ConsequenceException {
+			if (theURL == null || theURL.length() == 0) {
+				throw new ConsequenceException("Missing url for redirect!");
+			}
+			
+			if (theURL.indexOf("://") > 0) {
+				return theURL;
+			} else if (theURL.startsWith("//")) {
+				// url relative to the ROOT of the web server...
+				return theURL.substring(1, theURL.length());
+			} else {
+				// url relative to the context path...
+				return concat(req.getContextPath(), (!theURL.startsWith("/") ? "/" : ""), theURL);
+			}	
+	}
+
+	private void appendOutputToURL(StringBuilder urlToRedir, Output output, String querySeparator) {
+				StringBuilder queryFromOutputSB = new StringBuilder();
+				Iterator<String> iter = output.keys();
+				while (iter.hasNext()) {
+					String key = (String) iter.next();
+
+					// Skip the reserved keys from framework.
+					if (key.equals(Action.REDIR_URL)
+							|| key.equals(Action.HEAD_TITLE)
+							|| key.equals(Action.MODULE_ID_KEY)
+							|| key.equals(Action.PRETTY_URL_PARAMS)) {
+						continue;
+					}
+
+					Object value = output.getValue(key);
+					// Skip null values.
+					if (value == null) {
+						continue;
+					}
+
+					if (queryFromOutputSB.length() > 0) {
+						queryFromOutputSB.append('&');
+					}
+
+					queryFromOutputSB.append(key);
+					queryFromOutputSB.append("=");
+					queryFromOutputSB.append(EncodingUtil.encodeUrl(value.toString()));
+				}
+
+				if (queryFromOutputSB.length() > 0) {
+					urlToRedir.append(querySeparator).append(queryFromOutputSB);
+				}
+	}
+
+	private StringBuilder builBasicUrlToRedir(URI uri) {
+		StringBuilder urlToRedir = new StringBuilder();
+		if(uri.getHost()!=null) {
+				urlToRedir.append(concat(uri.getScheme(),"://",uri.getHost(),(uri.getPort()!=80 ? ":"+uri.getPort() : "")));
+		}
+		return urlToRedir;
+	}
+
 	/**
-	 * Return a string representation of the redirect.
-	 *
 	 * @return a string representation of the redirect.
 	 */
 	@Override
@@ -218,10 +181,10 @@ public class Redirect implements Consequence {
 		if (url != null) {
 			s.append(url);
 		} else {
-			s.append("(dynamic url)");
+			s.append(" url from output");
 		}
 		if (appendOutput) {
-			s.append(" (dynamic parameters)");
+			s.append(" appendOutput");
 		}
 		return s.toString();
 	}
