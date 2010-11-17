@@ -169,6 +169,14 @@ public class Dao extends HQLProvider {
         return (List<T>) query.list();
     }
 
+	public static <T> List<T> topList(int topSize, String hqlQuery, Class<T> resultClass) {
+        Query query = query(hqlQuery);
+		query.setMaxResults(topSize);
+		query.setResultTransformer(new AliasToBeanResultTransformer(resultClass));
+        return (List<T>) query.list();
+
+	}
+
     private static int calcPage(int page, int totalPages) {
         if (page > totalPages) {
             page = totalPages;
