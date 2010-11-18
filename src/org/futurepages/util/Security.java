@@ -25,7 +25,7 @@ public class Security {
         String sen = "";
         MessageDigest md = null;
         try {
-            md = MessageDigest.getInstance("MD5");
+            md = MessageDigest.getInstance("MD5"); //SHA1, TIGER
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }

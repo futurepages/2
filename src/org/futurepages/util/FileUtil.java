@@ -54,7 +54,7 @@ public class FileUtil {
 	}
 
 	public static String getStringContent(Class cls, String path) throws FileNotFoundException, IOException {
-		return getStringContent(classRealPath(cls)+"/"+path);
+		return getStringContent(classRealPath(cls)+path);
 	}
 
 	public static String[] getStringLines(Class cls, String path) throws FileNotFoundException, IOException {
