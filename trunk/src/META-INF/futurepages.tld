@@ -425,6 +425,12 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             <rtexprvalue>true</rtexprvalue>
             <type>int</type>
         </attribute>
+        <attribute>
+            <name>autoImportModule</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Boolean</type>
+        </attribute>
     </tag>
     <tag>
         <name>includeExternal</name>
@@ -454,6 +460,12 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <type>int</type>
+        </attribute>
+        <attribute>
+            <name>autoImportModule</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Boolean</type>
         </attribute>
     </tag>
     <tag>
