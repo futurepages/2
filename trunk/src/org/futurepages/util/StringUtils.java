@@ -11,6 +11,14 @@ public class StringUtils {
 		}
 		return sb.toString();
 	}
+
+    public static String concat(Object... args){
+		StringBuilder sb = new StringBuilder();
+		for (Object string : args) {
+			sb.append(string);
+		}
+		return sb.toString();
+	}
 	
 	public static String concatWith(String inserted, String... array) {
 		if(inserted == null){
