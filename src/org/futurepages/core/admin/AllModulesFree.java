@@ -5,4 +5,6 @@ package org.futurepages.core.admin;
  * pode ser acessada por usuários que possuem permissão para acesso a qualquer outro módulo.
  * @author leandro
  */
-public interface AllModulesFree { }
+public interface AllModulesFree {
+
+}
