@@ -19,7 +19,6 @@ public class Security {
     
     /**
      * Retorna o valor da string de entrada com codificação md5
-     *
      */
     public static String md5(String senha){
         String sen = "";
