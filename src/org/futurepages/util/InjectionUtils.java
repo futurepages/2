@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.lang.reflect.Modifier;
+import java.math.BigDecimal;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -223,6 +224,14 @@ public class InjectionUtils {
 				return null;
 			}
 			newValue = new Double(x);
+		} else if ( className.equals("java.math.BigDecimal")) {
+			float x = -1;
+			try {
+				x = realToFloat(value);
+			} catch (Exception e) {
+				return null;
+			}
+			newValue = new BigDecimal(x);
 		} else if (className.equals("boolean") || className.equals("java.lang.Boolean")) {
 			try {
 				int x = Integer.parseInt(value);
