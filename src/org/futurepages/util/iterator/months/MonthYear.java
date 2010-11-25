@@ -49,10 +49,25 @@ public class MonthYear implements Comparable<MonthYear> {
 		return new MonthYear(nextMonth, nextYear);
 	}
 
+		/**
+	 * Copara este monthYear com um segundo
+	 * @param that
+	 * @return -1 (quando sou menor que 'that')
+	 *          1 (quando sou maior que 'that')
+	 *          0 (quando somos iguais)
+	 */
 	@Override
 	public int compareTo(MonthYear that) {
 		Calendar calThis = new GregorianCalendar(this.year,this.month-1,1);
 		Calendar calThat = new GregorianCalendar(that.getYear(),that.getMonth()-1,1);
 		return CalendarUtil.compareCalendarDate(calThis, calThat);
+	}
+
+	public boolean before(MonthYear that){
+		return this.compareTo(that)<0;
+	}
+
+	public boolean after(MonthYear that){
+		return this.compareTo(that)>0;
 	}
 }
