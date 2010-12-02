@@ -109,6 +109,12 @@ public class CalendarUtil {
 		dataInicial.add(field, addValue);
 		return dataInicial;
 	}
+	
+	public static Calendar buildCalendar(int field, int addValue, Calendar dataInicial) {
+		Calendar novaData = CalendarUtil.buildCalendar(dataInicial);
+		novaData.add(field, addValue);
+		return novaData;
+	}
 
 	public static Calendar buildCalendar(int year, int month, int day) {
 		return new GregorianCalendar(year, month - 1, day);
