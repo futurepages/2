@@ -50,21 +50,30 @@ public class JPEGUtil {
 	 */
 	public static void resizeImage(File file, int width, int height, int quality, String pathNewFile) throws MalformedURLException, FileNotFoundException, IOException {
 		BufferedImage image = ImageIO.read(file);
-		resize(image, width, height, quality, pathNewFile, true);
+		resize(image, width, height, quality, pathNewFile, true, null);
+		image.flush();
+	}
+
+	public static void resizeImage(File file, int width, int height, int quality, String pathNewFile, int[] subimage) throws MalformedURLException, FileNotFoundException, IOException {
+		BufferedImage image = ImageIO.read(file);
+		resize(image, width, height, quality, pathNewFile, true, subimage);
 		image.flush();
 	}
 
 	public static void resizeImagePriorHeight(File file, int width, int height, int quality, String pathNewFile) throws MalformedURLException, FileNotFoundException, IOException {
 		BufferedImage image = ImageIO.read(file);
-		resize(image, width, height, quality, pathNewFile, false);
+		resize(image, width, height, quality, pathNewFile, false, null);
 		image.flush();
 	}
 
-	/**
-	 * Redimensiona imagens (criar thubmnails) - prioriza a largura
-	 */
-	private static void resize(BufferedImage image, int width, int height, int quality, String pathNewFile, boolean priorWidth) throws FileNotFoundException, IOException {
+
+	private static void resize(BufferedImage image, int width, int height, int quality, String pathNewFile, boolean priorWidth, int[] subimage) throws FileNotFoundException, IOException {
 		// Calculos necessários para manter as propoçoes da imagem, conhecido como "aspect ratio"
+
+		if(subimage!=null){
+			image = image.getSubimage(subimage[0], subimage[1], subimage[2], subimage[3]);
+		}
+
 		double thumbRatio = (double) width / (double) height;
 		int imageWidth = image.getWidth(null);
 		int imageHeight = image.getHeight(null);
@@ -88,6 +97,62 @@ public class JPEGUtil {
 		if (width >= imageWidth || height >= imageHeight) {
 			//quando imagem é menor que o resultado final, faz um resizer pobre
 			poorResize(image, width, height, quality, pathNewFile);
+		} else {
+			image = GraphicsUtilities.createThumbnail(image, width, height);
+
+			FileOutputStream fos = new FileOutputStream(pathNewFile);
+			BufferedOutputStream out = new BufferedOutputStream(fos);
+
+			JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
+			JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(image);
+			quality = Math.max(0, Math.min(quality, 100));
+			param.setQuality((float) quality / 100.0f, false);
+			encoder.setJPEGEncodeParam(param);
+			encoder.encode(image);
+
+			image.flush();
+			out.flush();
+			fos.flush();
+			fos.close();
+			out.close();
+		}
+	}
+
+	public static void resizeImageByOneDimension(boolean byWidth, File file, int width, int quality, String pathNewFile, boolean poorWhenSmaller) throws MalformedURLException, FileNotFoundException, IOException {
+		BufferedImage image = ImageIO.read(file);
+		resizeByWidth(byWidth, image, width, quality, pathNewFile, poorWhenSmaller);
+		image.flush();
+	}
+
+	/**
+	 * Redimensiona imagens (criar thubmnails) - prioriza a largura
+	 */
+	private static void resizeByWidth(boolean reallyByWidth, BufferedImage image, int theDimension, int quality, String pathNewFile, boolean poorWhenSmaller) throws FileNotFoundException, IOException {
+		// Calculos necessários para manter as propoçoes da imagem, conhecido como "aspect ratio"
+		int imageWidth = image.getWidth(null);
+		int imageHeight = image.getHeight(null);
+
+		double imageRatio = 0;
+		
+		int width = 0;
+		int height = 0;
+		if(reallyByWidth){
+			imageRatio = (double) imageHeight / (double) imageWidth ;
+			width = theDimension;
+			height = (int) (width * imageRatio);
+		} else {
+			imageRatio = (double) imageWidth / (double) imageHeight ;
+			height = theDimension;
+			width = (int) (height * imageRatio);
+		}
+
+		if (width >= imageWidth || height >= imageHeight) {
+			//quando imagem é menor que o resultado final, faz um resizer pobre
+			if(poorWhenSmaller){
+				poorResize(image, width, height, quality, pathNewFile);
+			}else{
+				poorResize(image, imageWidth, imageHeight, quality, pathNewFile);
+			}
 		} else {
 			image = GraphicsUtilities.createThumbnail(image, width, height);
 

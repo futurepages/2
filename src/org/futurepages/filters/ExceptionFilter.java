@@ -1,12 +1,12 @@
 package org.futurepages.filters;
 
 import java.util.Date;
+import javax.servlet.ServletException;
 
-import org.futurepages.actions.AjaxAction;
-import org.futurepages.actions.DynAction;
 import org.futurepages.annotations.NotListDependencies;
 import org.futurepages.core.action.AbstractAction;
 import org.futurepages.core.action.Action;
+import org.futurepages.core.action.AsynchronousAction;
 import org.futurepages.core.control.InvocationChain;
 import org.futurepages.core.exception.DefaultExceptionLogger;
 import org.futurepages.core.exception.ExceptionLogger;
@@ -25,6 +25,7 @@ public class ExceptionFilter  implements Filter {
 		this.exLogger = exLogger;
 	}
 
+	@Override
 	public String filter(InvocationChain chain) throws Exception {
 		try {
 			return chain.invoke();
@@ -33,6 +34,7 @@ public class ExceptionFilter  implements Filter {
 		}
 	}
 
+	@Override
 	public void destroy() {
 	}
 
@@ -41,12 +43,15 @@ public class ExceptionFilter  implements Filter {
 	 * 
 	 * @return DYN_EXCEPTION ou EXCEPTION para exceptions esperadas, ERROR para exceptions esperadas.
 	 */
-	public static String treatedException(Action action, ExceptionLogger exLogger, Throwable excecao) {
+	public static String treatedException(Action action, ExceptionLogger exLogger, Throwable excecao) throws ServletException {
 		Throwable cause = excecao;
 		if(excecao.getCause() != null){
 			cause = excecao.getCause();
 		}
-		boolean isErrorException = (cause instanceof ErrorException); 
+		boolean isErrorException = (cause instanceof ErrorException);
+		if(cause instanceof ServletException ){
+			throw ((ServletException)cause);  //Erro 500 (??) @TODO Verificar a viabilidade. Colocado por conta do uploadfy
+		}
 		if(isErrorException){
 			//Erros causados por Exceptions Esperadas (ErrorExceptions)
 			ErrorException errorException = (ErrorException) cause;
@@ -71,7 +76,7 @@ public class ExceptionFilter  implements Filter {
 				action.getOutput().setValue("exceptionNumber", exceptionNumber);
 				action.getOutput().setValue("exceptionMessage", cause.getMessage());
 			}
-			if(action instanceof DynAction || action instanceof AjaxAction){
+			if(action instanceof AsynchronousAction){
 				return DYN_EXCEPTION;
 			}
 			return EXCEPTION;
