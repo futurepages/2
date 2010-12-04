@@ -7,6 +7,7 @@ import org.futurepages.actions.DynAction;
 import org.futurepages.actions.AjaxAction;
 import org.futurepages.actions.LoginAction;
 import org.futurepages.core.action.Action;
+import org.futurepages.core.action.AsynchronousAction;
 import org.futurepages.core.context.Context;
 import org.futurepages.core.filter.Filter;
 import org.futurepages.core.control.InvocationChain;
@@ -53,7 +54,8 @@ public class AuthenticationFilter implements Filter {
         if (!shouldBypass) {
             if (!LoginAction.isLogged(session)) {
                 boolean shouldRedirect = false;
-                if ((action instanceof RedirectAfterLogin) && !(action instanceof DynAction)) {
+				
+                if ((action instanceof RedirectAfterLogin) && !(action instanceof AsynchronousAction)) {
                     RedirectAfterLogin ral = (RedirectAfterLogin) action;
                     shouldRedirect = ral.shouldRedirect(innerAction);
                 }
@@ -103,6 +105,8 @@ public class AuthenticationFilter implements Filter {
         }
         session.setAttribute(URL_KEY, url.toString());
     }
+	
+	@Override
     public void destroy() {
     }
 }

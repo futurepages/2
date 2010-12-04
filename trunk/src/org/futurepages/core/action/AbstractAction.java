@@ -203,8 +203,8 @@ public abstract class AbstractAction implements Pageable, Action {
         output(HEAD_TITLE, StringUtils.concat(HeadTitleFilter.SEPARATOR , headTitle));
     }
 
-	protected void outputAjax(Map map) {
-		output(AjaxConsequence.KEY, map);
+	protected void outputAjax(Object object) {
+		output(AjaxConsequence.KEY, object);
 	}
 
 	public void doListDependencies() {
@@ -302,6 +302,10 @@ public abstract class AbstractAction implements Pageable, Action {
 
 	protected ErrorException errorEx(String message) {
         return new ErrorException(message);
+    }
+
+	protected ErrorException errorEx(Exception ex) {
+        return new ErrorException(ex.getMessage());
     }
 
     public String putError(boolean listDependencies, ErrorException errorException) {
