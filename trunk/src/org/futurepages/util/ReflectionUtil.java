@@ -428,6 +428,17 @@ public final class ReflectionUtil {
 				parameterTypes);
 	}
 
+    public static boolean isAnnotationPresentInHierarchy(Class clss, Class annotation) {
+
+        do {
+            if (clss.isAnnotationPresent(annotation)) {
+                return true;
+            }
+        } while ((clss = clss.getSuperclass()) != null);
+
+        return false;
+    }
+
 	/**
 	 * Finds the most specific applicable declared method
 	 *
