@@ -10,6 +10,8 @@ import org.futurepages.util.iterator.months.MonthYear;
 
 public class CalendarUtil {
 
+    private static final long millisecondsDayFactor = 86400000L;
+
 	/**
 	 * Retorna o iésimo dia do ano da data informada.
 	 * <br>Se o ano for não bisexto(possui um dia a menos no ano),o valor retornado será o iésimo dia +1 para os dias após 01/03.
@@ -94,6 +96,10 @@ public class CalendarUtil {
 		long m1 = start.getTimeInMillis();
 		long m2 = end.getTimeInMillis();
 		return getDifference(m1, m2, millisecondsFactor);
+	}
+
+    public static int getDifferenceInDays(long m1, long m2) {
+		return getDifference(m1, m2, millisecondsDayFactor);
 	}
 
 	public static int getDifference(long start, long end, double millisecondsFactor) {
