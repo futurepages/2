@@ -116,6 +116,13 @@ public class HQLField implements HQLable {
         }
         return concat(fieldName , " != '" , escQuote(value) , "'");
     }
+	
+    public String differentFrom(Enum<?> enumeration) {
+        if (Is.empty(enumeration)) {
+            return "";
+        }
+        return concat(fieldName , " != '" , escQuote(enumeration.name()) , "'");
+    }
 
     public String differentFrom(int value) {
         return fieldName + " != " + value;
