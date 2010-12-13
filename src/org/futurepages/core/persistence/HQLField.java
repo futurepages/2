@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.persistence.EnumType;
+
 import org.futurepages.util.DateUtil;
 import org.futurepages.util.HQLUtil;
 import org.futurepages.util.Is;
@@ -117,11 +119,16 @@ public class HQLField implements HQLable {
         return concat(fieldName , " != '" , escQuote(value) , "'");
     }
 	
+    public String differentFrom(Enum<?> enumeration, EnumType type) {
+    	String value = escQuote(enumeration.name());
+    	if(type.equals(EnumType.ORDINAL)){
+    		value = enumeration.ordinal()+"";
+    	}    	
+		return differentFrom(value);
+    }
+    
     public String differentFrom(Enum<?> enumeration) {
-        if (Is.empty(enumeration)) {
-            return "";
-        }
-        return concat(fieldName , " != '" , escQuote(enumeration.name()) , "'");
+    	return differentFrom(enumeration, EnumType.STRING);
     }
 
     public String differentFrom(int value) {
@@ -290,45 +297,43 @@ public class HQLField implements HQLable {
     }
 
     public String in(long... tokens) {
-        return buildlLongExpression("IN", tokens);
+        return buildlLongExpression(IN, tokens);
     }
 
     public String notIn(String... tokens) {
-        return buildlStringExpression("NOT IN", tokens);
+        return buildlStringExpression(NOT_IN, tokens);
     }
 
     public String notIn(List<String> elements) {
-        return concat(fieldName , " NOT IN (" , HQLUtil.imploded(elements) , ")");
+        return concat(fieldName , NOT_IN +"(" , HQLUtil.imploded(elements) , ")");
     }
 
     public String notIn(String tokensStr) {
-        return concat(fieldName , " NOT IN (" , HQLUtil.imploded(tokensStr) , ")");
+        return concat(fieldName , NOT_IN+"(" , HQLUtil.imploded(tokensStr) , ")");
     }
 
     public String notIn(long... tokens) {
-        return buildlLongExpression("NOT IN", tokens);
+        return buildlLongExpression(NOT_IN, tokens);
     }
 
     public String startsWith(String value) {
-        if (Is.empty(value)) {
-            return "";
-        }
-        return concat(fieldName , LIKE , "'" , escLike(value) , "%'");
+        return likeExpression("'", value, "%'");
     }
 
     public String endsWith(String value) {
-        if (Is.empty(value)) {
-            return "";
-        }
-        return concat(fieldName , LIKE , "'%" , escLike(value) , "'");
+        return likeExpression("'%", value, "'");
     }
 
     public String contains(String value) {
-        if (Is.empty(value)) {
+        return likeExpression("'%", value, "%'");
+    }
+
+	private String likeExpression(String prefix, String value,  String sufix) {
+		if (Is.empty(value)) {
             return "";
         }
-        return concat(fieldName , LIKE , "'%" , escLike(value) , "%'");
-    }
+        return concat(fieldName , LIKE  , prefix, escLike(value), sufix);
+	}
 
     public String as(String alias) {
         return fieldName + AS + alias;
