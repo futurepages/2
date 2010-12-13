@@ -559,7 +559,6 @@ public class Controller extends HttpServlet {
     public static void setAppManager(AbstractApplicationManager applicationManager) {
         synchronized (applicationManager) {
             appManager = applicationManager;
-
         }
     }
 }
