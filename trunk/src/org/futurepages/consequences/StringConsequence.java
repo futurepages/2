@@ -31,6 +31,7 @@ public class StringConsequence implements Consequence {
 		this.key = key;
     }    
     
+	@Override
 	public void execute(Action a, HttpServletRequest req, HttpServletResponse res) throws ConsequenceException {
 		
 		Output output = a.getOutput();
