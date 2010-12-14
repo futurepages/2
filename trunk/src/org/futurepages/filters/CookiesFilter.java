@@ -16,57 +16,47 @@ import org.futurepages.core.control.InvocationChain;
  * @author Sergio Oliveira Jr.
  */
 public class CookiesFilter extends InputWrapper implements Filter {
-   
-   private final String name;
-   
-   private ThreadLocal<Action> action = new ThreadLocal<Action>();
-   
-   public CookiesFilter(String name) {
-      
-      this.name = name;
-      
-   }
-   
-   public String filter(InvocationChain chain) throws Exception {
-	   
-	   Action action = chain.getAction();
-	
-	   super.setInput(action.getInput());
-	
-	   action.setInput(this);
-	   
-	   this.action.set(action);
-	   
-	   return chain.invoke();
-   }
-   
+
+	private final String name;
+	private ThreadLocal<Action> action = new ThreadLocal<Action>();
+
+	public CookiesFilter(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String filter(InvocationChain chain) throws Exception {
+		Action theAction = chain.getAction();
+		super.setInput(theAction.getInput());
+		theAction.setInput(this);
+		this.action.set(theAction);
+		return chain.invoke();
+	}
+
 	@Override
 	public Object getValue(String name) {
-		
+
 		if (name.equals(this.name)) {
-			
 			Object value = super.getValue(name);
-			
-			if (value != null) return value;
-			
-			Action action = this.action.get();
-			
-			if (action == null) throw new IllegalStateException("Action cannot be null here!");
-			
-			Context cookies = action.getCookies();
-			
+			if (value != null) {
+				return value;
+			}
+			Action theAction = this.action.get();
+
+			if (theAction == null) {
+				throw new IllegalStateException("Action cannot be null here!");
+			}
+
+			Context cookies = theAction.getCookies();
 			setValue(name, cookies);
-			
 			return cookies;
-			
+
 		} else {
-			
 			return super.getValue(name);
 		}
 	}
-   
-   public void destroy() { 
-      
-   }
-   
+
+	@Override
+	public void destroy() {
+	}
 }
