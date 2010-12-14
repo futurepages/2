@@ -70,6 +70,7 @@ public class JSONGenericRenderer implements AjaxRenderer {
 		this.levels = levels;
 	}
 
+	@Override
 	public String encode(Object object, Locale loc, boolean pretty) throws Exception {
 		if(object instanceof String){
 			return object.toString();
@@ -77,10 +78,12 @@ public class JSONGenericRenderer implements AjaxRenderer {
 		return buildJSON(object, loc).toString();
 	}
 
+	@Override
 	public String getContentType() {
 		return "application/x-www-form-urlencoded";
 	}
    
+	@Override
    public String getCharset() {
       return AjaxConsequence.DEFAULT_CHARSET;
    }
