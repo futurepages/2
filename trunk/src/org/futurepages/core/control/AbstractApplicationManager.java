@@ -8,6 +8,7 @@ import org.futurepages.core.context.Context;
 import org.futurepages.core.filter.Filter;
 import org.futurepages.consequences.StreamConsequence;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -50,6 +51,8 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 	private List<Filter> globalFilters = new LinkedList<Filter>();
     private List<Filter> globalFiltersLast = new LinkedList<Filter>();
 	private Map<String, Consequence> globalConsequences = new HashMap<String, Consequence>();
+
+    private List<Chain> chains = new ArrayList<Chain>();
 
     static AbstractApplicationManager instance = null;
 	
@@ -675,8 +678,30 @@ public abstract class AbstractApplicationManager  implements Manipulable{
     	this.globalFilters = parent.globalFilters;
     	this.globalFiltersLast = parent.globalFiltersLast;
     	this.innerActions = parent.innerActions;
+    	this.chains = parent.chains;
 
     	return this;
+	}
+
+	protected Chain addChain(Chain chain){
+		this.chains.add(chain);
+		return chain;
+	}
+
+	/**
+	 * Necessário ser chamado após o registro de todas as ActionConfig's, pois se fossem registradas
+	 * durante o loadingActions, algumas AC's não existiriam ainda no mapa.
+	 */
+	protected void registerChains(){
+		for(Chain chain : chains){
+			ActionConfig ac = null;
+			if(chain.getInnerAction()==null){
+				ac = this.getActionConfig(chain.getActionPath());
+			}else{
+				ac = this.getActionConfig(chain.getActionPath(), chain.getInnerAction());
+			}
+			chain.setAc(ac);
+		}
 	}
 
    /**
@@ -686,7 +711,6 @@ public abstract class AbstractApplicationManager  implements Manipulable{
     * @since 1.11
     */
    public void setConsequenceProvider(ConsequenceProvider consequenceProvider) {
-
       Controller.setConsequenceProvider(consequenceProvider);
    }
 
@@ -697,7 +721,6 @@ public abstract class AbstractApplicationManager  implements Manipulable{
     * @since 1.11
     */
    public void addList(ListData listData) {
-
       ListManager.addList(listData);
    }
 }

@@ -147,9 +147,12 @@ public class Controller extends HttpServlet {
 
             appManager.init(appContext);
 
+
             appManager.loadLocales();
 
             appManager.loadActions();
+			
+			appManager.registerChains();
 
             appManager.loadBeans();
 
