@@ -411,6 +411,16 @@ public abstract class AbstractAction implements Pageable, Action {
 		return loc;
 	}
 
+	@Override
+	public Map<String, String> getMessages() {
+		return messages;
+	}
+
+	@Override
+	public void setMessages(Map<String, String> messages) {
+		this.messages = messages;
+	}
+
 	public Locale getUserLocale() {
 		return getUserLocale(session);
 	}

@@ -1,6 +1,7 @@
 package org.futurepages.core.action;
 
 import java.util.Locale;
+import java.util.Map;
 import javax.servlet.http.HttpSession;
 import org.futurepages.core.admin.DefaultUser;
 import org.futurepages.core.context.Context;
@@ -65,4 +66,8 @@ public interface Action extends Manipulable {
 	public boolean hasSuccess();
 
 	public boolean hasNoCache();
+
+	public Map<String, String> getMessages();
+
+	public void setMessages(Map<String, String> messages);
 }

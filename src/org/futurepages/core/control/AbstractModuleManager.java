@@ -8,6 +8,8 @@ import org.futurepages.util.ModuleUtil;
 import org.futurepages.actions.AjaxAction;
 import org.futurepages.actions.DynAction;
 import org.futurepages.core.ajax.json.JSONGenericRenderer;
+import org.futurepages.core.consequence.Chain;
+import org.futurepages.util.Is;
 
 public abstract class AbstractModuleManager extends AbstractApplicationManager {
 
@@ -31,6 +33,15 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
             this.webPath = Params.MODULES_PATH + "/" + moduleId + "/";
         }
     }
+
+	private String modulePath(String moduleId){
+        if(withPrettyURL){
+            return moduleId + "/";
+        }
+        else{
+            return Params.MODULES_PATH + "/" + moduleId + "/";
+        }
+	}
 
     @Override
     public ActionConfig action(String act, Class<? extends Object> actionClass) {
@@ -100,6 +111,38 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
         return (new Redirect(prettyCorrect(page) + moduleId + "/"+page));
     }
 
+
+    protected Consequence chain(String moduleId, String actionName, String innerAction) {
+        return addChain(modulePath(moduleId), actionName, innerAction);
+    }
+
+	protected Consequence chain(String moduleId, String actionName){
+		return chain(moduleId, actionName, null);
+	}
+
+    protected Consequence chainRoot(String actionName, String innerAction) {
+        return addChain("/", actionName, innerAction);
+    }
+
+    protected Consequence chainRoot(String actionName) {
+        return chainRoot(actionName, null);
+    }
+
+
+    protected Consequence chainIn(String actionName, String innerAction) {
+        return addChain(webPath, actionName, innerAction);
+    }
+
+	protected Consequence chainIn(String actionName) {
+        return chainIn(actionName, null);
+    }
+
+	private Consequence addChain(String path, String actionName, String innerAction){
+		String actionPath = path + actionName;
+		innerAction = (!Is.empty(innerAction) ? innerAction : null);
+		return addChain(new Chain(actionPath, innerAction));
+	}
+	
     public static String moduleId(Class klass){
            return ModuleUtil.moduleId(klass);
     }
