@@ -28,14 +28,14 @@ public class HQLFieldTest {
 
 	@Test
 	public void testIN_STRING_emptyOneToken(){
-		final String msg = "Erro quando não é passado nenhum elemento";
+		final String msg = "Erro quando não é apenas um elemento";
 		String esperado = fieldName + " IN ('AAA')";
 		in_STRING_TestProcedure(msg,esperado,"AAA");
 	}
 
 	@Test
 	public void testIN_STRING_TwoTokens(){
-		final String msg = "Erro quando não é passado nenhum elemento";
+		final String msg = "Erro quando não são passado dois elementos";
 		String esperado = fieldName + " IN ('AAA','BBB')";
 		in_STRING_TestProcedure(msg,esperado ,"AAA","BBB");
 	}
@@ -115,6 +115,18 @@ public class HQLFieldTest {
 		notIn_LONG_TestProcedure(msg,esperado , 12L, 49L);
 	}
 	
+	@Test
+	public void testEqualsTo_(){
+		final String msg = "Erro quando são passadas duas stringas iguais";
+		String esperado = fieldName + " = 'ASDF'";
+		equalsTo_String_TestProcedure(msg,esperado , "ASDF");
+	}
+	
+	private void equalsTo_String_TestProcedure(String msg, String esperado, String value) {
+		String result = field.equalsTo(value);
+		Assert.assertEquals(msg, esperado, result);
+	}
+
 	private void betweenTestProcedure(String msg, String dataBegin, String dataEnd, String esperado){
 		String result = field.between(dataBegin, dataEnd);
 		Assert.assertEquals(msg, esperado, result);
