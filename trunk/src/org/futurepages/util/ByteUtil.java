@@ -6,7 +6,7 @@ package org.futurepages.util;
  */
 public class ByteUtil {
 
-    public static String bytesPorExtenso(Long bytes) {
+    public static String bytesInWords(Long bytes) {
 
         float aux;
 
