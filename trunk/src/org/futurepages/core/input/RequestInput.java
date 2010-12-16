@@ -41,11 +41,11 @@ public class RequestInput extends AbstractInput implements Map<String, Object> {
 	 * @param req The request
 	 */
 	public RequestInput(HttpServletRequest req) {
-		Map<String, Object> map = req.getParameterMap();
+		Map<String, Object> mapReq = req.getParameterMap();
 
 		// map is ready-only !!!
 		// that's why the clone...
-		this.map = clone(map);
+		this.map = clone(mapReq);
 
 		// Path-info is not supported by *.fpg web.xml mapping!
 		/*
@@ -78,24 +78,16 @@ public class RequestInput extends AbstractInput implements Map<String, Object> {
 		return clone;
 	}
 
+	@Override
 	public String toString() {
-
 		Iterator<String> iter = keys();
-
 		StringBuffer sb = new StringBuffer(1024);
-
 		while (iter.hasNext()) {
-
 			String name = (String) iter.next();
-
 			String value = getStringValue(name);
-
 			value = value.replace('\n', ' ');
-
 			sb.append(name).append(" = ").append(value).append("\n");
-
 		}
-
 		return sb.toString();
 	}
 
@@ -108,6 +100,7 @@ public class RequestInput extends AbstractInput implements Map<String, Object> {
 		return req;
 	}
 
+	@Override
 	public String getProperty(String name) {
 
 		StringBuffer sb = new StringBuffer(64);
@@ -120,55 +113,46 @@ public class RequestInput extends AbstractInput implements Map<String, Object> {
 		String methodName = sb.toString();
 
 		try {
-
 			Method m = null;
 			
-			
-
 			if (cache == null)
 				cache = new Hashtable<String, Method>();
 			else {
-
 				m = cache.get(methodName);
 			}
-
 			if (m == null) {
-
 				m = req.getClass().getMethod(methodName, new Class[0]);
-
 				cache.put(methodName, m);
-
 			}
-
 			Object value = m.invoke(req, new Object[0]);
 
 			if (value != null)
 				return value.toString();
 
 		} catch (Exception e) {
-
 			// nothing here on purpose...
-
 		}
-
 		return null;
-
 	}
 
+	@Override
 	public String getHeader(String name) {
 		return req.getHeader(name);
 	}
 
+	@Override
 	public Iterator<String> getHeaderKeys() {
 
 		return EnumerationUtil.toIterator(req.getHeaderNames());
 
 	}
 
+	@Override
 	public Iterator<String> keys() {
 		return keys.iterator();
 	}
 
+	@Override
 	public void removeValue(String name) {
 		map.remove(name);
 		keys.remove(name);
@@ -177,6 +161,7 @@ public class RequestInput extends AbstractInput implements Map<String, Object> {
 	/**
 	 * If the parameter is not a String, its toString() method is called.
 	 */
+	@Override
 	public String getStringValue(String name) {
 		Object o = map.get(name);
 		return (o != null ? o.toString() : null);
@@ -187,6 +172,7 @@ public class RequestInput extends AbstractInput implements Map<String, Object> {
 	 * be thrown. If the parameter is a String, a String array of size one with
 	 * the string is returned.
 	 */
+	@Override
 	public String[] getStringValues(String name) {
 		Object obj = map.get(name);
 		if (obj == null)
@@ -201,41 +187,48 @@ public class RequestInput extends AbstractInput implements Map<String, Object> {
 		throw new InputException("Error trying to get a String []: " + name);
 	}
 
-
+	@Override
 	public void setValue(String name, Object value) {
 		map.put(name, value);
 		keys.add(name);
 	}
-	
+
+	@Override
 	public boolean hasValue(String name) {
 		
 		return map.containsKey(name);
 	}
 
+	@Override
 	public Object getValue(String name) {
 		return map.get(name);
 	}
 
+	@Override
 	public void clear() {
 		map.clear();
 		keys.clear();
 	}
 
+	@Override
 	public boolean isEmpty() {
 		return map.isEmpty();
 	}
 
+	@Override
 	public boolean containsKey(Object key) {
 		if (key instanceof String) {
-			return map.containsKey(key);
+			return map.containsKey((String) key);
 		}
 		throw new IllegalArgumentException();
 	}
 
+	@Override
 	public boolean containsValue(Object value) {
 		return map.containsValue(value);
 	}
 
+	@Override
 	public Object get(Object key) {
 		if (key instanceof String) {
 			return getValue((String) key);
@@ -243,22 +236,18 @@ public class RequestInput extends AbstractInput implements Map<String, Object> {
 		throw new IllegalArgumentException();
 	}
 
+	@Override
 	public Set<String> keySet() {
-		
 		if (size() == 0) return new HashSet<String>(0);
-		
 		Set<String> set = new HashSet<String>(size());
-		
 		Iterator<String> iter = keys();
-		
-		while(iter.hasNext()) {
-			
+		while(iter.hasNext()) {	
 			set.add(iter.next());
 		}
-		
 		return set;
 	}
 
+	@Override
 	public Object put(String key, Object value) {
 		if (key instanceof String) {
 			setValue((String) key, value);
@@ -267,6 +256,7 @@ public class RequestInput extends AbstractInput implements Map<String, Object> {
 		throw new IllegalArgumentException();
 	}
 
+	@Override
 	public void putAll(Map<? extends String,? extends Object> t) {
 		map.putAll(t);
 		
@@ -278,6 +268,7 @@ public class RequestInput extends AbstractInput implements Map<String, Object> {
 		}
 	}
 
+	@Override
 	public Object remove(Object key) {
 		if (key instanceof String) {
 			String s = (String) key;
@@ -291,18 +282,22 @@ public class RequestInput extends AbstractInput implements Map<String, Object> {
 		throw new IllegalArgumentException();
 	}
 
+	@Override
 	public int size() {
 		return map.size();
 	}
 
+	@Override
 	public Collection<Object> values() {
 		return map.values();
 	}
 
+	@Override
 	public Set<Map.Entry<String,Object>> entrySet() {
 		return map.entrySet();
 	}
 	
+	@Override
 	protected Locale getLocale() {
 
 		return LocaleManager.getLocale(req);
