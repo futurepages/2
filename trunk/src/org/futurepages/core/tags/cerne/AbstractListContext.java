@@ -15,7 +15,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.action.Action;
-import org.futurepages.core.consequence.Forward;
+import org.futurepages.consequences.Forward;
 import org.futurepages.core.i18n.LocaleManager;
 
 /**

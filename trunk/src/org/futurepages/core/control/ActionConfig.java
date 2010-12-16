@@ -1,6 +1,6 @@
 package org.futurepages.core.control;
 
-import org.futurepages.core.consequence.Forward;
+import org.futurepages.consequences.Forward;
 import org.futurepages.core.consequence.Consequence;
 import org.futurepages.core.filter.Filter;
 import org.futurepages.core.action.Action;

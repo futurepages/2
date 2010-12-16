@@ -1,5 +1,6 @@
 package org.futurepages.core.consequence;
 
+import org.futurepages.consequences.Forward;
 import org.futurepages.core.config.Params;
 
 /**

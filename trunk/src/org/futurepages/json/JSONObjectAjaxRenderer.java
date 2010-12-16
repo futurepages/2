@@ -1,4 +1,4 @@
-package org.futurepages.core.ajax.json;
+package org.futurepages.json;
 
 import java.util.Locale;
 

@@ -1,4 +1,4 @@
-package org.futurepages.core.consequence;
+package org.futurepages.consequences;
 
 import org.futurepages.exceptions.ConsequenceException;
 import org.futurepages.core.action.Action;
@@ -10,6 +10,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.futurepages.core.consequence.Consequence;
 import org.futurepages.core.control.AbstractApplicationManager;
 import org.futurepages.core.control.Controller;
 import org.futurepages.core.output.Output;

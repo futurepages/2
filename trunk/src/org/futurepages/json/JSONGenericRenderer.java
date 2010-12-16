@@ -1,4 +1,4 @@
-package org.futurepages.core.ajax.json;
+package org.futurepages.json;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -17,6 +17,7 @@ import net.sf.json.JSONObject;
 
 import org.futurepages.consequences.AjaxConsequence;
 import org.futurepages.core.ajax.AjaxRenderer;
+import org.futurepages.core.ajax.MentaJson;
 import org.futurepages.core.output.MapOutput;
 import org.futurepages.core.i18n.LocaleManager;
 import org.futurepages.util.InjectionUtils;
