@@ -103,7 +103,6 @@ public class JSONGenericRenderer implements AjaxRenderer {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-		
 		return null;
 	}
 	
@@ -135,43 +134,25 @@ public class JSONGenericRenderer implements AjaxRenderer {
 				}
 			}
 			if (value == null) value = "";
-			
 			try {
-			
 				if(isValidBean(value) && !value.equals("") && (levels > currentLevel)){   // Probably is JavaBean
-					
 					currentLevel++;
-
 					jsonObj.put(propertyName, convertBean(value, loc));		// Recursive call
-					
 				} else {
-					
 					if(isWrapper(value) && !isValidBean(value)) {
-
 						jsonObj.put(propertyName, value.toString());
-						
 					} else {
-						
 						if (value instanceof Collection && (levels == 1) && (levels > currentLevel)) {
-							
 							Collection list = (Collection) value;
 							jsonObj.put(propertyName, convertListBean(new ArrayList(list), loc));
-							
 						} else {
-							
 							jsonObj.put(propertyName, "");
-							
 						}
-
 					}
-					
-					
 				}
-					
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			
 		}
 		currentLevel = 0;
 		
@@ -201,7 +182,6 @@ public class JSONGenericRenderer implements AjaxRenderer {
 				jsonArray = convertCollection(list);
 				break;
 			}
-			
 		}
 		
 		return jsonArray;
