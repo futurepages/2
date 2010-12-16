@@ -7,7 +7,6 @@ import org.futurepages.core.consequence.Consequence;
 import org.futurepages.core.context.Context;
 import org.futurepages.core.filter.Filter;
 import org.futurepages.consequences.StreamConsequence;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,11 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.futurepages.consequences.AjaxConsequence;
 import org.futurepages.core.action.Manipulable;
 import org.futurepages.core.ajax.AjaxRenderer;
-import org.futurepages.core.consequence.ConsequenceProvider;
 import org.futurepages.filters.InjectionFilter;
 import org.futurepages.filters.OutjectionFilter;
-import org.futurepages.core.list.ListData;
-import org.futurepages.core.list.ListManager;
 
 /**
  * The central abstract base manager which controls actions, filters, locales and data lists.
@@ -42,7 +38,7 @@ import org.futurepages.core.list.ListManager;
  */
 public abstract class AbstractApplicationManager  implements Manipulable{
 
-	public static String EXTENSION = "fpg";
+	public static String EXTENSION = ".fpg";
 
     private static String realPath;
 
@@ -54,8 +50,6 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 
     private List<Chain> chains = new ArrayList<Chain>();
 
-    static AbstractApplicationManager instance = null;
-	
     private static String viewDir = null;
     private static ActionConfig defaultAction = null;
     private static Context appContext = null;
@@ -67,10 +61,6 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 
     public static Context getApplication() {
        return appContext;
-    }
-
-    public static AbstractApplicationManager getInstance() {
-        return instance;
     }
 
     public static void setRealPath(String realpath) {
@@ -148,7 +138,7 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 	 */
 	public ActionConfig addActionConfig(ActionConfig ac) {
         if (ac.getName() == null) throw new IllegalStateException("Cannot add an action config without a name!");
-        String innerAction = ac.getInnerAction();
+        String innerAction = ac.getNamedInnerAction();
         if (innerAction == null) {
 		    actions.put(ac.getName(), ac);
         } else {
@@ -172,7 +162,7 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 	public boolean removeActionConfig(ActionConfig ac) {
 		String name = ac.getName();
 		if (name == null) throw new IllegalStateException("Cannot remove an action config without a name!");
-		String innerAction = ac.getInnerAction();
+		String innerAction = ac.getNamedInnerAction();
 		if (innerAction == null) {
 			return actions.remove(name) != null;
 		} else {
@@ -209,11 +199,6 @@ public abstract class AbstractApplicationManager  implements Manipulable{
      */
     public void destroy(Context application) {  }
 
-    /**
-     * Override this method to register your mentabeans.
-     */
-    public void loadBeans() { }
-
 	/**
 	 * Override this method to register actions and filters in this application manager.
 	 */
@@ -223,13 +208,6 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 	 * Override this method to specify the supported locales for your application.
 	 */
 	public void loadLocales() {	}
-
-	/**
-	 * Override this method to control the data list loading process.
-	 */
-	public void loadLists() throws IOException {
-
-	}
 
     /**
      * Override this method to define formatters that can be used by fpg:out tag
@@ -497,62 +475,32 @@ public abstract class AbstractApplicationManager  implements Manipulable{
         return filters;
     }
 
-    /**
-     * Convenient method that provides a less verbose way to create a forward.
-     *
-     * This is shorter than new Forward("/foo.jsp").
-     */
     public static Consequence fwd(String page) {
 
         return new Forward(page);
 
     }
 
-    /**
-     * Convenient method that provides a less verbose way to create a redirect.
-	 * 
-     * This is shorter than new Redirect("/foo.jsp").
-     */
     public static Consequence redir(String page) {
         return new Redirect(page);
     }
 
-    /**
-     * Convenient method that provides a less verbose way to create a redirect.
-     *
-     * This is shorter than new Redirect("/foo.jsp", true).
-     */
     public static Consequence redir(String page, boolean flag) {
         return new Redirect(page, flag);
     }
 
-    /**
-     * Convenient method that provides a less verbose way to create a redirect.
-     *
-     * This is shorter than new Redirect().
-     */
     public static Consequence redir() {
 
         return new Redirect();
 
     }
 
-    /**
-     * Convenient method that provides a less verbose way to create a redirect.
-     *
-     * This is shorter than new Redirect().
-     */
     public static Consequence redir(boolean appendOutput) {
 
         return new Redirect(appendOutput);
 
     }
 
-    /**
-     * Convenient method that provides a less verbose way to create a chain.
-     *
-     * This is shorter than new Chain("/foo.jsp").
-     */
     public static Consequence chain(ActionConfig ac) {
 
         return new Chain(ac);
@@ -560,82 +508,45 @@ public abstract class AbstractApplicationManager  implements Manipulable{
     }
 
     public static Consequence ajax(AjaxRenderer renderer) {
-
-       return new AjaxConsequence(renderer);
+       return new AjaxConsequence(AjaxConsequence.KEY, renderer);
     }
 
-    /**
-     * Convenient method that provides a less verbose way to create a chain.
-     */
     public static Consequence chain(ActionConfig ac, String innerAction) {
-
        return new Chain(ac, innerAction);
     }
 
-    /**
-     * Convenient method for setting a chain.
-     */
     public static Consequence chain(Class<? extends Object> klass) {
        return new Chain(new ActionConfig(klass));
     }
 
-    /**
-     * Convenient method for setting a chain.
-     */
     public static Consequence chain(Class<? extends Object> klass, String innerAction) {
 
        return new Chain(new ActionConfig(klass, innerAction));
     }
 
 
-    /**
-     * Convenient method that provides a less verbose way to create a ClassActionConfig.
-     *
-     * Note: This will also add the action to this ApplicationManager, in other words,
-     * no need to call add or addActionConfig !!!
-	 * 
-     */
     public ActionConfig action(Class<? extends Object> klass) {
 
         return addActionConfig(new ActionConfig(klass));
     }
 
-    /**
-     * Convenient method that provides a less verbose way to create an action config.
-     *
-     * Note: This will also add the action to this ApplicationManager, in other words,
-     * no need to call add or addActionConfig
-	 * 
-     */
     public ActionConfig action(String name, Class<? extends Object> klass) {
         return addActionConfig(new ActionConfig(name, klass));
 
     }
 
-    /**
-     * Convenient method that provides a less verbose way to create an action config.
-     *
-     * Note: This will also add the action to this ApplicationManager, in other words,
-     * no need to call add or addActionConfig !!!
-	 * 
-     */
     public ActionConfig action(String name, Class<? extends Object> klass, String innerAction) {
-
         return addActionConfig(new ActionConfig(name, klass, innerAction));
-
     }
 
-    /**
-     * Convenient method that provides a less verbose way to create a ClassActionConfig.
-     *
-     * Note: This will also add the action to this ApplicationManager, in other words,
-     * no need to call add or addActionConfig !!!
-	 * 
-     */
+    public ActionConfig globalAction(String name, Class<? extends Object> klass) {
+		ActionConfig ac = (new ActionConfig(name, klass));
+		ac.setGlobal(true);
+        return addActionConfig(ac);
+    }
+
     public ActionConfig action(Class<? extends Object> klass, String innerAction) {
-
         return addActionConfig(new ActionConfig(klass, innerAction));
-
     }
 
     /**
@@ -645,26 +556,7 @@ public abstract class AbstractApplicationManager  implements Manipulable{
      * @param reloadMode
      */
     public void setReloadMode(boolean reloadMode) {
-
         Controller.reloadAppManager = reloadMode;
-
-    }
-
-    /**
-     * Turn on/off auto view discovery. Default is on!
-     * This can also be done in the web.xml file.
-     *
-     * Auto view gives the controller the ability to generate
-     * forward consequences automatically for the results it cannot
-     * find a consequence, so that you don't need to define consequences
-     * for your actions in the configuration.
-     *
-     * @param autoView
-     */
-    public void setAutoView(boolean autoView) {
-
-        Controller.autoView = autoView;
-
     }
 
 	/**
@@ -694,33 +586,18 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 	 */
 	protected void registerChains(){
 		for(Chain chain : chains){
+			chain.extractInputParamsFromURI();
 			ActionConfig ac = null;
-			if(chain.getInnerAction()==null){
-				ac = this.getActionConfig(chain.getActionPath());
+			if(chain.getNamedInnerAction()==null){
+				ac = this.getActionConfig(chain.getActionName());
 			}else{
-				ac = this.getActionConfig(chain.getActionPath(), chain.getInnerAction());
+				ac = this.getActionConfig(chain.getActionName(), chain.getNamedInnerAction());
 			}
 			chain.setAc(ac);
 		}
 	}
 
-   /**
-    * Sets the consequence provider that will be used by the controller.
-    *
-    * @param consequenceProvider
-    * @since 1.11
-    */
-   public void setConsequenceProvider(ConsequenceProvider consequenceProvider) {
-      Controller.setConsequenceProvider(consequenceProvider);
-   }
-
-   /**
-    * Adds the list to this ListManager, so there is no need to use ListManager.addList
-    *
-    * @param listData
-    * @since 1.11
-    */
-   public void addList(ListData listData) {
-      ListManager.addList(listData);
-   }
+	public Set<String> moduleIds(){
+		return new HashSet<String>();
+	}
 }

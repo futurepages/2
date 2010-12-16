@@ -31,10 +31,12 @@ import org.futurepages.core.formatter.FormatterManager;
 import org.futurepages.core.input.RequestInput;
 import org.futurepages.core.output.ResponseOutput;
 import org.futurepages.core.i18n.LocaleManager;
-import org.futurepages.core.list.ListManager;
+import org.futurepages.core.input.PrettyGlobalURLRequestInput;
+import org.futurepages.core.input.PrettyURLRequestInput;
 import org.futurepages.exceptions.FilterException;
+
 /**
- * The Mentawai central controller. Mentawai actions are intercepted and
+ * The central controller. The actions are intercepted and
  * executed by this controller. The controller is also responsable for creating
  * and starting the ApplicationManager.
  *
@@ -43,66 +45,60 @@ import org.futurepages.exceptions.FilterException;
  */
 public class Controller extends HttpServlet {
 
-    private static final char SEP = File.separatorChar;
-    private static AbstractApplicationManager appManager = null;
+    private static final char FILE_SEPARATOR = File.separatorChar;
+
+	private char innerActionSeparator = '.';
+
+	private final String EXTENSION = AbstractApplicationManager.EXTENSION;
+
+	private Set<String> moduleIDs;
+
+	private String startPage = null;
+
+    private AbstractApplicationManager appManager = null;
     private static String appMgrClassname = null;
     private static ServletContext application = null;
-    private static ServletConfig config = null;
+
     protected static ApplicationContext appContext = null;
-    private static ConsequenceProvider consequenceProvider = null;
     private static ConsequenceProvider defaultConsequenceProvider = new DefaultConsequenceProvider();
     private static File appManagerFile = null;
     private static long lastModified = 0;
     static boolean reloadAppManager = false;
-    static boolean autoView = true;
+
+	private boolean withPrettyURL;
+
+	private static Controller INSTANCE;
+
+	public static Controller getInstance(){
+		return INSTANCE;
+	}
 	
     /**
      * Initialize the Controller, creating and starting the ApplicationManager.
-     *
-     * @param conf
-     *            the ServletConfig.
      */
 	@Override
     public void init(ServletConfig conf) throws ServletException {
         super.init(conf);
-        config = conf;
-        application = conf.getServletContext();
-        appContext = new ApplicationContext(application);
-        AbstractApplicationManager.setRealPath(application.getRealPath(""));
 
-        // verifies if the "reload mode" is on
-        String reload = config.getInitParameter("reloadAppManager");
+		withPrettyURL = Params.get("PRETTY_URL").equals("true");
+		startPage     = Params.get("START_PAGE_NAME");
+		
+		if(withPrettyURL) {
+			innerActionSeparator = '-';
+		}
+		INSTANCE = this;
 
-        if (reload != null && reload.equalsIgnoreCase("true")) {
-            reloadAppManager = true;
-        }
-
-        // verifies if the "auto view" is on (default is on!)
-        String auto = config.getInitParameter("autoView");
-        if (auto != null && auto.equalsIgnoreCase("true")) {
-            autoView = true;
-        }
-
-        // gets the AplicationManager class
-        appMgrClassname = config.getInitParameter("applicationManager");
-
-        if (appMgrClassname == null || appMgrClassname.trim().equals("")) {
-            appMgrClassname = "ApplicationManager"; // default without package...
-        }
+		this.configureServlet(conf);
         initApplicationManager();
+
     }
 
-    public static void setConsequenceProvider(ConsequenceProvider provider) {
-        Controller.consequenceProvider = provider;
-    }
-
-    private static boolean isAppMgrModified() {
-
+    private boolean isAppMgrModified() {
         // not thread-safe on purpouse...
         if (appManagerFile == null) {
             StringBuilder sb = new StringBuilder(AbstractApplicationManager.getRealPath());
-            sb.append(SEP).append("WEB-INF").append(SEP).append("classes").append(SEP);
-            sb.append(appMgrClassname.replace('.', SEP)).append(".class");
+            sb.append(FILE_SEPARATOR).append("WEB-INF").append(FILE_SEPARATOR).append("classes").append(FILE_SEPARATOR);
+            sb.append(appMgrClassname.replace('.', FILE_SEPARATOR)).append(".class");
             appManagerFile = new File(sb.toString());
         }
 
@@ -122,7 +118,7 @@ public class Controller extends HttpServlet {
      *
      * @throws ServletException
      */
-    private static void initApplicationManager() throws ServletException {
+    private void initApplicationManager() throws ServletException {
 
         Class<? extends Object> klass = null;
 
@@ -141,37 +137,20 @@ public class Controller extends HttpServlet {
         try {
             appManager = (AbstractApplicationManager) klass.newInstance();
 
-            AbstractApplicationManager.instance = appManager;
-
             AbstractApplicationManager.setApplication(appContext);
 
-            appManager.init(appContext);
-
-
-            appManager.loadLocales();
-
-            appManager.loadActions();
+			moduleIDs = appManager.moduleIds();
 			
+            appManager.init(appContext);
+            appManager.loadLocales();
+            appManager.loadActions();
 			appManager.registerChains();
-
-            appManager.loadBeans();
-
-            // Try to automatic load the lists, if the user has created them
-            // inside "/lists" directory (default dir).
-            ListManager.init();
-
-            // Then load any user-defined list, because there are other ways to
-            // load lists besides the above.
-            appManager.loadLists();
 
             // Load some pre-defined formatters here.
             FormatterManager.init();
 
             appManager.loadFormatters();
 
-        } catch (IOException e) {
-            throw new ServletException(
-                    "Exception while loading lists in application manager: " + e.getMessage(), e);
         } catch (Exception e) {
             throw new ServletException(
                     "Exception while loading application manager " + appMgrClassname + ": " + e.getMessage(), e);
@@ -185,7 +164,6 @@ public class Controller extends HttpServlet {
      */
     @Override
     public void destroy() {
-
         if (appManager != null) {
             Set<Filter> filters = appManager.getAllFilters();
             Iterator<Filter> iter = filters.iterator();
@@ -207,99 +185,8 @@ public class Controller extends HttpServlet {
      *
      * @return The ServletContext of your web application.
      */
-    public static ServletContext getApplication() {
+    public ServletContext getApplication() {
         return application;
-    }
-
-    /**
-     * Returns the URI from this request. URI = URI - context - extension. This
-     * method is used by getActionName and getInnerActionName. You may call this
-     * method in your own controller subclass. Ex: /myapp/UserAction.add.fpg
-     * will return UserAction.add
-     *
-     * @param req
-     * @return The URI
-     */
-    protected String getURI(HttpServletRequest req) {
-        String context = req.getContextPath();
-        String uri = req.getRequestURI().toString();
-        // remove the context from the uri, if present
-        if (context.length() > 0 && uri.indexOf(context) == 0) {
-            uri = uri.substring(context.length());
-        }
-
-        if(uri.equals("/")){
-            return Params.get("START_PAGE_NAME");
-        }
-
-        // cut the extension... (.fpg or whatever was defined in web.xml)
-        int index = uri.lastIndexOf(".");
-
-        if (index > 0) {
-            uri = uri.substring(0, index);
-        }
-
-        // cut the first '/'
-        if (uri.startsWith("/") && uri.length() > 1) {
-            uri = uri.substring(1, uri.length());
-        }
-
-        return uri;
-    }
-
-    /**
-     * From the http request, get the action name. You may override this if you
-     * want to extract the action name through some other way.
-     *
-     * @param req
-     *            The http request
-     * @return The action name
-     */
-    protected String getActionName(HttpServletRequest req) {
-        String uri = getURI(req);
-        // If there is an Inner Action, cut it off from the action name
-        int index = uri.lastIndexOf(".");
-        if (index > 0 && (uri.length() - index) >= 2) {
-            uri = uri.substring(0, index);
-        }
-        return uri;
-    }
-
-    /**
-     * The action name may include an Inner Action. For example: for
-     * bookmanager.add.fpg the action name is "bookmanager" and the inneraction
-     * name is "add". If you want to extract the inner action through some other
-     * way you can override this method in your own controller.
-     *
-     * @param req
-     * @return The inner action name or null if there is no inneraction.
-     */
-    protected String getInnerActionName(HttpServletRequest req) {
-        String uri = getURI(req);
-        String innerAction = null;
-        int index = uri.lastIndexOf(".");
-        if (index > 0 && (uri.length() - index) >= 2) {
-            innerAction = uri.substring(index + 1, uri.length());
-        }
-        return innerAction;
-    }
-
-    /**
-     * Subclasses of this controller may override this method to have a chance
-     * to prepare the action before it is executed. This method creates and
-     * injects in the action all contexts, input, output and locale.
-     *
-     * @param action The action to prepare for execution
-     * @param req The http request (input will need that)
-     * @param res The http response (output will need that)
-     */
-    protected void prepareAction(Action action, HttpServletRequest req, HttpServletResponse res) {
-        action.setInput(new RequestInput(req));
-        action.setOutput(new ResponseOutput(res));
-        action.setSession(new SessionContext(req, res));
-        action.setApplication(appContext);
-        action.setCookies(new CookieContext(req, res));
-        action.setLocale(LocaleManager.getLocale(req));
     }
 
     @Override
@@ -325,15 +212,11 @@ public class Controller extends HttpServlet {
             }
         }
 
-        /*
-         * This is useful for ScriptApplicationManager that needs to check on
-         * every request if the script file has changed in disk.
-         */
         appManager.service(appContext, req, res);
 
-        String actionName = getActionName(req);
-
-        String innerAction = getInnerActionName(req);
+		String prettyActionUri = (withPrettyURL ? getActionPlusInnerAction(req) : null);
+        String actionName = getActionName(req, prettyActionUri);
+        String innerAction = getInnerActionName(req, prettyActionUri);
 
         ActionConfig ac = null;
 
@@ -359,7 +242,7 @@ public class Controller extends HttpServlet {
             throw new ServletException("Could not get an action instance: " + ac);
         }
 
-        prepareAction(action, req, res);
+        prepareAction(action, ac.isGlobal(), req, res);
 
         List<Object> filters = new LinkedList<Object>();
         Consequence c = null;
@@ -426,7 +309,7 @@ public class Controller extends HttpServlet {
      * @throws FilterException
      *             if there was an exception executing a filter for the action.
      */
-    public static Consequence invokeAction(ActionConfig ac, Action action,
+    public Consequence invokeAction(ActionConfig ac, Action action,
             String innerAction, List<Object> filters, StringBuilder returnedResult) throws Exception {
 
         InvocationChain chain = createInvocationChain(ac, action, innerAction);
@@ -467,26 +350,11 @@ public class Controller extends HttpServlet {
             c = appManager.getGlobalConsequence(result);
         }
 
-        if (consequenceProvider != null) {
-            // new consequenceProvider for Controller...
-            if (c == null) {
-                c = consequenceProvider.getConsequence(ac.getName(), ac.getActionClass(), result, innerAction);
-                // add the consequence dynamically...
-                if (c != null) {
-                    if (innerAction != null && ac.getInnerAction() == null) {
-                        ac.addConsequence(result, innerAction, c);
-                    } else {
-                        ac.addConsequence(result, c);
-                    }
-                }
-            }
-        } else {
-            // use the default consequence provider...
-            if (c == null && autoView) {
-                //c = ac.getAutoConsequence(result, innerAction); // moved to OldAutoViewConsequenceProvider
-                c = defaultConsequenceProvider.getConsequence(ac.getName(), ac.getActionClass(), result, innerAction);
-            }
-        }
+		// use the default consequence provider...
+		if (c == null) {
+			//c = ac.getAutoConsequence(result, innerAction); // moved to OldAutoViewConsequenceProvider
+			c = defaultConsequenceProvider.getConsequence(ac.getName(), ac.getActionClass(), result, innerAction);
+		}
 
         if (c == null) {
             throw new ActionException("Action has no consequence for result: " + ac.getName() + " - " + result);
@@ -495,7 +363,7 @@ public class Controller extends HttpServlet {
         return c;
     }
 
-    private static boolean hasGlobalFilterFreeMarkerFilter(List<Filter> filters, String innerAction) {
+    private boolean hasGlobalFilterFreeMarkerFilter(List<Filter> filters, String innerAction) {
         Iterator<Filter> iter = filters.iterator();
         while (iter.hasNext()) {
             Filter f = iter.next();
@@ -507,7 +375,7 @@ public class Controller extends HttpServlet {
         return false;
     }
 
-    private static InvocationChain createInvocationChain(ActionConfig ac, Action action, String innerAction) {
+    private InvocationChain createInvocationChain(ActionConfig ac, Action action, String innerAction) {
 
         InvocationChain chain = new InvocationChain(ac.getName(), action);
         Object actionImpl = action;
@@ -559,9 +427,196 @@ public class Controller extends HttpServlet {
         return chain;
     }
 
-    public static void setAppManager(AbstractApplicationManager applicationManager) {
-        synchronized (applicationManager) {
-            appManager = applicationManager;
-        }
+	//Only for prettyURLs
+	private String getActionPlusInnerAction(HttpServletRequest req) {
+
+		String context = req.getContextPath();
+
+		String uri = req.getRequestURI().toString();
+
+		if (context.length() > 0 && uri.indexOf(context) == 0) {
+			uri = uri.substring(context.length()); // remove the context from the uri, if present
+		}
+
+		if (uri.startsWith("/") && uri.length() > 1) {
+			uri = uri.substring(1); // cut the first '/'
+		}
+		
+		if (uri.endsWith("/") && uri.length() > 1) {
+			uri = uri.substring(0, uri.length() - 1);  // cut the last '/'
+		}
+
+		String[] s = uri.split("/");
+
+		if(isModule(s[0])){
+			if(s.length==1){
+				if(s[0].equals(startPage)){
+					return s[0];
+				}
+				else if(!s[0].equals(EXTENSION)){
+					return s[0]+"/"+startPage;
+				}
+			}
+			else if (s.length >= 2) {
+				//para prever URLs dos módulos
+				if(!s[0].equals(EXTENSION)){
+					return s[0]+"/"+s[1];
+				}
+				return s[1];
+			}
+		} else {
+			return s[0];
+		}
+
+		return null;
+	}
+
+	protected String getActionName(HttpServletRequest req, String s) {
+		if (!withPrettyURL) {
+			return getObsoleteActionName(req);
+		}
+
+		// separate the inner action from action...
+		int index = s.indexOf(innerActionSeparator);
+		if (index > 0) {
+			return s.substring(0, index);
+		}
+		return s;
+	}
+
+	protected String getInnerActionName(HttpServletRequest req, String s) {
+		if (!withPrettyURL) { //s == null
+			return getObsoleteInnerActionName(req);
+		}
+		// separate the inner action from action...
+		int index = s.indexOf(innerActionSeparator);
+		if (index > 0 && index + 1 < s.length()) {
+			return s.substring(index + 1);
+		}
+		return null;
+	}
+
+	protected void prepareAction(Action action , boolean global, HttpServletRequest req,
+			HttpServletResponse res) {
+
+		if (!withPrettyURL) {
+
+			prepareObsoleteAction(action, req, res);
+
+			return;
+		}
+		if(!global){
+			action.setInput(new PrettyURLRequestInput(req));
+		} else {
+			action.setInput(new PrettyGlobalURLRequestInput(req));
+		}
+		action.setOutput(new ResponseOutput(res));
+		action.setSession(new SessionContext(req, res));
+		action.setApplication(appContext);
+		action.setCookies(new CookieContext(req, res));
+		action.setLocale(LocaleManager.getLocale(req));
+	}
+
+	/**
+     * Subclasses of this controller may override this method to have a chance
+     * to prepare the action before it is executed. This method creates and
+     * injects in the action all contexts, input, output and locale.
+     *
+     * @param action The action to prepare for execution
+     * @param req The http request (input will need that)
+     * @param res The http response (output will need that)
+     */
+    protected void prepareObsoleteAction(Action action, HttpServletRequest req, HttpServletResponse res) {
+        action.setInput(new RequestInput(req));
+        action.setOutput(new ResponseOutput(res));
+        action.setSession(new SessionContext(req, res));
+        action.setApplication(appContext);
+        action.setCookies(new CookieContext(req, res));
+        action.setLocale(LocaleManager.getLocale(req));
     }
+
+
+    protected String getObsoleteActionName(HttpServletRequest req) {
+        String uri = getURI(req);
+        // If there is an Inner Action, cut it off from the action name
+        int index = uri.lastIndexOf(innerActionSeparator);
+        if (index > 0 && (uri.length() - index) >= 2) {
+            uri = uri.substring(0, index);
+        }
+        return uri;
+    }
+
+    protected String getObsoleteInnerActionName(HttpServletRequest req) {
+        String uri = getURI(req);
+        String innerAction = null;
+        int index = uri.lastIndexOf(".");
+        if (index > 0 && (uri.length() - index) >= 2) {
+            innerAction = uri.substring(index + 1, uri.length());
+        }
+        return innerAction;
+    }
+
+    /**
+     * Returns the URI from this request. URI = URI - context - extension. This
+     * method is used by getActionName and getInnerActionName. You may call this
+     * method in your own controller subclass. Ex: /myapp/UserAction.add.fpg
+     * will return UserAction.add
+     */
+    protected String getURI(HttpServletRequest req) {
+        String context = req.getContextPath();
+        String uri = req.getRequestURI().toString();
+        // remove the context from the uri, if present
+        if (context.length() > 0 && uri.indexOf(context) == 0) {
+            uri = uri.substring(context.length());
+        }
+
+        if(uri.equals("/")){
+            return Params.get("START_PAGE_NAME");
+        }
+
+        // cut the extension...
+        int index = uri.lastIndexOf(".");
+
+        if (index > 0) {
+            uri = uri.substring(0, index);
+        }
+
+        // cut the first '/'
+        if (uri.startsWith("/") && uri.length() > 1) {
+            uri = uri.substring(1, uri.length());
+        }
+        return uri;
+    }
+
+	public boolean isWithPrettyURL() {
+		return withPrettyURL;
+	}
+
+	public char getInnerActionSeparator() {
+		return innerActionSeparator;
+	}
+
+	private void configureServlet(ServletConfig conf) {
+        application = conf.getServletContext();
+        appContext = new ApplicationContext(application);
+        AbstractApplicationManager.setRealPath(application.getRealPath(""));
+
+        // verifies if the "reload mode" is on
+        String reload = conf.getInitParameter("reloadAppManager");
+
+        if (reload != null && reload.equalsIgnoreCase("true")) {
+            reloadAppManager = true;
+        }
+
+        // gets the AplicationManager class
+        appMgrClassname = conf.getInitParameter("applicationManager");
+
+        if (appMgrClassname == null || appMgrClassname.trim().equals("")) {
+            appMgrClassname = "ApplicationManager"; // default without package...
+        }
+	}
+
+	public boolean isModule(String pattern){
+		return moduleIDs.contains(pattern);
+	}
 }

@@ -16,6 +16,7 @@ public class NullConsequence implements Consequence {
     /**
      * This method does nothing.
      */
+	@Override
 	public void execute(Action a, HttpServletRequest req, HttpServletResponse res) throws ConsequenceException {
         // do nothing...
     }

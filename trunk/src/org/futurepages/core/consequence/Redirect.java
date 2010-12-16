@@ -130,37 +130,37 @@ public class Redirect implements Consequence {
 	}
 
 	private void appendOutputToURL(StringBuilder urlToRedir, Output output, String querySeparator) {
-				StringBuilder queryFromOutputSB = new StringBuilder();
-				Iterator<String> iter = output.keys();
-				while (iter.hasNext()) {
-					String key = (String) iter.next();
+		StringBuilder queryFromOutputSB = new StringBuilder();
+		Iterator<String> iter = output.keys();
+		while (iter.hasNext()) {
+			String key = (String) iter.next();
 
-					// Skip the reserved keys from framework.
-					if (key.equals(Action.REDIR_URL)
-							|| key.equals(Action.HEAD_TITLE)
-							|| key.equals(Action.MODULE_ID_KEY)
-							|| key.equals(Action.PRETTY_URL_PARAMS)) {
-						continue;
-					}
+			// Skip the reserved keys from framework.
+			if (key.equals(Action.REDIR_URL)
+					|| key.equals(Action.HEAD_TITLE)
+					|| key.equals(Action.MODULE_ID_KEY)
+					|| key.equals(Action.PRETTY_URL_PARAMS)) {
+				continue;
+			}
 
-					Object value = output.getValue(key);
-					// Skip null values.
-					if (value == null) {
-						continue;
-					}
+			Object value = output.getValue(key);
+			// Skip null values.
+			if (value == null) {
+				continue;
+			}
 
-					if (queryFromOutputSB.length() > 0) {
-						queryFromOutputSB.append('&');
-					}
+			if (queryFromOutputSB.length() > 0) {
+				queryFromOutputSB.append('&');
+			}
 
-					queryFromOutputSB.append(key);
-					queryFromOutputSB.append("=");
-					queryFromOutputSB.append(EncodingUtil.encodeUrl(value.toString()));
-				}
+			queryFromOutputSB.append(key);
+			queryFromOutputSB.append("=");
+			queryFromOutputSB.append(EncodingUtil.encodeUrl(value.toString()));
+		}
 
-				if (queryFromOutputSB.length() > 0) {
-					urlToRedir.append(querySeparator).append(queryFromOutputSB);
-				}
+		if (queryFromOutputSB.length() > 0) {
+			urlToRedir.append(querySeparator).append(queryFromOutputSB);
+		}
 	}
 
 	private StringBuilder builBasicUrlToRedir(URI uri) {

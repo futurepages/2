@@ -17,6 +17,7 @@ public class DefaultConsequenceProvider implements ConsequenceProvider {
      * Action.fpg ==> Action.page
      * 
      **/
+	@Override
    public Consequence getConsequence(String action, Class<? extends Object> actionClass, String result, String innerAction) {
 
 	   StringBuilder sb = new StringBuilder(128);

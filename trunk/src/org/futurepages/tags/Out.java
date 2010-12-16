@@ -1,9 +1,6 @@
 package org.futurepages.tags;
 
 import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Locale;
-import java.util.Map;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
@@ -17,8 +14,6 @@ import org.futurepages.core.output.Output;
 import org.futurepages.core.formatter.Formatter;
 import org.futurepages.core.formatter.FormatterManager;
 import org.futurepages.core.i18n.LocaleManager;
-import org.futurepages.core.list.ListData;
-import org.futurepages.core.list.ListManager;
 import org.futurepages.core.tags.build.ContentTypeEnum;
 import org.futurepages.core.tags.cerne.Context;
 
@@ -33,9 +28,6 @@ public class Out extends PrintTag {
 	@TagAttribute
 	private String value = null;
 
-	@TagAttribute
-    private String list = null;
-	
 	@TagAttribute
     private String formatter = null;
 	
@@ -79,10 +71,6 @@ public class Out extends PrintTag {
 	public void setOnBlank(String onBlank) {
 		this.onBlank = onBlank;
 	}
-    
-    public void setList(String list) {
-        this.list = list;
-    }
     
     public void setFormatter(String formatter) {
     	this.formatter = formatter;
@@ -180,49 +168,7 @@ public class Out extends PrintTag {
             }
         }   
     }
-    
-    public String getFromList(int i, Locale loc, String listname) throws JspException {
-    	
-    	return getFromList(i >= 0 ? String.valueOf(i) : null, loc, listname);
-    }
-    
-    public String getFromList(String i, Locale loc, String listname) throws JspException {
-    	
-		ListData list = null;
-    	
-        Object obj = Out.getValue(listname, pageContext, false);
-        
-        if (obj != null && obj instanceof ListData) {
-            
-            list = (ListData) obj;
-            
-        } else if (obj != null && obj instanceof Map) {
-        	
-        	list = ListManager.convert(listname, (Map) obj);
-        	
-        } else if (obj != null && obj instanceof Collection) {
-        	
-        	list = ListManager.convert(listname, (Collection) obj);
-            
-        } else {
-		
-            list = ListManager.getList(listname);
-            
-        }
-
-        if (list == null) throw new JspException("No data list could be found for listname: " + listname);
-        
-        String value = list.getValue(i, loc);
-        
-        if (value == null && i != null) {
-        	
-            //throw new JspException("No value inside listname " + listname + " for " + i + " / " + loc);
-        	
-        	return "???";
-        }
-        return value;
-    }
-    
+       
     private String checkOnBlank(String value) {
     	
     	if ((value == null || value.equals("")) && onBlank != null) {
@@ -296,55 +242,6 @@ public class Out extends PrintTag {
 	        	}
         	
         	}
-        }
-        
-        if (list != null) {
-        	
-            if (obj instanceof Integer) {
-            	
-                Integer i = (Integer) obj;
-                
-                String s = getFromList(i.intValue(), loc, list);
-                
-                return checkOnBlank(s);
-                
-            } else if (obj instanceof String) {
-            	
-                String s = getFromList(obj.toString(), loc, list);
-                    
-                return checkOnBlank(s);
-                    
-            } else if (obj instanceof int[]) {
-            	
-                int [] array = (int []) obj;
-                StringBuffer sb = new StringBuffer(array.length * 40);
-                for(int i=0;i<array.length;i++) {
-                    String item = getFromList(array[i], loc, list);
-                    if (i != 0) sb.append(", ");
-                    sb.append(item);
-                }
-                
-                String s = sb.toString();
-                
-                return checkOnBlank(s);
-                
-            } else if (obj instanceof String[]) {
-            	
-                String[] array = (String[]) obj;
-                StringBuffer sb = new StringBuffer(array.length * 40);
-                for(int i=0;i<array.length;i++) {
-                    String item = getFromList(array[i], loc, list);
-                    if (i != 0) sb.append(", ");
-                    sb.append(item);
-                }
-                
-                String s = sb.toString();
-                
-                return checkOnBlank(s);
-                
-            } else {
-                throw new JspException("Could not get list: " + value + " / " + obj);
-            }
         }
         
         // formatter logic here:
