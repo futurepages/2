@@ -92,13 +92,6 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
         return (new Forward(prettyCorrect(page) + webPath + page));
     }
 
-    protected Consequence rdIn(String page) {
-        return (new Redirect(prettyCorrect(page) + webPath + page));
-    }
-
-    protected Consequence rdIn(String page, boolean redirectParams) {
-        return (new Redirect(prettyCorrect(page) + webPath + page, redirectParams));
-    }
 
     protected Consequence fwd(String moduleId, String page){
         String path = Params.MODULES_PATH+"/";
@@ -110,8 +103,20 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
         return (new Forward(path +  moduleId + "/"+page));
     }
 
+    protected Consequence rdIn(String page) {
+        return (new Redirect(prettyCorrect(page) + webPath + page));
+    }
+
+    protected Consequence rdIn(String page, boolean redirectParams) {
+        return (new Redirect(prettyCorrect(page) + webPath + page, redirectParams));
+    }
+
     protected Consequence redir(String moduleId, String page){
         return (new Redirect(prettyCorrect(page) + moduleId + "/"+page));
+    }
+
+    protected Consequence redir(String moduleId, String page, boolean redirectParams){
+        return (new Redirect(prettyCorrect(page) + moduleId + "/"+page, redirectParams));
     }
 
     protected Consequence chain(String actionName) {
