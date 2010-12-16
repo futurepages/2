@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.futurepages.core.control.AbstractApplicationManager;
-import org.futurepages.core.list.ListManager;
 
 /**
  * @author Sergio Oliveira
@@ -168,7 +167,7 @@ public class LocaleManager {
 		
 		addLocales(scanLocales(getDir()));
 			
-		addLocales(scanLocales(ListManager.LIST_DIR.replace('\\', '/')));
+//		addLocales(scanLocales(ListManager.LIST_DIR.replace('\\', '/'))); // ListManager removido, porisso foi comentado.
 		
 		return true;
 	}
