@@ -2,13 +2,13 @@ package org.futurepages.core.control;
 
 import org.futurepages.core.config.Params;
 import org.futurepages.core.consequence.Consequence;
-import org.futurepages.core.consequence.Forward;
-import org.futurepages.core.consequence.Redirect;
+import org.futurepages.consequences.Forward;
+import org.futurepages.consequences.Redirect;
 import org.futurepages.util.ModuleUtil;
 import org.futurepages.actions.AjaxAction;
 import org.futurepages.actions.DynAction;
-import org.futurepages.core.ajax.json.JSONGenericRenderer;
-import org.futurepages.core.consequence.Chain;
+import org.futurepages.json.JSONGenericRenderer;
+import org.futurepages.consequences.Chain;
 import org.futurepages.util.StringUtils;
 
 public abstract class AbstractModuleManager extends AbstractApplicationManager {

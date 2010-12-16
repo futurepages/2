@@ -6,7 +6,7 @@ import org.futurepages.core.context.Context;
 import org.futurepages.core.filter.Filter;
 import org.futurepages.core.control.InvocationChain;
 import org.futurepages.core.output.Output;
-import org.futurepages.core.consequence.Redirect;
+import org.futurepages.consequences.Redirect;
 
 /**
  * A filter that implements the redirect after login mechanism.

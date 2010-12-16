@@ -1,4 +1,4 @@
-package org.futurepages.core.consequence;
+package org.futurepages.consequences;
 
 import java.util.HashMap;
 import org.futurepages.core.filter.AfterConsequenceFilter;
@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.futurepages.core.consequence.Consequence;
 import org.futurepages.core.control.ActionConfig;
 import org.futurepages.core.control.Controller;
 import org.futurepages.core.input.Input;

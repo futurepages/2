@@ -1,4 +1,4 @@
-package org.futurepages.core.consequence;
+package org.futurepages.consequences;
 
 import org.futurepages.exceptions.ConsequenceException;
 import org.futurepages.core.action.Action;
@@ -6,6 +6,7 @@ import java.net.URI;
 import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.futurepages.core.consequence.Consequence;
 import org.futurepages.core.output.Output;
 import org.futurepages.util.EncodingUtil;
 import org.futurepages.util.Is;

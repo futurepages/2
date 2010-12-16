@@ -1,8 +1,8 @@
 package org.futurepages.core.control;
 
-import org.futurepages.core.consequence.Forward;
-import org.futurepages.core.consequence.Chain;
-import org.futurepages.core.consequence.Redirect;
+import org.futurepages.consequences.Forward;
+import org.futurepages.consequences.Chain;
+import org.futurepages.consequences.Redirect;
 import org.futurepages.core.consequence.Consequence;
 import org.futurepages.core.context.Context;
 import org.futurepages.core.filter.Filter;
