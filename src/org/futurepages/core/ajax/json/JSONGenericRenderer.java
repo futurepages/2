@@ -19,8 +19,6 @@ import org.futurepages.consequences.AjaxConsequence;
 import org.futurepages.core.ajax.AjaxRenderer;
 import org.futurepages.core.output.MapOutput;
 import org.futurepages.core.i18n.LocaleManager;
-import org.futurepages.core.list.ListData;
-import org.futurepages.core.list.ListItem;
 import org.futurepages.util.InjectionUtils;
 
 
@@ -97,9 +95,6 @@ public class JSONGenericRenderer implements AjaxRenderer {
 			} else if (obj instanceof Collection) {
 					return MentaJson.getJSONObject().put("obj", convertListBean((Collection) obj, loc));
 				
-			} else if(obj instanceof ListData) {
-				return MentaJson.getJSONObject().put("obj", convertListData((ListData) obj, loc));
-				
 			} else if(obj instanceof Serializable )	{  // Every Bean Must implement Serializable
 				return MentaJson.getJSONObject().put("obj", MentaJson.getJSONArray().put(convertBean(obj, loc)));
 			}			
@@ -109,24 +104,6 @@ public class JSONGenericRenderer implements AjaxRenderer {
 		}
 		
 		return null;
-	}
-
-	private JSONArray convertListData(ListData listData, Locale loc) {
-		List<ListItem> itens =  listData.getValues(loc);
-		JSONArray jsa = MentaJson.getJSONArray();
-		JSONObject jso;
-		for (ListItem listItem : itens) {
-			try {
-
-				jso = MentaJson.getJSONObject().put("key", listItem.getKey()).put("value", listItem.getValue());
-				jsa.put(jso);
-				
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			
-		}
-		return jsa;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -250,12 +227,6 @@ public class JSONGenericRenderer implements AjaxRenderer {
 					jsonArray.put( MentaJson.getJSONObject()
 									.put("key", entry.getKey().toString())
 									.put("value", convertCollection( (Collection) value)  ));
-					
-				} else if(value instanceof ListData) {
-					jsonArray.put( MentaJson.getJSONObject()
-									.put("key", entry.getKey().toString())
-									.put("value", convertListData( (ListData) value, loc))
-									);
 					
 				} else {
 					jsonArray.put( MentaJson.getJSONObject()

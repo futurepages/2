@@ -1,5 +1,6 @@
 package org.futurepages.core.consequence;
 
+import java.util.HashMap;
 import org.futurepages.core.filter.AfterConsequenceFilter;
 import org.futurepages.core.filter.Filter;
 import org.futurepages.exceptions.ConsequenceException;
@@ -7,6 +8,7 @@ import org.futurepages.core.action.Action;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,12 +25,17 @@ import org.futurepages.core.input.RequestInput;
 public class Chain implements Consequence {
 
 	private ActionConfig ac;
-	private String actionPath = null;
+	
+	private String actionName = null;
+	private String namedInnerAction = null;
 	private String innerAction = null;
+	private String actionURI;
 
-	public Chain(String actionPath, String innerAction) {
-		this.actionPath = actionPath;
-		this.innerAction = innerAction;
+	private Map<String, Object> inputMap = new HashMap<String,Object>();
+
+
+	public Chain(String actionURI) {
+		extractUriData(actionURI);
 	}
 
 	public Chain(ActionConfig ac) {
@@ -38,11 +45,11 @@ public class Chain implements Consequence {
 	/**
 	 * Creates a chain consequence for the given ActionConfig
 	 * @param ac
-	 * @param innerAction
+	 * @param namedInnerAction
 	 */
-	public Chain(ActionConfig ac, String innerAction) {
+	public Chain(ActionConfig ac, String namedInnerAction) {
 		this(ac);
-		this.innerAction = innerAction;
+		this.namedInnerAction = namedInnerAction;
 	}
 
 	@Override
@@ -55,13 +62,17 @@ public class Chain implements Consequence {
 
 //		Because of the new InputWrapper filters, do not re-use the input but copy its values!
 //		@TODO legacy, verify why that.
-		Input input = new RequestInput(req);
+		Input input = chainedInput(req);
+
 		Input old = originalAction.getInput();
 		Iterator<String> iterOld = old.keys();
 
 		while (iterOld.hasNext()) {
 			String key = (String) iterOld.next();
 			input.setValue(key, old.getValue(key));
+		}
+		for(String key : inputMap.keySet()){
+			input.setValue(key, inputMap.get(key));
 		}
 
 		newAction.setInput(input);
@@ -85,13 +96,12 @@ public class Chain implements Consequence {
 			if (this.innerAction != null) {
 				inner = this.innerAction;
 			} else {
-				inner = ac.getInnerAction();
+				inner = ac.getNamedInnerAction();
 			}
-			c = Controller.invokeAction(ac, newAction, inner, filters, returnedResult);
+			c = Controller.getInstance().invokeAction(ac, newAction, inner, filters, returnedResult);
 			actionExecuted = true;
 			c.execute(newAction, req, res);
 			conseqExecuted = true;
-
 		} catch (ConsequenceException e) {
 			throw e;
 		} catch (Exception e) {
@@ -99,9 +109,7 @@ public class Chain implements Consequence {
 		} finally {
 			Iterator<Object> iter = filters.iterator();
 			while (iter.hasNext()) {
-
 				Filter f = (Filter) iter.next();
-
 				if (f instanceof AfterConsequenceFilter) {
 					AfterConsequenceFilter acf = (AfterConsequenceFilter) f;
 					try {
@@ -115,25 +123,91 @@ public class Chain implements Consequence {
 		}
 	}
 
-	public String getActionPath() {
-		return actionPath;
-	}
-
-	public String getInnerAction() {
-		return innerAction;
+	public String getActionName() {
+		return actionName;
 	}
 
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer(128);
 		sb.append("Chain to ").append(ac);
-		if (innerAction != null) {
-			sb.append(" (innerAction = ").append(innerAction).append(")");
+		if (namedInnerAction != null) {
+			sb.append(" (innerAction = ").append(namedInnerAction).append(")");
 		}
 		return sb.toString();
 	}
 
 	public void setAc(ActionConfig ac) {
 		this.ac = ac;
+	}
+
+/**
+ * Este método deve ser chamado só na instanciação. Os valores ficarão guardados pra
+ * sempre que a action for chamada.
+ */
+
+	private void extractUriData(String actionURI) {
+		actionURI = (actionURI.charAt(0)=='/')? actionURI.substring(1) : actionURI;
+
+		if(actionURI.contains("/?")){
+			actionURI = actionURI.replaceAll("/\\?", "?");
+		}
+
+		String[] parts   = actionURI.split("\\?");
+		String sepRegex = "\\"+Controller.getInstance().getInnerActionSeparator();
+		
+	    String[] partsAction = parts[0].split(sepRegex);
+
+		this.actionName = partsAction[0];
+
+		if(partsAction.length > 1){
+			this.innerAction = partsAction[1].split("/")[0];
+		}
+
+		if(parts.length>1){
+			extractInputFromQuery(parts[1]);
+		}
+		this.actionURI = parts[0]; //necessário para o extractInputParamsFromURI
+	}
+
+	private void extractInputFromQuery(String queryParams) {
+		String[] params = queryParams.split("&");
+		for(String paramBruto : params){
+			String[] param = paramBruto.split("=");
+			inputMap.put(param[0], (param.length>1 ? param[1] : null));
+		}
+	}
+
+	/**
+	 * deve ser chamado somente quando vai ser feito o registro dos chains, após todos os módulos
+	 * terem sido registrados, pois os módulos precisam ser carregados para verificar se a action é
+	 * global.
+	 */
+	public void extractInputParamsFromURI() {
+		if(Controller.getInstance().isWithPrettyURL()){
+			String[] uriPathParts = actionURI.split("/");
+			boolean global =  !(Controller.getInstance().isModule(uriPathParts[0]));
+			int i = (global? 1 : 2);
+
+			int keyIdx = 0;
+			if(uriPathParts.length > i ){
+				for(int k = i ; k < uriPathParts.length ; k++){
+					inputMap.put(String.valueOf(keyIdx), uriPathParts[k]);
+					keyIdx++;
+				}
+				if(global){
+					this.actionName = uriPathParts[0];
+				}
+			}
+		}
+	}
+	
+	private Input chainedInput(HttpServletRequest req) {
+		//o input de acordo com a situação
+		return new RequestInput(req);
+	}
+
+	public String getNamedInnerAction() {
+		return this.namedInnerAction;
 	}
 }

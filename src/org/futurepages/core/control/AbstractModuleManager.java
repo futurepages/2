@@ -9,19 +9,22 @@ import org.futurepages.actions.AjaxAction;
 import org.futurepages.actions.DynAction;
 import org.futurepages.core.ajax.json.JSONGenericRenderer;
 import org.futurepages.core.consequence.Chain;
-import org.futurepages.util.Is;
+import org.futurepages.util.StringUtils;
 
 public abstract class AbstractModuleManager extends AbstractApplicationManager {
 
 	protected String webPath;
     protected String moduleId;
+
     private boolean withPrettyURL = false;
+    private char innerActionSeparator;
     
     public AbstractModuleManager() {
         this.moduleId = AbstractModuleManager.moduleId(this.getClass());
 
-        withPrettyURL = Params.get("PRETTY_URL").equals("true");
-        
+        withPrettyURL = Controller.getInstance().isWithPrettyURL();
+		innerActionSeparator = Controller.getInstance().getInnerActionSeparator();
+		
         webPathIt();
     }
 
@@ -48,8 +51,9 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
         return super.action(webPath + act, actionClass);
     }
 
+	@Override
 	public ActionConfig globalAction(String act, Class<? extends Object> actionClass) {
-        return super.action(act, actionClass);
+        return super.globalAction(act, actionClass);
     }
 
 
@@ -60,16 +64,15 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
     
 	public ActionConfig ajaxAction(String act, Class<? extends AjaxAction> actionClass) {
         return super.action(webPath + act, actionClass)
-				.ajaxSuccess(new JSONGenericRenderer())
-				.ajaxError(new JSONGenericRenderer())
+				.on(SUCCESS, ajax(new JSONGenericRenderer()))
+				.on(ERROR, ajax(new JSONGenericRenderer()))
 		;
     }
 
 	public ActionConfig ajaxAction(Class<? extends AjaxAction> actionClass) {
-        return super.action(webPath +
-						actionClass.getSimpleName(),actionClass)
-							.ajaxSuccess(new JSONGenericRenderer())
-							.ajaxError(new JSONGenericRenderer())
+        return super.action(webPath + actionClass.getSimpleName() , actionClass)
+						.on(SUCCESS, ajax(new JSONGenericRenderer()))
+						.on(ERROR, ajax(new JSONGenericRenderer()))
 		;
     }
 
@@ -111,36 +114,20 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
         return (new Redirect(prettyCorrect(page) + moduleId + "/"+page));
     }
 
-
-    protected Consequence chain(String moduleId, String actionName, String innerAction) {
-        return addChain(modulePath(moduleId), actionName, innerAction);
+    protected Consequence chain(String actionName) {
+        return addChain(actionName);
     }
 
 	protected Consequence chain(String moduleId, String actionName){
-		return chain(moduleId, actionName, null);
+		return addChain(modulePath(moduleId), actionName);
 	}
 
-    protected Consequence chainRoot(String actionName, String innerAction) {
-        return addChain("/", actionName, innerAction);
+    protected Consequence chainIn(String actionName) {
+        return addChain(modulePath(moduleId), actionName);
     }
 
-    protected Consequence chainRoot(String actionName) {
-        return chainRoot(actionName, null);
-    }
-
-
-    protected Consequence chainIn(String actionName, String innerAction) {
-        return addChain(webPath, actionName, innerAction);
-    }
-
-	protected Consequence chainIn(String actionName) {
-        return chainIn(actionName, null);
-    }
-
-	private Consequence addChain(String path, String actionName, String innerAction){
-		String actionPath = path + actionName;
-		innerAction = (!Is.empty(innerAction) ? innerAction : null);
-		return addChain(new Chain(actionPath, innerAction));
+	private Consequence addChain(String... actionPath){
+		return addChain(new Chain(StringUtils.concat(actionPath)));
 	}
 	
     public static String moduleId(Class klass){
@@ -155,4 +142,12 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
         }
         return "";
     }
+
+	public char getInnerActionSeparator() {
+		return innerActionSeparator;
+	}
+
+	public void setInnerActionSeparator(char innerActionSeparator) {
+		this.innerActionSeparator = innerActionSeparator;
+	}
 }

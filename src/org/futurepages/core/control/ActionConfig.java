@@ -30,8 +30,10 @@ public class ActionConfig {
     private Map<String, Map<String, Consequence>> innerConsequences = new HashMap<String, Map<String, Consequence>>();
     private List<Object[]> filters = new LinkedList<Object[]>();
     private List<Object[]> firstFilters = new LinkedList<Object[]>();
-    private String innerAction = null;
-    
+    private String namedInnerAction = null;
+
+	private boolean global = false;
+ 
 	/**
 	 * Creates an ActionConfig for the given action implementation.
      * This action config will use the name of the action to derive its name.
@@ -72,7 +74,7 @@ public class ActionConfig {
          }
 
          this.name = cutSlash(st.nextToken());
-         this.innerAction = st.nextToken();
+         this.namedInnerAction = st.nextToken();
          
       } else {
 
@@ -104,7 +106,7 @@ public class ActionConfig {
 		
 		this.actionClass = klass;
 		this.name = cutSlash(name);
-        this.innerAction = innerAction;
+        this.namedInnerAction = innerAction;
 	}
 	
 	/**
@@ -118,7 +120,7 @@ public class ActionConfig {
 		
 		this.actionClass = klass;
 		this.name = getName(klass);
-        this.innerAction = innerAction;
+        this.namedInnerAction = innerAction;
 	}
 	
 	/**
@@ -179,7 +181,7 @@ public class ActionConfig {
      * @throws IllegalStateException If this method is called for a action config specific to an inner action
 	 */
 	public ActionConfig addConsequence(String result, String innerAction, Consequence c) {
-        if (this.innerAction != null) throw new IllegalStateException("Calling addConsequence(result,innerAction,c) is illegal for inner action configs!");
+        if (this.namedInnerAction != null) throw new IllegalStateException("Calling addConsequence(result,innerAction,c) is illegal for inner action configs!");
         Map<String, Consequence> map = innerConsequences.get(innerAction);
         if (map == null) {
             map = new HashMap<String, Consequence>();
@@ -388,34 +390,7 @@ public class ActionConfig {
     public ActionConfig filter(List filters) {
         return addFilter(filters);
     }
-    
-    /**
-     * Shorter version of a AjaxConsequence success.
-     * 
-     * @param renderer
-     * @return this
-     * @since 1.10.1
-     */
-    public ActionConfig ajaxSuccess(AjaxRenderer renderer){
-    
-    	return addConsequence(Action.SUCCESS, new AjaxConsequence(AjaxConsequence.KEY , renderer));
-    }
-
-    /**
-     * Shorter version of a AjaxConsequence error.
-     * 
-     * @param renderer
-     * @return this
-     * @since 1.10.1
-     */
-    public ActionConfig ajaxError(AjaxRenderer renderer){
-    
-    	return addConsequence(Action.ERROR, new AjaxConsequence(AjaxConsequence.KEY, renderer));
-    }    
-    
- 
- 
-    
+        
     /**
      * Adds a list of filter for the inner action.
      *
@@ -551,12 +526,12 @@ public class ActionConfig {
      *
      * @return The inner action name that his action represents.
      */
-    public String getInnerAction() {
-        return innerAction;
+    public String getNamedInnerAction() {
+        return namedInnerAction;
     }
     
     void setInnerAction(String innerAction) {
-        this.innerAction = innerAction;
+        this.namedInnerAction = innerAction;
     }
 	
 	/**
@@ -624,4 +599,12 @@ public class ActionConfig {
     public String toString() {
         return name;
     }
+
+	void setGlobal(boolean b) {
+		this.global = b;
+	}
+
+	public boolean isGlobal() {
+		return this.global;
+	}
 }

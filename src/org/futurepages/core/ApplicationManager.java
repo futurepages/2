@@ -3,7 +3,9 @@ package org.futurepages.core;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.futurepages.core.config.Modules;
 import org.futurepages.core.config.Params;
 import org.futurepages.core.control.AbstractApplicationManager;
@@ -16,6 +18,8 @@ import org.futurepages.core.context.Context;
 public class ApplicationManager extends AbstractApplicationManager {
 
 	private final List<AbstractApplicationManager> managers;
+
+	private Set<String> moduleIDs = new HashSet<String>();
 
 	private boolean initialized = false;
 
@@ -39,6 +43,10 @@ public class ApplicationManager extends AbstractApplicationManager {
             log("Iniciando Registro de Managers");
             //Lista os módulos na árvore de arquivos
             File[] modules = (new File(Params.get("MODULES_CLASSES_REAL_PATH"))).listFiles();
+
+			for(File module : modules){
+				moduleIDs.add(module.getName());
+			}
 
             //Registra o Módulo de Inicialização da Aplicação
             Class initManagerClass = Class.forName(Params.get("INIT_MANAGER_CLASS"));
@@ -88,18 +96,15 @@ public class ApplicationManager extends AbstractApplicationManager {
 	}
 
 	@Override
+	public Set<String> moduleIds(){
+		return moduleIDs;
+	}
+
+	@Override
 	public final void loadActions() {
 		super.loadActions();
 		for (AbstractApplicationManager manager : this.managers) {
 			manager.loadActions();
-		}
-	}
-
-	@Override
-	public final void loadBeans() {
-		super.loadBeans();
-		for (AbstractApplicationManager manager : this.managers) {
-			manager.loadBeans();
 		}
 	}
 
@@ -116,14 +121,6 @@ public class ApplicationManager extends AbstractApplicationManager {
 		super.loadFormatters();
 		for (AbstractApplicationManager manager : this.managers) {
 			manager.loadFormatters();
-		}
-	}
-
-	@Override
-	public final void loadLists() throws IOException {
-		super.loadLists();
-		for (AbstractApplicationManager manager : this.managers) {
-			manager.loadLists();
 		}
 	}
 
