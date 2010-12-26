@@ -119,7 +119,7 @@ public class Forward implements Consequence {
 
     @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer(100);
+        StringBuilder sb = new StringBuilder(100);
         sb.append("Forward to ").append(url);
         return sb.toString();
     }
