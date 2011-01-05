@@ -1,7 +1,6 @@
 package org.futurepages.core;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -18,9 +17,7 @@ import org.futurepages.core.context.Context;
 public class ApplicationManager extends AbstractApplicationManager {
 
 	private final List<AbstractApplicationManager> managers;
-
 	private Set<String> moduleIDs = new HashSet<String>();
-
 	private boolean initialized = false;
 
 	/**
@@ -36,37 +33,37 @@ public class ApplicationManager extends AbstractApplicationManager {
 	}
 
 	/**
-     * Registra o InitManager e os ModuleManagers dos demais módulos
-     */
-    public void registerManagers() {
-        try {
-            log("Iniciando Registro de Managers");
-            //Lista os módulos na árvore de arquivos
-            File[] modules = (new File(Params.get("MODULES_CLASSES_REAL_PATH"))).listFiles();
+	 * Registra o InitManager e os ModuleManagers dos demais módulos
+	 */
+	public void registerManagers() {
+		try {
+			log("Iniciando Registro de Managers");
+			//Lista os módulos na árvore de arquivos
+			File[] modules = (new File(Params.get("MODULES_CLASSES_REAL_PATH"))).listFiles();
 
-			for(File module : modules){
-				moduleIDs.add(module.getName());
+			if (modules!=null) {
+				for (File module : modules) {
+					moduleIDs.add(module.getName());
+				}
 			}
 
-            //Registra o Módulo de Inicialização da Aplicação
-            Class initManagerClass = Class.forName(Params.get("INIT_MANAGER_CLASS"));
-            register(initManagerClass);
+			//Registra o Módulo de Inicialização da Aplicação
+			Class initManagerClass = Class.forName(Params.get("INIT_MANAGER_CLASS"));
+			register(initManagerClass);
 
-            // Registra os demais módulos: mapeia, registra os managers e conecta ao banco criando uma sessão.
-            if(modules!=null){
-                if (Params.get("CONNECT_EXTERNAL_MODULES").equals("false")) {
-                    Modules.registerLocalModules(this, modules);
-                } else if (Params.get("CONNECT_EXTERNAL_MODULES").equals("true")) {
-                    Modules.registerAllModules(this, modules);
-                }
-            }
-            log("Managers Iniciados");
-        } catch (Exception ex) {
-            log("Erro ao registrar os módulos do sistema: "+ex.getMessage());
-            ex.printStackTrace();
-        }
-    }
-
+			// Registra os demais módulos: mapeia, registra os managers e conecta ao banco criando uma sessão.
+			if (modules != null) {
+				if (Params.get("CONNECT_EXTERNAL_MODULES").equals("false")) {
+					Modules.registerLocalModules(this, modules);
+				} else if (Params.get("CONNECT_EXTERNAL_MODULES").equals("true")) {
+					Modules.registerAllModules(this, modules);
+				}
+			}
+			log("Managers Iniciados");
+		} catch (Exception ex) {
+			log("Erro ao registrar os módulos do sistema: " + ex.getMessage());
+		}
+	}
 
 	/**
 	 * Call this method to register an ApplicationManager.
@@ -75,7 +72,9 @@ public class ApplicationManager extends AbstractApplicationManager {
 	 */
 	public void register(Class<? extends AbstractApplicationManager> manager) {
 
-		if (initialized) throw new IllegalStateException("MultiApplicationManager is already initialized! Call register from registerManagers() method!");
+		if (initialized) {
+			throw new IllegalStateException("MultiApplicationManager is already initialized! Call register from registerManagers() method!");
+		}
 
 		try {
 			org.futurepages.core.control.AbstractApplicationManager newInstance = manager.newInstance();
@@ -96,7 +95,7 @@ public class ApplicationManager extends AbstractApplicationManager {
 	}
 
 	@Override
-	public Set<String> moduleIds(){
+	public Set<String> moduleIds() {
 		return moduleIDs;
 	}
 
@@ -124,7 +123,7 @@ public class ApplicationManager extends AbstractApplicationManager {
 		}
 	}
 
-    private void log(String msg){
-        System.out.println("[::appManager::] "+msg);
-    }
+	private void log(String msg) {
+		System.out.println("[::appManager::] " + msg);
+	}
 }
