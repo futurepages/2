@@ -129,7 +129,7 @@ public final class ImportComponentRes extends SimpleTagSupport {
 	}
 
 	public void appendCSSto(HttpServletRequest req, StringBuffer buffer) {
-		buffer.append( concat("<link rel=\"stylesheet\" type=\"text/css\" href=\"" , resPath(req) , "/" , key , "/" , version , "/" , key , ".css\" media=\"screen\"/>"));
+		buffer.append( concat("<link rel=\"stylesheet\" type=\"text/css\" href=\"" , resPath(req) , "/" , key , "/" , version , "/" , key , ".css\" media=\"all\"/>"));
 	}
 
 	private String resPath(HttpServletRequest req){
