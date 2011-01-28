@@ -13,6 +13,8 @@ import org.hibernate.Query;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 
 import org.futurepages.core.pagination.PaginationSlice;
+import org.futurepages.util.Is;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
 public class Dao extends HQLProvider {
@@ -562,4 +564,46 @@ public class Dao extends HQLProvider {
         session().merge(obj);
         return obj;
     }
+
+	public static void executeSQL(String sql) {
+		if (!Is.empty(sql)) {
+			SQLQuery sqlQuery = HibernateManager.getSession().createSQLQuery(sql);
+			sqlQuery.executeUpdate();
+		}
+	}
+
+	public static void executeSQLs(String... sqls) {
+		String trimmedSql = null;
+		String delimiter = ";";
+		StringBuffer sqlToExecute = new StringBuffer();
+
+		for (int i = 0; i < sqls.length; i++) {
+			trimmedSql = sqls[i].trim();
+			if (trimmedSql.length() == 0
+					|| trimmedSql.startsWith("--")
+					|| trimmedSql.startsWith("//")
+					|| trimmedSql.startsWith("/*")) {
+				continue;
+			} else {
+				if (trimmedSql.length() > 10 && trimmedSql.substring(0, 10).toLowerCase().equals("delimiter ")) {
+					delimiter = trimmedSql.substring(10);
+				} else {
+					if (i == sqls.length - 1 && !trimmedSql.endsWith(delimiter)) {
+						sqlToExecute.append(trimmedSql);
+						executeSQL(sqlToExecute.toString());
+						sqlToExecute.delete(0, sqlToExecute.length());
+					} else {
+						if (trimmedSql.endsWith(delimiter)) {
+							sqlToExecute.append(trimmedSql.substring(0, trimmedSql.length() - delimiter.length()));
+							executeSQL(sqlToExecute.toString());
+							sqlToExecute.delete(0, sqlToExecute.length());
+						} else {
+							sqlToExecute.append(trimmedSql + " ");
+						}
+					}
+				}
+
+			}
+		}
+	}
 }

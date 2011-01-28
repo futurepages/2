@@ -3,8 +3,6 @@ package org.futurepages.core.persistence;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.futurepages.util.FileUtil;
-import org.futurepages.util.Is;
-import org.hibernate.SQLQuery;
 
 /**
  * Gerador de Schema. Herde esta classe e coloque dentro do pacote schema
@@ -25,47 +23,13 @@ public abstract class SchemaGenerator {
 	}
 
 	protected void executeSQL(String sql) {
-		if (!Is.empty(sql)) {
 			System.out.println("[::schema-generator::] " + sql);
-			SQLQuery sqlQuery = HibernateManager.getSession().createSQLQuery(sql);
-			sqlQuery.executeUpdate();
-		}
+			Dao.executeSQL(sql);
 	}
 
 	protected void executeSQLFromFile(String path) throws FileNotFoundException, IOException {
 		String[] sqls = FileUtil.getStringLines(this.getClass(), path);
-		String trimmedSql = null;
-		String delimiter = ";";
-		StringBuffer sqlToExecute = new StringBuffer();
-
-		for (int i = 0; i < sqls.length; i++) {
-			trimmedSql = sqls[i].trim();
-			if (trimmedSql.length() == 0
-					|| trimmedSql.startsWith("--")
-					|| trimmedSql.startsWith("//")
-					|| trimmedSql.startsWith("/*")) {
-				continue;
-			} else {
-				if (trimmedSql.length() > 10 && trimmedSql.substring(0, 10).toLowerCase().equals("delimiter ")) {
-					delimiter = trimmedSql.substring(10);
-				} else {
-					if (i == sqls.length - 1 && !trimmedSql.endsWith(delimiter)) {
-						sqlToExecute.append(trimmedSql);
-						executeSQL(sqlToExecute.toString());
-						sqlToExecute.delete(0, sqlToExecute.length());
-					} else {
-						if (trimmedSql.endsWith(delimiter)) {
-							sqlToExecute.append(trimmedSql.substring(0, trimmedSql.length() - delimiter.length()));
-							executeSQL(sqlToExecute.toString());
-							sqlToExecute.delete(0, sqlToExecute.length());
-						} else {
-							sqlToExecute.append(trimmedSql + " ");
-						}
-					}
-				}
-
-			}
-		}
+		Dao.executeSQLs(sqls);
 	}
 
 	public abstract void execute() throws Exception;
