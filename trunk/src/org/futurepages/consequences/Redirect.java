@@ -95,7 +95,6 @@ public class Redirect implements Consequence {
 			if (appendOutput && output != null) {
 				appendOutputToURL(urlToRedir, output, querySeparator);
 			}
-
 			res.sendRedirect(urlToRedir.toString());
 		} catch (Exception e) {
 			throw new ConsequenceException(e);
@@ -167,7 +166,7 @@ public class Redirect implements Consequence {
 	private StringBuilder builBasicUrlToRedir(URI uri) {
 		StringBuilder urlToRedir = new StringBuilder();
 		if(uri.getHost()!=null) {
-				urlToRedir.append(concat(uri.getScheme(),"://",uri.getHost(),(uri.getPort()!=80 ? ":"+uri.getPort() : "")));
+				urlToRedir.append(concat(uri.getScheme(),"://",uri.getHost(),(uri.getPort()!=80 && uri.getPort()!=-1 ? ":"+uri.getPort() : "")));
 		}
 		return urlToRedir;
 	}
