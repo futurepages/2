@@ -34,7 +34,7 @@ public class ImportModuleLayout extends PrintTag{
 				if(!Is.empty(moduleId) && !moduleId.equals(autoImportModule)){
 					sb.append(cssLayoutTag(moduleId));
 				}
-			} else {
+			} else if(!Is.empty(moduleId)){
 					sb.append(cssLayoutTag(moduleId));
 			}
 			return sb.toString();

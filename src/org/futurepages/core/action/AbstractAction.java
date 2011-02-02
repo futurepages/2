@@ -25,6 +25,7 @@ import org.futurepages.core.pagination.Paginator;
 import org.futurepages.core.validation.Validator;
 import org.futurepages.exceptions.ErrorException;
 import org.futurepages.filters.HeadTitleFilter;
+import org.futurepages.filters.ModuleIdFilter;
 import org.futurepages.util.StringUtils;
 import org.futurepages.util.The;
 import org.futurepages.util.html.HtmlMapChars;
@@ -198,6 +199,10 @@ public abstract class AbstractAction implements Pageable, Action {
     public void headTitleAppend(String headTitle) {
         output(HEAD_TITLE, StringUtils.concat((String)output.getValue(HEAD_TITLE) , HeadTitleFilter.SEPARATOR , headTitle));
     }
+
+	public void setModuleId(String moduleId){
+		ModuleIdFilter.setModuleId(this, moduleId);
+	}
 
 	public void headTitleAppendToRoot(String headTitle) {
         output(HEAD_TITLE, StringUtils.concat(HeadTitleFilter.SEPARATOR , headTitle));
