@@ -69,9 +69,6 @@ public class CheckOptions extends HTMLTag {
 	}
 
 	public void setAttribute(String attribute) {
-		if(attribute == null){
-			attribute = "";
-		}
 		this.attribute = attribute;
 
 	}
