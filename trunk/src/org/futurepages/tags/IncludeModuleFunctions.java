@@ -35,7 +35,7 @@ public class IncludeModuleFunctions extends PrintTag{
 				if(!Is.empty(moduleId) && !moduleId.equals(autoImportModule)){
 					sb.append(scriptFunctionsTag(moduleId));
 				}
-			} else {
+			} else if(!Is.empty(moduleId)){
 					sb.append(scriptFunctionsTag(moduleId));
 			}
 			return sb.toString();
