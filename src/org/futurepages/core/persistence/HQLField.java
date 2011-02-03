@@ -26,7 +26,7 @@ public class HQLField implements HQLable {
     }
 
     public String between(String dateBegin, String dateEnd) {
-        return concat("((" , fieldName , GREATER_EQUALS , "'" , escQuote(dateBegin) , "') " , AND , " (" , fieldName , LOWER_EQUALS , "'" , escQuote(dateEnd) , "'))");
+        return concat("((" , fieldName , GREATER_EQUALS , "'" , escQuoteAndSlashes(dateBegin) , "') " , AND , " (" , fieldName , LOWER_EQUALS , "'" , escQuoteAndSlashes(dateEnd) , "'))");
     }
 
     public String inDate(Date date) {
@@ -56,19 +56,24 @@ public class HQLField implements HQLable {
 
         return this.between(dateBegin, dateEnd);
     }
-    
+
+	/**
+	 * Cuidado: só é dado supor para aquelas enums anotadas com @Enumerated(EnumType.STRING)
+	 * @param enumeration
+	 * @return true if equals
+	 */
     public String equalsTo(Enum<?> enumeration) {
     	if (Is.empty(enumeration)) {
     		return "";
     	}
-        return concat(fieldName , " = '" , escQuote(enumeration.name()) , "'");
+        return concat(fieldName , " = '" , escQuoteAndSlashes(enumeration.name()) , "'");
     }
 
     public String equalsTo(String value) {
         if (Is.empty(value)) {
             return "";
         }
-        return concat(fieldName , " = '" , escQuote(value) , "'");
+        return concat(fieldName , " = '" , escQuoteAndSlashes(value) , "'");
     }
 
     public String matches(String value) {
@@ -116,11 +121,11 @@ public class HQLField implements HQLable {
         if (Is.empty(value)) {
             return "";
         }
-        return concat(fieldName , " != '" , escQuote(value) , "'");
+        return concat(fieldName , " != '" , escQuoteAndSlashes(value) , "'");
     }
 	
     public String differentFrom(Enum<?> enumeration, EnumType type) {
-    	String value = escQuote(enumeration.name());
+    	String value = escQuoteAndSlashes(enumeration.name());
     	if(type.equals(EnumType.ORDINAL)){
     		value = enumeration.ordinal()+"";
     	}    	
@@ -148,7 +153,7 @@ public class HQLField implements HQLable {
     }
 
     public String greaterThen(String value) {
-        return concat(fieldName , GREATER , "'" , escQuote(value) , "'");
+        return concat(fieldName , GREATER , "'" , escQuoteAndSlashes(value) , "'");
     }
 
     public String greaterThen(long value) {
@@ -160,7 +165,7 @@ public class HQLField implements HQLable {
     }
 
     public String greaterEqualsThen(String value) {
-        return concat(fieldName , GREATER_EQUALS , "'" , escQuote(value) , "'");
+        return concat(fieldName , GREATER_EQUALS , "'" , escQuoteAndSlashes(value) , "'");
     }
 
     public String greaterEqualsThen(long value) {
@@ -172,7 +177,7 @@ public class HQLField implements HQLable {
     }
 
     public String lowerThen(String value) {
-        return concat(fieldName , LOWER , "'" , escQuote(value) , "'");
+        return concat(fieldName , LOWER , "'" , escQuoteAndSlashes(value) , "'");
     }
 
     public String lowerThen(long value) {
@@ -184,7 +189,7 @@ public class HQLField implements HQLable {
     }
 
     public String lowerEqualsThen(String value) {
-        return concat(fieldName , LOWER_EQUALS , "'" , escQuote(value) , "'");
+        return concat(fieldName , LOWER_EQUALS , "'" , escQuoteAndSlashes(value) , "'");
     }
 
     public String lowerEqualsThen(long value) {
@@ -348,8 +353,8 @@ public class HQLField implements HQLable {
         return HQLUtil.escLike(hql);
     }
 
-    private String escQuote(String hql) {
-        return HQLUtil.escQuote(hql);
+    private String escQuoteAndSlashes(String hql) {
+        return HQLUtil.escQuotesAndSlashes(hql);
     }
 
     /**
@@ -362,7 +367,7 @@ public class HQLField implements HQLable {
     }
 
     private String timeExpression(Calendar cal, String comparator) {
-        return concat(fieldName , comparator , "'" , escQuote(DateUtil.dbDateTime(cal.getTime())) , "'");
+        return concat(fieldName , comparator , "'" , escQuoteAndSlashes(DateUtil.dbDateTime(cal.getTime())) , "'");
     }
 
     public String greaterEqualsThen(Calendar cal) {

@@ -63,7 +63,7 @@ public class HQLUtil {
 		String virgula = "";
 		for (Object element : elements) {
 			out.append(virgula);
-			out.append("'" + escQuote(element.toString()) + "'");
+			out.append("'" + escQuotesAndSlashes(element.toString()) + "'");
 			if(virgula.equals(""))  virgula = "," ;
 		}
 		return out.toString();
@@ -89,9 +89,8 @@ public class HQLUtil {
 	 * @return
 	 */
 	public static String escLike(String original) {
-		original = escQuote(original);
-		original = original.replace("%","\\%");
-		original = original.replace("_","\\_");
+		original = escQuotesAndSlashes(original);
+		original = original.replace("%","\\%").replace("_","\\_");
 		return original;
 	}
 
@@ -100,8 +99,8 @@ public class HQLUtil {
 	 * Escape de HQL/SQL para evitar Injections
 	 * @param original HQL de entrada
 	 */
-	public static String escQuote(String original) {
-		original = original.replace("'", "''");
+	public static String escQuotesAndSlashes(String original) {
+		original = original.replace("'", "''").replace("\\","\\\\");
 		return original;
 	}
 
@@ -111,7 +110,7 @@ public class HQLUtil {
 			if (i != 0) {
 				out.append(",");
 			}
-			out.append("'" + escQuote(array[i]) + "'");
+			out.append("'" + escQuotesAndSlashes(array[i]) + "'");
 		}
 		return out.toString();
 	}
