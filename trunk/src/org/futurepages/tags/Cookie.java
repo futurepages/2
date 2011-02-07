@@ -20,20 +20,24 @@ public class Cookie extends PrintTag{
 	@TagAttribute(required = false)
 	private boolean user = false;
 
+	@TagAttribute(required = false)
+	private String defaultValue;
+
 	@Override
 	public String getStringToPrint() throws JspException {
 		String cookieName = key;
 		if(user){
-			DefaultUser user = this.action.loggedUser();
-			if(user != null){
-				cookieName = key + "_"+ user.getLogin();
+			DefaultUser loggedUser = this.action.loggedUser();
+			if(loggedUser != null){
+				cookieName = key + "_"+ loggedUser.getLogin();
 			}
 		}
 		Object result = this.action.getCookies().getAttribute(cookieName);
+
 		if(result != null){
 			return result.toString();
 		}
-		return "";
+		return defaultValue == null ? "" : defaultValue;
 	}
 
 	public void setKey(String key) {
@@ -44,4 +48,7 @@ public class Cookie extends PrintTag{
 		this.user = user;
 	}
 
+	public void setDefaultValue(String defaultValue) {
+		this.defaultValue = defaultValue;
+	}
 }
