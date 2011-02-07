@@ -21,7 +21,7 @@ public class DateUtil {
 	/**
 	 * Converte datas no formato DD/MM/AAAA para o formato por extenso em língua portuguesa.
 	 * Obs.: converte somente datas entre os anos de  1500 a 2099
-	 * 
+	 *
 	 * @param date - a data de entrada no formato DD/MM/AAAA
 	 * @return - a data por extenso em caracteres todos mnúsculos.
 	 * @throws java.lang.Exception
@@ -326,12 +326,12 @@ public class DateUtil {
 	 * Method to parse a date string in the supplied format to a Date object. If the format is null,
 	 * the default "yyyy-MM-dd" is assumed and returns null if the input string does not match the
 	 * format.
-	 * 
+	 *
 	 * @param <b>dateString
 	 *            </b> The string to be converted to a Date
 	 * @param <b>formatString
 	 *            </b> The format of the string
-	 * 
+	 *
 	 * @return <b>Date</b> The Date object of the string parsed
 	 */
 	public static Date parse(String dateString, DateFormatEnum formatString) {
