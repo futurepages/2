@@ -191,60 +191,85 @@ public class Dao extends HQLProvider {
         return totalPages;
     }
 
-    public static <T extends Serializable> PaginationSlice<T> paginationSlice(int page, int pageSize, Class<T> entity, String whereClause, String... orderClauses) {
+    public static <T extends Serializable> PaginationSlice<T> paginationSlice(int page, int pageSize,                  Class<T> entity, String whereClause, String... orderClauses) {
+        return paginationSlice(page, pageSize, 0, entity, whereClause, orderClauses);
+    }
+    public static <T extends Serializable> PaginationSlice<T> paginationSlice(int page, int pageSize, int pagesOffset, Class<T> entity, String whereClause, String... orderClauses) {
         final long numRows = Dao.numRows(entity, whereClause);
         int totalPages = calcNumPages(numRows, pageSize);
         page = calcPage(page, totalPages);
-        List<T> list = listPage(page, pageSize, concat(from(entity), where(whereClause), orderBy(orderClauses)));
-        return new PaginationSlice<T>(numRows, pageSize, totalPages, page, list);
-    }
+        List<T> list = listPage(page, pageSize, pagesOffset, concat(from(entity), where(whereClause), orderBy(orderClauses)));
+        return new PaginationSlice<T>(numRows, pageSize, pagesOffset, totalPages, page, list);
+	}
 
-    public static <T extends Serializable> PaginationSlice<T> paginationSlice(int page, int pageSize, String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
+    public static <T extends Serializable> PaginationSlice<T> paginationSlice(int page, int pageSize,                  String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
+        return paginationSlice(page, pageSize, 0, entityAlias,fromAndJoin, whereClause, orderClauses);
+    }
+	public static <T extends Serializable> PaginationSlice<T> paginationSlice(int page, int pageSize, int pagesOffset, String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
         final long numRows = Dao.numRows(fromAndJoin, whereClause);
         int totalPages = calcNumPages(numRows, pageSize);
         page = calcPage(page, totalPages);
-        List<T> list = listPage(page, pageSize, select(entityAlias) + fromAndJoin + where(whereClause) + orderBy(orderClauses));
-        return new PaginationSlice<T>(numRows, pageSize, totalPages, page, list);
+        List<T> list = listPage(page, pageSize, pagesOffset, select(entityAlias) + fromAndJoin + where(whereClause) + orderBy(orderClauses));
+        return new PaginationSlice<T>(numRows, pageSize, pagesOffset, totalPages, page, list);
     }
 
-
-	 public static long numRowsWithDistinct(String entityAlias, String fromClause, String where) {
-        Long res = (Long) query(concat(select(count(distinct(entityAlias))), fromClause, where(where))).uniqueResult();
-        return res.longValue();
-    }
-
-    public static <T extends Serializable> PaginationSlice<T> paginationSliceWithDistinct(int page, int pageSize, String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
+    public static <T extends Serializable> PaginationSlice<T> paginationSliceWithDistinct(int page, int pageSize,                  String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
+		return paginationSliceWithDistinct(page, pageSize, 0, entityAlias,fromAndJoin, whereClause, orderClauses);
+	}
+    public static <T extends Serializable> PaginationSlice<T> paginationSliceWithDistinct(int page, int pageSize, int pagesOffset, String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
         final long numRows = Dao.numRowsWithDistinct(entityAlias, fromAndJoin, whereClause);
         int totalPages = calcNumPages(numRows, pageSize);
         page = calcPage(page, totalPages);
-        List<T> list = listPage(page, pageSize, select(distinct( entityAlias)) + fromAndJoin + where(whereClause) + orderBy(orderClauses));
-        return new PaginationSlice<T>(numRows, pageSize, totalPages, page, list);
+        List<T> list = listPage(page, pageSize, pagesOffset, select(distinct( entityAlias)) + fromAndJoin + where(whereClause) + orderBy(orderClauses));
+        return new PaginationSlice<T>(numRows, pageSize, pagesOffset, totalPages, page, list);
     }
 
-    public static <T extends Serializable> PaginationSlice<T> paginationSliceWithJoin(int page, int pageSize, Class<T> entity, String joinClause, String whereClause, String... orderClauses) {
-        return paginationSliceWithJoin(page, pageSize, entity.getSimpleName().toLowerCase(), entity, joinClause, whereClause, orderClauses);
+
+    public static <T extends Serializable> PaginationSlice<T> paginationSliceWithJoin(int page, int pageSize, int pagesOffset, Class<T> entity, String joinClause, String whereClause, String... orderClauses) {
+        return paginationSliceWithJoin(page, pageSize, pagesOffset, entity.getSimpleName().toLowerCase(), entity, joinClause, whereClause, orderClauses);
     }
 
-    public static <T extends Serializable> PaginationSlice<T> paginationSliceWithJoin(int page, int pageSize, String entityAlias, Class<T> entity, String joinClause, String whereClause, String... orderClauses) {
+    public static <T extends Serializable> PaginationSlice<T> paginationSliceWithJoin(int page, int pageSize, int pagesOffset, String entityAlias, Class<T> entity, String joinClause, String whereClause, String... orderClauses) {
         String fromAndJoin = fromAndJoin(entityAlias, entity, joinClause);
         final long numRows = Dao.numRows(fromAndJoin, whereClause);
         int totalPages = calcNumPages(numRows, pageSize);
 
         page = calcPage(page, totalPages);
-        List<T> list = listPage(page, pageSize, select(entityAlias) + fromAndJoin + where(whereClause) + orderBy(orderClauses));
-        return new PaginationSlice<T>(numRows, pageSize, totalPages, page, list);
+        List<T> list = listPage(page, pageSize, pagesOffset, select(entityAlias) + fromAndJoin + where(whereClause) + orderBy(orderClauses));
+        return new PaginationSlice<T>(numRows, pageSize, pagesOffset, totalPages, page, list);
+    }
+
+
+
+	public static long numRowsWithDistinct(String entityAlias, String fromClause, String where) {
+        Long res = (Long) query(concat(select(count(distinct(entityAlias))), fromClause, where(where))).uniqueResult();
+        return res.longValue();
     }
 
     private static <T> String fromAndJoin(String entityAlias, Class<T> entity, String joinClause) {
         return from(entity) + as(entityAlias) + (joinClause != null ? join(joinClause) : "");
     }
 
-    public static <T extends Serializable> List<T> listPage(int page, int pageSize, String hqlQuery) {
+    public static <T extends Serializable> List<T> listPage(int page, int pageSize, int pagesOffset, String hqlQuery) {
         Query query = query(hqlQuery);
-        query.setFirstResult((page * pageSize) - pageSize);
-        query.setMaxResults(pageSize);
-        return query.list();
+        return slicedQuery(query,page,pageSize,pagesOffset).list();
     }
+
+    public static <T extends Serializable> List<T> reportPage(int page, int pageSize, int offset, Class entity, Class<T> reportClass, String fields, String where, String group, String... order) {
+        Query query = query(select(fields) + from(entity) + where(where) + groupBy(group) + orderBy(order));
+        query.setResultTransformer(new AliasToBeanResultTransformer(reportClass));
+        return slicedQuery(query,page,pageSize,offset).list();
+    }
+
+	/**
+	 * the slice of the query to be retrieved
+	 */
+	private static Query slicedQuery(Query query, int pageNumber, int pageSize, int pagesOffset){
+        query.setFirstResult(((pageNumber * pageSize) - pageSize)+pagesOffset);
+        query.setMaxResults(pageSize);
+		return query;
+	}
+
 
     /* TOP LIST*/
     public static <T extends Serializable> List<T> topListWithJoin(int topSize, Class<T> entity, String joinClause, String whereClause, String... orderClauses) {
@@ -336,14 +361,6 @@ public class Dao extends HQLProvider {
         Query query = query(select(functions) + from(entity) + where(where));
         query.setResultTransformer(new AliasToBeanResultTransformer(reportClass));
         return query.uniqueResult();
-    }
-
-    public static <T extends Serializable> List<T> reportPage(int page, int pageSize, Class entity, Class<T> reportClass, String fields, String where, String group, String... order) {
-        Query query = query(select(fields) + from(entity) + where(where) + groupBy(group) + orderBy(order));
-        query.setResultTransformer(new AliasToBeanResultTransformer(reportClass));
-        query.setFirstResult((page * pageSize) - pageSize);
-        query.setMaxResults(pageSize);
-        return query.list();
     }
 
     public static <T extends Serializable> List<T> topReportWithJoin(int topSize, Class entity,
