@@ -15,16 +15,20 @@ public class PaginationSlice<T> {
     
     /** número da página*/
     private int pageNumber;
+
+	/** o quanto deslocou */
+    private int pagesOffset;
     
     /** lista referente à página*/
     private List<T> list;
 
-    public PaginationSlice(Long totalSize, Integer pageSize, int numPages, int page, List<T> list) {
+    public PaginationSlice(Long totalSize, Integer pageSize, int pagesOffset, int numPages, int page,  List<T> list) {
         this.totalSize = totalSize;
         this.pageSize = pageSize;
         this.totalPages = numPages;
         this.list = list;
         this.pageNumber = page;
+        this.pagesOffset = pagesOffset;
     }
 
     public void setTotalPages(int total) {
@@ -66,4 +70,12 @@ public class PaginationSlice<T> {
     public void setList(List<T> list) {
         this.list = list;
     }
+
+	public int getPagesOffset() {
+		return pagesOffset;
+	}
+
+	public void setPagesOffset(int pagesOffset) {
+		this.pagesOffset = pagesOffset;
+	}
 }

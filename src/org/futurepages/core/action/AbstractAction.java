@@ -92,10 +92,15 @@ public abstract class AbstractAction implements Pageable, Action {
 		return Validator.validate(t, true);
 	}
 
-	private Paginator getPaginator(){
+	protected Paginator getPaginator(){
 		if(paginator == null){
 			paginator = new Paginator(output, input);
 		}
+		return paginator;
+	}
+
+	protected Paginator getPaginator(int defaultPageSize){
+		getPaginator().setDefaultPageSize(defaultPageSize);
 		return paginator;
 	}
 
@@ -112,10 +117,6 @@ public abstract class AbstractAction implements Pageable, Action {
 
 	public <T extends Serializable> void setOutputPaginationSlice(String listKey, PaginationSlice<T> slice) {
 		getPaginator().setOutputPaginationSlice(listKey, slice);
-	}
-
-	protected void setOutputPaginationValues(int pageSize, long totalSize, int totalPages, int pageNum) {
-		setOutputPaginationValues(pageSize, totalSize, totalPages, pageNum);
 	}
 
 	protected Object input(String key){
@@ -172,6 +173,11 @@ public abstract class AbstractAction implements Pageable, Action {
 	/** @return Pega o numero da página corrente em uso */
 	protected int getPageNum() {
 		return getPaginator().getPageNum();
+	}
+
+	/** @return Pega o tamanho do deslocamento dos elementos na página */
+	protected int getOffsetPages(){
+		return getPaginator().getPagesOffset();
 	}
 
 	protected int getPageSize(int defaultPageSize) {

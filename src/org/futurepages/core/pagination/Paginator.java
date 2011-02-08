@@ -18,6 +18,8 @@ public class Paginator implements Pageable {
 	private Output output;
 	private Input input;
 
+	private int defaultPageSize = 10;
+
 	public Paginator(Output output, Input input) {
 		super();
 		this.output = output;
@@ -32,24 +34,25 @@ public class Paginator implements Pageable {
 	 * @deprecated Utilize setOutputPaginationSlice (verificar em site2 e scrummer o uso)
 	 */
 	public <T extends Serializable> List<T> paginateList(int pageSize, Class<T> entityClass, String where, String order) {
-		List<T> list = Dao.listPage(getPageNum(), pageSize, " FROM " + entityClass.getName() + " WHERE " + where + " ORDER BY " + order);
+		List<T> list = Dao.listPage(getPageNum(), pageSize, 0, " FROM " + entityClass.getName() + " WHERE " + where + " ORDER BY " + order);
 		long totalSize = Dao.numRows(entityClass, where);
 		double total = totalSize;
 		int totalPages = (int) Math.ceil(total / pageSize);
-		setOutputPaginationValues(pageSize, totalSize, totalPages, getPageNum());
+		setOutputPaginationValues(pageSize, 0, totalSize, totalPages, getPageNum());
 		return list;
 	}
 
 	public <T extends Serializable> void setOutputPaginationSlice(String listKey, PaginationSlice<T> slice) {
-		setOutputPaginationValues(slice.getPageSize(), slice.getTotalSize(), slice.getTotalPages(), slice.getPageNumber());
+		setOutputPaginationValues(slice.getPageSize(),slice.getPagesOffset(), slice.getTotalSize(), slice.getTotalPages(), slice.getPageNumber());
 		output.setValue(listKey, slice.getList());
 	}
 
-	public void setOutputPaginationValues(int pageSize, long totalSize, int totalPages, int pageNum) {
+	public void setOutputPaginationValues(int pageSize, int pagesOffset, long totalSize, int totalPages, int pageNum) {
 		output.setValue(_TOTAL_SIZE, (int) totalSize);
 		output.setValue(_TOTAL_PAGES, totalPages);
 		output.setValue(_PAGE_NUM, pageNum);
 		output.setValue(_PAGE_SIZE, pageSize);
+		output.setValue(_PAGES_OFFSET, pagesOffset);
 	}
 
 	/**
@@ -80,6 +83,27 @@ public class Paginator implements Pageable {
 			pageSize = defaultPageSize;
 		}
 		return pageSize;
+	}
+
+	public void setDefaultPageSize(int defPageSize){
+		this.defaultPageSize = defPageSize;
+	}
+
+	public int getPageSize(){
+		return this.getPageSize(this.defaultPageSize);
+	}
+
+	/**
+	 * Offset é a quantidade de elementos que as páginas que estão sendo exibidas assincronamente
+	 * mudou desde a última vez que a página foi carregada.
+	 * @return
+	 */
+	public int getPagesOffset() {
+		int offsetPages = 0;
+		if (input.getValue(_PAGES_OFFSET) != null) {
+			offsetPages = input.getIntValue(_PAGES_OFFSET);
+		}
+		return offsetPages;
 	}
 
 }
