@@ -179,10 +179,12 @@ public class Dao extends HQLProvider {
 
 	}
 
-    private static int calcPage(int page, int totalPages) {
-        if (page > totalPages) {
-            page = totalPages;
-        }
+    private static int correctPageNumber(int page, int totalPages, int pagesOffset) {
+		if(pagesOffset == 0){
+			if (page > totalPages) {
+				page = totalPages;
+			}
+		}
         return page;
     }
 
@@ -197,7 +199,7 @@ public class Dao extends HQLProvider {
     public static <T extends Serializable> PaginationSlice<T> paginationSlice(int page, int pageSize, int pagesOffset, Class<T> entity, String whereClause, String... orderClauses) {
         final long numRows = Dao.numRows(entity, whereClause);
         int totalPages = calcNumPages(numRows, pageSize);
-        page = calcPage(page, totalPages);
+		page = correctPageNumber(page, totalPages, pagesOffset);
         List<T> list = listPage(page, pageSize, pagesOffset, concat(from(entity), where(whereClause), orderBy(orderClauses)));
         return new PaginationSlice<T>(numRows, pageSize, pagesOffset, totalPages, page, list);
 	}
@@ -208,7 +210,7 @@ public class Dao extends HQLProvider {
 	public static <T extends Serializable> PaginationSlice<T> paginationSlice(int page, int pageSize, int pagesOffset, String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
         final long numRows = Dao.numRows(fromAndJoin, whereClause);
         int totalPages = calcNumPages(numRows, pageSize);
-        page = calcPage(page, totalPages);
+        page = correctPageNumber(page, totalPages, pagesOffset);
         List<T> list = listPage(page, pageSize, pagesOffset, select(entityAlias) + fromAndJoin + where(whereClause) + orderBy(orderClauses));
         return new PaginationSlice<T>(numRows, pageSize, pagesOffset, totalPages, page, list);
     }
@@ -219,11 +221,10 @@ public class Dao extends HQLProvider {
     public static <T extends Serializable> PaginationSlice<T> paginationSliceWithDistinct(int page, int pageSize, int pagesOffset, String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
         final long numRows = Dao.numRowsWithDistinct(entityAlias, fromAndJoin, whereClause);
         int totalPages = calcNumPages(numRows, pageSize);
-        page = calcPage(page, totalPages);
+        page = correctPageNumber(page, totalPages, pagesOffset);
         List<T> list = listPage(page, pageSize, pagesOffset, select(distinct( entityAlias)) + fromAndJoin + where(whereClause) + orderBy(orderClauses));
         return new PaginationSlice<T>(numRows, pageSize, pagesOffset, totalPages, page, list);
     }
-
 
     public static <T extends Serializable> PaginationSlice<T> paginationSliceWithJoin(int page, int pageSize, int pagesOffset, Class<T> entity, String joinClause, String whereClause, String... orderClauses) {
         return paginationSliceWithJoin(page, pageSize, pagesOffset, entity.getSimpleName().toLowerCase(), entity, joinClause, whereClause, orderClauses);
@@ -234,7 +235,7 @@ public class Dao extends HQLProvider {
         final long numRows = Dao.numRows(fromAndJoin, whereClause);
         int totalPages = calcNumPages(numRows, pageSize);
 
-        page = calcPage(page, totalPages);
+        page = correctPageNumber(page, totalPages,pagesOffset);
         List<T> list = listPage(page, pageSize, pagesOffset, select(entityAlias) + fromAndJoin + where(whereClause) + orderBy(orderClauses));
         return new PaginationSlice<T>(numRows, pageSize, pagesOffset, totalPages, page, list);
     }
