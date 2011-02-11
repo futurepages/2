@@ -73,6 +73,7 @@ public class AjaxConsequence implements Consequence {
      * Prints in the request's output the ajax response. The ajax response is
      * supplied by the AjaxRender.
      */
+	@Override
     public void execute(Action a, HttpServletRequest req, HttpServletResponse res) throws ConsequenceException {
     	
     	Object obj = a.getOutput().getValue(key);
