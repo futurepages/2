@@ -78,9 +78,8 @@ public class Select extends HTMLTag {
 					actionList.add(Array.get(tempVal, i));
 				}
 			}
-            
-            //List actionList = (List) action.getOutput().getValue(list);
-            String value_id = "";
+
+			String value_id = "";
             if (defaultText != null) {
                 sb.append("<option value=\"").append(defaultValue).append("\">").append(defaultText).append("</option>");
             }
