@@ -1,5 +1,8 @@
 package org.futurepages.tags;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.persistence.Entity;
 
@@ -61,7 +64,20 @@ public class Select extends HTMLTag {
         if (list != null) {
 
             javax.servlet.jsp.tagext.Tag parent = findAncestorWithClass(this, Context.class);
-            List actionList = (List) Out.getValue(parent, list , pageContext, true);
+
+			Object tempVal = Out.getValue(parent, list , pageContext, true);
+			List actionList;
+			
+			if (tempVal instanceof List) {
+				actionList = (List) tempVal;
+			} else if (tempVal instanceof Object[]){
+				actionList = Arrays.asList((Object[])tempVal);
+			} else {
+				actionList = new ArrayList<Object>();
+				for (int i = 0; i < Array.getLength(tempVal); i++) {
+					actionList.add(Array.get(tempVal, i));
+				}
+			}
             
             //List actionList = (List) action.getOutput().getValue(list);
             String value_id = "";
