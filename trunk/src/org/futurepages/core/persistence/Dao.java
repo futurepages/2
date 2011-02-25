@@ -14,7 +14,6 @@ import org.hibernate.transform.AliasToBeanResultTransformer;
 
 import org.futurepages.core.pagination.PaginationSlice;
 import org.futurepages.util.Is;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
 public class Dao extends HQLProvider {
@@ -50,6 +49,10 @@ public class Dao extends HQLProvider {
     public static Criteria createCriteria(Class entityClass) {
         return session().createCriteria(entityClass);
     }
+
+    public static Query sqlQuery(String sqlQuery) {
+		return session().createSQLQuery(sqlQuery);
+	}
 
     public static Query query(String hqlQuery) {
 //		System.out.println("HQL: "+hqlQuery);
@@ -585,8 +588,7 @@ public class Dao extends HQLProvider {
 
 	public static void executeSQL(String sql) {
 		if (!Is.empty(sql)) {
-			SQLQuery sqlQuery = HibernateManager.getSession().createSQLQuery(sql);
-			sqlQuery.executeUpdate();
+			sqlQuery(sql).executeUpdate();
 		}
 	}
 
