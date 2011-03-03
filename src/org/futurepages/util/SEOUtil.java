@@ -83,7 +83,7 @@ public class SEOUtil {
     }
 
     /**
-     * Devolve a string informadoa sem acentuacao e pontuacao
+     * Devolve a string informada sem acentuacao e pontuacao
      * @see urlMappingAlphabetics
      * @see urlMappingEspeciais
      */
