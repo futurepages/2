@@ -423,6 +423,11 @@ public class Dao extends HQLProvider {
         return res.longValue();
     }
 
+	public static long numRows(String hqlQuery){
+		 Long res = (Long) query(hqlQuery).uniqueResult();
+        return res.longValue();
+	}
+
     /**
      * /////////////////////////////////////////////////
      * MÉTODOS TRANSACIONAIS
