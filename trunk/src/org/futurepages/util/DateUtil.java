@@ -227,7 +227,7 @@ public class DateUtil {
 	 * Formato da saída: DD/MM/YYYY
 	 */
 	public static String viewDateTime(Object in) {
-		return viewDateTime(in, "dd/MM/yyyy - HH:mm");
+		return viewDateTime(in, "dd/MM/yyyy - HH:mm:ss");
 	}
 
 	/**
