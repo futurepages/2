@@ -41,6 +41,21 @@ public class Paginator implements Pageable {
 		setOutputPaginationValues(pageSize, 0, totalSize, totalPages, getPageNum());
 		return list;
 	}
+	/**
+	 * Paginação de elementos de um report
+	 *
+	 * Depreciado por ser uma má pratica de programação (mistura controle e modelo)
+	 *
+	 * @deprecated Utilize setOutputPaginationSlice (verificar em site2 e scrummer o uso)
+	 */
+	public <T extends Serializable> List<T> paginateReport(int pageSize, Class<T> entityClass, Class resultClass, String fields, String where, String group, String... order) {
+		List<T> list = Dao.reportPage(getPageNum(), pageSize, 0, entityClass, resultClass, fields, where , group, order);
+		long totalSize = Dao.numRows(entityClass, where);
+		double total = totalSize;
+		int totalPages = (int) Math.ceil(total / pageSize);
+		setOutputPaginationValues(pageSize, 0, totalSize, totalPages, getPageNum());
+		return list;
+	}
 
 	public <T extends Serializable> void setOutputPaginationSlice(String listKey, PaginationSlice<T> slice) {
 		setOutputPaginationValues(slice.getPageSize(),slice.getPagesOffset(), slice.getTotalSize(), slice.getTotalPages(), slice.getPageNumber());

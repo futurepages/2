@@ -2,7 +2,6 @@ package org.futurepages.core.persistence;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -10,625 +9,407 @@ import java.util.Map;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
-import org.hibernate.transform.AliasToBeanResultTransformer;
 
 import org.futurepages.core.pagination.PaginationSlice;
-import org.futurepages.util.Is;
-import org.hibernate.Session;
+import org.hibernate.SQLQuery;
 
 public class Dao extends HQLProvider {
 
-    //privado propositalmente para encapsular o hibernate
-    private static Session session() {
-        return HibernateManager.getSession();
-    }
+	private static GenericDao INSTANCE;
 
-    public static void clearSession() {
-        Session session = session();
-        if (session.isDirty()) {
-            session.clear();
-        }
-    }
-
-    public static void open() {
-        if (!session().isOpen()) {
-            session().getSessionFactory().openSession();
-        }
-    }
-
-    public static void close() {
-        if (session().isOpen()) {
-            session().close();
-        }
-    }
-
-	public static void evict(Class entity){
-		session().getSessionFactory().evict(entity);
+	static {
+		INSTANCE = new GenericDao();
 	}
 
-    public static Criteria createCriteria(Class entityClass) {
-        return session().createCriteria(entityClass);
-    }
-
-    public static Query sqlQuery(String sqlQuery) {
-		return session().createSQLQuery(sqlQuery);
+	public static GenericDao getInstance() {
+		return INSTANCE;
 	}
 
-    public static Query query(String hqlQuery) {
-//		System.out.println("HQL: "+hqlQuery);
-		Query query = session().createQuery(hqlQuery).setCacheable(true);
-        return query;
-    }
+	public static void clearSession() {
+		getInstance().clearSession();
+	}
 
-    public static String getIdName(Class entity) {
-        return session().getSessionFactory().getClassMetadata(entity).getIdentifierPropertyName();
-    }
+	public static void open() {
+		getInstance().open();
+	}
 
-    public static Class getIdType(Class entity) {
-        return session().getSessionFactory().getClassMetadata(entity).getIdentifierType().getClass();
+	public static void close() {
+		getInstance().close();
+	}
 
-    }
+	public static void evict(Class entity) {
+		getInstance().evict(entity);
+	}
 
-    public static boolean isTransactionActive() {
-        return session().getTransaction().isActive();
-    }
+	public static Criteria createCriteria(Class entityClass) {
+		return getInstance().createCriteria(entityClass);
+	}
 
-    public static Object uniqueResult(String function, Class entity, String where) {
-        Object obj = query(select(function) + from(entity) + where(where)).uniqueResult();
-        return obj;
-    }
+	public static SQLQuery sqlQuery(String sqlQuery) {
+		return getInstance().sqlQuery(sqlQuery);
+	}
 
-    public static Object getMinField(String field, Class entity, String where) {
-        Object result = uniqueResult(min(field), entity, where);
-        return result;
-    }
+	public static Query query(String hqlQuery) {
+		return getInstance().query(hqlQuery);
+	}
 
-    public static Object getMaxField(String field, Class entity, String where) {
-        Object result = uniqueResult(max(field), entity, where);
-        return result;
-    }
+	public static String getIdName(Class entity) {
+		return getInstance().getIdName(entity);
+	}
 
-    public static long getNextLong(String field, Class entity) {
-        Long newId = (Long) uniqueResult(max(field) + "+1", entity, null);
-        if (newId != null) {
-            return newId;
-        }
-        return 1;
-    }
+	public static Class getIdType(Class entity) {
+		return getInstance().getIdType(entity);
+	}
 
-    public static Object updateField(Class entity, String field, String expression, String whereClause) {
-        String hql = concat(updateSetting(entity), field, EQUALS, expression, where(whereClause));
-        query(hql).executeUpdate();
-        return query(select(field) + from(entity) + where(whereClause)).uniqueResult();
-    }
+	public static boolean isTransactionActive() {
+		return getInstance().isTransactionActive();
+	}
 
-    public static Object incrementField(Class entity, String field, String whereClause, Integer quantidade) {
-        return updateField(entity, field, field + "+(" + quantidade + ")", whereClause);
-    }
+	public static Object uniqueResult(String function, Class entity, String where) {
+		return getInstance().uniqueResult(function, entity, where);
+	}
 
-    public static Object decrementField(Class entity, String field, String whereClause, Integer quantidade) {
-        return updateField(entity, field, field + "-(" + quantidade + ")", whereClause);
-    }
+	public static Object getMinField(String field, Class entity, String where) {
+		return getInstance().getMinField(field, entity, where);
+	}
 
-    public static Object incrementField(Class entity, String field, String whereClause) {
-        return Dao.incrementField(entity, field, whereClause, 1);
-    }
+	public static Object getMaxField(String field, Class entity, String where) {
+		return getInstance().getMaxField(field, entity, where);
+	}
 
-    public static Object decrementField(Class entity, String field, String whereClause) {
-        return updateField(entity, field, field + "-1", whereClause);
-    }
+	public static long getNextLong(String field, Class entity) {
+		return getInstance().getNextLong(field, entity);
+	}
 
-    public static long getNextLongId(Class entity) {
-        Long newId = (Long) uniqueResult(max(getIdName(entity)) + "+1", entity, null);
-        if (newId != null) {
-            return newId;
-        }
-        return (long) 1;
-    }
+	public static Object updateField(Class entity, String field, String expression, String whereClause) {
+		return getInstance().updateField(entity, field, expression, whereClause);
+	}
 
-    public static int getNextIntId(Class entity) {
-        Integer newId = (Integer) uniqueResult(max(getIdName(entity)) + "+1", entity, null);
-        if (newId != null) {
-            return newId;
-        }
-        return (int) 1;
-    }
+	public static Object incrementField(Class entity, String field, String whereClause, Integer quantidade) {
+		return getInstance().incrementField(entity, field, whereClause, quantidade);
+	}
 
-    public static <T extends Serializable> List<T> list(Class<T> entity) {
-        return list(entity, null);
-    }
+	public static Object decrementField(Class entity, String field, String whereClause, Integer quantidade) {
+		return getInstance().decrementField(entity, field, whereClause, quantidade);
+	}
 
-    public static <T extends Serializable> List<T> listWithJoin(Class<T> entity, String joinClause, String whereClause, String... orderClauses) {
-        return listWithJoin(entity.getSimpleName().toLowerCase(), entity, joinClause, whereClause, orderClauses);
-    }
+	public static Object incrementField(Class entity, String field, String whereClause) {
+		return getInstance().incrementField(entity, field, whereClause);
+	}
 
-    public static <T extends Serializable> List<T> listWithJoin(String entityAlias, Class<T> entity, String joinClause, String whereClause, String... orderClauses) {
-        String fromAndJoin = fromAndJoin(entityAlias, entity, joinClause);
-        Query query = query(select(entityAlias) + fromAndJoin + where(whereClause) + orderBy(orderClauses));
-        return query.list();
-    }
+	public static Object decrementField(Class entity, String field, String whereClause) {
+		return getInstance().decrementField(entity, field, whereClause);
+	}
 
-    public static <T extends Serializable> List<T> listDistinctWithJoin(String entityAlias, Class<T> entity, String joinClause, String whereClause, String... orderClauses) {
-        String fromAndJoin = fromAndJoin(entityAlias, entity, joinClause);
-        Query query = query(select(distinct(entityAlias)) + fromAndJoin + where(whereClause) + orderBy(orderClauses));
-        return query.list();
-    }
+	public static long getNextLongId(Class entity) {
+		return getInstance().getNextLongId(entity);
+	}
 
-    public static <T extends Serializable> List<T> list(String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
-        Query query = query(select(entityAlias) + fromAndJoin + where(whereClause) + orderBy(orderClauses));
-        return query.list();
-    }
+	public static int getNextIntId(Class entity) {
+		return getInstance().getNextIntId(entity);
+	}
 
-    public static <T extends Serializable> List<T> list(Class<T> entity, String whereClause, String... orderClauses) {
-        return list(concat(from(entity), where(whereClause), orderBy(orderClauses)));
-    }
+	public static <T extends Serializable> List<T> list(Class<T> entity) {
+		return getInstance().list(entity);
+	}
 
-    public static <T extends Serializable> List<T> list(String hqlQuery) {
-        Query query = query(hqlQuery);
-        return (List<T>) query.list();
-    }
+	public static <T extends Serializable> List<T> listWithJoin(Class<T> entity, String joinClause, String whereClause, String... orderClauses) {
+		return getInstance().listWithJoin(entity, joinClause, whereClause, orderClauses);
+	}
+
+	public static <T extends Serializable> List<T> listWithJoin(String entityAlias, Class<T> entity, String joinClause, String whereClause, String... orderClauses) {
+		return getInstance().listWithJoin(entityAlias, entity, joinClause, whereClause, orderClauses);
+	}
+
+	public static <T extends Serializable> List<T> listDistinctWithJoin(String entityAlias, Class<T> entity, String joinClause, String whereClause, String... orderClauses) {
+		return getInstance().listDistinctWithJoin(entityAlias, entity, joinClause, whereClause, orderClauses);
+	}
+
+	public static <T extends Serializable> List<T> list(String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
+		return getInstance().list(entityAlias, fromAndJoin, whereClause, orderClauses);
+	}
+
+	public static <T extends Serializable> List<T> list(Class<T> entity, String whereClause, String... orderClauses) {
+		return getInstance().list(entity, whereClause, orderClauses);
+	}
+
+	public static <T extends Serializable> List<T> list(String hqlQuery) {
+		return getInstance().list(hqlQuery);
+	}
 
 	public static <T> List<T> list(String hqlQuery, Class<T> resultClass) {
-        Query query = query(hqlQuery);
-		query.setResultTransformer(new AliasToBeanResultTransformer(resultClass));
-        return (List<T>) query.list();
-    }
+		return getInstance().list(hqlQuery, resultClass);
+	}
 
 	public static <T> List<T> topList(int topSize, String hqlQuery, Class<T> resultClass) {
-        Query query = query(hqlQuery);
-		query.setMaxResults(topSize);
-		query.setResultTransformer(new AliasToBeanResultTransformer(resultClass));
-        return (List<T>) query.list();
-
+		return getInstance().topList(topSize, hqlQuery, resultClass);
 	}
 
-    private static int correctPageNumber(int page, int totalPages, int pagesOffset) {
-		if(pagesOffset == 0){
-			if (page > totalPages) {
-				page = totalPages;
-			}
-		}
-        return page;
-    }
-
-    private static int calcNumPages(final long numRows, int pageSize) {
-        int totalPages = (int) Math.ceil(numRows / (double) pageSize);
-        return totalPages;
-    }
-
-    public static <T extends Serializable> PaginationSlice<T> paginationSlice(int page, int pageSize,                  Class<T> entity, String whereClause, String... orderClauses) {
-        return paginationSlice(page, pageSize, 0, entity, whereClause, orderClauses);
-    }
-    public static <T extends Serializable> PaginationSlice<T> paginationSlice(int page, int pageSize, int pagesOffset, Class<T> entity, String whereClause, String... orderClauses) {
-        final long numRows = Dao.numRows(entity, whereClause);
-        int totalPages = calcNumPages(numRows, pageSize);
-		page = correctPageNumber(page, totalPages, pagesOffset);
-        List<T> list = listPage(page, pageSize, pagesOffset, concat(from(entity), where(whereClause), orderBy(orderClauses)));
-        return new PaginationSlice<T>(numRows, pageSize, pagesOffset, totalPages, page, list);
+	public static <T extends Serializable> PaginationSlice<T> paginationSlice(int page, int pageSize, Class<T> entity, String whereClause, String... orderClauses) {
+		return getInstance().paginationSlice(page, pageSize, entity, whereClause, orderClauses);
 	}
 
-    public static <T extends Serializable> PaginationSlice<T> paginationSlice(int page, int pageSize,                  String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
-        return paginationSlice(page, pageSize, 0, entityAlias,fromAndJoin, whereClause, orderClauses);
-    }
+	public static <T extends Serializable> PaginationSlice<T> paginationSlice(int page, int pageSize, int pagesOffset, Class<T> entity, String whereClause, String... orderClauses) {
+		return getInstance().paginationSlice(page, pageSize, pagesOffset, entity, whereClause, orderClauses);
+	}
+
+	public static <T extends Serializable> PaginationSlice<T> paginationSlice(int page, int pageSize, String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
+		return getInstance().paginationSlice(page, pageSize, entityAlias, fromAndJoin, whereClause, orderClauses);
+	}
+
 	public static <T extends Serializable> PaginationSlice<T> paginationSlice(int page, int pageSize, int pagesOffset, String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
-        final long numRows = Dao.numRows(fromAndJoin, whereClause);
-        int totalPages = calcNumPages(numRows, pageSize);
-        page = correctPageNumber(page, totalPages, pagesOffset);
-        List<T> list = listPage(page, pageSize, pagesOffset, select(entityAlias) + fromAndJoin + where(whereClause) + orderBy(orderClauses));
-        return new PaginationSlice<T>(numRows, pageSize, pagesOffset, totalPages, page, list);
-    }
-
-    public static <T extends Serializable> PaginationSlice<T> paginationSliceWithDistinct(int page, int pageSize,                  String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
-		return paginationSliceWithDistinct(page, pageSize, 0, entityAlias,fromAndJoin, whereClause, orderClauses);
+		return getInstance().paginationSlice(page, pageSize, pagesOffset, entityAlias, fromAndJoin, whereClause, orderClauses);
 	}
-    public static <T extends Serializable> PaginationSlice<T> paginationSliceWithDistinct(int page, int pageSize, int pagesOffset, String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
-        final long numRows = Dao.numRowsWithDistinct(entityAlias, fromAndJoin, whereClause);
-        int totalPages = calcNumPages(numRows, pageSize);
-        page = correctPageNumber(page, totalPages, pagesOffset);
-        List<T> list = listPage(page, pageSize, pagesOffset, select(distinct( entityAlias)) + fromAndJoin + where(whereClause) + orderBy(orderClauses));
-        return new PaginationSlice<T>(numRows, pageSize, pagesOffset, totalPages, page, list);
-    }
 
-    public static <T extends Serializable> PaginationSlice<T> paginationSliceWithJoin(int page, int pageSize, int pagesOffset, Class<T> entity, String joinClause, String whereClause, String... orderClauses) {
-        return paginationSliceWithJoin(page, pageSize, pagesOffset, entity.getSimpleName().toLowerCase(), entity, joinClause, whereClause, orderClauses);
-    }
+	public static <T extends Serializable> PaginationSlice<T> paginationSliceWithDistinct(int page, int pageSize, String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
+		return getInstance().paginationSliceWithDistinct(page, pageSize, entityAlias, fromAndJoin, whereClause, orderClauses);
+	}
 
-    public static <T extends Serializable> PaginationSlice<T> paginationSliceWithJoin(int page, int pageSize, int pagesOffset, String entityAlias, Class<T> entity, String joinClause, String whereClause, String... orderClauses) {
-        String fromAndJoin = fromAndJoin(entityAlias, entity, joinClause);
-        final long numRows = Dao.numRows(fromAndJoin, whereClause);
-        int totalPages = calcNumPages(numRows, pageSize);
+	public static <T extends Serializable> PaginationSlice<T> paginationSliceWithDistinct(int page, int pageSize, int pagesOffset, String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
+		return getInstance().paginationSliceWithDistinct(page, pageSize, pagesOffset, entityAlias, fromAndJoin, whereClause, orderClauses);
+	}
 
-        page = correctPageNumber(page, totalPages,pagesOffset);
-        List<T> list = listPage(page, pageSize, pagesOffset, select(entityAlias) + fromAndJoin + where(whereClause) + orderBy(orderClauses));
-        return new PaginationSlice<T>(numRows, pageSize, pagesOffset, totalPages, page, list);
-    }
+	public static <T extends Serializable> PaginationSlice<T> paginationSliceWithJoin(int page, int pageSize, int pagesOffset, Class<T> entity, String joinClause, String whereClause, String... orderClauses) {
+		return getInstance().paginationSliceWithJoin(page, pageSize, pagesOffset, entity, joinClause, whereClause, orderClauses);
+	}
 
-
+	public static <T extends Serializable> PaginationSlice<T> paginationSliceWithJoin(int page, int pageSize, int pagesOffset, String entityAlias, Class<T> entity, String joinClause, String whereClause, String... orderClauses) {
+		return getInstance().paginationSliceWithJoin(page, pageSize, pagesOffset, entityAlias, entity, joinClause, whereClause, orderClauses);
+	}
 
 	public static long numRowsWithDistinct(String entityAlias, String fromClause, String where) {
-        Long res = (Long) query(concat(select(count(distinct(entityAlias))), fromClause, where(where))).uniqueResult();
-        return res.longValue();
-    }
+		return getInstance().numRowsWithDistinct(entityAlias, fromClause, where);
+	}
 
-    private static <T> String fromAndJoin(String entityAlias, Class<T> entity, String joinClause) {
-        return from(entity) + as(entityAlias) + (joinClause != null ? join(joinClause) : "");
-    }
+	public static <T extends Serializable> List<T> listPage(int page, int pageSize, int pagesOffset, String hqlQuery) {
+		return getInstance().listPage(page, pageSize, pagesOffset, hqlQuery);
+	}
 
-    public static <T extends Serializable> List<T> listPage(int page, int pageSize, int pagesOffset, String hqlQuery) {
-        Query query = query(hqlQuery);
-        return slicedQuery(query,page,pageSize,pagesOffset).list();
-    }
-
-    public static <T extends Serializable> List<T> reportPage(int page, int pageSize, int offset, Class entity, Class<T> reportClass, String fields, String where, String group, String... order) {
-        Query query = query(select(fields) + from(entity) + where(where) + groupBy(group) + orderBy(order));
-        query.setResultTransformer(new AliasToBeanResultTransformer(reportClass));
-        return slicedQuery(query,page,pageSize,offset).list();
-    }
-
-	/**
-	 * the slice of the query to be retrieved
-	 */
-	private static Query slicedQuery(Query query, int pageNumber, int pageSize, int pagesOffset){
-        query.setFirstResult(((pageNumber * pageSize) - pageSize)+pagesOffset);
-        query.setMaxResults(pageSize);
-		return query;
+	public static <T extends Serializable> List<T> reportPage(int page, int pageSize, int offset, Class entity, Class<T> reportClass, String fields, String where, String group, String... order) {
+		return getInstance().reportPage(page, pageSize, offset, entity, reportClass, fields, where, group, order);
 	}
 
 
-    /* TOP LIST*/
-    public static <T extends Serializable> List<T> topListWithJoin(int topSize, Class<T> entity, String joinClause, String whereClause, String... orderClauses) {
-        return topListWithJoin(topSize, entity.getSimpleName().toLowerCase(), entity, joinClause, whereClause, orderClauses);
-    }
+	/* TOP LIST*/
+	public static <T extends Serializable> List<T> topListWithJoin(int topSize, Class<T> entity, String joinClause, String whereClause, String... orderClauses) {
+		return getInstance().topListWithJoin(topSize, entity, joinClause, whereClause, orderClauses);
+	}
 
-    public static <T extends Serializable> List<T> topListWithJoin(int topSize, String entityAlias, Class<T> entity, String joinClause, String where, String... order) {
-        String fromAndJoin = fromAndJoin(entityAlias, entity, joinClause);
-        String strQuery = concat(select(entityAlias), fromAndJoin, where(where), orderBy(order));
-        Query query = query(strQuery);
-        query.setMaxResults(topSize);
-        return query.list();
+	public static <T extends Serializable> List<T> topListWithJoin(int topSize, String entityAlias, Class<T> entity, String joinClause, String where, String... order) {
+		return getInstance().topListWithJoin(topSize, entityAlias, entity, joinClause, where, order);
+	}
 
-    }
+	public static <T extends Serializable> List<T> topList(int topSize, String entityAlias, String fromAndJoin, String where, String... order) {
+		return getInstance().topList(topSize, entityAlias, fromAndJoin, where, order);
 
-    public static <T extends Serializable> List<T> topList(int topSize, String entityAlias, String fromAndJoin, String where, String... order) {
-        String strQuery = concat(select(entityAlias), fromAndJoin, where(where), orderBy(order));
-        Query query = query(strQuery);
-        query.setMaxResults(topSize);
-        return query.list();
+	}
 
-    }
+	public static <T extends Serializable> List<T> topList(int topSize, Class<T> entity, String where, String... order) {
+		return getInstance().topList(topSize, entity, where, order);
+	}
 
-    public static <T extends Serializable> List<T> topList(int topSize, Class<T> entity, String where, String... order) {
-        Query query = query(concat(from(entity), where(where), orderBy(order)));
-        query.setMaxResults(topSize);
-        return query.list();
-    }
+	public static <T extends Serializable> List<T> topList(int topSize, String hqlQuery) {
+		return getInstance().topList(topSize, hqlQuery);
+	}
 
-    public static <T extends Serializable> List<T> topList(int topSize, String hqlQuery) {
-        Query query = query(hqlQuery);
-        query.setMaxResults(topSize);
-        return query.list();
-    }
+	public static <T extends Serializable> List<T> listReports(Class entity, Class<T> reportClass, String fields, String where, String group, String... order) {
+		return getInstance().listReports(entity, reportClass, fields, where, group, order);
+	}
 
-    public static <T extends Serializable> List<T> listReports(Class entity, Class<T> reportClass, String fields, String where, String group, String... order) {
-        Query query = query(concat(select(fields), from(entity), where(where), groupBy(group), orderBy(order)));
-        query.setResultTransformer(new AliasToBeanResultTransformer(reportClass));
-        return query.list();
-    }
+	public static <T extends Serializable> T getReport(Class entity, Class<T> reportClass, String fields, String where, String group, String... order) {
+		return getInstance().getReport(entity, reportClass, fields, where, group, order);
+	}
 
-    public static <T extends Serializable> T getReport(Class entity, Class<T> reportClass, String fields, String where, String group, String... order) {
-        Query query = query(select(fields) + from(entity) + where(where) + groupBy(group) + orderBy(order));
-        query.setResultTransformer(new AliasToBeanResultTransformer(reportClass));
-        return (T) query.uniqueResult();
-    }
+	public static <T extends Serializable> LinkedHashMap map(Class<T> entity, String key, String value, String where, String... order) {
+		return getInstance().map(entity, key, value, where, order);
+	}
 
-    public static <T extends Serializable> LinkedHashMap map(Class<T> entity, String key, String value, String where, String... order) {
-        Query query = query(concat(select(key + "," + value), from(entity), where(where), orderBy(order)));
-        List<Object[]> results = query.list();
-        LinkedHashMap map = new LinkedHashMap();
-        for (Object[] result : results) {
-            map.put(result[0], result[1]);
-        }
-        return map;
-    }
+	public static <T extends Serializable> LinkedHashMap mapGrouped(Class<T> entity, String key, String value, String where, String... order) {
+		return getInstance().mapGrouped(entity, key, value, where, order);
+	}
 
-    public static <T extends Serializable> LinkedHashMap mapGrouped(Class<T> entity, String key, String value, String where, String... order) {
-        Query query = query(select(key + "," + value) + from(entity) + where(where) + groupBy(key) + orderBy(order));
-        List<Object[]> results = query.list();
-        LinkedHashMap map = new LinkedHashMap();
-        for (Object[] result : results) {
-            map.put(result[0], result[1]);
-        }
-        return map;
-    }
-
-    public static <T extends Serializable> Map mapGrouped(Class<T> entity, String entityAlias, String join, String key, String value, String where) {
-        Query query = query(select(key + "," + value) + from(entity) + as(entityAlias) + join(join) + where(where) + groupBy(key));
-        List<Object[]> results = query.list();
-        Map map = new HashMap();
-        for (Object[] result : results) {
-            map.put(result[0], result[1]);
-        }
-        return map;
-    }
+	public static <T extends Serializable> Map mapGrouped(Class<T> entity, String entityAlias, String join, String key, String value, String where) {
+		return getInstance().mapGrouped(entity, entityAlias, join, key, value, where);
+	}
 
     public static Map mapGrouped(String entityAlias, String fromAndjoin, String key, String value, String where) {
-        Query query = query(select(key + "," + value) + fromAndjoin + where(where) + groupBy(key));
-        List<Object[]> results = query.list();
-        Map map = new HashMap();
-        for (Object[] result : results) {
-            map.put(result[0], result[1]);
-        }
-        return map;
-    }
+		return getInstance().mapGrouped(entityAlias, fromAndjoin, key, value, where);
+	}
 
     public static Object reportTotal(Class entity, String functions, String where, Class reportClass) {
-        Query query = query(select(functions) + from(entity) + where(where));
-        query.setResultTransformer(new AliasToBeanResultTransformer(reportClass));
-        return query.uniqueResult();
+        return getInstance().reportTotal(entity, functions, where, reportClass);
     }
 
-    public static <T extends Serializable> List<T> topReportWithJoin(int topSize, Class entity,
-            Class<T> reportClass, String fields, String joinClause, String whereClause, String group, String... orderClauses) {
-
-        return topReportWithJoin(topSize, entity.getSimpleName().toLowerCase(), entity,
-                reportClass, fields, joinClause, whereClause, group, orderClauses);
+    public static <T extends Serializable> List<T> topReportWithJoin(int topSize, Class entity,Class<T> reportClass, String fields, String joinClause, String whereClause, String group, String... orderClauses) {
+				return getInstance().topReportWithJoin(topSize, entity, reportClass, fields, joinClause, whereClause, group, orderClauses);
     }
 
-    public static <T extends Serializable> List<T> topReportWithJoin(int topSize, String entityAlias, Class entity,
-            Class<T> reportClass, String fields, String joinClause, String whereClause, String group, String... orderClauses) {
-
-        String fromAndJoin = fromAndJoin(entityAlias, entity, joinClause);
-        String strQuery = select(fields) + fromAndJoin + where(whereClause) + groupBy(group) + orderBy(orderClauses);
-        Query query = query(strQuery);
-        query.setResultTransformer(new AliasToBeanResultTransformer(reportClass));
-        query.setMaxResults(topSize);
-        return query.list();
-    }
-
-    public static <T extends Serializable> List<T> topReport(int topSize, String entityAlias, Class entity,
-            Class<T> reportClass, String fields, String fromAndJoin, String whereClause, String group, String... orderClauses) {
-
-        String strQuery = select(fields) + fromAndJoin + where(whereClause) + groupBy(group) + orderBy(orderClauses);
-        Query query = query(strQuery);
-        query.setResultTransformer(new AliasToBeanResultTransformer(reportClass));
-        query.setMaxResults(topSize);
-        return query.list();
-    }
-
-    public static <T extends Serializable> List<T> topReport(Integer topSize, Class entity, Class<T> reportClass, String fields, String where, String group, String... order) {
-        Query query = query(select(fields) + from(entity) + where(where) + groupBy(group) + orderBy(order));
-        query.setResultTransformer(new AliasToBeanResultTransformer(reportClass));
-        if (topSize != null) {
-            query.setMaxResults(topSize);
-        }
-        return query.list();
-    }
-
-    public static <T extends Serializable> List<T> report(Class entity, Class<T> reportClass, String fields, String where, String group, String... order) {
-        return topReport(null, entity, reportClass, fields, where, group, order);
-    }
-
-    public static long numRows(Class entity, String where) {
-        Long res = (Long) query(concat(select(count("*")), from(entity), where(where))).uniqueResult();
-        return res.longValue();
-    }
-
-    public static long numRows(String fromClause, String where) {
-        Long res = (Long) query(concat(select(count("*")), fromClause, where(where))).uniqueResult();
-        return res.longValue();
-    }
-
-    public static long numRows(String whereClause, String group, Class entity) {
-        Long res = (Long) query(concat(select(count(distinct(group))), from(entity), where(whereClause))).uniqueResult();
-        return res.longValue();
-    }
-
-	public static long numRows(String hqlQuery){
-		 Long res = (Long) query(hqlQuery).uniqueResult();
-        return res.longValue();
+	public static <T extends Serializable> List<T> topReportWithJoin(int topSize, String entityAlias, Class entity, Class<T> reportClass, String fields, String joinClause, String whereClause, String group, String... orderClauses) {
+		return getInstance().topReportWithJoin(topSize, entityAlias, entity, reportClass, fields, joinClause, whereClause, group, orderClauses);
 	}
 
-    /**
-     * /////////////////////////////////////////////////
-     * MÉTODOS TRANSACIONAIS
-     * /////////////////////////////////////////////////
-     */
-    public static void beginTransaction() {
-        session().getTransaction().begin();
-    }
+	public static <T extends Serializable> List<T> topReport(int topSize, String entityAlias, Class entity, Class<T> reportClass, String fields, String fromAndJoin, String whereClause, String group, String... orderClauses) {
+		return getInstance().topReport(topSize, entityAlias, entity, reportClass, fields, fromAndJoin, whereClause, group, orderClauses);
+	}
 
-    public static void rollBackTransaction() {
-        session().getTransaction().rollback();
-    }
+	public static <T extends Serializable> List<T> topReport(Integer topSize, Class entity, Class<T> reportClass, String fields, String where, String group, String... order) {
+		return getInstance().topReport(topSize, entity, reportClass, fields, where, group, order);
+	}
 
-    public static void commitTransaction() {
-        session().getTransaction().commit();
-    }
+	public static <T extends Serializable> List<T> report(Class entity, Class<T> reportClass, String fields, String where, String group, String... order) {
+		return topReport(null, entity, reportClass, fields, where, group, order);
+	}
 
-    public static void flush() {
-        session().flush();
-    }
+	public static long numRows(Class entity, String where) {
+		Long res = (Long) query(concat(select(count("*")), from(entity), where(where))).uniqueResult();
+		return res.longValue();
+	}
 
-    public static <T extends Serializable> T saveTransaction(T obj) {
-        Dao.beginTransaction();
-        session().save(obj);
-        Dao.commitTransaction();
-        return obj;
-    }
+	public static long numRows(String fromClause, String where) {
+		Long res = (Long) query(concat(select(count("*")), fromClause, where(where))).uniqueResult();
+		return res.longValue();
+	}
 
-    public static <T extends Serializable> Collection<T> saveTransaction(Collection<T> objs) {
-        Dao.beginTransaction();
-        for (T obj : objs) {
-            save(obj);
-        }
-        Dao.commitTransaction();
-        return objs;
-    }
+	public static long numRows(String whereClause, String group, Class entity) {
+		Long res = (Long) query(concat(select(count(distinct(group))), from(entity), where(whereClause))).uniqueResult();
+		return res.longValue();
+	}
 
-    public static <T extends Serializable> T updateTransaction(T obj) {
-        Dao.beginTransaction();
-        session().update(obj);
-        Dao.commitTransaction();
-        return obj;
-    }
+	public static long numRows(String hqlQuery) {
+		Long res = (Long) query(hqlQuery).uniqueResult();
+		return res.longValue();
+	}
 
-    public static <T extends Serializable> T saveOrUpdateTransaction(T obj) {
-        Dao.beginTransaction();
-        session().saveOrUpdate(obj);
-        Dao.commitTransaction();
-        return obj;
-    }
+	/**
+	 * /////////////////////////////////////////////////
+	 * MÉTODOS TRANSACIONAIS
+	 * /////////////////////////////////////////////////
+	 */
+	public static void beginTransaction() {
+		getInstance().beginTransaction();
+	}
 
-    public static <T extends Serializable> T deleteTransaction(T obj) {
-        Dao.beginTransaction();
-        session().delete(obj);
-        Dao.commitTransaction();
-        return obj;
-    }
+	public static void rollBackTransaction() {
+		getInstance().rollBackTransaction();
+	}
 
-    public static <T extends Serializable> void deleteTransaction(Collection<T> objs) {
-        Dao.beginTransaction();
-        for (T obj : objs) {
-            delete(obj);
-        }
-        Dao.commitTransaction();
-    }
+	public static void commitTransaction() {
+		getInstance().commitTransaction();
+	}
 
-    public static <T extends Serializable> T save(T obj) {
-        session().save(obj);
-        return obj;
-    }
+	public static void flush() {
+		getInstance().flush();
+	}
 
-    public static <T extends Serializable> void save(T[] arr) {
-        for (T obj : arr) {
-            save(obj);
-        }
-    }
+	public static <T extends Serializable> T saveTransaction(T obj) {
+		return getInstance().saveTransaction(obj);
+	}
 
-    public static <T extends Serializable> void save(Collection<T> objs) {
-        for (T obj : objs) {
-            save(obj);
-        }
-    }
+	public static <T extends Serializable> Collection<T> saveTransaction(Collection<T> objs) {
+		return getInstance().saveTransaction(objs);
 
-    public static <T extends Serializable> T update(T obj) {
-        session().update(obj);
-        return obj;
-    }
+	}
 
-    public static <T extends Serializable> void update(T[] arr) {
-        for (T obj : arr) {
-            session().update(obj);
-        }
-    }
+	public static <T extends Serializable> T updateTransaction(T obj) {
+		return getInstance().updateTransaction(obj);
 
-    public static <T extends Serializable> void update(Collection<T> objs) {
-        for (T obj : objs) {
-            update(obj);
-        }
-    }
+	}
 
-    public static <T extends Serializable> T delete(T obj) {
-        session().delete(obj);
-        return obj;
-    }
+	public static <T extends Serializable> T saveOrUpdateTransaction(T obj) {
+		return getInstance().saveOrUpdateTransaction(obj);
 
-    public static <T extends Serializable> void delete(T[] arr) {
-        for (T obj : arr) {
-            session().delete(obj);
-        }
-    }
+	}
 
-    public static <T extends Serializable> void delete(Collection<T> objs) {
-        for (T obj : objs) {
-            delete(obj);
-        }
-    }
+	public static <T extends Serializable> T deleteTransaction(T obj) {
+		return getInstance().deleteTransaction(obj);
+	}
 
-    public static <T extends Serializable> T saveOrUpdate(T obj) {
-        session().saveOrUpdate(obj);
-        return obj;
-    }
+	public static <T extends Serializable> void deleteTransaction(Collection<T> objs) {
+		getInstance().deleteTransaction(objs);
+	}
+
+	public static <T extends Serializable> T save(T obj) {
+		return getInstance().save(obj);
+	}
+
+	public static <T extends Serializable> void save(T[] arr) {
+		getInstance().save(arr);
+	}
+
+	public static <T extends Serializable> void save(Collection<T> objs) {
+		getInstance().save(objs);
+	}
+
+	public static <T extends Serializable> T update(T obj) {
+		return getInstance().update(obj);
+	}
+
+	public static <T extends Serializable> void update(T[] arr) {
+		getInstance().update(arr);
+	}
+
+	public static <T extends Serializable> void update(Collection<T> objs) {
+		getInstance().update(objs);
+	}
+
+	public static <T extends Serializable> T delete(T obj) {
+		return getInstance().delete(obj);
+	}
+
+	public static <T extends Serializable> void delete(T[] arr) {
+		getInstance().delete(arr);
+	}
+
+	public static <T extends Serializable> void delete(Collection<T> objs) {
+		getInstance().delete(objs);
+	}
+
+	public static <T extends Serializable> T saveOrUpdate(T obj) {
+		return getInstance().saveOrUpdate(obj);
+	}
 
 	public synchronized static <T extends Serializable> T syncSaveOrUpdate(T obj) {
-		session().saveOrUpdate(obj);
-		return obj;
+		return getInstance().syncSaveOrUpdate(obj);
 	}
 
-    public static <T extends Serializable> T get(Class<T> entity, Serializable id) {
-        return (T) session().get(entity, id);
-    }
+	public static <T extends Serializable> T get(Class<T> entity, Serializable id) {
+		return getInstance().get(entity, id);
+	}
 
-    public static <T> T uniqueResult(Class<T> entity, String where) {
-        return (T) query(from(entity) + where(where)).uniqueResult();
+	public static <T> T uniqueResult(Class<T> entity, String where) {
+		return getInstance().uniqueResult(entity, where);
 
-    }
+	}
 
-    public static <T> T uniqueResult(String hqlQuery) {
-        Query query = query(hqlQuery);
-        return (T) query.uniqueResult();
-    }
+	public static <T> T uniqueResult(String hqlQuery) {
+		return (T) getInstance().uniqueResult(hqlQuery);
+	}
 
-    public static <T extends Serializable> T load(Class<T> entity, Serializable id) {
-        return (T) session().load(entity, id);
-    }
+	public static <T extends Serializable> T load(Class<T> entity, Serializable id) {
+		return getInstance().load(entity, id);
+	}
 
-    public static <T extends Serializable> void evict(T obj) {
-        session().evict(obj);
-    }
+	public static <T extends Serializable> void evict(T obj) {
+		getInstance().evict(obj);
+	}
 
-    public static <T extends Serializable> void persist(T obj) {
-        session().persist(obj);
-    }
+	public static <T extends Serializable> void persist(T obj) {
+		getInstance().persist(obj);
+	}
 
-    public static <T extends Serializable> T refresh(T obj) {
-        session().refresh(obj);
-        return obj;
-    }
+	public static <T extends Serializable> T refresh(T obj) {
+		return getInstance().refresh(obj);
+	}
 
-    public static <T extends Serializable> T merge(T obj) {
-        session().merge(obj);
-        return obj;
-    }
+	public static <T extends Serializable> T merge(T obj) {
+		return getInstance().merge(obj);
+	}
 
 	public static void executeSQL(String sql) {
-		if (!Is.empty(sql)) {
-			sqlQuery(sql).executeUpdate();
-		}
+		getInstance().executeSQL(sql);
 	}
 
 	public static void executeSQLs(String... sqls) {
-		String trimmedSql = null;
-		String delimiter = ";";
-		StringBuffer sqlToExecute = new StringBuffer();
-
-		for (int i = 0; i < sqls.length; i++) {
-			trimmedSql = sqls[i].trim();
-			if (trimmedSql.length() == 0
-					|| trimmedSql.startsWith("--")
-					|| trimmedSql.startsWith("//")
-					|| trimmedSql.startsWith("/*")) {
-				continue;
-			} else {
-				if (trimmedSql.length() > 10 && trimmedSql.substring(0, 10).toLowerCase().equals("delimiter ")) {
-					delimiter = trimmedSql.substring(10);
-				} else {
-					if (i == sqls.length - 1 && !trimmedSql.endsWith(delimiter)) {
-						sqlToExecute.append(trimmedSql);
-						executeSQL(sqlToExecute.toString());
-						sqlToExecute.delete(0, sqlToExecute.length());
-					} else {
-						if (trimmedSql.endsWith(delimiter)) {
-							sqlToExecute.append(trimmedSql.substring(0, trimmedSql.length() - delimiter.length()));
-							executeSQL(sqlToExecute.toString());
-							sqlToExecute.delete(0, sqlToExecute.length());
-						} else {
-							sqlToExecute.append(trimmedSql + " ");
-						}
-					}
-				}
-
-			}
-		}
+		getInstance().executeSQLs(sqls);
 	}
 }

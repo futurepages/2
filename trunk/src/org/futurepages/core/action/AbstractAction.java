@@ -22,6 +22,7 @@ import org.futurepages.core.output.Output;
 import org.futurepages.core.pagination.Pageable;
 import org.futurepages.core.pagination.PaginationSlice;
 import org.futurepages.core.pagination.Paginator;
+import org.futurepages.core.persistence.Dao;
 import org.futurepages.core.validation.Validator;
 import org.futurepages.exceptions.ErrorException;
 import org.futurepages.filters.HeadTitleFilter;
@@ -113,6 +114,11 @@ public abstract class AbstractAction implements Pageable, Action {
 	 */
 	public <T extends Serializable> List<T> paginateList(int pageSize, Class<T> entityClass, String where, String order) {
 		return getPaginator().paginateList(pageSize, entityClass, where, order);
+	}
+
+	@Deprecated
+	public List paginateReport(int pageSize, Class entityClass, String fields, String where, String group, String order, Class resultClass) {
+		return getPaginator().paginateReport(pageSize, entityClass, resultClass,fields, where, group, order);
 	}
 
 	public <T extends Serializable> void setOutputPaginationSlice(String listKey, PaginationSlice<T> slice) {
