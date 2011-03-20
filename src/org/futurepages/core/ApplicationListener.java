@@ -49,21 +49,27 @@ public class ApplicationListener implements ServletContextListener {
 
 			if (HibernateManager.isRunning()) {
 				log("Hibernate OK");
+				
 				// Atualiza/gera esquema do banco como solicitado no arquivo de configuração.
 				if (Params.get("SCHEMA_GENERATION_TYPE").equals("update")) {
-					log("SCHEMA UPDATE Begin");
+					log("SCHEMA UPDATE - Begin");
 					SchemaGeneration.update();
+					log("SCHEMA UPDATE - End");
 				} else if (Params.get("SCHEMA_GENERATION_TYPE").equals("export")) {
-					log("SCHEMA EXPORT Begin");
+					log("SCHEMA EXPORT - Begin");
 					SchemaGeneration.export();
+					log("SCHEMA EXPORT - End");
 				}
 
 				//Se o modo de instalação estiver ligado, serão feitas as instalações de cada módulo.
 				String installMode = Params.get("INSTALL_MODE");
-				log("Install Mode: " + installMode);
 				if (!installMode.equals("off")&&!installMode.equals("none")) {
+					log("Install Mode: " + installMode);
 					InstallersManager.initialize(modules, installMode);
+					log("Install - End");
 				}
+			} else {
+				log("WARNING: HIBERNATE is not running!");
 			}
 
 			log("Session Listenter...: ");

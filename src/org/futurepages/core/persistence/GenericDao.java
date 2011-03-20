@@ -19,20 +19,20 @@ import org.hibernate.Session;
 
 public class GenericDao extends HQLProvider {
 
-	private String databaseKey;
+	private String sessionFactoryKey;
 
 
-	public GenericDao(String databaseKey){
-		this.databaseKey = databaseKey;
+	public GenericDao(String sessionFactoryKey){
+		this.sessionFactoryKey = sessionFactoryKey;
 	}
 
 	public GenericDao(){
-		this.databaseKey = HibernateManager.DEFAULT;
+		this.sessionFactoryKey = HibernateManager.DEFAULT;
 	}
 
     //privado propositalmente na tentativa de encapsular o hibernate
     private Session session() {
-        return HibernateManager.getSession(databaseKey);
+        return HibernateManager.getSession(sessionFactoryKey);
     }
 
     public void clearSession() {
