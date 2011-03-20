@@ -3,11 +3,12 @@ package org.futurepages.core.config;
 import java.io.File;
 import org.futurepages.core.ApplicationManager;
 import org.futurepages.core.control.AbstractApplicationManager;
+import org.futurepages.util.StringUtils;
 
 /**
  * Registrar os Módulos da aplicação
  */
-public class Modules extends Mapper{
+public class Modules {
     /**
      * Registra o Gerenciador dos Módulos (ModuleManager) não comentado
      */
@@ -45,4 +46,13 @@ public class Modules extends Mapper{
         }
     }
 
+
+    public static boolean moduleHasDB(File module) {
+        File hiberPropertiesFile = new File(StringUtils.concat(module.getAbsolutePath() , File.pathSeparator , Params.CONFIGURATION_DIR_NAME ,File.pathSeparator ,Params.BASE_HIBERNATE_PROPERTIES_FILE));
+		if(hiberPropertiesFile.exists()){
+			return true;
+		}
+        File hiberXmlFile = new File(StringUtils.concat(module.getAbsolutePath() , File.pathSeparator , Params.CONFIGURATION_DIR_NAME , File.pathSeparator , Params.BASE_HIBERANTE_XML_FILE));
+		return hiberXmlFile.exists();
+    }
 }

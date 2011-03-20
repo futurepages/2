@@ -15,7 +15,7 @@ import java.util.Properties;
 import javax.persistence.Entity;
 
 import org.futurepages.annotations.View;
-import org.futurepages.core.config.Mapper;
+import org.futurepages.core.config.Modules;
 import org.futurepages.core.config.Params;
 import org.futurepages.exceptions.BadFormedConfigFileException;
 import org.futurepages.exceptions.ConfigFileNotFoundException;
@@ -31,9 +31,9 @@ import org.jdom.JDOMException;
  * Classe de instanciação das Configurações Hibernate; 
  * @author Danilo Medeiros
  */
-public class HibernateConfigurationFactory extends Mapper {
+public class HibernateConfigurationFactory {
 
-	public static HibernateConfigurationFactory uniqueInstance;
+	private static HibernateConfigurationFactory INSTANCE;
 	public static File rootDir;
 
 	/**
@@ -41,11 +41,14 @@ public class HibernateConfigurationFactory extends Mapper {
 	 * @return
 	 */
 	public static HibernateConfigurationFactory getInstance() {
-		if (uniqueInstance == null) {
-			uniqueInstance = new HibernateConfigurationFactory();
+		if (INSTANCE == null) {
+			INSTANCE = new HibernateConfigurationFactory();
 		}
 
-		return uniqueInstance;
+		return INSTANCE;
+	}
+
+	private HibernateConfigurationFactory() {
 	}
 
 	/**
@@ -81,14 +84,14 @@ public class HibernateConfigurationFactory extends Mapper {
 
 		if (modules != null) {
 			for (File module : modules) {
-				if (!moduleHasDB(module)) {
+				if (!Modules.moduleHasDB(module)) {
 					mapModule(module, defaultConfiguration);
 
-				} else if (moduleHasDB(module)) {
-					mapModule(module);
-					Configurations moduleConfiguration = new Configurations();
-					moduleConfiguration.getEntitiesConfig().createMappings();
-					configurationsMap.put(module.getName(), moduleConfiguration);
+				} else if (Params.get("CONNECT_EXTERNAL_MODULES").equals("true")) {
+						mapModule(module);
+						Configurations moduleConfiguration = new Configurations();
+						moduleConfiguration.getEntitiesConfig().createMappings();
+						configurationsMap.put(module.getName(), moduleConfiguration);
 				}
 			}
 		}
@@ -105,7 +108,7 @@ public class HibernateConfigurationFactory extends Mapper {
 	 * @param configurations
 	 * @return
 	 */
-	private Configurations mapModule(File module, Configurations configurations)  {
+	private Configurations mapModule(File module, Configurations configurations) {
 		Collection<Class<Object>> classes;
 		try {
 			classes = listBeansAnnotatedFromModule(module);
