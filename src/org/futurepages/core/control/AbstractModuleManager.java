@@ -89,7 +89,7 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
     }
 	
     protected Consequence fwIn(String page) {
-        return (new Forward(prettyCorrect(page) + webPath + page));
+        return (new Forward(prettyCorrect(page,false) + webPath + page));
     }
 
 
@@ -104,19 +104,19 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
     }
 
     protected Consequence rdIn(String page) {
-        return (new Redirect(prettyCorrect(page) + webPath + page));
+        return (new Redirect(prettyCorrect(page,false) + webPath + page));
     }
 
     protected Consequence rdIn(String page, boolean redirectParams) {
-        return (new Redirect(prettyCorrect(page) + webPath + page, redirectParams));
+        return (new Redirect(prettyCorrect(page,false) + webPath + page, redirectParams));
     }
 
     protected Consequence redir(String moduleId, String page){
-        return (new Redirect(prettyCorrect(page) + moduleId + "/"+page));
+        return (new Redirect(prettyCorrect(page,true) + moduleId + "/"+page));
     }
 
     protected Consequence redir(String moduleId, String page, boolean redirectParams){
-        return (new Redirect(prettyCorrect(page) + moduleId + "/"+page, redirectParams));
+        return (new Redirect(prettyCorrect(page,true) + moduleId + "/"+page, redirectParams));
     }
 
     protected Consequence chain(String actionName) {
@@ -139,12 +139,14 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
            return ModuleUtil.moduleId(klass);
     }
 
-    private String prettyCorrect(String page) {
+    private String prettyCorrect(String page, boolean putModulePath) {
         if(withPrettyURL){
             if(page.contains(".")){ //.page , .jsp
                 return Params.MODULES_PATH+"/";
             }
-        }
+        }else if(putModulePath){
+                return Params.MODULES_PATH+"/";
+		}
         return "";
     }
 
