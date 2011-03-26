@@ -1,5 +1,6 @@
 package org.futurepages.util;
 
+
 import java.util.Map;
 
 public class StringUtils {
@@ -61,5 +62,16 @@ public class StringUtils {
 		return outBuffer.toString();
 	}
 
+	public static String replaceIntoByMap(String strIn, Map<String, String> map) {
+		if (Is.empty(strIn)) {
+			return "";
+		}
+
+		for (String key : map.keySet()) {
+			strIn = org.apache.commons.lang.StringUtils.replace(strIn, key, map.get(key));
+		}
+
+		return strIn;
+	}
 
 }
