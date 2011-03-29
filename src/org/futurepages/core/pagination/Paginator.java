@@ -34,7 +34,7 @@ public class Paginator implements Pageable {
 	 * @deprecated Utilize setOutputPaginationSlice (verificar em site2 e scrummer o uso)
 	 */
 	public <T extends Serializable> List<T> paginateList(int pageSize, Class<T> entityClass, String where, String order) {
-		List<T> list = Dao.listPage(getPageNum(), pageSize, 0, " FROM " + entityClass.getName() + " WHERE " + where + " ORDER BY " + order);
+		List<T> list = Dao.listPage(getPageNum(), pageSize, 0, " FROM " + entityClass.getName() +  (Is.empty(where) ? "" :" WHERE " + where) + " ORDER BY " + order);
 		long totalSize = Dao.numRows(entityClass, where);
 		double total = totalSize;
 		int totalPages = (int) Math.ceil(total / pageSize);
