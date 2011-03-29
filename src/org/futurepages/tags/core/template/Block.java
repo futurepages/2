@@ -7,7 +7,7 @@ import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.tags.PrintTag;
 import org.futurepages.core.tags.build.ContentTypeEnum;
 import org.futurepages.core.template.Page;
-import org.futurepages.core.template.TemplateServlet;
+import org.futurepages.core.template.JspTemplateServlet;
 
 /**
  * @author Leandro
@@ -20,33 +20,20 @@ public class Block extends PrintTag {
 	
 	@Override
 	public String getStringToPrint() throws JspException {
-		Page page = (Page) req.getAttribute(TemplateServlet.PAGE_ATTR);
-		Page block = page.getBlock(id);
-		String view = "";
-		if (block == null) {
-			throw new JspException("Block " + id + " doesn't exists");
+		Page page = (Page) req.getAttribute(JspTemplateServlet.PAGE_ATTR);
+		String view = null;
+		if(page.isWithRule() && id.equals("body")) {
+				view = ((String)req.getAttribute(JspTemplateServlet.CURRENT_PATH)) + ".jsp";
+		} else {
+			view = page.getBlock(id).getView();
 		}
-		req.setAttribute(TemplateServlet.PAGE_ATTR, block);
-		view = block.getView();
+
 		try {
-			TemplateServlet.executeListener(block, req, res, application);
+			pageContext.include("/" + view, false);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new JspException(ex);
 		}
-
-		String oldView = (String) req.getAttribute("_view");
-
-		String _view = "/" + view;
-		req.setAttribute("_view", _view);
-		try {
-			pageContext.include(_view, false); //o mesmo que <jsp:include page="${_view}" flush="false"/>
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			throw new JspException(ex);
-		}
-		req.setAttribute("_view", oldView);
-		req.setAttribute(TemplateServlet.PAGE_ATTR, page);
 		return "";
 	}
 }

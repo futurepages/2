@@ -50,7 +50,6 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 
     private List<Chain> chains = new ArrayList<Chain>();
 
-    private static String viewDir = null;
     private static ActionConfig defaultAction = null;
     private static Context appContext = null;
     private List<String> actionPackages = new LinkedList<String>();
@@ -85,15 +84,6 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 
     public void removeActionPackage(String actionPackage) {
     	actionPackages.remove(actionPackage);
-    }
-
-    public static void setViewDir(String viewDir) {
-    	AbstractApplicationManager.viewDir = viewDir;
-    }
-
-    public static String getViewDir() {
-
-    	return viewDir;
     }
 
     /**
@@ -547,16 +537,6 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 
     public ActionConfig action(Class<? extends Object> klass, String innerAction) {
         return addActionConfig(new ActionConfig(klass, innerAction));
-    }
-
-    /**
-     * Turn on/off the reload mode of application manager.
-     * This can also be done in the web.xml file.
-     *
-     * @param reloadMode
-     */
-    public void setReloadMode(boolean reloadMode) {
-        Controller.reloadAppManager = reloadMode;
     }
 
 	/**

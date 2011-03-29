@@ -36,11 +36,8 @@ public abstract class AbstractTemplateManager {
         }
 
         String path = cutSlash(page.getPath());
-
         if (findPageForPath(path, false) != null) {
-
             throw new TemplateException("Already exists a page with the path " + page.getPath());
-
         }
         pages.put(path, page);
     }
@@ -58,15 +55,10 @@ public abstract class AbstractTemplateManager {
      * @return Page que possui o path informado
      */
     public Page getPageForPath(String path) {
-
         path = cutSlash(path);
-
         Page page = findPageForPath(path, false);
-
         if (page == null) {
-
             page = findPageForPath(path, true);
-
         }
 
         return page;

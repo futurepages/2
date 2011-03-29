@@ -21,6 +21,7 @@ import org.futurepages.exceptions.ConfigFileNotFoundException;
  */
 public class TemplateManager extends AbstractTemplateManager {
 
+	@Override
 	public void configurePages(){
 		try {
 			initialize();
@@ -56,7 +57,7 @@ public class TemplateManager extends AbstractTemplateManager {
 			path = page.getAttributeValue("path");
 			base = page.getAttributeValue("base");
 			if (rule != null) { // Página com regra
-				Page basePage = new Page(rule, base, ConventionController.class);
+				Page basePage = new Page(rule, base, true);
 				List<Element> blocks = page.getChildren();
 				for (Element block : blocks) {
 					String id = block.getAttributeValue("id");

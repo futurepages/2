@@ -51,14 +51,6 @@ public class Forward implements Consequence {
 	 */
 	public Forward(String url) {
 		this.url = putSlash(url);
-		String viewDir = AbstractApplicationManager.getViewDir();
-		if (viewDir != null) {
-			if (viewDir.endsWith("/") && viewDir.length() > 1) {
-				viewDir = viewDir.substring(0, viewDir.length() - 1);
-			}
-			this.url = putSlash(viewDir) + this.url; 
-		}
-
 	}
     
     private String putSlash(String url) {
@@ -96,8 +88,7 @@ public class Forward implements Consequence {
                 req.setAttribute(ACTION_REQUEST, a);
             
             }
-            
-            forward(this.url, req, res);
+            forward(this.getUrl(), req, res);
             
         } catch(Exception e) {
             throw new ConsequenceException(e);
@@ -112,9 +103,9 @@ public class Forward implements Consequence {
      * @param res the http servlet response.
      */
 	public static void forward(String url, HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        ServletContext app = Controller.getInstance().getApplication();
-        RequestDispatcher rd = app.getRequestDispatcher(url);
-        rd.forward(req, res);
+			ServletContext app = Controller.getInstance().getApplication();
+			RequestDispatcher rd = app.getRequestDispatcher(url);
+			rd.forward(req, res);
     }
 
     @Override
