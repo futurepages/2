@@ -18,7 +18,6 @@ public class Page {
 
     private String path,  view;
     private Map<String, Object> blocks = new HashMap<String, Object>();
-    private Class listener;
     private Pattern pattern;
 
     /**
@@ -56,7 +55,6 @@ public class Page {
     public Page(Page pageSuper) {
         this(pageSuper.getView());
         blocks.putAll(pageSuper.getBlocks());
-        this.listener = pageSuper.getListener();
         this.pattern = pageSuper.getPattern();
     }
 
@@ -81,7 +79,6 @@ public class Page {
      */
     public Page(String view, Class listener) {
         this(view);
-        this.listener = listener;
         this.pattern = Pattern.compile(path);
     }
 
@@ -93,10 +90,11 @@ public class Page {
      * @param listener
      *            Classe do listener
      */
-    public Page(String path, String view, Class listener) {
+    public Page(String path, String view, boolean withRule) {
         this(path, view);
-        this.listener = listener;
-        this.pattern = Pattern.compile(path);
+		if(withRule){
+			this.pattern = Pattern.compile(path);
+		}
     }
 
     /**
@@ -107,7 +105,6 @@ public class Page {
      */
     public Page(Page pageSuper, Class listener) {
         this(pageSuper);
-        this.listener = listener;
     }
 
     /**
@@ -120,7 +117,6 @@ public class Page {
      */
     public Page(String path, Page pageSuper, Class listener) {
         this(path, pageSuper);
-        this.listener = listener;
         this.pattern = pageSuper.getPattern();
     }
 
@@ -156,6 +152,10 @@ public class Page {
         return blocks.get(id) + "";
     }
 
+	public boolean isWithRule(){
+		return pattern != null;
+	}
+
     /**
      * @param id
      * @param stringBlock
@@ -169,29 +169,22 @@ public class Page {
         return path;
     }
 
-    public Pattern getPattern(){
+    private Pattern getPattern(){
         return this.pattern;
     }
+//
+//    public void setPath(String path) {
+//        this.path = path;
+//    }
 
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public void setView(String view) {
-        this.view = view;
-    }
+//    public void setView(String view) {
+//        this.view = view;
+//    }
 
     public String getView() {
         return view;
     }
 
-    public Class getListener() {
-        return listener;
-    }
-
-    public void setListener(Class listener) {
-        this.listener = listener;
-    }
 
     /**
      * Verifies if the pattern matches the given patch
