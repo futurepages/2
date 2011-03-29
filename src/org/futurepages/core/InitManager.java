@@ -32,6 +32,7 @@ import org.futurepages.filters.InjectionFilter;
 import org.futurepages.core.formatter.FormatterManager;
 import org.futurepages.core.i18n.LocaleManager;
 import org.futurepages.formatters.CollectionSizeFormatter;
+import org.futurepages.formatters.MonthFormatter;
 import org.futurepages.formatters.RemainingTimeFormatter;
 import org.futurepages.formatters.UrlFormatter;
 
@@ -96,6 +97,7 @@ public class InitManager extends AbstractApplicationManager{
         FormatterManager.addFormatter("anniversaryAbbr"    , new AnniversaryAbbrFormatter());
         FormatterManager.addFormatter("literalAnniversary" , new LiteralAnniversaryFormatter());
         FormatterManager.addFormatter("money"              , new MoneyFormatter());
+        FormatterManager.addFormatter("month"              , new MonthFormatter());
         FormatterManager.addFormatter("float"        	   , new FloatFormatter());
         FormatterManager.addFormatter("seoURL"	     	   , new SEOURLFormatter());
         FormatterManager.addFormatter("noSpecials"  	   , new NoSpecialsFormatter());
