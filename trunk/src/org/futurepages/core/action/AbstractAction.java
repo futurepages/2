@@ -253,10 +253,12 @@ public abstract class AbstractAction implements Pageable, Action {
 		return messages.get(ERROR);
 	}
 
+	@Override
 	public HttpServletRequest getRequest() {
 		return ((SessionContext) session).getRequest();
 	}
 
+	@Override
 	public HttpServletResponse getResponse() {
 		return ((SessionContext) session).getResponse();
 	}

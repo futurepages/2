@@ -2,6 +2,8 @@ package org.futurepages.core.action;
 
 import java.util.Locale;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.futurepages.core.admin.DefaultUser;
 import org.futurepages.core.context.Context;
@@ -51,6 +53,10 @@ public interface Action extends Manipulable {
 
 	public HttpSession getHttpSession();
 
+	public HttpServletRequest getRequest();
+
+	public HttpServletResponse getResponse();
+	
 	public Context getApplication();
 
 	public Context getCookies();
