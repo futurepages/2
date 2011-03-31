@@ -31,10 +31,12 @@ import org.futurepages.filters.FileUploadFilter;
 import org.futurepages.filters.InjectionFilter;
 import org.futurepages.core.formatter.FormatterManager;
 import org.futurepages.core.i18n.LocaleManager;
+import org.futurepages.filters.AutoRedirectDomainFilter;
 import org.futurepages.formatters.CollectionSizeFormatter;
 import org.futurepages.formatters.MonthFormatter;
 import org.futurepages.formatters.RemainingTimeFormatter;
 import org.futurepages.formatters.UrlFormatter;
+import org.futurepages.util.Is;
 
 /**
  * ApplicationManager que gerencia a Ação Inicial e os filtros Globais
@@ -45,7 +47,11 @@ public class InitManager extends AbstractApplicationManager{
     @Override
     public final void loadActions() {
             //Filtros Globais
-            if(HibernateManager.isRunning()){
+			if(!Is.empty(Params.get("AUTO_REDIRECT_DOMAIN"))){
+				filter(new AutoRedirectDomainFilter(Params.get("AUTO_REDIRECT_DOMAIN")));
+			}
+
+			if(HibernateManager.isRunning()){
                 filter(new HibernateFilter());
             }else{
                 filter(new ExceptionFilter());
