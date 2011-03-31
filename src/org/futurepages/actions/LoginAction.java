@@ -76,8 +76,7 @@ public abstract class LoginAction extends AbstractAction implements Authenticati
 		session.setMaxInactiveInterval(timeInMinutes * 60);
 	}
 
-	////////////// HERDADO DE BASELOGINACTION DO MENTAWAI ////////////////////////
-
+	@Override
     public boolean bypassAuthentication(String innerAction) {
        return true;
     }
