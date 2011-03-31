@@ -26,14 +26,6 @@ import org.futurepages.core.i18n.LocaleManager;
  */
 public class InjectionUtils {
 
-	/**
-	 * The character used to separate the prefix from the value name when you
-	 * are using the getObject method with a prefix. You can change the value of
-	 * this prefix if you want to by changing this static variable.
-	 *
-	 * Ex: getObject(User.class, "user") will get all values that begin with
-	 * "user.".
-	 */
 	public static char PREFIX_SEPARATOR = '.';
 	private static Map<Class<? extends Object>, Map<String, Object>> settersMaps = new HashMap<Class<? extends Object>, Map<String, Object>>();
 	private static Map<Class<? extends Object>, Map<String, Object>> fieldsMaps = new HashMap<Class<? extends Object>, Map<String, Object>>();
