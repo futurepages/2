@@ -87,8 +87,8 @@ public abstract class TemplateServlet extends HttpServlet {
 		}
 
 		try {
-			request.setAttribute(JspTemplateServlet.PAGE_ATTR, page);
-			request.setAttribute(JspTemplateServlet.CURRENT_PATH, path);
+			request.setAttribute(PAGE_ATTR, page);
+			request.setAttribute(CURRENT_PATH, path);
 			application.getRequestDispatcher("/" + page.getView()).forward(request, response);
 		} catch (Exception e) {
 			throw new TemplateException(e);
