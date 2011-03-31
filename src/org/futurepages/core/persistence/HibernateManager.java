@@ -100,6 +100,7 @@ public class HibernateManager {
 			for (ThreadLocal<Session> sTL : sessionTL.values()) {
 				if (sTL != null && sTL.get() != null && sTL.get().isOpen()) {//verifica se a sessao esta aberta se estiver fecha ela
 					sTL.get().close();
+					sTL.set(null);
 					sTL.remove();
 				}
 			}
