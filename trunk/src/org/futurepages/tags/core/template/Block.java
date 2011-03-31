@@ -7,7 +7,7 @@ import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.tags.PrintTag;
 import org.futurepages.core.tags.build.ContentTypeEnum;
 import org.futurepages.core.template.Page;
-import org.futurepages.core.template.JspTemplateServlet;
+import org.futurepages.core.template.TemplateServlet;
 
 /**
  * @author Leandro
@@ -20,10 +20,10 @@ public class Block extends PrintTag {
 	
 	@Override
 	public String getStringToPrint() throws JspException {
-		Page page = (Page) req.getAttribute(JspTemplateServlet.PAGE_ATTR);
+		Page page = (Page) req.getAttribute(TemplateServlet.PAGE_ATTR);
 		String view = null;
 		if(page.isWithRule() && id.equals("body")) {
-				view = ((String)req.getAttribute(JspTemplateServlet.CURRENT_PATH)) + ".jsp";
+				view = ((String)req.getAttribute(TemplateServlet.CURRENT_PATH)) + ".jsp";
 		} else {
 			view = page.getBlock(id).getView();
 		}
