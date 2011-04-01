@@ -9,6 +9,7 @@ import org.futurepages.core.input.Input;
 import org.futurepages.core.control.InvocationChain;
 
 import org.futurepages.core.persistence.Dao;
+import org.futurepages.core.persistence.GenericDao;
 import org.futurepages.util.ReflectionUtil;
 import org.futurepages.util.The;
 
@@ -26,16 +27,30 @@ public class PIFilter implements Filter {
 	private String keyToInject;  //chave do input a ser injetado
 	private String targetKey;   //chave do input do objeto que sofrerá a injeção
 
+	private GenericDao dao;
+
 	public PIFilter(String targetKey, Class classToInject) {
 		this.targetKey = targetKey;
 		this.classToInject = classToInject;
 		this.keyToInject = The.uncapitalizedWord(classToInject.getSimpleName());
+		this.dao = Dao.getInstance();
 	}
 
 	public PIFilter(String targetKey, String keyToInject, Class classToInject) {
 		this.targetKey = targetKey;
 		this.classToInject = classToInject;
 		this.keyToInject = keyToInject;
+		this.dao = Dao.getInstance();
+	}
+
+	public PIFilter(String targetKey, String keyToInject, Class classToInject, String schemaId) {
+		this(targetKey, keyToInject, classToInject);
+		this.dao = Dao.getInstance(schemaId);
+	}
+
+	public PIFilter(String targetKey, Class classToInject, String schemaId) {
+		this(targetKey, classToInject);
+		this.dao = Dao.getInstance(schemaId);
 	}
 
 	@Override
@@ -45,14 +60,14 @@ public class PIFilter implements Filter {
 		Object keyFound = input.getValue(keyToInject);
 		if (keyFound!=null) {
 			Serializable obj = null;
-			Class pkType = Dao.getIdType(classToInject);
+			Class pkType = this.dao.getIdType(classToInject);
 			if (pkType == StringType.class) {
-				obj = Dao.get(classToInject, input.getStringValue(keyToInject));
+				obj = this.dao.get(classToInject, input.getStringValue(keyToInject));
 			} else if(pkType == LongType.class) {
 				final long idLong = input.getLongValue(keyToInject);
-				obj = Dao.get(classToInject, idLong);
+				obj = this.dao.get(classToInject, idLong);
 			} else if(pkType == IntegerType.class) {
-				obj = Dao.get(classToInject, input.getIntValue(keyToInject));
+				obj = this.dao.get(classToInject, input.getIntValue(keyToInject));
 			}
 			
 			inject(input, obj);

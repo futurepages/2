@@ -19,20 +19,15 @@ import org.hibernate.Session;
 
 public class GenericDao extends HQLProvider {
 
-	private String sessionFactoryKey;
+	private String schemaId;
 
 
-	public GenericDao(String sessionFactoryKey){
-		this.sessionFactoryKey = sessionFactoryKey;
+	GenericDao(String sessionFactoryKey){
+		this.schemaId = sessionFactoryKey;
 	}
 
-	public GenericDao(){
-		this.sessionFactoryKey = HibernateManager.DEFAULT;
-	}
-
-    //privado propositalmente na tentativa de encapsular o hibernate
-    private Session session() {
-        return HibernateManager.getSession(sessionFactoryKey);
+    public Session session() {
+        return HibernateManager.getSession(schemaId);
     }
 
     public void clearSession() {
@@ -67,7 +62,7 @@ public class GenericDao extends HQLProvider {
 	}
 
     public Query query(String hqlQuery) {
-//		System.out.println("HQL: "+hqlQuery);
+//		System.out.println("HQL: "+hqlQuery); //para depurar HQls, descomente.
 		Query query = session().createQuery(hqlQuery).setCacheable(true);
         return query;
     }

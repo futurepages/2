@@ -47,12 +47,12 @@ public class HibernateFilter implements AfterConsequenceFilter {
 
 	@Override
 	public void destroy() {
-		Dao.close();
+		HibernateManager.closeSessions();
 	}
 
 	@Override
 	public void afterConsequence(Action action, Consequence c, boolean conseqExecuted, boolean actionExecuted, String result) {
-		Dao.close();
+		HibernateManager.closeSessions();
 	}
 
 	/**

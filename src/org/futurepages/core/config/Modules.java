@@ -48,11 +48,7 @@ public class Modules {
 
 
     public static boolean moduleHasDB(File module) {
-        File hiberPropertiesFile = new File(StringUtils.concat(module.getAbsolutePath() , File.pathSeparator , Params.CONFIGURATION_DIR_NAME ,File.pathSeparator ,Params.BASE_HIBERNATE_PROPERTIES_FILE));
-		if(hiberPropertiesFile.exists()){
-			return true;
-		}
-        File hiberXmlFile = new File(StringUtils.concat(module.getAbsolutePath() , File.pathSeparator , Params.CONFIGURATION_DIR_NAME , File.pathSeparator , Params.BASE_HIBERANTE_XML_FILE));
-		return hiberXmlFile.exists();
+        File hiberPropertiesFile = new File(StringUtils.concat(module.getAbsolutePath() , "/" , Params.CONFIGURATION_DIR_NAME ,"/" ,Params.BASE_HIBERNATE_PROPERTIES_FILE));
+		return hiberPropertiesFile.exists();
     }
 }

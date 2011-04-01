@@ -18,7 +18,11 @@ public class Dao extends HQLProvider {
 	private static GenericDao INSTANCE;
 
 	static {
-		INSTANCE = new GenericDao();
+		INSTANCE = HibernateManager.getDefaultGenericDao();
+	}
+
+	public static GenericDao getInstance(String schemaId){
+		return HibernateManager.getGenericDao(schemaId);
 	}
 
 	public static GenericDao getInstance() {

@@ -230,6 +230,7 @@ public class Controller extends HttpServlet {
                         String s = returnedResult.toString();
                         acf.afterConsequence(action, c, conseqExecuted, actionExecuted, s.length() > 0 ? s : null);
                     } catch (Exception e) {
+						e.printStackTrace();
                         throw new ServletException(
                                 "Exception while executing the AfterConsequence filters: " + e.getMessage(), e);
                     }
