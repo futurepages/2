@@ -26,7 +26,6 @@ public class Params {
 	public static final  String CONFIGURATION_DIR_NAME = "conf";
     public static final  String BEANS_PACK_NAME        = "beans";
 	public static final  String TEMPLATE_PATH          = "template";
-	public static final  String BASE_HIBERANTE_XML_FILE = "hibernate.cfg.xml";
 	public static final  String BASE_HIBERNATE_PROPERTIES_FILE = "hibernate.properties";
 
 	public static String get(String name) {

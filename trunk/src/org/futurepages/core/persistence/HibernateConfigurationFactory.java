@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -17,15 +16,12 @@ import javax.persistence.Entity;
 import org.futurepages.annotations.View;
 import org.futurepages.core.config.Modules;
 import org.futurepages.core.config.Params;
-import org.futurepages.exceptions.BadFormedConfigFileException;
 import org.futurepages.exceptions.ConfigFileNotFoundException;
 import org.futurepages.exceptions.ModuleWithoutBeanDirException;
 import org.futurepages.util.ClassesUtil;
 import org.futurepages.util.EncodingUtil;
-import org.futurepages.util.XmlUtil;
+import org.futurepages.util.Is;
 import org.hibernate.cfg.Configuration;
-import org.jdom.Element;
-import org.jdom.JDOMException;
 
 /**
  * Classe de instanciação das Configurações Hibernate; 
@@ -34,157 +30,140 @@ import org.jdom.JDOMException;
 public class HibernateConfigurationFactory {
 
 	private static HibernateConfigurationFactory INSTANCE;
-	public static File rootDir;
+	private static final String DEFAULT = HibernateManager.DEFAULT;
 
-	/**
-	 * Singleton Pattern
-	 * @return
-	 */
 	public static HibernateConfigurationFactory getInstance() {
 		if (INSTANCE == null) {
 			INSTANCE = new HibernateConfigurationFactory();
 		}
-
 		return INSTANCE;
 	}
 
-	private HibernateConfigurationFactory() {
+	public File[] getModulesDirs() throws UnsupportedEncodingException {
+		File[] modulesDirs = (new File(getRootFileDir() + "/" + Params.MODULES_PATH)).listFiles();
+		return modulesDirs;
 	}
 
-	/**
-	 * Retorna as configurações 'hibernate' da aplicação 
-	 * @return
-	 * @throws UnsupportedEncodingException 
-	 * @throws IOException
-	 * @throws JDOMException 
-	 */
-	public Map<String, Configurations> getApplicationConfigurations() throws ConfigFileNotFoundException, UnsupportedEncodingException {
-		File[] modules = getModules();
-		return config(modules);
-	}
-
-	private File[] getModules() throws UnsupportedEncodingException {
+	public File getRootFileDir() {
 		String classPath = this.getClass().getResource("/").getPath();
-		rootDir = new File(EncodingUtil.correctPath(classPath));
-		File modulesDir = new File(rootDir + "/" + Params.MODULES_PATH);
-		File[] modules = modulesDir.listFiles();
-		return modules;
-	}
-
-	/**
-	 * Cria um {@link Map} de {@link Configuration} com as configurações 'hibernate' da aplicação  
-	 * @param modules
-	 * @return Map<String,Configuration> (Nome do módulo, Configuration)
-	 * @throws IOException 
-	 * @throws JDOMException 
-	 */
-	public Map<String, Configurations> config(File[] modules) throws ConfigFileNotFoundException {
-		Configurations defaultConfiguration = new Configurations();
-		Map<String, Configurations> configurationsMap = new HashMap<String, Configurations>();
-
-		if (modules != null) {
-			for (File module : modules) {
-				if (!Modules.moduleHasDB(module)) {
-					mapModule(module, defaultConfiguration);
-
-				} else if (Params.get("CONNECT_EXTERNAL_MODULES").equals("true")) {
-						mapModule(module);
-						Configurations moduleConfiguration = new Configurations();
-						moduleConfiguration.getEntitiesConfig().createMappings();
-						configurationsMap.put(module.getName(), moduleConfiguration);
-				}
-			}
-		}
-		configurationsMap.put(HibernateManager.DEFAULT, defaultConfiguration);
-		insertPropertiesConfiguration(defaultConfiguration, rootDir);
-		defaultConfiguration.createMappings();
-		return configurationsMap;
-
-	}
-
-	/**
-	 * Povoa uma {@link Configuration} hibernate com as classes annotadas com {@link Entity} presentes no {@link File} passado.
-	 * @param module
-	 * @param configurations
-	 * @return
-	 */
-	private Configurations mapModule(File module, Configurations configurations) {
-		Collection<Class<Object>> classes;
 		try {
-			classes = listBeansAnnotatedFromModule(module);
-			for (Class<?> annotatedClass : classes) {
-				configurations.getEntitiesConfig().addAnnotatedClass(annotatedClass);
-				if (!annotatedClass.isAnnotationPresent(View.class)) {
-					configurations.getTablesConfig().addAnnotatedClass(annotatedClass);
-				}
-			}
-		} catch (ModuleWithoutBeanDirException ex) {
-			//Módulo não possui o diretório de beans
-			//System.out.println(ex.getMessage());
+			return new File(EncodingUtil.correctPath(classPath));
+		} catch (UnsupportedEncodingException ex) {
+			System.out.println("erro ao gerar rootDir " + ex.getMessage());
+			ex.printStackTrace();
+			return null;
 		}
-		return configurations;
 	}
 
-	private Configurations mapModule(File module) throws ConfigFileNotFoundException {
-		Configurations config = new Configurations();
-		config = mapModule(module, config);
-		insertPropertiesConfiguration(config, module);
-		return config;
+	/**
+	 * Retorna o mapa das configurações de cada schema do 'hibernate' na aplicação
+	 */
+	public Map<String, Configurations> getApplicationConfigurations() throws ConfigFileNotFoundException, UnsupportedEncodingException, FileNotFoundException, IOException {
+
+		Map<String, Schema> schemasMap = new HashMap<String, Schema>();
+		File[] modulesDirs = getModulesDirs();
+		if (modulesDirs != null) {
+			for (File module : modulesDirs) {
+				mapModule(module, schemasMap);
+			}
+		}
+		return generateConfigurationsMap(schemasMap); //createMappings & insertProperties
+
 	}
 
-	private void insertPropertiesConfiguration(Configurations configurations, File path) throws ConfigFileNotFoundException {
-		String file = path.getAbsolutePath() + "/" + Params.CONFIGURATION_DIR_NAME + "/" + Params.BASE_HIBERNATE_PROPERTIES_FILE;
+	private void mapModule(File module, Map<String, Schema> schemasMap) throws FileNotFoundException, IOException {
 		Properties properties = new Properties();
-		InputStream inputStream;
-		boolean naoCarregado = false;
-		try {
-			inputStream = new FileInputStream(file);
-			properties.load(inputStream);
-			configurations.getEntitiesConfig().addProperties(properties);
-			configurations.getTablesConfig().addProperties(properties);
-			configurations.getEntitiesConfig().getProperties();
-			configurations.getTablesConfig().getProperties();
-		} catch (FileNotFoundException e) {
-			naoCarregado = true;
-		} catch (IOException e) {
-			naoCarregado = true;
-		}
-		if (naoCarregado) {
-			insertSessionFactoryXMLProperties(configurations, path);
+
+		String schemaId = getSchemaId(module, properties, schemasMap); //properties é preenchido e devolve schemaId
+
+		if (schemaId != null) { //modulo interno ou externo com CONNECT_EXTERNAL_MODULES=true
+			if (schemasMap.get(schemaId) == null) {
+				//só vale os properties do primeiro módulo do schema externo. Os properties dos demais
+				//servem somente para verificar o schemaId (que foi feito anteriormente em getSchemaId()
+				schemasMap.put(schemaId, new Schema());
+				schemasMap.get(schemaId).properties = properties;
+			}
+
+			Configurations configurations = schemasMap.get(schemaId).config;
+
+			Collection<Class<Object>> classes;
+			try {
+				classes = listBeansAnnotatedFromModule(module);
+				for (Class<?> annotatedClass : classes) {
+					configurations.getEntitiesConfig().addAnnotatedClass(annotatedClass);
+					if (!annotatedClass.isAnnotationPresent(View.class)) {
+						configurations.getTablesConfig().addAnnotatedClass(annotatedClass);
+					}
+				}
+			} catch (ModuleWithoutBeanDirException ex) {
+				//Módulo não possui o diretório de beans
+				//System.out.println(ex.getMessage());
+			}
 		}
 	}
 
-	private void insertSessionFactoryXMLProperties(Configurations config, File module) throws ConfigFileNotFoundException {
-
-		Element rootElement = null;
-		String file = module.getAbsolutePath() + "/" + Params.CONFIGURATION_DIR_NAME + "/" + Params.BASE_HIBERANTE_XML_FILE;
-		try {
-			rootElement = XmlUtil.getRootElement(file);
-		} catch (IOException e) {
-			throw new ConfigFileNotFoundException("Arquivo de configuração hibernate não encontrado: " + file);
-		} catch (JDOMException e) {
-			throw new BadFormedConfigFileException("Arquivo de configuração hibenrnate mal formado: " + file);
-		}
-		insertSessionFactoryProperties(config, rootElement);
-	}
-
-	private void insertSessionFactoryProperties(Configurations configuration, Element element) {
-		Element sessionFactory = element.getChild("session-factory");
-		for (Element child : (List<Element>) sessionFactory.getChildren()) {
-			configuration.getEntitiesConfig().setProperty(child.getAttributeValue("name"), child.getValue());
-			configuration.getTablesConfig().setProperty(child.getAttributeValue("name"), child.getValue());
-		}
+	private void insertSchemaProperties(Schema schema) {
+		schema.config.getEntitiesConfig().addProperties(schema.properties);
+		schema.config.getTablesConfig().addProperties(schema.properties);
+		schema.config.getEntitiesConfig().createMappings();
+//		configurations.getEntitiesConfig().getProperties();
+//		configurations.getTablesConfig().getProperties();
 	}
 
 	private Collection<Class<Object>> listBeansAnnotatedFromModule(File module) throws ModuleWithoutBeanDirException {
 		File beansDirectory = new File(module.getAbsolutePath() + "/" + Params.BEANS_PACK_NAME);
-
 		if (beansDirectory.listFiles() != null) {
-
-			return ClassesUtil.getInstance().listClassesFromDirectory(beansDirectory,
-					rootDir.getAbsolutePath(), null, Entity.class, true);
+			return ClassesUtil.getInstance().listClassesFromDirectory(beansDirectory, getRootFileDir().getAbsolutePath(), null, Entity.class, true);
 		}
-
 		throw new ModuleWithoutBeanDirException(module.getName());
+	}
+
+	/**
+	 * Devolve o schemaId registrado na propriedade "hibernate.schemaId" e devolve o Properties.
+	 * Se "hibernate.schemaId" não for definido, devolve o moduleId.
+	 */
+	private String getSchemaId(File module, Properties properties, Map<String, Schema> schemasMap) throws FileNotFoundException, IOException {
+		boolean defaultModule = !Modules.moduleHasDB(module);
+		if (defaultModule) { //internal
+			if(schemasMap.get(DEFAULT)==null){
+				schemasMap.put(DEFAULT, new Schema());
+				String configPath = "/" + Params.CONFIGURATION_DIR_NAME + "/" + Params.BASE_HIBERNATE_PROPERTIES_FILE;
+				String filePath = getRootFileDir().getAbsolutePath() + configPath;
+				InputStream inputStream = new FileInputStream(filePath);
+				properties.load(inputStream);
+				schemasMap.get(DEFAULT).properties = properties;
+			}
+			return DEFAULT;
+		} else if (Params.get("CONNECT_EXTERNAL_MODULES").equals("true")) {
+			String configPath = "/" + Params.CONFIGURATION_DIR_NAME + "/" + Params.BASE_HIBERNATE_PROPERTIES_FILE;
+			String filePath = module.getAbsolutePath() + configPath;
+			InputStream inputStream;
+			inputStream = new FileInputStream(filePath);
+			properties.load(inputStream);
+			String schemaId = properties.getProperty("hibernate.schemaId");
+			if (Is.empty(schemaId)) {
+				return module.getName(); //se não foi definido, seu schemaId será o nome do módulo.
+			}
+			return schemaId;
+		}
+		return null;
+	}
+
+	private Map<String, Configurations> generateConfigurationsMap(Map<String, Schema> schemasMap) {
+		Map<String, Configurations> configurationsMap = new HashMap<String, Configurations>();
+		for(String schemaId : schemasMap.keySet()){
+			Schema schema = schemasMap.get(schemaId);
+			insertSchemaProperties(schema);
+			configurationsMap.put(schemaId, schema.config);
+		}
+		return configurationsMap;
+	}
+
+	class Schema {
+		Schema() {
+			this.config = new Configurations();
+		}
+		private Configurations config;
+		private Properties properties;
 	}
 }
