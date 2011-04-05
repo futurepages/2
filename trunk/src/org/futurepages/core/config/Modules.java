@@ -40,14 +40,14 @@ public class Modules {
      */
     public static void registerLocalModules(ApplicationManager manager, File[] modules) throws Exception {
         for (File module : modules) {
-            if (!moduleHasDB(module)) {
+            if (!hasOwnSchema(module)) {
                 registerModule(manager, module);
             }
         }
     }
 
 
-    public static boolean moduleHasDB(File module) {
+    public static boolean hasOwnSchema(File module) {
         File hiberPropertiesFile = new File(StringUtils.concat(module.getAbsolutePath() , "/" , Params.CONFIGURATION_DIR_NAME ,"/" ,Params.BASE_HIBERNATE_PROPERTIES_FILE));
 		return hiberPropertiesFile.exists();
     }

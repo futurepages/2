@@ -2,7 +2,7 @@
 
 <!-- ANT SCRIPT TO BUILD THE FUTUREPAGES PROJECT -->
 
-<project name="placitumBuild" default="run" basedir="../../futurepages2/">
+<project name="fpgBuild" default="run" basedir="../../futurepages2/">
 
 	<path id="classpath">
 		<fileset dir="dist" includes="futurepages2.jar"/>
