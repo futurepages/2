@@ -21,7 +21,6 @@ import org.futurepages.exceptions.ModuleWithoutBeanDirException;
 import org.futurepages.util.ClassesUtil;
 import org.futurepages.util.EncodingUtil;
 import org.futurepages.util.Is;
-import org.hibernate.cfg.Configuration;
 
 /**
  * Classe de instanciação das Configurações Hibernate; 
@@ -106,8 +105,6 @@ public class HibernateConfigurationFactory {
 		schema.config.getEntitiesConfig().addProperties(schema.properties);
 		schema.config.getTablesConfig().addProperties(schema.properties);
 		schema.config.getEntitiesConfig().createMappings();
-//		configurations.getEntitiesConfig().getProperties();
-//		configurations.getTablesConfig().getProperties();
 	}
 
 	private Collection<Class<Object>> listBeansAnnotatedFromModule(File module) throws ModuleWithoutBeanDirException {
@@ -123,7 +120,7 @@ public class HibernateConfigurationFactory {
 	 * Se "hibernate.schemaId" não for definido, devolve o moduleId.
 	 */
 	private String getSchemaId(File module, Properties properties, Map<String, Schema> schemasMap) throws FileNotFoundException, IOException {
-		boolean defaultModule = !Modules.moduleHasDB(module);
+		boolean defaultModule = !Modules.hasOwnSchema(module);
 		if (defaultModule) { //internal
 			if(schemasMap.get(DEFAULT)==null){
 				schemasMap.put(DEFAULT, new Schema());
