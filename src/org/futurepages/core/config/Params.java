@@ -3,6 +3,7 @@ package org.futurepages.core.config;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -45,6 +46,10 @@ public class Params {
 		defaultParams(applicationRealPath, contextName);
 		parseXML();
 		compositeParams();
+	}
+
+	public static Map<String, String> getParamsMap(){
+		return  paramsMap;
 	}
 
 	/**
