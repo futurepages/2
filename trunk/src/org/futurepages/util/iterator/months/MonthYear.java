@@ -3,6 +3,7 @@ package org.futurepages.util.iterator.months;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import org.futurepages.util.CalendarUtil;
+import org.futurepages.util.The;
 
 /**
  *  
@@ -69,5 +70,10 @@ public class MonthYear implements Comparable<MonthYear> {
 
 	public boolean after(MonthYear that){
 		return this.compareTo(that)>0;
+	}
+
+	@Override
+	public String toString() {
+		return this.year + "/" + The.intWithLeftZeros(month, 2);
 	}
 }
