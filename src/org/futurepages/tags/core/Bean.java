@@ -11,7 +11,9 @@ import org.futurepages.core.tags.cerne.Context;
 
 /**
  * @author Sergio Oliveira
+ * @deprecated
  */
+@Deprecated
 @org.futurepages.annotations.Tag(bodyContent=ContentTypeEnum.JSP)
 public class Bean extends AbstractContext {
 	
