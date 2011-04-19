@@ -60,7 +60,16 @@ public class HtmlTagReplacer {
 			keep("div");
 			keep("p");
 			keep("strong", "strong");
-			keep("i", "em");
+			keep("em");
+
+			keep("i"   , "em");
+			keep("cite", "em");
+			keep("var" , "em");
+			keep("code", "em");
+			keep("samp", "em");
+			keep("kbd" , "em");
+			keep("dfn" , "em");
+
 			keep("u", "span " + STYLE_UNDERLINE, "span");
 			keep("address", "em");
 			keep("b", "strong");
@@ -76,7 +85,16 @@ public class HtmlTagReplacer {
 			reduce("div","p");
 			reduce("p");
 			reduce("strong");
-			reduce("i", "em");
+
+			reduce("em");
+			reduce("i"   , "em");
+			reduce("cite", "em");
+			reduce("var" , "em");
+			reduce("code", "em");
+			reduce("samp", "em");
+			reduce("kbd" , "em");
+			reduce("dfn" , "em");
+
 			reduce("u", "span " + STYLE_UNDERLINE, "span");
 			reduce("address", "em");
 			reduce("b", "strong");
@@ -95,11 +113,23 @@ public class HtmlTagReplacer {
 				keep("ol");
 				keep("li");
 				keep("blockote");
+				keep("cite");
+				keep("var");
+				keep("code");
+				keep("samp");
+				keep("kbd");
+				keep("dfn");
 			} else {
 				reduce("ul");
 				reduce("ol");
 				reduce("li");
 				reduce("blockote");
+				reduce("cite");
+				reduce("var");
+				reduce("code");
+				reduce("samp");
+				reduce("kbd");
+				reduce("dfn");
 			}
 		} else { // !lists
 			reduce("ul", "p");
@@ -108,12 +138,12 @@ public class HtmlTagReplacer {
 		}
 
 		if (image) {
-			keep("img");
 			keep("object");
 			keep("embed");
 			keep("param");
 			keep("iframe");
 			if(styles){
+				keep("img");
 			} else {
 				reduce("img", attrs("src","alt"));
 			}
