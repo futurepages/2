@@ -129,7 +129,7 @@ public abstract class AbstractAction implements Pageable, Action {
 		return input.getValue(key);
 	}
 	
-	protected void output(String key, Object obj){
+	public void output(String key, Object obj){
 		output.setValue(key, obj);
 	}
 	protected void outputOnly(String key, Object obj){
@@ -299,7 +299,7 @@ public abstract class AbstractAction implements Pageable, Action {
 		return loggedUser(session);
 	}
 
-	protected String success() {
+	public String success() {
 		return success("");
 	}
 
@@ -307,7 +307,7 @@ public abstract class AbstractAction implements Pageable, Action {
 		return this.putMessage(SUCCESS, msg);
 	}
 
-    protected String error() {
+    public String error() {
         return error("");
     }
 
