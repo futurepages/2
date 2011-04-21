@@ -102,4 +102,18 @@ public class SEOUtil {
 		strIn = strIn.toLowerCase().trim();
 		return StringUtils.replace(strIn, urlDirt);
 	}
+
+	public static String noAccent(String in){
+		StringBuffer out = new StringBuffer();
+		char[] chars = in.toCharArray();
+		for(char ch : chars){
+			String newChar = alphabetics.get(ch);
+			if(newChar!=null){
+				out.append(newChar);
+			}else {
+				out.append(ch);
+			}
+		}
+		return out.toString();
+	}
 }
