@@ -53,7 +53,8 @@ public class EncodingUtil {
 
     public static String decodeUrl(String strIn){
         try {
-            return URLDecoder.decode(strIn, "UTF-8");
+            String decodedUrl = URLDecoder.decode(strIn, "UTF-8");
+			return decodedUrl.replaceAll("&frasl;", "/"); //bug - tomcat não reconhece barra.
         } catch (Exception ex) {
            return null;
         }
