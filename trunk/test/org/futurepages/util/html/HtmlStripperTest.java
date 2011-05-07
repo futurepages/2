@@ -116,7 +116,7 @@ public class HtmlStripperTest {
 	public void testeRichText_longHtml() throws FileNotFoundException, IOException{
 		String path = getResourcePath()+"/res/longHtml.html";
 		richTextTestProcedure(false, false, false, false, false, path,
-				"/res/expectedLongHtml.html", "html quebrado(tags não fechadas, aspas nao fechadas)");
+				"/res/expectedLongHtml.html", "html longo");
 	}
 	
 	@Test
