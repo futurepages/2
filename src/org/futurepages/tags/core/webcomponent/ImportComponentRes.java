@@ -7,6 +7,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 import org.futurepages.annotations.Tag;
 import org.futurepages.annotations.TagAttribute;
+import org.futurepages.core.config.Params;
 import org.futurepages.core.path.Paths;
 import org.futurepages.core.tags.build.ContentTypeEnum;
 import static org.futurepages.util.StringUtils.concat;
@@ -125,11 +126,11 @@ public final class ImportComponentRes extends SimpleTagSupport {
 	}
 
 	public void appendJSto(HttpServletRequest req, StringBuffer buffer) {
-		buffer.append( concat("<script src=\"" , resPath(req) , "/" , key , "/" , version , "/" , key , ".js\" type=\"text/javascript\"></script>"));
+		buffer.append( concat("<script src=\"" , resPath(req) , "/" , key , "/" , version , "/" , key , ".js"+Params.get("RELEASE_QUERY")+"\" type=\"text/javascript\"></script>"));
 	}
 
 	public void appendCSSto(HttpServletRequest req, StringBuffer buffer) {
-		buffer.append( concat("<link rel=\"stylesheet\" type=\"text/css\" href=\"" , resPath(req) , "/" , key , "/" , version , "/" , key , ".css\" media=\"all\"/>"));
+		buffer.append( concat("<link rel=\"stylesheet\" type=\"text/css\" href=\"" , resPath(req) , "/" , key , "/" , version , "/" , key , ".css"+Params.get("RELEASE_QUERY")+"\" media=\"all\"/>"));
 	}
 
 	private String resPath(HttpServletRequest req){

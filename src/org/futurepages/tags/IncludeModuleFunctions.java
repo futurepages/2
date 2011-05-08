@@ -5,6 +5,7 @@ import javax.servlet.jsp.JspException;
 
 import org.futurepages.annotations.Tag;
 import org.futurepages.annotations.TagAttribute;
+import org.futurepages.core.config.Params;
 import org.futurepages.core.path.Paths;
 import org.futurepages.core.tags.PrintTag;
 import org.futurepages.core.tags.build.ContentTypeEnum;
@@ -46,6 +47,6 @@ public class IncludeModuleFunctions extends PrintTag{
     }
 
 	private String scriptFunctionsTag(String moduleId){
-		return "<script type=\"text/javascript\" src=\""+Paths.module(req,moduleId)+"/template/functions.js\"></script>";
+		return "<script type=\"text/javascript\" src=\""+Paths.module(req,moduleId)+"/template/functions.js"+Params.get("RELEASE_QUERY")+"\"></script>";
 	}
 }

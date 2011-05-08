@@ -4,6 +4,7 @@ import javax.servlet.jsp.JspException;
 
 import org.futurepages.annotations.Tag;
 import org.futurepages.annotations.TagAttribute;
+import org.futurepages.core.config.Params;
 import org.futurepages.core.path.Paths;
 import org.futurepages.core.tags.PrintTag;
 import org.futurepages.core.tags.build.ContentTypeEnum;
@@ -45,6 +46,6 @@ public class ImportModuleLayout extends PrintTag{
     }
 
 	private String cssLayoutTag(String moduleId){
-			return ("<link rel=\"stylesheet\" type=\"text/css\" href=\""+Paths.module(req,moduleId)+"/template/layout.css\" media=\"all\"/>");
+			return ("<link rel=\"stylesheet\" type=\"text/css\" href=\""+Paths.module(req,moduleId)+"/template/layout.css"+Params.get("RELEASE_QUERY")+"\" media=\"all\"/>");
 	}
 }
