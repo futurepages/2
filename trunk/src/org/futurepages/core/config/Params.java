@@ -78,6 +78,7 @@ public class Params {
 		paramsMap.put("PRETTY_URL", "false");
 		paramsMap.put("MINIFY_RESOURCE_MODE", "none"); //none, css, js, both
 		paramsMap.put("QUARTZ_MODE", "off");
+		paramsMap.put("RELEASE", "");
 		paramsMap.put("SCHEMA_GENERATION_TYPE", "none");
 		paramsMap.put("START_PAGE_NAME", "Index");
         paramsMap.put("THEME", "default");
@@ -124,6 +125,11 @@ public class Params {
 
 		if (get("START_CONSEQUENCE") == null) {
 			paramsMap.put("START_CONSEQUENCE", "init/" + Params.get("START_PAGE_NAME") + ".page");
+		}
+		if (!get("RELEASE").equals("")) {
+			paramsMap.put("RELEASE_QUERY", "?release=" + Params.get("RELEASE"));
+		} else {
+			paramsMap.put("RELEASE_QUERY", "");
 		}
 	}
 }

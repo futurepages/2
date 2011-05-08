@@ -1,5 +1,6 @@
 package org.futurepages.core;
 
+import org.futurepages.core.context.Context;
 import org.futurepages.formatters.LiteralAnniversaryFormatter;
 import org.futurepages.formatters.AnniversaryAbbrFormatter;
 import org.futurepages.formatters.AnniversaryFormatter;
@@ -111,4 +112,9 @@ public class InitManager extends AbstractApplicationManager{
         FormatterManager.addFormatter("uppercase"		   , new UpperCaseFormatter());
 		FormatterManager.addFormatter("url"                , new UrlFormatter());
     }
+
+	@Override
+	public void init(Context application) {
+		application.setAttribute("params", Params.getParamsMap());
+	}
 }
