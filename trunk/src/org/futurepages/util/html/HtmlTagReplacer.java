@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.futurepages.util.StringUtils;
+
 import static org.futurepages.util.StringUtils.concat;
 
 /**
@@ -201,6 +204,9 @@ public class HtmlTagReplacer {
 	 * @return retorna a tag convertida de acordo com os parâmetros passados.
 	 */
 	public String treated(String tag) {
+		if(StringUtils.isEmpty(tag)){
+			return "";
+		}
 		boolean isClosing = isClosingTag(tag);
 		String[] tagParts = tagParts(tag, isClosing);
 		String treated ;
