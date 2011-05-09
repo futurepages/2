@@ -79,6 +79,9 @@ public class HtmlTagReplacerTest_treated {
 	public static Collection parameters() {
 		Collection col =  Arrays.asList(new Object[][] {
 			
+			{noStyles(),	null, 		"", 	"Quando o texto for null"},
+			{noStyles(),	"", 		"", 	"Quando o texto for vazio"},
+			
 			{noStyles(),	"<a/>", 		"<span style=\"text-decoration:underline;\"/>", 	"tag <a> com style."},
 			
 			{styles(), 		"<a/>", 		"<span style=\"text-decoration:underline;\"/>", 	"tag <a> com style."},
