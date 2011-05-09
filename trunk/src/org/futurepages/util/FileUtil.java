@@ -261,6 +261,82 @@ public class FileUtil {
 		}
 	}
 
+	/**
+	 * Creates the path indicated if there isn't
+	 * @param fileDir - path to create
+	 * @return - True if creates path. False if path exists
+	 */
+	public static boolean createPath(String fileDir) {
+		return createPath(new File(fileDir));
+	}
+
+	/**
+	 * Creates the path indicated if there isn't
+	 * @param fileDir - path to create
+	 * @return - True if creates path. False if path exists
+	 */
+	public static boolean createPath(File fileDir) {
+		if (!fileDir.exists()) {
+			return fileDir.mkdirs();
+		}
+		return false;
+	}
+
+	/**
+	 * Copies the specified folder to destination folder.
+	 * @param origin - Origin folder
+	 * @param destiny - Destiny folder
+	 * @param showLogCopy - Show only the file name copied
+	 * @param showPath - Shows the full path to the file name copied
+	 * @param overwrite - Oveerwrite if file exists
+	 * @throws IOException
+	 */
+	public static void copyFolderTo(File folder, File destiny, boolean showLogCopy, boolean showPath, boolean overwrite) throws IOException {
+		copyFolderContent(folder, new File(destiny + "\\" + folder.getName()), showLogCopy, showPath, overwrite);
+	}
+
+	/**
+	 * Copies content from origin folder to destination folder.
+	 * @param origin - Origin folder
+	 * @param destiny - Destiny folder
+	 * @param showLogCopy - Show only the file name copied
+	 * @param showPath - Shows the full path to the file name copied
+	 * @param overwrite - Oveerwrite if file exists
+	 * @throws IOException
+	 */
+	public static void copyFolderContent(File origin, File destiny, boolean showLogCopy, boolean showPath, boolean overwrite) throws IOException {
+		createPath(destiny);
+		if (!origin.isDirectory()) {
+			throw new UnsupportedOperationException("Origin must be a directory");
+		}
+		if (!destiny.isDirectory()) {
+			throw new UnsupportedOperationException("Destiny must be a directory");
+		}
+		if (destiny.equals(origin)) {
+			throw new UnsupportedOperationException("Origin and Destiny are the same directory");
+		}
+		if (destiny.getPath().regionMatches(true, 0, origin.getAbsolutePath(), 0, origin.getAbsolutePath().length())){
+			throw new UnsupportedOperationException("Destiny folder is a subfolder of origin folder");
+		}
+
+		File[] files = origin.listFiles();
+		for (File file : files) {
+			if (file.isDirectory()) {
+				copyFolderContent(file, new File(destiny + "\\" + file.getName()), showLogCopy, showPath, overwrite);
+			} else {
+				String msgLog = "";
+				File newFile = new File(destiny + "\\" + file.getName());
+				if (overwrite || !newFile.exists()) {
+					FileUtil.copy(file.getAbsolutePath(), newFile.getAbsolutePath());
+					if (showLogCopy) {
+						msgLog = ((overwrite)?"Overwriting":"Copying")+" file: " + ((showPath)?file.getAbsolutePath():file.getName());
+						System.out.println(msgLog);
+					}
+				}
+			}
+		}
+	}
+	
 	public static String convertStreamToString(InputStream is) {
 		/*
 		 * To convert the InputStream to String we use the BufferedReader.readLine()
