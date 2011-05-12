@@ -90,10 +90,10 @@ public final class WebContainer extends SimpleTagSupport {
 		getJspBody().invoke(evalResult); //invoca o conteúdo dentro do container
 
 		for (ImportComponentRes component : getComponents().values()) {
-			if (!component.isNoCSS()) {
+			if (!component.isNoCSS() && !component.isPseudo()) {
 				component.appendCSSto(req, headBufferEnd);
 			}
-			if (!component.isNoJS()) {
+			if (!component.isNoJS() && !component.isPseudo()) {
 				if (component.isJsInHead()) {
 					component.appendJSto(req, headBufferEnd);
 				} else {
@@ -117,8 +117,7 @@ public final class WebContainer extends SimpleTagSupport {
 		getJspContext().getOut().print(footerBuffer);
 
 		bodyEvaluated = true;
-		threadLocal.set(null);
-		threadLocal.remove();
+		threadLocal.remove(); // quase equivalente a threadLocal.set(null);
 	}
 
 	public void setHeadFile(String headFile) {

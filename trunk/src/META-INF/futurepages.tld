@@ -408,6 +408,12 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             <type>boolean</type>
         </attribute>
         <attribute>
+            <name>pseudo</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>boolean</type>
+        </attribute>
+        <attribute>
             <name>version</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>

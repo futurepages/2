@@ -22,6 +22,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.futurepages.actions.DynAction;
 
 import org.futurepages.core.consequence.ConsequenceProvider;
 import org.futurepages.core.consequence.DefaultConsequenceProvider;
@@ -33,6 +34,7 @@ import org.futurepages.core.i18n.LocaleManager;
 import org.futurepages.core.input.PrettyGlobalURLRequestInput;
 import org.futurepages.core.input.PrettyURLRequestInput;
 import org.futurepages.exceptions.FilterException;
+import org.futurepages.tags.core.webcomponent.ImportComponentRes;
 
 /**
  * The central controller. The actions are intercepted and
@@ -43,8 +45,6 @@ import org.futurepages.exceptions.FilterException;
  * @author Rubem Azenha (rubem.azenha@gmail.com)
  */
 public class Controller extends HttpServlet {
-
-//    private static final char FILE_SEPARATOR = File.separatorChar;
 
 	private char innerActionSeparator = '.';
 
@@ -210,7 +210,9 @@ public class Controller extends HttpServlet {
             actionExecuted = true;
             c.execute(action, req, res);
             conseqExecuted = true;
-
+			if(action instanceof DynAction){ //@TODO local temporário, vai mudar em breve. Mudando, desde que continue ocorrendo após consequência, continuará correto.
+				ImportComponentRes.asyncResources.remove();
+			}
         } catch (Exception e) {
             e.printStackTrace();
             Throwable cause = getRootCause(e);
