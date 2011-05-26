@@ -45,42 +45,27 @@ public class CookieContext implements Context, Map<String, Object> {
      */
 	@Override
     public Object getAttribute(String name) {
-        
         Cookie[] cookies = req.getCookies();
-
         if (cookies != null) {
-            
             for (int i = 0; i < cookies.length; i++) {
-                
                 if (cookies[i].getName().equals(name)) {
-                    
                     return cookies[i].getValue();
                 }
             }
         }        
-        
         return null;
     }
     
 	@Override
     public Iterator<String> keys() {
-    	
     	List<String> list = new ArrayList<String>();
-    	
     	Cookie[] cookies = req.getCookies();
-    	
     	if (cookies != null) {
-    		
             for (int i = 0; i < cookies.length; i++) {
-            	
-            	list.add(cookies[i].getName());
-                
+            	list.add(cookies[i].getName());   
             }
-    		
     	}
-    	
     	return list.iterator();
-    	
     }
     
     /**
@@ -98,19 +83,12 @@ public class CookieContext implements Context, Map<String, Object> {
      */
 	@Override
     public void setAttribute(String name, Object value) {
-        
         if (value instanceof Cookie) {
-            
             res.addCookie((Cookie) value);
-            
         } else {
-        
             Cookie c = new Cookie(name, value.toString());
-            
             c.setMaxAge(31104000);
-            
             c.setPath("/");
-            
             res.addCookie(c);
         }
     }
@@ -122,22 +100,18 @@ public class CookieContext implements Context, Map<String, Object> {
      */
 	@Override
     public void removeAttribute(String name) {
-        
         Cookie c = new Cookie(name, "");
         c.setMaxAge(0);
-        
         res.addCookie(c);
     }
     
 	@Override
     public void reset() {
-        
         throw new UnsupportedOperationException("reset() is not supported by CookieContext !");
     }
     
 	@Override
     public boolean hasAttribute(String name) {
-        
         return getAttribute(name) != null;
         
     }
@@ -152,126 +126,88 @@ public class CookieContext implements Context, Map<String, Object> {
     
 	@Override
     public boolean containsKey(Object key) {
-    	
     	return getAttribute(key.toString()) != null;
     }
     
 	@Override
     public boolean containsValue(Object value) {
-    	
     	if (!(value instanceof String)) return false;
-    	
     	String v = value.toString();
-    	
         Cookie[] cookies = req.getCookies();
-
         if (cookies != null) {
-            
             for (int i = 0; i < cookies.length; i++) {
-            	
             	String cookie = cookies[i].getValue();
-            	
             	if (cookie != null && cookie.equals(v)) {
-            		
             		return true;
             	}
             }
         }
-        
         return false;
     }
     
 	@Override
     public Set<Map.Entry<String,Object>> entrySet() {
-    	
     	throw new UnsupportedOperationException();
     }
     
 	@Override
     public Object get(Object key) {
-    	
     	if (key == null) return null;
-    	
     	Object value = getAttribute(key.toString());
-    	
     	if (value == null) return null;
-    	
     	return value.toString();
     }
     
 	@Override
     public boolean isEmpty() {
-    	
     	Cookie[] cookies = req.getCookies();
-    	
     	return cookies == null || cookies.length == 0;
     }
     
 	@Override
     public Set<String> keySet() {
-    	
     	Set<String> keys = new HashSet<String>();
-    	
     	Iterator<String> iter = keys();
-    	
     	while(iter.hasNext()) {
-    		
     		keys.add(iter.next());
     	}
-    	
     	return keys;
     }
     
 	@Override
     public String put(String key, Object value) {
-    	
     	setAttribute(key, value);
-    	
     	return null;
     }
     
 	@Override
     public void putAll(Map<? extends String,? extends Object> t) {
-    	
     	throw new UnsupportedOperationException();
     }
     
 	@Override
     public String remove(Object key) {
-    	
     	removeAttribute(key.toString());
-    	
     	return null;
     }
     
 	@Override
     public int size() {
-    	
     	Cookie[] cookies = req.getCookies();
-    	
     	if (cookies == null) return 0;
-    	
     	return cookies.length;
     }
     
 	@Override
     public Collection<Object> values() {
-    	
     	Cookie[] cookies = req.getCookies();
-    	
     	if (cookies == null || cookies.length == 0) {
-    		
     		return new ArrayList<Object>(0);
     	}
-    	
     	List<Object> list = new ArrayList<Object>(cookies.length);
-    	
     	for(int i=0;i<cookies.length;i++) {
-    		
     		list.add(cookies[i].getValue());
     	}
-    	
     	return list;
     }
-    
 }
