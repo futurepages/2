@@ -4,10 +4,12 @@ import java.io.File;
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Map;
+import org.futurepages.core.config.Params;
 
 import org.futurepages.core.persistence.Dao;
 import org.futurepages.core.persistence.HibernateManager;
 import org.futurepages.core.tags.build.ModulesAutomation;
+import org.futurepages.util.FileUtil;
 import org.futurepages.util.The;
 
 /**
@@ -82,38 +84,41 @@ public class InstallersManager extends ModulesAutomation {
 					log(">>> installer of Resources isn't present.");
 				}
 
-
-				Map<String, List<Class<Installer>>> classes = getModulesDirectoryClasses(Installer.class, null);
-				for (String moduleName : classes.keySet()) {
-					log("module '" + moduleName + "' installing...");
-					for (Class<?> installer : classes.get(moduleName)) {
-						if(!Modifier.isAbstract(installer.getModifiers())){
-							log(">>> installer " + installer.getSimpleName() + " running...  ");
-							installer.newInstance();
-							log(">>> installer " + installer.getSimpleName() + " OK");
+				if (installMode.startsWith("script:")) {
+					System.out.println("Installing data from script: "+Params.get("CLASSES_REAL_PATH") + "/install/" + installMode.split("script\\:")[1]+"...");
+					Dao.executeSQLs(false,FileUtil.getStringLines(Params.get("CLASSES_REAL_PATH")			   + "/install/" + installMode.split("script\\:")[1]));
+				} else {
+					Map<String, List<Class<Installer>>> classes = getModulesDirectoryClasses(Installer.class, null);
+					for (String moduleName : classes.keySet()) {
+						log("module '" + moduleName + "' installing...");
+						for (Class<?> installer : classes.get(moduleName)) {
+							if (!Modifier.isAbstract(installer.getModifiers())) {
+								log(">>> installer " + installer.getSimpleName() + " running...  ");
+								installer.newInstance();
+								log(">>> installer " + installer.getSimpleName() + " OK");
+							}
+						}
+						log("module '" + moduleName + "' installed.");
+					}
+					//ExtraInstaller
+					String extraInstaller = null;
+					if (!installMode.equals("modules")) {
+						if (installMode.equals("on")) {
+							extraInstaller = "Examples";
+						} else {
+							extraInstaller = The.capitalizedWord(installMode);
 						}
 					}
-					log("module '" + moduleName + "' installed.");
-				}
 
-				//ExtraInstaller
-				String extraInstaller = null;
-				if (!installMode.equals("modules")) {
-					if (installMode.equals("on")) {
-						extraInstaller = "Examples";
-					} else {
-						extraInstaller = The.capitalizedWord(installMode);
-					}
-				}
-
-				if (extraInstaller != null) {
-					try {
-						Class exInstallerClass = Class.forName(INSTALL_DIR_NAME + "."+extraInstaller);
-						log(">>> " + extraInstaller + " installing...  ");
-						Installer extras = (Installer) exInstallerClass.newInstance();
-						log(">>> " + extras + " installed in " + extras.totalTime() + " secs.");
-					} catch (ClassNotFoundException ex) {
-						log(">>> installer of " + extraInstaller + " not present.");
+					if (extraInstaller != null) {
+						try {
+							Class exInstallerClass = Class.forName(INSTALL_DIR_NAME + "." + extraInstaller);
+							log(">>> " + extraInstaller + " installing...  ");
+							Installer extras = (Installer) exInstallerClass.newInstance();
+							log(">>> " + extras + " installed in " + extras.totalTime() + " secs.");
+						} catch (ClassNotFoundException ex) {
+							log(">>> installer of " + extraInstaller + " not present.");
+						}
 					}
 				}
 
