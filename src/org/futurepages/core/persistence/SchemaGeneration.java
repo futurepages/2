@@ -17,11 +17,11 @@ public class SchemaGeneration {
 			
             (new SchemaGeneratorsManager(modules)).execute();
 			if(schemaUpdate.getExceptions().size()>0){
-				log("Found "+schemaUpdate.getExceptions().size()+" Exception(s) while updating:");
+				log("Found "+schemaUpdate.getExceptions().size()+" Exception(s) while updating");
 				for (Object obj : schemaUpdate.getExceptions()) {
-					if(!((Exception)obj).getMessage().contains("doesn't exist")){
+//					if(!((Exception)obj).getMessage().contains("doesn't exist")){ //comentaado para entender o pq deste if
 						log("  "+((Exception)obj).getMessage());
-					}
+//					}
 				}
 			}
             log("Schema-Generation UPDATE ---- END ----");
@@ -34,11 +34,11 @@ public class SchemaGeneration {
 			(new SchemaGeneratorsManager(ModuleUtil.getIstance().getModules())).execute();
 
 			if(schemaExport.getExceptions().size()>0){
-				log("Found "+schemaExport.getExceptions().size()+" Exception(s) while exporting:");
+				log("Found "+schemaExport.getExceptions().size()+" Exception(s) while exporting");
 				for (Object obj : schemaExport.getExceptions()) {
-					if(!((Exception)obj).getMessage().contains("doesn't exist")){
+//					if(!((Exception)obj).getMessage().contains("doesn't exist")){ //comentaado para entender o pq deste if
 						log("  "+((Exception)obj).getMessage());
-					}
+//					}
 				}
 			}
             log("Schema-Generation EXPORT ---- END ----");
