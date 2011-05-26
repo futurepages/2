@@ -47,32 +47,10 @@ public class Is {
         String[] mailParts = mailStr.split("@");
 
         if (mailParts.length == 2) {
-            if (!mailParts[1].contains(".")) {
-                return false;
-            }
-            if (mailParts[0].contains(",")) {
-                return false;
-            }
-            if (mailParts[1].contains(",")) {
-                return false;
-            }
-            if (mailParts[0].contains(":")) {
-                return false;
-            }
-            if (mailParts[1].contains(":")) {
-                return false;
-            }
-            if (mailParts[0].contains(";")) {
-                return false;
-            }
-            if (mailParts[1].contains(";")) {
-                return false;
-            }
+            return validStringKey(mailParts[0],null,null,true) && validStringKey(mailParts[1],null,null,true);
         } else {
             return false;
         }
-
-        return true;
     }
 
     /**
@@ -111,10 +89,25 @@ public class Is {
      */
     public static boolean validStringKey(String str) {
 
-        if (str.length() < 4 || str.length() >= 50) {
+        return validStringKey(str, 4, 50, true);
+
+    }
+
+	public static boolean validStringKey(String str, Integer min, Integer max, boolean allowsInitialNumber) {
+		        
+		if ((min != null && (str.length() < min)) || (max != null && (str.length() >= max))) {
             return false;
         }
-        String loginVerify = The.stringKeyIn(str);//TIRA CARACTERES ESPECIAIS
+
+		String loginVerify;
+
+		if (!allowsInitialNumber){
+			loginVerify = The.stringWithoutInitialNumbers(str);
+		} else{
+			loginVerify = str;
+		}
+
+        loginVerify = The.stringKeyIn(loginVerify);//TIRA CARACTERES ESPECIAIS E NÚMEROS NO INÍCIO
         loginVerify = SEOUtil.stringKeyValid(loginVerify);//TIRA ACENTOS E Ç
 
         if (loginVerify.equalsIgnoreCase(str)) {
