@@ -605,6 +605,10 @@ public class GenericDao extends HQLProvider {
 	}
 
 	public void executeSQLs(String... sqls) {
+		executeSQLs(false, sqls);
+	}
+
+	public void executeSQLs(boolean withLog, String... sqls) {
 		String trimmedSql = null;
 		String delimiter = ";";
 		StringBuffer sqlToExecute = new StringBuffer();
@@ -622,12 +626,16 @@ public class GenericDao extends HQLProvider {
 				} else {
 					if (i == sqls.length - 1 && !trimmedSql.endsWith(delimiter)) {
 						sqlToExecute.append(trimmedSql);
-						executeSQL(sqlToExecute.toString());
+						String sql = sqlToExecute.toString();
+						executeSQL(sql);
+						System.out.println("  "+sql);
 						sqlToExecute.delete(0, sqlToExecute.length());
 					} else {
 						if (trimmedSql.endsWith(delimiter)) {
 							sqlToExecute.append(trimmedSql.substring(0, trimmedSql.length() - delimiter.length()));
-							executeSQL(sqlToExecute.toString());
+							String sql = sqlToExecute.toString();
+							executeSQL(sql);
+							System.out.println("  "+sql);
 							sqlToExecute.delete(0, sqlToExecute.length());
 						} else {
 							sqlToExecute.append(trimmedSql + " ");
