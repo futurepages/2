@@ -16,7 +16,16 @@ public class CNPJUtil {
 		sb.insert(15,'-');
 		return sb.toString();
 	}
-	
+	/**
+	 * Remove máscara
+	 * @param cnpj
+	 */
+	public static String somenteNumeros(String cnpj) {
+		cnpj = cnpj.replace(".", "").toString();
+		cnpj = cnpj.replace("-", "").toString();
+		cnpj = cnpj.replace("/", "").toString();
+		return cnpj.toString();
+	}
     /**
      * Valida o CNPJ - Cadastro Nacional de Pessoa Jurídica
      * @param str_cnpj
