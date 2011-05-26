@@ -270,14 +270,14 @@ public class The {
      * @param str
      * @return
      */
-	 public static String stringKeyIn(String str){
-        String[] specials = new String[]{":",";",",","!","?","(",")","\\","/",
+	 public static String stringKeyIn(String str){        
+		 String[] specials = new String[]{":",";",",","!","?","(",")","\\","/",
                                          "\"","'","%","#","{","}","[","]","º","ª",
                                          "<",">","´","`","~"," ","\\t","\\n","\\r","\\h"};
 		return wordWithoutSpecials(specials, str,"");
 
     }
-
+	 
     /**
      *
      * @param in objeto que deseja-se alterar
@@ -325,5 +325,14 @@ public class The {
 			valor = value.toString();
 		}
 		return valor;
+	}
+
+	static String stringWithoutInitialNumbers(String str) {
+		char[] c = str.toCharArray();		
+		while(Character.isDigit(c[0])){			
+			str = str.substring(1, str.length());
+			c = str.toCharArray();
+		}					
+		return str;
 	}
 }
