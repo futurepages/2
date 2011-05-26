@@ -628,14 +628,18 @@ public class GenericDao extends HQLProvider {
 						sqlToExecute.append(trimmedSql);
 						String sql = sqlToExecute.toString();
 						executeSQL(sql);
-						System.out.println("  "+sql);
+						if(withLog){
+							System.out.println("  "+sql);
+						}
 						sqlToExecute.delete(0, sqlToExecute.length());
 					} else {
 						if (trimmedSql.endsWith(delimiter)) {
 							sqlToExecute.append(trimmedSql.substring(0, trimmedSql.length() - delimiter.length()));
 							String sql = sqlToExecute.toString();
 							executeSQL(sql);
-							System.out.println("  "+sql);
+							if(withLog){
+								System.out.println("  "+sql);
+							}
 							sqlToExecute.delete(0, sqlToExecute.length());
 						} else {
 							sqlToExecute.append(trimmedSql + " ");
