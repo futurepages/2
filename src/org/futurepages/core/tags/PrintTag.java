@@ -15,7 +15,6 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import org.futurepages.annotations.SuperTag;
-import org.futurepages.annotations.Tag;
 import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.action.Action;
 import org.futurepages.consequences.Forward;
