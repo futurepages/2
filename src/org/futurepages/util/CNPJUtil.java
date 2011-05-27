@@ -75,14 +75,4 @@ public class CNPJUtil {
 
         return str_cnpj.equals(cnpj_calc);
     }
-    
-    public static String paraNumerico(String cnpjFormatado){
-        //@TODO
-        return null;
-    }
-    
-    public static String paraFormatado(String cnpjNumerico){
-        //@TODO
-        return null;
-    }
 }
