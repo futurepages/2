@@ -1,5 +1,7 @@
 package org.futurepages.enums;
 
+import org.futurepages.annotations.AsynchronousAction;
+
 public enum DateFormatEnum {
 
 	DATE_PT_BR_DAY_MONTH("dd-MM"),
@@ -21,7 +23,6 @@ public enum DateFormatEnum {
 	public String getMask(){
 		return mask;
 	}
-	
 	public String getMask(String separator){
 		return mask.replace(DEFAULT_SEPARATOR, separator);
 	}

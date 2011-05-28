@@ -38,7 +38,7 @@ public class ModulePermissionFilter implements Filter {
 				if(!(action instanceof AllModulesFree)) {
 					String moduleId = AbstractModuleManager.moduleId(action.getClass());
 					if (!action.loggedUser().hasModule(moduleId)) {
-							return Authentication.accessDenied(action);
+							return Authentication.accessDenied(chain);
 					}
 				}
 			}
