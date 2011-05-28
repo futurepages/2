@@ -1,0 +1,87 @@
+package org.futurepages.core.validation;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import org.futurepages.exceptions.ErrorException;
+
+public abstract class Validator {
+
+	/** mapa de validações (chave, mensagem)*/
+	private LinkedHashMap<String, String> validationMap;
+
+	/** validadores chamados por esse validador.*/
+	private ArrayList<Validator> subValidators;
+
+	protected Boolean breakOnFirst;
+
+	public static <T extends Validator> T validate(Class<T> t, boolean breakOnFirst) {
+		T validator;
+		try {
+			validator = t.newInstance();
+			validator.setBreakOnFirst(breakOnFirst);
+			return validator;
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
+	public Validator() {
+		validationMap = new LinkedHashMap<String, String>();
+		subValidators = new ArrayList<Validator>();
+	}
+
+	protected <T extends Validator> T validate(Class<T> t) {
+		T validator = Validator.validate(t, breakOnFirst);
+		subValidators.add(validator);
+		return validator;
+	}
+
+	public void error(String key, String msg) {
+		putError(key, msg);
+	}
+
+	public void error(String key, ErrorException ex) {
+		putError(key, ex.getMessage());
+	}
+
+	public void error(String msg) {
+		error(null, msg);
+	}
+
+	public void error(Exception ex) {
+		error(null, ex.getMessage());
+	}
+
+
+	private void putError(String key, String message) {
+		if (key == null) {
+			key = String.valueOf(validationMap.size()+1);
+		}
+		validationMap.put(key, message);
+
+		if (breakOnFirst) {
+			throw new ErrorException(validationMap);
+		}
+	}
+
+	public void setBreakOnFirst(boolean breakOnFirst) {
+		this.breakOnFirst = breakOnFirst;
+	}
+
+	protected void validate(){
+		validationMap();
+	}
+
+	private HashMap<String, String> validationMap() {
+		for (Validator v : subValidators) {
+			validationMap.putAll(v.validationMap());
+		}
+		if ((breakOnFirst != null) && (!validationMap.isEmpty())) {
+			ErrorException exce = new ErrorException(validationMap);
+			throw exce;
+		}
+		return validationMap;
+	}
+}

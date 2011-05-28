@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ANT SCRIPT TO BUILD THE FUTUREPAGES PROJECT -->
+
+<project name="futurepages" default="deploy" basedir="../">
+
+	<target name="deploy">
+	
+		<echo>futurePages: Generating the framework jar file...</echo>
+		<jar
+			destfile="dist/futurepages2.jar"
+			basedir="bin"/>
+	</target>
+</project>
