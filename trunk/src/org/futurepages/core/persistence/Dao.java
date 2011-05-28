@@ -41,7 +41,7 @@ public class Dao extends HQLProvider {
 		getInstance().close();
 	}
 
-	public static void evict(Class entity) {
+	public static <T extends Serializable>void evict(Class<T> entity) {
 		getInstance().evict(entity);
 	}
 

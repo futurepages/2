@@ -1,10 +1,9 @@
 package org.futurepages.filters;
 
-import org.futurepages.actions.DynAction;
 import org.futurepages.core.action.Action;
-import org.futurepages.core.action.AsynchronousAction;
-import org.futurepages.core.filter.Filter;
+import org.futurepages.core.action.AsynchronousManager;
 import org.futurepages.core.control.InvocationChain;
+import org.futurepages.core.filter.Filter;
 import org.futurepages.core.output.Output;
 
 
@@ -26,7 +25,7 @@ public class HeadTitleFilter implements Filter {
 
 	@Override
     public String filter(InvocationChain chain) throws Exception {
-        if(!(chain.getAction() instanceof AsynchronousAction )){
+        if(!(AsynchronousManager.isAsynchronousAction(chain) )){
             Output output = chain.getAction().getOutput();
             output.setValue(Action.HEAD_TITLE, headTitle);
         }

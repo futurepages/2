@@ -123,12 +123,12 @@ public class InvocationChain {
 	public Method getMethod() {
 
 		if(this.innerMethod == null){
-			String methodToExec = innerAction;
+			String methodToExec = getInnerAction();
 			if (methodToExec == null) {
 				methodToExec = "execute";
 			}
 
-			Method[] metodos = action.getClass().getMethods();
+			Method[] metodos = getAction().getClass().getMethods();
 			for (Method metodo: metodos) {
 				if (!Modifier.isPublic(metodo.getModifiers())) {
 					continue;

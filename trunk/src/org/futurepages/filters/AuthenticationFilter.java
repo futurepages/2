@@ -3,17 +3,15 @@ package org.futurepages.filters;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.futurepages.actions.DynAction;
-import org.futurepages.actions.AjaxAction;
 import org.futurepages.actions.LoginAction;
 import org.futurepages.core.action.Action;
-import org.futurepages.core.action.AsynchronousAction;
-import org.futurepages.core.context.Context;
-import org.futurepages.core.filter.Filter;
-import org.futurepages.core.control.InvocationChain;
-import org.futurepages.core.context.SessionContext;
+import org.futurepages.core.action.AsynchronousManager;
 import org.futurepages.core.admin.AuthenticationFree;
 import org.futurepages.core.admin.RedirectAfterLogin;
+import org.futurepages.core.context.Context;
+import org.futurepages.core.context.SessionContext;
+import org.futurepages.core.control.InvocationChain;
+import org.futurepages.core.filter.Filter;
 
 /**
  * A filter to handle user authentcation.
@@ -55,8 +53,8 @@ public class AuthenticationFilter implements Filter {
             if (!LoginAction.isLogged(session)) {
                 boolean shouldRedirect = false;
 				
-                if ((action instanceof RedirectAfterLogin) && !(action instanceof AsynchronousAction)) {
                     RedirectAfterLogin ral = (RedirectAfterLogin) action;
+                    if ((action instanceof RedirectAfterLogin) && !(AsynchronousManager.isAsynchronousAction(chain))) {
                     shouldRedirect = ral.shouldRedirect(innerAction);
                 }
                 //maker ??
@@ -75,11 +73,11 @@ public class AuthenticationFilter implements Filter {
                     setCallbackUrl(ses, req);
                 }
 
-                if (action instanceof AjaxAction) {
+                if (AsynchronousManager.isAjaxAction(chain)) {
                     return AJAX_DENIED;
                 }
 
-                if (action instanceof DynAction) {
+                if (AsynchronousManager.isDynAction(chain)) {
                     return DYN_LOGIN;
                 }
                 return LOGIN;
@@ -88,7 +86,7 @@ public class AuthenticationFilter implements Filter {
         return chain.invoke();
     }
 
-    /**
+	/**
      * Sets a callback url for a redirection after the login.
      * This method is called by the authentication tag to set a url for the redirection.
      * You should not call this method.

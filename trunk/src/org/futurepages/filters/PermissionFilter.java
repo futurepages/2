@@ -65,19 +65,19 @@ public class PermissionFilter implements Filter {
 
 			if (actionType == null && userType != null) {
 				if (!userType.isAssignableFrom(action.loggedUser().getClass())) {
-					return Authentication.accessDenied(action);
+					return Authentication.accessDenied(chain);
 				}
 			} else if (actionType != null) {
 				if (actionType.isAssignableFrom(action.getClass())
 						&& !userType.isAssignableFrom(action.loggedUser().getClass())) {
-					return Authentication.accessDenied(action);
+					return Authentication.accessDenied(chain);
 				}
 			}
 
 			if (roles != null) {
 				for (String roleId : roles) {
 					if (!action.loggedUser().hasRole(roleId)) {
-						return Authentication.accessDenied(action);
+						return Authentication.accessDenied(chain);
 					}
 				}
 			}

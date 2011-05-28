@@ -49,7 +49,7 @@ public class GenericDao extends HQLProvider {
         }
     }
 
-	public void evict(Class entity){
+	public <T extends Serializable> void evict(Class<T> entity){
 		session().getSessionFactory().evict(entity);
 	}
 
