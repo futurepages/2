@@ -1,5 +1,6 @@
 package org.futurepages;
 
+import org.futurepages.core.action.AsynchronousManagerTest;
 import org.futurepages.core.persistence.HQLFieldTest;
 import org.futurepages.core.persistence.HQLProviderTest;
 import org.futurepages.core.persistence.HibernateFilterTest_isTransactional;
@@ -14,6 +15,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({
 	BeforeTestSuite.class,
+	AsynchronousManagerTest.class,
 	EnumTestSuite.class,
 	FilterTestSuite.class,
 	UtilTestSuite.class,
