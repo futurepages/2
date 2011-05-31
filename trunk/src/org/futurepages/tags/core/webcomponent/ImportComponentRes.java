@@ -3,7 +3,9 @@ package org.futurepages.tags.core.webcomponent;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.HashSet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
@@ -12,12 +14,21 @@ import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.config.Params;
 import org.futurepages.core.path.Paths;
 import org.futurepages.core.tags.build.ContentTypeEnum;
+import org.futurepages.util.EncodingUtil;
 import static org.futurepages.util.StringUtils.concat;
 
 @Tag(bodyContent = ContentTypeEnum.SCRIPTLESS)
 public final class ImportComponentRes extends SimpleTagSupport {
 
+	public static final String KEY = "importComponentRes";
+
 	public static final ThreadLocal<HashSet> asyncResources = new ThreadLocal();
+	public static final ThreadLocal<Boolean> asyncResStoredInClient = new ThreadLocal();
+
+	public static void destroyAsyncResources() {
+		asyncResources.remove();
+		asyncResStoredInClient.remove();
+	}
 
 	@TagAttribute(required = true)
 	private String key;
@@ -59,17 +70,28 @@ public final class ImportComponentRes extends SimpleTagSupport {
 			}
 			getJspContext().getOut().print(buffer);
 			addToContainer();
-		} else { //if primeira vez dentro da ajax request - container = null (ajax request)
+		} else { //container = null (ajax request)
+			HttpServletRequest req = (HttpServletRequest) ((PageContext) getJspContext()).getRequest();
+			HttpServletResponse res = (HttpServletResponse) ((PageContext) getJspContext()).getResponse();
+
+			//if primeira vez dentro da ajax request -
 			 if(asyncResources.get()==null){
 				asyncResources.set(new HashSet());
+				boolean cameFromClient = addComponentsPreLoaded(req,res, asyncResources.get());//adiciona no mapa os componentes que já foram requisitados na página, enviando a mensagem através do cookie
+				asyncResStoredInClient.set(cameFromClient);
 			 }
 			 if(!asyncResources.get().contains(this.uniqueKey())){ //primeira vez do componente dentro do contexto request
-				HttpServletRequest req = (HttpServletRequest) ((PageContext) getJspContext()).getRequest();
 				if(!noJS && !pseudo){
-					getJspContext().getOut().print(importJS(req));
+					String jsResStr = null;
+					if(asyncResStoredInClient.get()){
+						jsResStr = importJS(req, true);
+					}else {
+						jsResStr = (concat("<script type=\"text/javascript\">needResourceJS('",this.getKey(),"','"+this.getVersion(),"');</script>"));
+					}
+					getJspContext().getOut().print(jsResStr);
 				}
 				if(!noCSS && !pseudo){
-					getJspContext().getOut().print(importCSS(req));
+					getJspContext().getOut().print(importCSS(req, true));
 				}
 				StringWriter evalResult = new StringWriter(); //escreve o body da tag
 				if(getJspBody()!=null){
@@ -153,19 +175,25 @@ public final class ImportComponentRes extends SimpleTagSupport {
 	}
 
 	public void appendJSto(HttpServletRequest req, StringBuffer buffer) {
-		buffer.append(importJS(req));
+		buffer.append(importJS(req, false));
 	}
 
-	private String importJS(HttpServletRequest req){
-		return  concat("<script src=\"" , resPath(req) , "/" , key , "/" , version , "/" , key , ".js"+Params.get("RELEASE_QUERY")+"\" type=\"text/javascript\"></script>");
+	private String importJS(HttpServletRequest req, boolean async){
+		return  concat("<script type=\"text/javascript\" src=\"" , resPath(req) , "/" , key , "/" , version , "/" , key , ".js"+Params.get("RELEASE_QUERY")+"\"></script>"
+					  ,(async?"<script type=\"text/javascript\">addComponentRes('"+this.uniqueKey()+"')</script>":"")
+				);
 	}
 
 	public void appendCSSto(HttpServletRequest req, StringBuffer buffer) {
-		buffer.append(importCSS(req));
+		buffer.append(importCSS(req,false));
 	}
 
-	private String importCSS(HttpServletRequest req){
-		return  concat("<link rel=\"stylesheet\" type=\"text/css\" href=\"" , resPath(req) , "/" , key , "/" , version , "/" , key , ".css"+Params.get("RELEASE_QUERY")+"\" media=\"all\"/>");
+	private String importCSS(HttpServletRequest req, boolean async){
+		if(!async){
+			return concat("<link rel=\"stylesheet\" type=\"text/css\" href=\"" , resPath(req) , "/" , key , "/" , version , "/" , key , ".css"+Params.get("RELEASE_QUERY")+"\" media=\"all\"/>");
+		}else{
+			return concat("<script type=\"text/javascript\">needResourceCSS('"+this.getKey(),"','",this.getVersion(),"');</script>");
+		}
 	}
 
 	private String resPath(HttpServletRequest req){
@@ -176,5 +204,41 @@ public final class ImportComponentRes extends SimpleTagSupport {
 	public String toString() {
 		getMyContainer();
 		return uniqueKey()+(myContainer!=null?" in "+this.getMyContainer():" without container");
+	}
+
+	private boolean addComponentsPreLoaded(HttpServletRequest req, HttpServletResponse res, HashSet componentsSet) throws JspException {
+		String componentsToString = null;
+		Cookie cookieOne = null;
+		Cookie[] cookies = req.getCookies();
+		boolean receivedComponents = false;
+		if(cookies != null){
+			for(Cookie cookie : req.getCookies()){
+				if(cookie.getName().equals(KEY)){
+					componentsToString = EncodingUtil.decodeUrl(cookie.getValue());
+					cookieOne = cookie;
+					receivedComponents = true;
+					break;
+				}
+			}
+		}
+		if(componentsToString==null){
+			if(req.getParameterMap().get(KEY)!=null  && (req.getParameterMap().get(KEY) instanceof String[]) && ((String[])req.getParameterMap().get(KEY)).length>0){
+				componentsToString = ((String[])req.getParameterMap().get(KEY))[0]; //no need to decode url. framework does it for you.
+				receivedComponents = true;
+
+			}
+		}
+
+		if(componentsToString!=null){
+			String[] components = componentsToString.split("\\|");
+			for(String component : components){
+				componentsSet.add(component);
+			}
+		}
+		if(cookieOne!=null){
+			cookieOne.setMaxAge(0);
+			res.addCookie(cookieOne);
+		}
+		return receivedComponents;
 	}
 }

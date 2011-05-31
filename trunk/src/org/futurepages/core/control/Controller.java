@@ -216,7 +216,7 @@ public class Controller extends HttpServlet {
             throw new ServletException("Exception while invoking action " + actionName + ": " + e.getMessage() + " / " + e.getClass().getName() + " / " + cause.getMessage() + " / " + cause.getClass().getName(), cause);
         } finally {
 			if(action instanceof DynAction){ //@TODO local temporário, vai mudar em breve. Mudando, desde que continue ocorrendo após consequência, continuará correto.
-				ImportComponentRes.asyncResources.remove();
+				ImportComponentRes.destroyAsyncResources();
 			}
             /*
              * Here we check all filters that were executed together with the
