@@ -12,11 +12,16 @@ import org.futurepages.actions.DynAction;
 import org.futurepages.annotations.AsynchronousAction;
 import org.futurepages.core.admin.DefaultUser;
 import org.futurepages.core.context.Context;
+import org.futurepages.core.control.InvocationChain;
 import org.futurepages.core.input.Input;
 import org.futurepages.core.output.Output;
 import org.futurepages.enums.AsynchronousActionType;
 
 public class ActionImpl implements Action{
+
+	@Override
+	public void setChain(InvocationChain chain) {
+	}
 
 	@AsynchronousAction(AsynchronousActionType.DYN)
 	public class ClasseDynAnotada extends ActionImpl{}
