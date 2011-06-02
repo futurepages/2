@@ -72,6 +72,10 @@ public class MonthYear implements Comparable<MonthYear> {
 		return this.compareTo(that)>0;
 	}
 
+	public boolean equals(MonthYear that){
+		return this.year==that.year && this.month == that.month;
+	}
+
 	@Override
 	public String toString() {
 		return this.year + "/" + The.intWithLeftZeros(month, 2);
