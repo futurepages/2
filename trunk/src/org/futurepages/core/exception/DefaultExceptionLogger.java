@@ -17,10 +17,12 @@ public class DefaultExceptionLogger implements ExceptionLogger{
         this.showTrace = showTrace;
     }
 
+	@Override
 	public void execute(Throwable throwable) {
 		execute(throwable, System.currentTimeMillis());
 	}
 
+	@Override
     public void execute(Throwable throwable, long numeroProtocolo){
         handleException(throwable,numeroProtocolo, showTrace);
     }
