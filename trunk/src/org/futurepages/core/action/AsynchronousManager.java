@@ -14,7 +14,7 @@ import org.futurepages.enums.AsynchronousActionType;
 public class AsynchronousManager {
 
 	public static boolean isAsynchronousAction(InvocationChain chain) {
-		return chain instanceof AsynchronousAction;
+		return isDynAction(chain) || isAjaxAction(chain);
 	}
 
 	public static boolean isDynAction(InvocationChain chain) {
