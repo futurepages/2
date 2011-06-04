@@ -3,6 +3,7 @@ package org.futurepages.core.persistence;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
+import org.futurepages.core.exception.DefaultExceptionLogger;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -45,7 +46,7 @@ public class HibernateManager {
 			System.out.println(e.getMessage());
 		} catch (Exception ex) {
 			log("Erro Inesperado na inicialização do Hibernate: " + ex.getMessage());
-			ex.printStackTrace();
+			DefaultExceptionLogger.getInstance().execute(ex);
 		}
 	}
 
@@ -122,10 +123,8 @@ public class HibernateManager {
 			}
 			log("sessions killed.");
 		} catch (Exception ex) {
-			log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 			log("Não foi possível matar hibernate-sessions:");
-			ex.printStackTrace();
-			log("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+			DefaultExceptionLogger.getInstance().execute(ex);
 		}
 	}
 

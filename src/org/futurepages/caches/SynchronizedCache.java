@@ -2,6 +2,7 @@ package org.futurepages.caches;
 
 import org.futurepages.core.cache.Cache;
 import java.lang.reflect.Constructor;
+import org.futurepages.core.exception.DefaultExceptionLogger;
 
 import org.jgroups.JChannel;
 import org.jgroups.Message;
@@ -75,7 +76,7 @@ public class SynchronizedCache implements Cache , MessageListener {
             try {
                 channel.send(null, null, (java.io.Serializable) key);
             } catch(Exception e) {
-                e.printStackTrace();
+                DefaultExceptionLogger.getInstance().execute(e);
             }
         }
         return obj;
@@ -101,7 +102,7 @@ public class SynchronizedCache implements Cache , MessageListener {
             Object key = Util.objectFromByteBuffer(msg.getBuffer());
             cache.remove(key);
         } catch(Exception e) {
-            e.printStackTrace();
+            DefaultExceptionLogger.getInstance().execute(e);
         }
     }
 

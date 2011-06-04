@@ -7,11 +7,11 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import javax.servlet.ServletException;
 
 import org.futurepages.core.action.Action;
 import org.futurepages.core.filter.Filter;
 import org.futurepages.core.input.Input;
-import org.futurepages.exceptions.ActionException;
 import org.futurepages.filters.MethodParamFilter;
 import org.futurepages.util.InjectionUtils;
 
@@ -40,6 +40,7 @@ public class InvocationChain {
 		this.actionName = actionName;
 
 		this.action = action;
+		this.action.setChain(this);
 	}
 
 	public Filter getFilter(Class<? extends Filter> filterClass) {
@@ -88,7 +89,7 @@ public class InvocationChain {
 	 */
 	//TODO TEST
 	public String invoke() throws Exception {
-
+		
 		if (!filters.isEmpty()) {
 			Filter f = (Filter) filters.removeFirst();
 			return f.filter(this);
@@ -112,7 +113,7 @@ public class InvocationChain {
 			}
 			return result;
 		}else{
-			throw new ActionException("The inner action does not exist: " + innerAction);
+			throw new ServletException("The inner action does not exist: " + innerAction);
 		}
 	}
 	
@@ -145,9 +146,9 @@ public class InvocationChain {
 	 * Found the arguments to the action invocation
 	 * @param method
 	 * @return
-	 * @throws ActionException
+	 * @throws ServletException
 	 */
-	private Object[] getParametersValues(Method method) throws ActionException {
+	private Object[] getParametersValues(Method method) throws ServletException {
 
 		Class<?>[] params = method.getParameterTypes();
 		Input input = action.getInput();
@@ -207,7 +208,7 @@ public class InvocationChain {
 				}
 			}
 			if (!found) {
-				throw new ActionException("Cannot find parameter value for method: " + method.getName() + " / " + params[pos]);
+				throw new ServletException("Cannot find parameter value for method: " + method.getName() + " / " + params[pos]);
 			}
 		}
 		return values;

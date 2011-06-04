@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import org.futurepages.core.exception.DefaultExceptionLogger;
 
 /**
  *
@@ -31,12 +32,12 @@ public class JavaScriptMinifier {
 				System.out.println("COMPACTADO: "+f.getAbsolutePath()+"!");
 			} catch (Exception ex) {
 				System.out.println("ERROR AO COMPACTAR ARQUIVO JS");
-				ex.printStackTrace();
+				DefaultExceptionLogger.getInstance().execute(ex);
 				try {
 					fis.close();
 					inReader.close();
 				} catch (IOException ex2) {
-					ex2.printStackTrace();
+					DefaultExceptionLogger.getInstance().execute(ex2);
 				}
 			}
 		}

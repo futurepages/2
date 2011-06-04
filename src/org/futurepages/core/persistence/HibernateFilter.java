@@ -30,7 +30,7 @@ public class HibernateFilter implements AfterConsequenceFilter {
 			return result;
 			
 		} catch (Throwable throwable) {
-			return ExceptionFilter.treatedException(chain, null, throwable);
+			return ExceptionFilter.treatedException(chain, throwable);
 		} finally {
 
 			if (Dao.isTransactionActive()) {

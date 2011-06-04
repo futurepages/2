@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 import org.apache.commons.lang.StringUtils;
+import org.futurepages.core.exception.DefaultExceptionLogger;
 
 /**
  * Class Helper for reflection operations.
@@ -97,7 +98,7 @@ public final class ReflectionUtil {
 						method.invoke(object, new Object[]{value});
 						return;
 					} catch (Exception e) {
-						e.printStackTrace();
+						DefaultExceptionLogger.getInstance().execute(e);
 					}
 				}
 			}
@@ -138,7 +139,7 @@ public final class ReflectionUtil {
 			method.invoke(object, new Object[]{});
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			DefaultExceptionLogger.getInstance().execute(e);
 		}
 		return false;
 	}
@@ -254,7 +255,7 @@ public final class ReflectionUtil {
 				return method.invoke(object, value);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			DefaultExceptionLogger.getInstance().execute(e);
 		}
 		return null;
 	}
@@ -314,7 +315,7 @@ public final class ReflectionUtil {
 			return klass.getMethod(methodName).getReturnType();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			DefaultExceptionLogger.getInstance().execute(e);
 		}
 		return null;
 	}
@@ -384,7 +385,7 @@ public final class ReflectionUtil {
 			fieldValue = field.get(null);
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			DefaultExceptionLogger.getInstance().execute(e);
 		}
 		return fieldValue;
 	}
@@ -406,7 +407,7 @@ public final class ReflectionUtil {
 					field.setAccessible(true);
 					field.set(child, ReflectionUtil.getField(parent, field.getName()));
 				} catch (Exception ex) {
-					ex.printStackTrace();
+					DefaultExceptionLogger.getInstance().execute(ex);
 				}
 			}
 		}

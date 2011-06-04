@@ -12,9 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.futurepages.consequences.AjaxConsequence;
 import org.futurepages.core.action.Manipulable;
-import org.futurepages.core.ajax.AjaxRenderer;
+import org.futurepages.core.exception.DefaultExceptionLogger;
 
 /**
  * An ActionConfig links together an action implementation, an action name or alias, action results and action consequences.
@@ -571,7 +570,7 @@ public class ActionConfig {
 		try {
 			return (Action) actionClass.newInstance();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			DefaultExceptionLogger.getInstance().execute(ex);
 			return null;
 		}
     }

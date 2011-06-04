@@ -48,7 +48,6 @@ public class PisPasepNitUtil {
 	    }
 
 	} catch (Exception ex) {
-	    ex.printStackTrace();
 	    return false;
 	}
 

@@ -3,6 +3,7 @@ package org.futurepages.core.validation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import org.futurepages.core.exception.DefaultExceptionLogger;
 import org.futurepages.exceptions.ErrorException;
 
 public abstract class Validator {
@@ -22,7 +23,7 @@ public abstract class Validator {
 			validator.setBreakOnFirst(breakOnFirst);
 			return validator;
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			DefaultExceptionLogger.getInstance().execute(ex);
 		}
 		return null;
 	}

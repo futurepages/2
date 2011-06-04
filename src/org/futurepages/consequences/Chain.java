@@ -117,7 +117,7 @@ public class Chain implements Consequence {
 						String s = returnedResult.toString();
 						acf.afterConsequence(newAction, c, conseqExecuted, actionExecuted, s.length() > 0 ? s : null);
 					} catch (Exception e) {
-						e.printStackTrace();
+						throw new ConsequenceException(e);
 					}
 				}
 			}

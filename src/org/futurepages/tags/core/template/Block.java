@@ -31,7 +31,6 @@ public class Block extends PrintTag {
 		try {
 			pageContext.include("/" + view, false);
 		} catch (Exception ex) {
-			ex.printStackTrace();
 			throw new JspException(ex);
 		}
 		return "";

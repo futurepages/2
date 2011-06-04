@@ -75,7 +75,6 @@ public abstract class TemplateServlet extends HttpServlet {
 		try {
 			processTemplate(extractPagePath(request), createTemplateManager(), request, response, getServletContext());
 		} catch (Exception e) {
-			//e.printStackTrace();
 			throw new TemplateException(e);
 		}
 	}

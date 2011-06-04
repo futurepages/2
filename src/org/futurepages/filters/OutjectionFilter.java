@@ -70,8 +70,7 @@ public class OutjectionFilter extends OutputWrapper implements Filter {
 					output.setValue(adjustName(name), value);
 
 				} catch (Exception e) {
-					System.err.println("Error calling method in OutputFilter: " + name);
-					e.printStackTrace();
+					throw new Exception(e);
 				}
 			}
 		}

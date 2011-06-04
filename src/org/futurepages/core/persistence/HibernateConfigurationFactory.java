@@ -16,6 +16,7 @@ import javax.persistence.Entity;
 import org.futurepages.annotations.View;
 import org.futurepages.core.config.Modules;
 import org.futurepages.core.config.Params;
+import org.futurepages.core.exception.DefaultExceptionLogger;
 import org.futurepages.exceptions.ConfigFileNotFoundException;
 import org.futurepages.exceptions.ModuleWithoutBeanDirException;
 import org.futurepages.util.ClassesUtil;
@@ -49,7 +50,7 @@ public class HibernateConfigurationFactory {
 			return new File(EncodingUtil.correctPath(classPath));
 		} catch (UnsupportedEncodingException ex) {
 			System.out.println("erro ao gerar rootDir " + ex.getMessage());
-			ex.printStackTrace();
+			DefaultExceptionLogger.getInstance().execute(ex);
 			return null;
 		}
 	}

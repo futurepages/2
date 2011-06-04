@@ -15,6 +15,7 @@ import org.futurepages.consequences.AjaxConsequence;
 import org.futurepages.core.admin.DefaultUser;
 import org.futurepages.core.context.Context;
 import org.futurepages.core.context.SessionContext;
+import org.futurepages.core.control.InvocationChain;
 import org.futurepages.core.i18n.LocaleManager;
 import org.futurepages.core.input.Input;
 import org.futurepages.core.output.MapOutput;
@@ -22,7 +23,6 @@ import org.futurepages.core.output.Output;
 import org.futurepages.core.pagination.Pageable;
 import org.futurepages.core.pagination.PaginationSlice;
 import org.futurepages.core.pagination.Paginator;
-import org.futurepages.core.persistence.Dao;
 import org.futurepages.core.validation.Validator;
 import org.futurepages.exceptions.ErrorException;
 import org.futurepages.filters.HeadTitleFilter;
@@ -47,7 +47,8 @@ public abstract class AbstractAction implements Pageable, Action {
 	private Map<String, String> messages;
 	protected boolean listingDependencies;
 	private Paginator paginator;
-	
+
+	private InvocationChain chain;
 	
 	public AbstractAction() {
 		messages = new HashMap<String, String>();
@@ -163,17 +164,23 @@ public abstract class AbstractAction implements Pageable, Action {
 	}
 
 	protected String redir(String url) {
-		return redir(url,false);
+			return redir(url,false);
 	}
 
 	protected String redir(String url, boolean keepOutput) {
-		String howToRedir = REDIR_APPEND_OUTPUT;
-		if(!keepOutput){
-			clearOutput();
-			howToRedir = REDIR;
+		if(AsynchronousManager.isAjaxAction(chain)){
+			outputAjax(url);
+			return AJAX_REDIR;
+		} else {
+			String howToRedir = REDIR_APPEND_OUTPUT;
+			if(!keepOutput){
+				clearOutput();
+				howToRedir = REDIR;
+			}
+			output(REDIR_URL, url);
+			return howToRedir;
 		}
-		output(REDIR_URL, url);
-		return howToRedir;
+
 	}
 
 	/** @return Pega o numero da página corrente em uso */
@@ -330,8 +337,9 @@ public abstract class AbstractAction implements Pageable, Action {
     public String putError(boolean listDependencies, ErrorException errorException) {
         this.putMessage(ERROR, errorException.getMessage());
 
-		if(this instanceof AjaxAction){
+		if(AsynchronousManager.isAjaxAction(chain)){
 			outputAjax(errorException.getValidationMap());
+			return AJAX_ERROR;
 		}else{
 			output("errorList", errorException.getValidationMap());
 		}
@@ -466,5 +474,12 @@ public abstract class AbstractAction implements Pageable, Action {
 
 	public String getContextPath() {
 		return input.getProperty("contextPath");
+	}
+
+	@Override
+	public void setChain(InvocationChain chain) {
+		if(this.chain==null){
+			this.chain = chain;
+		}
 	}
 }

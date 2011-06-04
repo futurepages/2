@@ -1,4 +1,3 @@
-
 package org.futurepages.core.resource;
 
 import com.yahoo.platform.yui.compressor.CssCompressor;
@@ -8,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import org.futurepages.core.exception.DefaultExceptionLogger;
 
 /**
  *
@@ -20,7 +20,7 @@ public class CSSMinifier {
 			FileInputStream fis = null;
 			InputStreamReader inReader = null;
 			try {
-				System.out.println("COMPACTANDO "+f.getAbsolutePath()+"...");
+				System.out.println("COMPACTANDO " + f.getAbsolutePath() + "...");
 				fis = new FileInputStream(f);
 				inReader = new InputStreamReader(fis);
 				CssCompressor compressor = new CssCompressor(inReader);
@@ -29,15 +29,15 @@ public class CSSMinifier {
 				fileWriter.close();
 				fis.close();
 				inReader.close();
-				System.out.println("COMPACTADO: "+f.getAbsolutePath()+"!");
+				System.out.println("COMPACTADO: " + f.getAbsolutePath() + "!");
 			} catch (Exception ex) {
 				System.out.println("ERROR AO COMPACTAR ARQUIVO CSS");
-				ex.printStackTrace();
+				DefaultExceptionLogger.getInstance().execute(ex);
 				try {
 					fis.close();
 					inReader.close();
 				} catch (IOException ex2) {
-					ex2.printStackTrace();
+					DefaultExceptionLogger.getInstance().execute(ex2);
 				}
 			}
 		}

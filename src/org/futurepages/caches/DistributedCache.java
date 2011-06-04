@@ -3,6 +3,7 @@ package org.futurepages.caches;
 import org.futurepages.core.cache.Cache;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
+import org.futurepages.core.exception.DefaultExceptionLogger;
 
 import org.jgroups.JChannel;
 import org.jgroups.Message;
@@ -88,7 +89,7 @@ public class DistributedCache implements Cache, MessageListener {
                 DistributedCacheMessage msg = new DistributedCacheMessage(DistributedCacheMessage.PUT, (java.io.Serializable) key, (java.io.Serializable) value);
                 channel.send(null, null, msg);
             } catch(Exception e) {
-                e.printStackTrace();
+                DefaultExceptionLogger.getInstance().execute(e);
             }
         }
         return obj;
@@ -105,7 +106,7 @@ public class DistributedCache implements Cache, MessageListener {
                 DistributedCacheMessage msg = new DistributedCacheMessage(DistributedCacheMessage.REMOVE, (java.io.Serializable) key);
                 channel.send(null, null, msg);
             } catch(Exception e) {
-                e.printStackTrace();
+                DefaultExceptionLogger.getInstance().execute(e);
             }
         }
         return obj;
@@ -122,7 +123,7 @@ public class DistributedCache implements Cache, MessageListener {
                 DistributedCacheMessage msg = new DistributedCacheMessage(DistributedCacheMessage.CLEAR);
                 channel.send(null, null, msg);
             } catch(Exception e) {
-                e.printStackTrace();
+                DefaultExceptionLogger.getInstance().execute(e);
             }
         }
     }
@@ -148,7 +149,7 @@ public class DistributedCache implements Cache, MessageListener {
                 }
             }
         } catch(Exception e) {
-            e.printStackTrace();
+            DefaultExceptionLogger.getInstance().execute(e);
         }
     }
 
@@ -157,7 +158,7 @@ public class DistributedCache implements Cache, MessageListener {
             this.cache = (Cache) Util.objectFromByteBuffer(state);
         } catch(Exception e) {
             System.err.println("Error setting jgroups state!");
-            e.printStackTrace();
+            DefaultExceptionLogger.getInstance().execute(e);
         }
     }
 
@@ -166,7 +167,7 @@ public class DistributedCache implements Cache, MessageListener {
             return Util.objectToByteBuffer(cache);
         } catch(Exception e) {
             System.err.println("Error getting jgroups state!");
-            e.printStackTrace();
+            DefaultExceptionLogger.getInstance().execute(e);
             return null;
         }
     }

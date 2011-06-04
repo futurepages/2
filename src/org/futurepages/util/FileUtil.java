@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.futurepages.core.exception.DefaultExceptionLogger;
 
 /**
  * Encapsulates all file operations.
@@ -78,7 +79,7 @@ public class FileUtil {
 			target.write(content);
 			target.flush();
 		} catch (Exception e) {
-			e.printStackTrace();
+			DefaultExceptionLogger.getInstance().execute(e);
 		} finally {
 			if (target != null) {
 				target.close();
@@ -166,7 +167,7 @@ public class FileUtil {
 			target = new FileOutputStream(targetUrl);
 			target.write(content);
 		} catch (Exception e) {
-			e.printStackTrace();
+			DefaultExceptionLogger.getInstance().execute(e);
 		} finally {
 			if (target != null) {
 				target.close();
@@ -181,7 +182,7 @@ public class FileUtil {
 			target = new FileOutputStream(targetUrl);
 			target.write(contentBytes);
 		} catch (Exception e) {
-			e.printStackTrace();
+			DefaultExceptionLogger.getInstance().execute(e);
 		} finally {
 			if (target != null) {
 				target.close();
@@ -248,14 +249,14 @@ public class FileUtil {
 				try {
 					from.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					DefaultExceptionLogger.getInstance().execute(e);
 				}
 			}
 			if (to != null) {
 				try {
 					to.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					DefaultExceptionLogger.getInstance().execute(e);
 				}
 			}
 		}
@@ -353,12 +354,12 @@ public class FileUtil {
 				sb.append(line + "\n");
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			DefaultExceptionLogger.getInstance().execute(e);
 		} finally {
 			try {
 				is.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				DefaultExceptionLogger.getInstance().execute(e);
 			}
 		}
 

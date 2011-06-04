@@ -480,7 +480,6 @@ public abstract class AbstractApplicationManager  implements Manipulable{
     }
 
     public static Consequence redir() {
-
         return new Redirect();
 
     }

@@ -1,6 +1,15 @@
 package org.futurepages.core.exception;
 
-public class DefaultExceptionLogger implements ExceptionLogger{
+import javax.servlet.ServletException;
+import org.futurepages.core.action.AsynchronousManager;
+import org.futurepages.core.action.Manipulable;
+import org.futurepages.core.control.InvocationChain;
+import org.futurepages.exceptions.FuturepagesServletException;
+import org.futurepages.exceptions.ServletErrorException;
+import org.futurepages.util.StringUtils;
+
+
+public class DefaultExceptionLogger implements ExceptionLogger, Manipulable{
 
     private static final DefaultExceptionLogger INSTANCE = new DefaultExceptionLogger();
 
@@ -8,40 +17,54 @@ public class DefaultExceptionLogger implements ExceptionLogger{
         return INSTANCE;
     }
 
-    private boolean showTrace = true;
+	private DefaultExceptionLogger() {}
 
-    public DefaultExceptionLogger(){
-    }
-
-    public DefaultExceptionLogger(boolean showTrace){
-        this.showTrace = showTrace;
-    }
-
-	@Override
 	public void execute(Throwable throwable) {
-		execute(throwable, System.currentTimeMillis());
+		execute(throwable, ExceptionLogType.SILENT_EXCEPTION.name());
 	}
 
-	@Override
-    public void execute(Throwable throwable, long numeroProtocolo){
-        handleException(throwable,numeroProtocolo, showTrace);
-    }
+	public String execute(Throwable throwable, String errorType) {
+		String numeroProtocolo = System.currentTimeMillis()+"-"+Thread.currentThread().getId();
 
-	protected void handleException(Throwable throwable,long numeroProtocolo, boolean trace) {
+        log("[",errorType.toUpperCase(),"] ",numeroProtocolo," >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 
-		Throwable root = throwable.getCause();
-        String message = "";
-        if(throwable.getCause()!=null){
-            message = throwable.getCause().getMessage();
-        }
+		throwable.printStackTrace();
 
-		if (root == null) root = throwable;
+		log("\n"+numeroProtocolo+" <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n");
+		return numeroProtocolo;
+	}
 
-        System.out.println("EXCEPTION "+numeroProtocolo+" ------------------------->");
-        System.out.println(message);
-      	if (trace) {
-            root.printStackTrace();
-        }
-        System.out.println(numeroProtocolo+" <--------------------------------------");
+	public String execute(Throwable throwable, InvocationChain chain, boolean status500) throws ServletException {
+		
+		String actionType = null;
+		if(chain!=null){
+			if(AsynchronousManager.isAsynchronousAction(chain)){
+				actionType = DYN_EXCEPTION;
+			}else{
+				actionType = EXCEPTION;
+			}
+		}
+
+		String protocolNumber = execute(throwable,(status500?ExceptionLogType.SERVLET_500.name():actionType));
+
+		if(status500){
+			if(throwable instanceof ServletErrorException){
+				throw (ServletErrorException) throwable;
+			}
+			throw new FuturepagesServletException(protocolNumber, actionType, throwable);
+		}else if(chain!=null){
+			chain.getAction().getOutput().setValue(EXCEPTION, new Exception(protocolNumber,throwable));
+		}
+		
+		return actionType;
+	}
+
+	private void log(String... strs){
+		System.out.println(StringUtils.concat(strs));
+	}
+	
+	private enum ExceptionLogType {
+		EXCEPTION, SERVLET_500, DYN_EXCEPTION, SILENT_EXCEPTION;
 	}
 }
+

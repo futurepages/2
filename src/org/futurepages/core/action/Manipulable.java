@@ -2,6 +2,8 @@ package org.futurepages.core.action;
 
 public interface Manipulable {
 
+    public static final String AJAX_REDIR = "ajax_redir";
+    public static final String AJAX_ERROR = "ajax_error";
     public static final String CHANGE = "change";
     public static final String CHECK = "check";
     public static final String CREATE = "create";
