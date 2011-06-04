@@ -1,13 +1,13 @@
 package org.futurepages.core.template;
 
 import org.futurepages.exceptions.TemplateException;
-import java.io.IOException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.futurepages.core.exception.DefaultExceptionLogger;
 
 /**
  * Classe abstrata base para TemplateServlets. Possui uma implementacao padrao,
@@ -33,7 +33,11 @@ public abstract class TemplateServlet extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		templateManager = createTemplateManager();
+		try{
+			templateManager = createTemplateManager();
+		}catch(Exception ex){
+			DefaultExceptionLogger.getInstance().execute(ex, null, true);
+		}
 	}
 
 	private AbstractTemplateManager createTemplateManager() {
@@ -71,11 +75,11 @@ public abstract class TemplateServlet extends HttpServlet {
 		return servletPath.substring(0, servletPath.lastIndexOf("."));
 	}
 
-	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 		try {
 			processTemplate(extractPagePath(request), createTemplateManager(), request, response, getServletContext());
-		} catch (Exception e) {
-			throw new TemplateException(e);
+		} catch (Exception ex) {
+			DefaultExceptionLogger.getInstance().execute(ex, null, true);
 		}
 	}
 
@@ -95,12 +99,12 @@ public abstract class TemplateServlet extends HttpServlet {
 	}
 
 	@Override
-	protected void doGet(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request,HttpServletResponse response) throws ServletException {
 		processRequest(request, response);
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request,HttpServletResponse response) throws ServletException {
 		processRequest(request, response);
 	}
 }
