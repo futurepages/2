@@ -64,7 +64,8 @@ public class Params {
 		//só quando for dar suporte a mais de um banco de dados
 		paramsMap.put("CONNECT_EXTERNAL_MODULES", "false");
 		paramsMap.put("DATABASE_DIR_NAME", "database");
-		paramsMap.put("DYN_EXCEPTION_FILE_PATH", "/exceptions/dynException.jsp");
+		paramsMap.put("DEV_MODE" , "off");
+		paramsMap.put("DYN_EXCEPTION_FILE_PATH", "/exceptions/dyn/exception.jsp");
     	paramsMap.put("EMAIL_ACTIVE", "false");
 		paramsMap.put("EMAIL_DEFAULT_PORT", "25");
 		paramsMap.put("EMAIL_SSL_CONNECTION", "false");
@@ -131,5 +132,9 @@ public class Params {
 		} else {
 			paramsMap.put("RELEASE_QUERY", "");
 		}
+	}
+
+	public static boolean devMode(){
+		return Params.get("DEV_MODE").equals("on");
 	}
 }

@@ -6,6 +6,7 @@ import java.util.LinkedList;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.futurepages.core.exception.DefaultExceptionLogger;
 
 /**
  * 
@@ -33,7 +34,7 @@ public class MentaJson {
 			elements.set(array, new LinkedList());
 
 		} catch (Throwable e) {
-			e.printStackTrace();
+			DefaultExceptionLogger.getInstance().execute(e);
 		}
 
 		return array;
@@ -55,7 +56,7 @@ public class MentaJson {
 			properties.set(obj, new LinkedHashMap());
 
 		} catch (Throwable e) {
-			e.printStackTrace();
+			DefaultExceptionLogger.getInstance().execute(e);
 		}
 		return obj;
 

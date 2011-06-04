@@ -7,6 +7,7 @@ import javax.servlet.jsp.JspException;
 
 import org.futurepages.annotations.Tag;
 import org.futurepages.annotations.TagAttribute;
+import org.futurepages.core.exception.DefaultExceptionLogger;
 import org.futurepages.core.tags.PrintTag;
 import org.futurepages.core.tags.build.ContentTypeEnum;
 import org.futurepages.util.FileUtil;
@@ -33,7 +34,7 @@ public class IncludeExternal extends PrintTag {
             connection.setDoInput(true);
 			return FileUtil.convertStreamToString(connection.getInputStream());
         } catch (Exception ex) {
-            ex.printStackTrace();
+			DefaultExceptionLogger.getInstance().execute(ex);
             return this.bodyContent.getString();
         }
 	}

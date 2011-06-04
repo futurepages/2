@@ -28,6 +28,7 @@ import org.futurepages.formatters.TextAreaFormatter;
 import org.futurepages.formatters.UpperCaseFormatter;
 import org.futurepages.core.control.AbstractApplicationManager;
 import org.futurepages.consequences.NullConsequence;
+import org.futurepages.core.exception.DefaultExceptionLogger;
 import org.futurepages.filters.FileUploadFilter;
 import org.futurepages.filters.InjectionFilter;
 import org.futurepages.core.formatter.FormatterManager;
@@ -37,6 +38,7 @@ import org.futurepages.formatters.CollectionSizeFormatter;
 import org.futurepages.formatters.MonthFormatter;
 import org.futurepages.formatters.RemainingTimeFormatter;
 import org.futurepages.formatters.UrlFormatter;
+import org.futurepages.json.JSONGenericRenderer;
 import org.futurepages.util.Is;
 
 /**
@@ -69,6 +71,8 @@ public class InitManager extends AbstractApplicationManager{
 			on(EXCEPTION, fwd(Params.get("EXCEPTION_FILE_PATH")));
 			on(DYN_EXCEPTION, fwd(Params.get("DYN_EXCEPTION_FILE_PATH")));
 			on(REDIR, redir());
+			on(AJAX_REDIR, ajax(new JSONGenericRenderer()));
+			on(AJAX_ERROR, ajax(new JSONGenericRenderer()));
 			on(REDIR_APPEND_OUTPUT, redir(true));
 
             //Ação Inicial Padrão
@@ -77,7 +81,7 @@ public class InitManager extends AbstractApplicationManager{
                 action(Params.get("START_PAGE_NAME"), initActionClass).on(SUCCESS, fwd(Params.get("START_CONSEQUENCE")));
             } catch (ClassNotFoundException ex) {
                 System.out.println("[::initManager::] A classe de Ação Inicial da Aplicação não foi encontrada.");
-                ex.printStackTrace();
+                DefaultExceptionLogger.getInstance().execute(ex);
             }
     }
     

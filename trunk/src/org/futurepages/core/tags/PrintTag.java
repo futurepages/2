@@ -67,7 +67,7 @@ public abstract class PrintTag extends BodyTagSupport {
 			}
 		}
 		catch (Exception e) {
-			//e.printStackTrace();
+			//DefaultExceptionLogger.getInstance().execute(e);
 		}
         
 		try {
@@ -84,7 +84,7 @@ public abstract class PrintTag extends BodyTagSupport {
 			}
 		}
 		catch (Exception e) {
-			//e.printStackTrace();
+			//DefaultExceptionLogger.getInstance().execute(e);
 		}        
         
 		return null;
@@ -112,7 +112,7 @@ public abstract class PrintTag extends BodyTagSupport {
 			}
 		}
 		catch (Exception e) {
-			//e.printStackTrace();
+			//DefaultExceptionLogger.getInstance().execute(e);
 		}
         if (tryBoolean) {
 		    return getBooleanValue(bean, name);

@@ -7,7 +7,6 @@ import org.futurepages.core.context.SessionContext;
 import org.futurepages.core.filter.AfterConsequenceFilter;
 import org.futurepages.core.filter.GlobalFilterFree;
 import org.futurepages.core.filter.Filter;
-import org.futurepages.exceptions.ActionException;
 import org.futurepages.core.action.Action;
 import org.futurepages.core.config.Params;
 import java.io.IOException;
@@ -26,6 +25,7 @@ import org.futurepages.actions.DynAction;
 
 import org.futurepages.core.consequence.ConsequenceProvider;
 import org.futurepages.core.consequence.DefaultConsequenceProvider;
+import org.futurepages.core.exception.DefaultExceptionLogger;
 import org.futurepages.filters.GlobalFilterFreeFilter;
 import org.futurepages.core.formatter.FormatterManager;
 import org.futurepages.core.input.RequestInput;
@@ -43,340 +43,351 @@ import org.futurepages.tags.core.webcomponent.ImportComponentRes;
  *
  * @author Sergio Oliveira
  * @author Rubem Azenha (rubem.azenha@gmail.com)
+ * @author Leandro Santana Pereira
+ * @author Danilo Batista
  */
 public class Controller extends HttpServlet {
 
 	private char innerActionSeparator = '.';
-
 	private final String EXTENSION = AbstractApplicationManager.EXTENSION;
-
 	private Set<String> moduleIDs;
-
 	private String startPage = null;
-
-    private AbstractApplicationManager appManager = null;
-    private static String appMgrClassname = null;
-    private static ServletContext application = null;
-
-    protected static ApplicationContext appContext = null;
-    private static ConsequenceProvider defaultConsequenceProvider = new DefaultConsequenceProvider();
-
+	private AbstractApplicationManager appManager = null;
+	private static String appMgrClassname = null;
+	private static ServletContext application = null;
+	protected static ApplicationContext appContext = null;
+	private static ConsequenceProvider defaultConsequenceProvider = new DefaultConsequenceProvider();
 	private boolean withPrettyURL;
-
 	private static Controller INSTANCE;
+	private ThreadLocal<InvocationChain> chainTL = new ThreadLocal<InvocationChain>();
 
-	public static Controller getInstance(){
+	public static Controller getInstance() {
 		return INSTANCE;
 	}
-	
-    /**
-     * Initialize the Controller, creating and starting the ApplicationManager.
-     */
+
+	/**
+	 * Initialize the Controller, creating and starting the ApplicationManager.
+	 */
 	@Override
-    public void init(ServletConfig conf) throws ServletException {
-        super.init(conf);
+	public void init(ServletConfig conf) throws ServletException {
+		super.init(conf);
+		try {
 
-		withPrettyURL = Params.get("PRETTY_URL").equals("true");
-		startPage     = Params.get("START_PAGE_NAME");
-		
-		if(withPrettyURL) {
-			innerActionSeparator = '-';
+			withPrettyURL = Params.get("PRETTY_URL").equals("true");
+			startPage = Params.get("START_PAGE_NAME");
+
+			if (withPrettyURL) {
+				innerActionSeparator = '-';
+			}
+			INSTANCE = this;
+
+			this.configureServlet(conf);
+			initApplicationManager();
+		} catch (Exception ex) {
+			DefaultExceptionLogger.getInstance().execute(ex, null, true);
 		}
-		INSTANCE = this;
 
-		this.configureServlet(conf);
-        initApplicationManager();
+	}
 
-    }
+	/**
+	 * Creates the AplicationManager and starts it.
+	 *
+	 * @throws ServletException
+	 */
+	private void initApplicationManager() throws ServletException {
 
-    /**
-     * Creates the AplicationManager and starts it.
-     *
-     * @throws ServletException
-     */
-    private void initApplicationManager() throws ServletException {
+		Class<? extends Object> klass = null;
 
-        Class<? extends Object> klass = null;
+		try {
+			klass = Class.forName(appMgrClassname);
+		} catch (ClassNotFoundException e) {
+			throw new ServletException("Could not find application manager: " + appMgrClassname, e);
+		}
 
-        try {
-             klass = Class.forName(appMgrClassname);
-        } catch (ClassNotFoundException e) {
-            throw new ServletException("Could not find application manager: " + appMgrClassname, e);
-        }
+		try {
+			appManager = (AbstractApplicationManager) klass.newInstance();
 
-        try {
-            appManager = (AbstractApplicationManager) klass.newInstance();
-
-            AbstractApplicationManager.setApplication(appContext);
+			AbstractApplicationManager.setApplication(appContext);
 
 			moduleIDs = appManager.moduleIds();
-			
-            appManager.init(appContext);
-            appManager.loadLocales();
-            appManager.loadActions();
+
+			appManager.init(appContext);
+			appManager.loadLocales();
+			appManager.loadActions();
 			appManager.registerChains();
 
-            // Load some pre-defined formatters here.
-            FormatterManager.init();
+			// Load some pre-defined formatters here.
+			FormatterManager.init();
 
-            appManager.loadFormatters();
+			appManager.loadFormatters();
 
-        } catch (Exception e) {
-            throw new ServletException(
-                    "Exception while loading application manager " + appMgrClassname + ": " + e.getMessage(), e);
-        }
-    }
+		} catch (Exception e) {
+			throw new ServletException(
+					"Exception while loading application manager " + appMgrClassname + ": " + e.getMessage(), e);
+		}
+	}
 
-    /**
-     * Destroy all filters defined in the ApplicationManager, call the destroy()
-     * method of ApplicationManager, then call super.destroy() to destroy this
-     * servlet (the Controller).
-     */
-    @Override
-    public void destroy() {
-        if (appManager != null) {
-            Set<Filter> filters = appManager.getAllFilters();
-            Iterator<Filter> iter = filters.iterator();
-            while (iter.hasNext()) {
-                Filter f = iter.next();
-                f.destroy();
-            }
+	/**
+	 * Destroy all filters defined in the ApplicationManager, call the destroy()
+	 * method of ApplicationManager, then call super.destroy() to destroy this
+	 * servlet (the Controller).
+	 */
+	@Override
+	public void destroy() {
+		if (appManager != null) {
+			Set<Filter> filters = appManager.getAllFilters();
+			Iterator<Filter> iter = filters.iterator();
+			while (iter.hasNext()) {
+				Filter f = iter.next();
+				f.destroy();
+			}
 
-            // call destroy from appmanager...
-            appManager.destroy(appContext);
-        }
+			// call destroy from appmanager...
+			appManager.destroy(appContext);
+		}
+		chainTL.remove();
 
-        super.destroy();
-        LocaleManager.stopLocaleScan();
-    }
+		super.destroy();
+		LocaleManager.stopLocaleScan();
+	}
 
-    /**
-     * Returns the ServletContext of your web application.
-     *
-     * @return The ServletContext of your web application.
-     */
-    public ServletContext getApplication() {
-        return application;
-    }
+	/**
+	 * Returns the ServletContext of your web application.
+	 *
+	 * @return The ServletContext of your web application.
+	 */
+	public ServletContext getApplication() {
+		return application;
+	}
 
-    @Override
-    protected void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		try {
+			doService(req, res);
+		} catch (Exception ex) {
+			DefaultExceptionLogger.getInstance().execute(ex, chainTL.get(), true);
+		} finally {
+			chainTL.remove();
+		}
+	}
 
-        if (appManager == null) {
-            throw new ServletException("The Application manager is not loaded");
-        }
+	protected void doService(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		if (appManager == null) {
+			throw new ServletException("The Application manager is not loaded");
+		}
 		res.setCharacterEncoding(Params.get("PAGE_ENCODING"));
 
-        appManager.service(appContext, req, res);
+		appManager.service(appContext, req, res);
 
 		String prettyActionUri = (withPrettyURL ? getActionPlusInnerAction(req) : null);
-        String actionName = getActionName(req, prettyActionUri);
-        String innerAction = getInnerActionName(req, prettyActionUri);
+		String actionName = getActionName(req, prettyActionUri);
+		String innerAction = getInnerActionName(req, prettyActionUri);
 
-        ActionConfig ac = null;
+		ActionConfig ac = null;
 
-        if (innerAction != null) {
-            ac = appManager.getActionConfig(actionName, innerAction);
-        }
+		if (innerAction != null) {
+			ac = appManager.getActionConfig(actionName, innerAction);
+		}
 
-        if (ac == null) {
-            ac = appManager.getActionConfig(actionName);
-        }
+		if (ac == null) {
+			ac = appManager.getActionConfig(actionName);
+		}
 
-        if (ac == null) {
-            if (AbstractApplicationManager.getDefaultAction() != null) {
-                ac = AbstractApplicationManager.getDefaultAction();
-            } else {
-                throw new ServletException("Could not find the action for actionName: " + actionName + (innerAction != null ? "." + innerAction : ""));
-            }
-        }
+		if (ac == null) {
+			if (AbstractApplicationManager.getDefaultAction() != null) {
+				ac = AbstractApplicationManager.getDefaultAction();
+			} else {
+				throw new ServletException("Could not find the action for actionName: " + actionName + (innerAction != null ? "." + innerAction : ""));
+			}
+		}
 
-        Action action = ac.getAction(); // create an action instance here...
+		Action action = ac.getAction(); // create an action instance here...
 
-        if (action == null) {
-            throw new ServletException("Could not get an action instance: " + ac);
-        }
+		if (action == null) {
+			throw new ServletException("Could not get an action instance: " + ac);
+		}
 
-        prepareAction(action, ac.isGlobal(), req, res);
+		prepareAction(action, ac.isGlobal(), req, res);
 
-        List<Object> filters = new LinkedList<Object>();
-        Consequence c = null;
-        boolean conseqExecuted = false;
-        boolean actionExecuted = false;
-        StringBuilder returnedResult = new StringBuilder(32);
+		List<Object> filters = new LinkedList<Object>();
+		Consequence c = null;
+		boolean conseqExecuted = false;
+		boolean actionExecuted = false;
+		StringBuilder returnedResult = new StringBuilder(32);
 
-        try {
-            c = invokeAction(ac, action, innerAction, filters, returnedResult);
-            actionExecuted = true;
-            c.execute(action, req, res);
-            conseqExecuted = true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            Throwable cause = getRootCause(e);
-            throw new ServletException("Exception while invoking action " + actionName + ": " + e.getMessage() + " / " + e.getClass().getName() + " / " + cause.getMessage() + " / " + cause.getClass().getName(), cause);
-        } finally {
-			if(action instanceof DynAction){ //@TODO local temporário, vai mudar em breve. Mudando, desde que continue ocorrendo após consequência, continuará correto.
+		try {
+			c = invokeAction(ac, action, innerAction, filters, returnedResult);
+			actionExecuted = true;
+			c.execute(action, req, res);
+			conseqExecuted = true;
+		} catch (Exception e) {
+			Throwable cause = getRootCause(e);
+			throw new ServletException("Exception while invoking action " + actionName + ": " + e.getMessage() + " / " + e.getClass().getName() + " / " + cause.getMessage() + " / " + cause.getClass().getName(), cause);
+		} finally {
+			if (action instanceof DynAction) { //@TODO local temporário, vai mudar em breve. Mudando, desde que continue ocorrendo após consequência, continuará correto.
 				ImportComponentRes.destroyAsyncResources();
 			}
-            /*
-             * Here we check all filters that were executed together with the
-             * action. If they are AfterConsequenceFilters, we need to call the
-             * afterConsequence method.
-             */
-            Iterator<Object> iter = filters.iterator();
-            while (iter.hasNext()) {
-                Filter f = (Filter) iter.next();
-                if (f instanceof AfterConsequenceFilter) {
-                    AfterConsequenceFilter acf = (AfterConsequenceFilter) f;
-                    try {
-                        String s = returnedResult.toString();
-                        acf.afterConsequence(action, c, conseqExecuted, actionExecuted, s.length() > 0 ? s : null);
-                    } catch (Exception e) {
-						e.printStackTrace();
-                        throw new ServletException(
-                                "Exception while executing the AfterConsequence filters: " + e.getMessage(), e);
-                    }
-                }
-            }
-        }
-    }
+			/*
+			 * Here we check all filters that were executed together with the
+			 * action. If they are AfterConsequenceFilters, we need to call the
+			 * afterConsequence method.
+			 */
+			Iterator<Object> iter = filters.iterator();
+			while (iter.hasNext()) {
+				Filter f = (Filter) iter.next();
+				if (f instanceof AfterConsequenceFilter) {
+					AfterConsequenceFilter acf = (AfterConsequenceFilter) f;
+					try {
+						String s = returnedResult.toString();
+						acf.afterConsequence(action, c, conseqExecuted, actionExecuted, s.length() > 0 ? s : null);
+					} catch (Exception e) {
+						throw new ServletException(
+								"Exception while executing the AfterConsequence filters: " + e.getMessage(), e);
+					}
+				}
+			}
+		}
+	}
 
-    private Throwable getRootCause(Throwable t) {
-        Throwable curr = t;
-        while (curr.getCause() != null) {
-            curr = curr.getCause();
-        }
-        return curr;
-    }
+	private Throwable getRootCause(Throwable t) {
+		Throwable curr = t;
+		while (curr.getCause() != null) {
+			curr = curr.getCause();
+		}
+		return curr;
+	}
 
-    /**
-     * Invoke an action and return the consequence generated by this invocation.
-     * This method also return all filters that were executed together with the
-     * action inside the filters list parameter.
-     *
-     * @param ac  The ActionConfig which contains the consequences for this action.
-     * @param action The action to invoke.
-     * @param innerAction The inner action to execute or null to execute the regular action (execute() method).
-     * @param filters The filters that were applied to the action. (You should pass an empty list here!)
-     * @return A consequence generated by this invocation.
-     * @throws ActionException if there was an exception executing the action.
-     * @throws FilterException if there was an exception executing a filter for the action.
-     */
-    public Consequence invokeAction(ActionConfig ac, Action action, String innerAction, List<Object> filters, StringBuilder returnedResult) throws Exception {
+	/**
+	 * Invoke an action and return the consequence generated by this invocation.
+	 * This method also return all filters that were executed together with the
+	 * action inside the filters list parameter.
+	 *
+	 * @param ac  The ActionConfig which contains the consequences for this action.
+	 * @param action The action to invoke.
+	 * @param innerAction The inner action to execute or null to execute the regular action (execute() method).
+	 * @param filters The filters that were applied to the action. (You should pass an empty list here!)
+	 * @return A consequence generated by this invocation.
+	 * @throws ActionException if there was an exception executing the action.
+	 * @throws FilterException if there was an exception executing a filter for the action.
+	 */
+	public Consequence invokeAction(ActionConfig ac, Action action, String innerAction, List<Object> filters, StringBuilder returnedResult) throws Exception {
 
-        InvocationChain chain = createInvocationChain(ac, action, innerAction);
+		InvocationChain chain = createInvocationChain(ac, action, innerAction);
+		if (chainTL.get() == null) { //no caso do ChainConsequence, o chain mantido é o da action original.
+			chainTL.set(chain); //setado para gerenciar o log das exceptions
+		}
 
-        // copy all filters executed together with that action to the filters parameter...
+		// copy all filters executed together with that action to the filters parameter...
 
-        if (filters == null || !filters.isEmpty()) {
+		if (filters == null || !filters.isEmpty()) {
 
-            throw new IllegalArgumentException(
-                    "filters parameter should be non-null and a zero-sized list!");
-        }
-        Iterator<Filter> iter = chain.getFilters().iterator();
+			throw new IllegalArgumentException(
+					"filters parameter should be non-null and a zero-sized list!");
+		}
+		Iterator<Filter> iter = chain.getFilters().iterator();
 
-        while (iter.hasNext()) {
-            filters.add(iter.next());
-        }
+		while (iter.hasNext()) {
+			filters.add(iter.next());
+		}
 
-        // execute chain!
-        String result = chain.invoke();
-        returnedResult.append(result);
+		// execute chain!
+		String result = chain.invoke();
+		returnedResult.append(result);
 
-        // If there is an inner action, try to get a consequence for the inner
-        // action
-        Consequence c = null;
-        if (innerAction != null) {
-            c = ac.getConsequence(result, innerAction);
-        }
+		// If there is an inner action, try to get a consequence for the inner
+		// action
+		Consequence c = null;
+		if (innerAction != null) {
+			c = ac.getConsequence(result, innerAction);
+		}
 
-        // If not found, try to get a consequene specific for that action
-        if (c == null) {
-            c = ac.getConsequence(result);
-        }
+		// If not found, try to get a consequene specific for that action
+		if (c == null) {
+			c = ac.getConsequence(result);
+		}
 
 		// If not found, try to get a global consequence
 		if (c == null) {
-            c = appManager.getGlobalConsequence(result);
-        }
+			c = appManager.getGlobalConsequence(result);
+		}
 
 		// use the default consequence provider...
 		if (c == null) {
 			c = defaultConsequenceProvider.getConsequence(ac.getName(), ac.getActionClass(), result, innerAction);
 		}
 
-        if (c == null) {
-            throw new ActionException("Action has no consequence for result: " + ac.getName() + " - " + result);
-        }
+		if (c == null) {
+			throw new ServletException("Action has no consequence for result: " + ac.getName() + " - " + result);
+		}
 
 //		System.out.println("<#"+Thread.currentThread().getId()+"#>"+  ac.getName()+ ((innerAction!=null)?"."+innerAction:"")+"["+result.toUpperCase()+"] -> "+(c!=null?c.toString():" NULL"));
 
-        return c;
-    }
+		return c;
+	}
 
-    private boolean hasGlobalFilterFreeMarkerFilter(List<Filter> filters, String innerAction) {
-        Iterator<Filter> iter = filters.iterator();
-        while (iter.hasNext()) {
-            Filter f = iter.next();
-            if (GlobalFilterFreeFilter.class.isAssignableFrom(f.getClass())) {
-                GlobalFilterFreeFilter gffmf = (GlobalFilterFreeFilter) f;
-                return gffmf.isGlobalFilterFree(innerAction);
-            }
-        }
-        return false;
-    }
+	private boolean hasGlobalFilterFreeMarkerFilter(List<Filter> filters, String innerAction) {
+		Iterator<Filter> iter = filters.iterator();
+		while (iter.hasNext()) {
+			Filter f = iter.next();
+			if (GlobalFilterFreeFilter.class.isAssignableFrom(f.getClass())) {
+				GlobalFilterFreeFilter gffmf = (GlobalFilterFreeFilter) f;
+				return gffmf.isGlobalFilterFree(innerAction);
+			}
+		}
+		return false;
+	}
 
-    private InvocationChain createInvocationChain(ActionConfig ac, Action action, String innerAction) {
+	private InvocationChain createInvocationChain(ActionConfig ac, Action action, String innerAction) {
 
-        InvocationChain chain = new InvocationChain(ac.getName(), action);
-        Object actionImpl = action;
+		InvocationChain chain = new InvocationChain(ac.getName(), action);
+		Object actionImpl = action;
 
-        // first place the "firstFilters" for the action...
+		// first place the "firstFilters" for the action...
 
-        List<Filter> firstFilters = ac.getFirstFilters(innerAction);
-        if (firstFilters != null) {
-            chain.addFilters(firstFilters);
-        }
+		List<Filter> firstFilters = ac.getFirstFilters(innerAction);
+		if (firstFilters != null) {
+			chain.addFilters(firstFilters);
+		}
 
-        // place the global filters that are NOT LAST...
-        boolean isGlobalFilterFree = false;
-        if (actionImpl instanceof GlobalFilterFree) {
-            GlobalFilterFree gff = (GlobalFilterFree) actionImpl;
-            isGlobalFilterFree = gff.isGlobalFilterFree(innerAction);
-        }
+		// place the global filters that are NOT LAST...
+		boolean isGlobalFilterFree = false;
+		if (actionImpl instanceof GlobalFilterFree) {
+			GlobalFilterFree gff = (GlobalFilterFree) actionImpl;
+			isGlobalFilterFree = gff.isGlobalFilterFree(innerAction);
+		}
 
-        if (!isGlobalFilterFree) {
-            List<Filter> globals = appManager.getGlobalFilters(false);
-            if (globals != null) {
-                chain.addFilters(globals);
-            }
-        }
+		if (!isGlobalFilterFree) {
+			List<Filter> globals = appManager.getGlobalFilters(false);
+			if (globals != null) {
+				chain.addFilters(globals);
+			}
+		}
 
-        // place the action specific filters...
-        List<Filter> filters = ac.getFilters(innerAction);
-        if (filters != null) {
-            isGlobalFilterFree = hasGlobalFilterFreeMarkerFilter(filters, innerAction);
-            if (isGlobalFilterFree) {
-                // remove previously added global filters...
-                chain.clearFilters();
-            }
-            chain.addFilters(filters);
-        }
+		// place the action specific filters...
+		List<Filter> filters = ac.getFilters(innerAction);
+		if (filters != null) {
+			isGlobalFilterFree = hasGlobalFilterFreeMarkerFilter(filters, innerAction);
+			if (isGlobalFilterFree) {
+				// remove previously added global filters...
+				chain.clearFilters();
+			}
+			chain.addFilters(filters);
+		}
 
-        // place the global filters that are LAST
+		// place the global filters that are LAST
 
-        if (!isGlobalFilterFree) {
-            List<Filter> globals = appManager.getGlobalFilters(true);
-            if (globals != null) {
-                chain.addFilters(globals);
-            }
-        }
+		if (!isGlobalFilterFree) {
+			List<Filter> globals = appManager.getGlobalFilters(true);
+			if (globals != null) {
+				chain.addFilters(globals);
+			}
+		}
 
-        if (innerAction != null) {
-            chain.setInnerAction(innerAction);
-        }
-        return chain;
-    }
+		if (innerAction != null) {
+			chain.setInnerAction(innerAction);
+		}
+		return chain;
+	}
 
 	//Only for prettyURLs
 	private String getActionPlusInnerAction(HttpServletRequest req) {
@@ -392,26 +403,24 @@ public class Controller extends HttpServlet {
 		if (uri.startsWith("/") && uri.length() > 1) {
 			uri = uri.substring(1); // cut the first '/'
 		}
-		
+
 		if (uri.endsWith("/") && uri.length() > 1) {
 			uri = uri.substring(0, uri.length() - 1);  // cut the last '/'
 		}
 
 		String[] s = uri.split("/");
 
-		if(isModule(s[0])){
-			if(s.length==1){
-				if(s[0].equals(startPage)){
+		if (isModule(s[0])) {
+			if (s.length == 1) {
+				if (s[0].equals(startPage)) {
 					return s[0];
+				} else if (!s[0].equals(EXTENSION)) {
+					return s[0] + "/" + startPage;
 				}
-				else if(!s[0].equals(EXTENSION)){
-					return s[0]+"/"+startPage;
-				}
-			}
-			else if (s.length >= 2) {
+			} else if (s.length >= 2) {
 				//para prever URLs dos módulos
-				if(!s[0].equals(EXTENSION)){
-					return s[0]+"/"+s[1];
+				if (!s[0].equals(EXTENSION)) {
+					return s[0] + "/" + s[1];
 				}
 				return s[1];
 			}
@@ -447,7 +456,7 @@ public class Controller extends HttpServlet {
 		return null;
 	}
 
-	protected void prepareAction(Action action , boolean global, HttpServletRequest req,
+	protected void prepareAction(Action action, boolean global, HttpServletRequest req,
 			HttpServletResponse res) {
 
 		if (!withPrettyURL) {
@@ -456,7 +465,7 @@ public class Controller extends HttpServlet {
 
 			return;
 		}
-		if(!global){
+		if (!global) {
 			action.setInput(new PrettyURLRequestInput(req));
 		} else {
 			action.setInput(new PrettyGlobalURLRequestInput(req));
@@ -469,75 +478,74 @@ public class Controller extends HttpServlet {
 	}
 
 	/**
-     * Subclasses of this controller may override this method to have a chance
-     * to prepare the action before it is executed. This method creates and
-     * injects in the action all contexts, input, output and locale.
-     *
-     * @param action The action to prepare for execution
-     * @param req The http request (input will need that)
-     * @param res The http response (output will need that)
-     */
-    protected void prepareObsoleteAction(Action action, HttpServletRequest req, HttpServletResponse res) {
-        action.setInput(new RequestInput(req));
-        action.setOutput(new ResponseOutput(res));
-        action.setSession(new SessionContext(req, res));
-        action.setApplication(appContext);
-        action.setCookies(new CookieContext(req, res));
-        action.setLocale(LocaleManager.getLocale(req));
-    }
+	 * Subclasses of this controller may override this method to have a chance
+	 * to prepare the action before it is executed. This method creates and
+	 * injects in the action all contexts, input, output and locale.
+	 *
+	 * @param action The action to prepare for execution
+	 * @param req The http request (input will need that)
+	 * @param res The http response (output will need that)
+	 */
+	protected void prepareObsoleteAction(Action action, HttpServletRequest req, HttpServletResponse res) {
+		action.setInput(new RequestInput(req));
+		action.setOutput(new ResponseOutput(res));
+		action.setSession(new SessionContext(req, res));
+		action.setApplication(appContext);
+		action.setCookies(new CookieContext(req, res));
+		action.setLocale(LocaleManager.getLocale(req));
+	}
 
+	protected String getObsoleteActionName(HttpServletRequest req) {
+		String uri = getURI(req);
+		// If there is an Inner Action, cut it off from the action name
+		int index = uri.lastIndexOf(innerActionSeparator);
+		if (index > 0 && (uri.length() - index) >= 2) {
+			uri = uri.substring(0, index);
+		}
+		return uri;
+	}
 
-    protected String getObsoleteActionName(HttpServletRequest req) {
-        String uri = getURI(req);
-        // If there is an Inner Action, cut it off from the action name
-        int index = uri.lastIndexOf(innerActionSeparator);
-        if (index > 0 && (uri.length() - index) >= 2) {
-            uri = uri.substring(0, index);
-        }
-        return uri;
-    }
+	protected String getObsoleteInnerActionName(HttpServletRequest req) {
+		String uri = getURI(req);
+		String innerAction = null;
+		int index = uri.lastIndexOf(".");
+		if (index > 0 && (uri.length() - index) >= 2) {
+			innerAction = uri.substring(index + 1, uri.length());
+		}
+		return innerAction;
+	}
 
-    protected String getObsoleteInnerActionName(HttpServletRequest req) {
-        String uri = getURI(req);
-        String innerAction = null;
-        int index = uri.lastIndexOf(".");
-        if (index > 0 && (uri.length() - index) >= 2) {
-            innerAction = uri.substring(index + 1, uri.length());
-        }
-        return innerAction;
-    }
+	/**
+	 * Returns the URI from this request. URI = URI - context - extension. This
+	 * method is used by getActionName and getInnerActionName. You may call this
+	 * method in your own controller subclass. Ex: /myapp/UserAction.add.fpg
+	 * will return UserAction.add
+	 */
+	protected String getURI(HttpServletRequest req) {
+		String context = req.getContextPath();
+		String uri = req.getRequestURI().toString();
+		// remove the context from the uri, if present
+		if (context.length() > 0 && uri.indexOf(context) == 0) {
+			uri = uri.substring(context.length());
+		}
 
-    /**
-     * Returns the URI from this request. URI = URI - context - extension. This
-     * method is used by getActionName and getInnerActionName. You may call this
-     * method in your own controller subclass. Ex: /myapp/UserAction.add.fpg
-     * will return UserAction.add
-     */
-    protected String getURI(HttpServletRequest req) {
-        String context = req.getContextPath();
-        String uri = req.getRequestURI().toString();
-        // remove the context from the uri, if present
-        if (context.length() > 0 && uri.indexOf(context) == 0) {
-            uri = uri.substring(context.length());
-        }
+		if (uri.equals("/")) {
+			return Params.get("START_PAGE_NAME");
+		}
 
-        if(uri.equals("/")){
-            return Params.get("START_PAGE_NAME");
-        }
+		// cut the extension...
+		int index = uri.lastIndexOf(".");
 
-        // cut the extension...
-        int index = uri.lastIndexOf(".");
+		if (index > 0) {
+			uri = uri.substring(0, index);
+		}
 
-        if (index > 0) {
-            uri = uri.substring(0, index);
-        }
-
-        // cut the first '/'
-        if (uri.startsWith("/") && uri.length() > 1) {
-            uri = uri.substring(1, uri.length());
-        }
-        return uri;
-    }
+		// cut the first '/'
+		if (uri.startsWith("/") && uri.length() > 1) {
+			uri = uri.substring(1, uri.length());
+		}
+		return uri;
+	}
 
 	public boolean isWithPrettyURL() {
 		return withPrettyURL;
@@ -548,19 +556,19 @@ public class Controller extends HttpServlet {
 	}
 
 	private void configureServlet(ServletConfig conf) {
-        application = conf.getServletContext();
-        appContext = new ApplicationContext(application);
-        AbstractApplicationManager.setRealPath(application.getRealPath(""));
+		application = conf.getServletContext();
+		appContext = new ApplicationContext(application);
+		AbstractApplicationManager.setRealPath(application.getRealPath(""));
 
-        // gets the AplicationManager class
-        appMgrClassname = conf.getInitParameter("applicationManager");
+		// gets the AplicationManager class
+		appMgrClassname = conf.getInitParameter("applicationManager");
 
-        if (appMgrClassname == null || appMgrClassname.trim().equals("")) {
-            appMgrClassname = "ApplicationManager"; // default without package...
-        }
+		if (appMgrClassname == null || appMgrClassname.trim().equals("")) {
+			appMgrClassname = "ApplicationManager"; // default without package...
+		}
 	}
 
-	public boolean isModule(String pattern){
+	public boolean isModule(String pattern) {
 		return moduleIDs.contains(pattern);
 	}
 }

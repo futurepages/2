@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 
 import java.util.Calendar;
 import java.util.Date;
+import org.futurepages.core.exception.DefaultExceptionLogger;
 import org.futurepages.core.input.Input;
 import org.futurepages.core.output.Output;
 import org.futurepages.core.i18n.LocaleManager;
@@ -216,7 +217,7 @@ public class InjectionUtils {
 				return null;
 			}
 			newValue = new Double(x);
-		} else if ( className.equals("java.math.BigDecimal")) {
+		} else if (className.equals("java.math.BigDecimal")) {
 			float x = -1;
 			try {
 				x = realToFloat(value);
@@ -486,7 +487,6 @@ public class InjectionUtils {
 				return true;
 			} catch (Exception e) {
 				System.err.println("Error injecting by method: " + value + " in " + target + " thru " + m);
-				e.printStackTrace();
 				throw e;
 			}
 		}
@@ -566,7 +566,7 @@ public class InjectionUtils {
 			// we may have a list of overloaded methods...
 			List list = null;
 			Method m = null;
-			
+
 			if (obj instanceof List) {
 				list = (List) obj;
 			} else {
@@ -578,7 +578,7 @@ public class InjectionUtils {
 					// i did not inject... how about a VO object for this setter?
 					Class<?> type = m.getParameterTypes()[0];
 					if (!type.getName().startsWith("java.lang.") && !type.isPrimitive() && hasDefaultConstructor(type)) {
-						if(!Modifier.isAbstract(type.getModifiers())){
+						if (!Modifier.isAbstract(type.getModifiers())) {
 							Object param = type.newInstance();
 							InjectionUtils.getObject(param, input, loc, true, prefix, true, true, false); // no recursion...
 							inject(m, target, param, loc, false, false);
@@ -591,7 +591,7 @@ public class InjectionUtils {
 				boolean injected = false;
 				while (it.hasNext()) {
 					m = (Method) it.next();
-					if (inject(m, target, value, loc, tryToConvert,	tryingToConvertBoolean)) {
+					if (inject(m, target, value, loc, tryToConvert, tryingToConvertBoolean)) {
 						injected = true;
 						break;
 					}
@@ -638,7 +638,7 @@ public class InjectionUtils {
 				if (value == null && !hasValue) {
 					continue;                // if (value == null) continue;
 				}
-				if (value == null 
+				if (value == null
 						|| (type.isAssignableFrom(value.getClass())
 						|| checkPrimitives(type, value.getClass())
 						|| (tryToConvert && ((isBlank(value) && (value = shouldConvertToNull(value, type)) == null)
@@ -647,7 +647,6 @@ public class InjectionUtils {
 						f.set(target, value);
 					} catch (Exception e) {
 						System.err.println("Error injecting by field: " + value + " in " + target);
-						e.printStackTrace();
 						throw e;
 					}
 				}
@@ -683,7 +682,7 @@ public class InjectionUtils {
 						output.setValue(adjusted, value);
 					} catch (Exception e) {
 						System.err.println("Error calling method in InjectionUtils: " + name);
-						e.printStackTrace();
+						DefaultExceptionLogger.getInstance().execute(e);
 					}
 				}
 			}
@@ -783,7 +782,7 @@ public class InjectionUtils {
 				String name = method.getName();
 
 				if (name.length() > 3 && name.startsWith("get") && !name.equals("getClass")
-					&& method.getParameterTypes().length == 0) {
+						&& method.getParameterTypes().length == 0) {
 
 					method.setAccessible(true);
 					Object value = method.invoke(bean, new Object[0]);

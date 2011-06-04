@@ -26,7 +26,7 @@ public class Security {
         try {
             md = MessageDigest.getInstance("MD5"); //SHA1, TIGER
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         BigInteger hash = new BigInteger(1, md.digest(senha.getBytes()));
         sen = hash.toString(16);

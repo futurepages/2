@@ -92,17 +92,13 @@ public class VOFilter implements Filter {
     private Object getTarget() throws FilterException {
         
         try {
-
             return targetClass.newInstance();
-
         } catch(Exception e) {
-
-            e.printStackTrace();
-
             throw new FilterException(e);
         }        
     }
     
+	@Override
     public String filter(InvocationChain chain) throws Exception {
 
     	Action action = chain.getAction();
@@ -129,6 +125,7 @@ public class VOFilter implements Filter {
         }
     }
     
+	@Override
     public void destroy() { }
 }
         

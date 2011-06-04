@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import org.futurepages.core.exception.DefaultExceptionLogger;
 
 class I18NWrapper {
   
@@ -42,7 +43,7 @@ class I18NWrapper {
             this.i18n = new I18N(prop);
             
         } catch(IOException e) {
-            e.printStackTrace();
+			DefaultExceptionLogger.getInstance().execute(e);
         } finally {
         	
         	if (fis != null) try { fis.close(); } catch(Exception e) { }
@@ -64,7 +65,7 @@ class I18NWrapper {
     		
     	} catch(IOException e) {
     		
-    		e.printStackTrace();
+			DefaultExceptionLogger.getInstance().execute(e);
     		
     	} finally {
     		

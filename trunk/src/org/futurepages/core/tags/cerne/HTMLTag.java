@@ -80,10 +80,7 @@ public abstract class HTMLTag extends PrintTag {
 	            
 	            if (value != null && !value.equals("")) return value;
 	            
-	        } catch(JspException e) {
-	            
-	            //e.printStackTrace();
-	            
+	        } catch(JspException e) {	            
 	        }
         
         }

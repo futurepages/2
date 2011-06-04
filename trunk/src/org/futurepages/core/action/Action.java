@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.futurepages.core.admin.DefaultUser;
 import org.futurepages.core.context.Context;
+import org.futurepages.core.control.InvocationChain;
 import org.futurepages.core.input.Input;
 import org.futurepages.core.output.Output;
 
@@ -76,4 +77,6 @@ public interface Action extends Manipulable {
 	public Map<String, String> getMessages();
 
 	public void setMessages(Map<String, String> messages);
+
+	public void setChain(InvocationChain chain);
 }

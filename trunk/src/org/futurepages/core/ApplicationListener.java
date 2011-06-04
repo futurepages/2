@@ -7,6 +7,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import org.futurepages.core.config.Params;
+import org.futurepages.core.exception.DefaultExceptionLogger;
 import org.futurepages.core.install.InstallersManager;
 import org.futurepages.core.mail.MailConfig;
 import org.futurepages.core.persistence.HibernateManager;
@@ -49,7 +50,7 @@ public class ApplicationListener implements ServletContextListener {
 
 			if (HibernateManager.isRunning()) {
 				log("Hibernate OK");
-				
+
 				// Atualiza/gera esquema do banco como solicitado no arquivo de configuração.
 				if (Params.get("SCHEMA_GENERATION_TYPE").equals("update")) {
 					log("SCHEMA UPDATE - Begin");
@@ -63,7 +64,7 @@ public class ApplicationListener implements ServletContextListener {
 
 				//Se o modo de instalação estiver ligado, serão feitas as instalações de cada módulo.
 				String installMode = Params.get("INSTALL_MODE");
-				if (!installMode.equals("off")&&!installMode.equals("none")) {
+				if (!installMode.equals("off") && !installMode.equals("none")) {
 					log("Install Mode: " + installMode);
 					InstallersManager.initialize(modules, installMode);
 					log("Install - End");
@@ -108,7 +109,7 @@ public class ApplicationListener implements ServletContextListener {
 			log(servletContext.getServletContextName() + " inicializado.");
 		} catch (Exception ex) {
 			log("Erro ao inicializar contexto.");
-			ex.printStackTrace();
+			DefaultExceptionLogger.getInstance().execute(ex);
 		}
 	}
 
@@ -121,7 +122,7 @@ public class ApplicationListener implements ServletContextListener {
 				log("Schedulers do Quartz parado.");
 			} catch (SchedulerException ex) {
 				log("Erro ao tentar parar Schedulers do Quartz: " + ex.getMessage());
-				ex.printStackTrace();
+				DefaultExceptionLogger.getInstance().execute(ex);
 			}
 		}
 		if (HibernateManager.isRunning()) {

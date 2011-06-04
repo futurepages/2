@@ -25,6 +25,7 @@ import javax.mail.internet.MimeMultipart;
 import org.futurepages.util.StringUtils;
 
 import javax.mail.Authenticator;
+import org.futurepages.core.exception.DefaultExceptionLogger;
 
 // Revision: 193103
 
@@ -217,7 +218,7 @@ public abstract class Email {
         try {
             def_from = createInternetAddress(email, name, def_charset);
         } catch(EmailException e) {
-            e.printStackTrace();
+			DefaultExceptionLogger.getInstance().execute(e);
         }
     }
     
@@ -466,7 +467,7 @@ public abstract class Email {
 	            }
 	            
         	} catch(AccessControlException e) {
-        		e.printStackTrace();
+        			DefaultExceptionLogger.getInstance().execute(e);
         	}
 
             // changed this (back) to getInstance due to security exceptions
