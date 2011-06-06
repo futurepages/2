@@ -26,11 +26,12 @@ public class DefaultExceptionLogger implements ExceptionLogger, Manipulable{
 	public String execute(Throwable throwable, String errorType) {
 		String numeroProtocolo = System.currentTimeMillis()+"-"+Thread.currentThread().getId();
 
-        log("[",errorType.toUpperCase(),"] ",numeroProtocolo," >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-
+		String exceptionId =  StringUtils.concat("[",errorType.toUpperCase(),"] ",numeroProtocolo);
+        log(exceptionId ," >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+						 
 		throwable.printStackTrace();
 
-		log("\n"+numeroProtocolo+" <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n");
+		log("\n"+exceptionId+" <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n");
 		return numeroProtocolo;
 	}
 
