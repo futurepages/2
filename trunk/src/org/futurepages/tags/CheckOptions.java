@@ -52,20 +52,24 @@ public class CheckOptions extends HTMLTag {
             if (list != null) {
                 for (int i = 0; i < fullList.size(); i++) {
                     value1 = ReflectionUtil.getField(fullList.get(i), attributePath[attributePath.length-1]).toString();
-                    sb.append(StringUtils.concat("<input value=\"",value1 , "\" id=\"" , name , "_" , i , "\" type=\"checkbox\" name=\"" , name , "\" " , cssClass));
+                    sb.append("<label><input value=\"").append(value1).append("\" id=\"")
+					  .append(name).append("_").append(i).append("\" type=\"checkbox\" name=\"").append(name)
+					  .append("\" ").append(cssClass);
                     for (int j = 0; j < list.size(); j++) {
                         value2 = getAttributeValue(j, attributePath);
                         if (value1.equals(value2)) {
                             sb.append("checked=\"checked\"");
                         }
                     }
-                    sb.append(StringUtils.concat("/>&#32;", ReflectionUtil.getField(fullList.get(i), showAttr).toString() , "<br />"));
+                    sb.append("/>&#32;").append(ReflectionUtil.getField(fullList.get(i), showAttr).toString()).append("</label>");
                 }
             } else {
                 for (int i = 0; i < fullList.size(); i++) {
                     value1 = ReflectionUtil.getField(fullList.get(i), attribute).toString();
-                    sb.append(StringUtils.concat("<input value=\"" , value1 , "\" id=\"" , name , "_" , i , "\" type=\"checkbox\" name=\"" , name , "\" " , cssClass , "/>&#32;" ,
-                            ReflectionUtil.getField(fullList.get(i), showAttr).toString() , "<br />"));
+                    sb.append("<label><input value=\"").append(value1).append("\" id=\"").append(name)
+					  .append("_").append(i).append("\" type=\"checkbox\" name=\"").append(name)
+					  .append("\" ").append(cssClass).append("/>&#32;")
+					  .append(ReflectionUtil.getField(fullList.get(i), showAttr).toString()).append("</label>");
                 }
 
             }
