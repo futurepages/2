@@ -8,7 +8,6 @@ import org.futurepages.core.persistence.Dao;
 import org.futurepages.core.tags.build.ContentTypeEnum;
 import org.futurepages.util.ReflectionUtil;
 import org.futurepages.core.tags.cerne.HTMLTag;
-import org.futurepages.util.StringUtils;
 
 /**
  *
