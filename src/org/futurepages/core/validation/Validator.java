@@ -2,7 +2,9 @@ package org.futurepages.core.validation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import org.futurepages.core.exception.DefaultExceptionLogger;
 import org.futurepages.exceptions.ErrorException;
 
@@ -76,13 +78,27 @@ public abstract class Validator {
 	}
 
 	private HashMap<String, String> validationMap() {
-		for (Validator v : subValidators) {
-			validationMap.putAll(v.validationMap());
-		}
+		validationMapAux();
+
 		if ((breakOnFirst != null) && (!validationMap.isEmpty())) {
 			ErrorException exce = new ErrorException(validationMap);
 			throw exce;
 		}
+		return validationMap;
+	}
+	
+	private HashMap<String, String> validationMapAux() {
+		for (Validator v : subValidators) {
+			HashMap<String, String> temp = v.validationMapAux();
+			
+			Iterator it = temp.entrySet().iterator();
+			while (it.hasNext()) {
+				Map.Entry<String, String> entry = (Map.Entry<String, String>)it.next();
+				validationMap.put(entry.getKey(), entry.getValue());
+			}
+
+		}
+		
 		return validationMap;
 	}
 }
