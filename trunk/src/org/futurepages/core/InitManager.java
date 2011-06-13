@@ -71,8 +71,9 @@ public class InitManager extends AbstractApplicationManager{
 			on(EXCEPTION, fwd(Params.get("EXCEPTION_FILE_PATH")));
 			on(DYN_EXCEPTION, fwd(Params.get("DYN_EXCEPTION_FILE_PATH")));
 			on(REDIR, redir());
-			on(AJAX_REDIR, ajax(new JSONGenericRenderer()));
-			on(AJAX_ERROR, ajax(new JSONGenericRenderer()));
+			on(AJAX_REDIR,   ajax(new JSONGenericRenderer()));
+			on(AJAX_ERROR,   ajax(new JSONGenericRenderer()));
+			on(AJAX_SUCCESS, ajax(new JSONGenericRenderer()));
 			on(REDIR_APPEND_OUTPUT, redir(true));
 
             //Ação Inicial Padrão

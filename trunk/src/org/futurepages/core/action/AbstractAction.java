@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.futurepages.actions.AjaxAction;
 import org.futurepages.consequences.AjaxConsequence;
 import org.futurepages.core.admin.DefaultUser;
 import org.futurepages.core.context.Context;
@@ -362,6 +361,15 @@ public abstract class AbstractAction implements Pageable, Action {
 		return action.putMessage(INFO, infoMsg);
 	}
 
+	public String ajaxError(String errorMsg) {
+		outputAjax(errorMsg);
+		return AJAX_ERROR;
+	}
+
+	public String ajaxSuccess(String successMsg) {
+		outputAjax(successMsg);
+		return AJAX_SUCCESS;
+	}
 
 	@Override
 	public boolean hasNoCache(){
