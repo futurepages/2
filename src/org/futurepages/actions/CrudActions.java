@@ -44,9 +44,8 @@ public abstract class CrudActions extends AbstractAction implements RedirectAfte
 
 	@Override
     public void doListDependencies() {
-		super.doListDependencies();
         fwdValue(TYPE);
-        listDependencies();
+		super.doListDependencies();
     }
 
     protected void listObjects() {
