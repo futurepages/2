@@ -361,6 +361,13 @@ public abstract class AbstractAction implements Pageable, Action {
 		return action.putMessage(INFO, infoMsg);
 	}
 
+	public String ajaxError(Exception ex) {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(ERROR, ex.getMessage());
+		outputAjax(map);
+		return AJAX_ERROR;
+	}
+
 	public String ajaxError(String errorMsg) {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put(ERROR, errorMsg);
