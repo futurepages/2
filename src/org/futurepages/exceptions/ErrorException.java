@@ -2,6 +2,7 @@ package org.futurepages.exceptions;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import org.futurepages.core.action.Action;
 
 /**
  *
@@ -34,6 +35,10 @@ public class ErrorException extends RuntimeException {
 	}
 
 	public LinkedHashMap<String, String> getValidationMap() {
+		if(validationMap==null){
+			validationMap = new LinkedHashMap<String, String>();
+			validationMap.put(Action.ERROR, this.getMessage());
+		}
 		return validationMap;
 	}
 
