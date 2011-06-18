@@ -39,9 +39,6 @@ import org.futurepages.util.InjectionUtils;
  */
 public class JSONGenericRenderer implements AjaxRenderer {
 
-	String dateFormat = null;
-	private int levels = 0;
-	private int currentLevel = 0;
 	/**
 	 * List de propriedades excluidas.
 	 * Ex: hibernateLazyInitializer
@@ -55,25 +52,15 @@ public class JSONGenericRenderer implements AjaxRenderer {
 	public JSONGenericRenderer() {
 	}
 
-	public JSONGenericRenderer(String dateFormat) {
-		this.dateFormat = dateFormat;
-	}
-
-	public JSONGenericRenderer(int levels) {
-		this.levels = levels;
-	}
-
-	public JSONGenericRenderer(String dateFormat, int levels) {
-		this(dateFormat);
-		this.levels = levels;
-	}
-
-	@Override
 	public String encode(Object object, Locale loc, boolean pretty) throws Exception {
+		return encode(object, loc, 3, pretty);
+	}
+	
+	public String encode(Object object, Locale loc, int levels, boolean pretty) throws Exception {
 		if (object instanceof String) {
 			return object.toString();
 		}
-		return buildJSON(object, loc).toString();
+		return buildJSON(object, loc, levels).toString();
 	}
 
 	@Override
@@ -85,18 +72,18 @@ public class JSONGenericRenderer implements AjaxRenderer {
 	public String getCharset() {
 		return AjaxConsequence.DEFAULT_CHARSET;
 	}
-
+	
 	@SuppressWarnings("unchecked")
-	protected JSONObject buildJSON(Object obj, Locale loc) {
+	protected JSONObject buildJSON(Object obj, Locale loc, int levels) {
 		try {
 			if (obj instanceof Map) {
 				return MentaJson.getJSONObject().put("obj", convertMap((Map) obj, loc));
 
 			} else if (obj instanceof Collection) {
-				return MentaJson.getJSONObject().put("obj", convertListBean((Collection) obj, loc));
+				return MentaJson.getJSONObject().put("obj", convertListBean((Collection) obj, loc, levels, 0));
 
 			} else if (obj instanceof Serializable) {  // Every Bean Must implement Serializable
-				return MentaJson.getJSONObject().put("obj", MentaJson.getJSONArray().put(convertBean(obj, loc)));
+				return MentaJson.getJSONObject().put("obj", MentaJson.getJSONArray().put(convertBean(obj, loc, levels, 0)));
 			}
 			throw new IllegalStateException("Object must be a (Map || List || ListData || Bean implemented Serializable)");
 		} catch (JSONException e) {
@@ -106,7 +93,7 @@ public class JSONGenericRenderer implements AjaxRenderer {
 	}
 
 	@SuppressWarnings("unchecked")
-	private JSONObject convertBean(Object bean, Locale loc) {
+	private JSONObject convertBean(Object bean, Locale loc, int levels,  int currentLevel) {
 		MapOutput om = new MapOutput();
 		InjectionUtils.setObject(bean, om, null, false);
 		Iterator<String> interator = om.keys();
@@ -125,6 +112,7 @@ public class JSONGenericRenderer implements AjaxRenderer {
 
 			if (value instanceof Date) {
 				if (value != null) {
+					String dateFormat = null;
 					if (dateFormat == null) {
 						SimpleDateFormat sdf = LocaleManager.getSimpleDateFormat(loc);
 						if (sdf != null) {
@@ -141,14 +129,14 @@ public class JSONGenericRenderer implements AjaxRenderer {
 			try {
 				if (isValidBean(value) && !value.equals("") && (levels > currentLevel)) {   // Probably is JavaBean
 					currentLevel++;
-					jsonObj.put(propertyName, convertBean(value, loc));		// Recursive call
+					jsonObj.put(propertyName, convertBean(value, loc, levels, currentLevel));		// Recursive call
 				} else {
 					if (isWrapper(value) && !isValidBean(value)) {
 						jsonObj.put(propertyName, value.toString());
 					} else {
 						if (value instanceof Collection && (levels == 1) && (levels > currentLevel)) {
 							Collection list = (Collection) value;
-							jsonObj.put(propertyName, convertListBean(new ArrayList(list), loc));
+							jsonObj.put(propertyName, convertListBean(new ArrayList(list), loc, levels, currentLevel));
 						} else {
 							jsonObj.put(propertyName, "");
 						}
@@ -158,8 +146,6 @@ public class JSONGenericRenderer implements AjaxRenderer {
 				DefaultExceptionLogger.getInstance().execute(e);
 			}
 		}
-		currentLevel = 0;
-
 		return jsonObj;
 	}
 
@@ -174,13 +160,13 @@ public class JSONGenericRenderer implements AjaxRenderer {
 	}
 
 	@SuppressWarnings("unchecked")
-	private JSONArray convertListBean(Collection list, Locale loc) {
+	private JSONArray convertListBean(Collection list, Locale loc, int levels, int level) {
 
 		JSONArray jsonArray = MentaJson.getJSONArray();
 		for (Object object : list) {
 
 			if (isValidBean(object)) {		// if is bean
-				jsonArray.put(convertBean(object, loc));
+				jsonArray.put(convertBean(object, loc, levels, level));
 
 			} else {
 				jsonArray = convertCollection(list);
