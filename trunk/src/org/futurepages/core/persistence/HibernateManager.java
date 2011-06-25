@@ -30,11 +30,11 @@ public class HibernateManager {
 			configurations = HibernateConfigurationFactory.getInstance().getApplicationConfigurations();
 			if (!configurations.isEmpty()) {
 				for (String schemaId : configurations.keySet()) {
-					System.out.println("registering '"+schemaId+ "' schema.");
+					log("registering '"+schemaId+ "' schema.");
 					Configuration config;
 					config = configurations.get(schemaId).getEntitiesConfig();
-					factories.put(  schemaId , config.buildSessionFactory());
-					sessionsTL.put( schemaId , new ThreadLocal<Session>());
+					factories  .put(schemaId , config.buildSessionFactory());
+					sessionsTL .put(schemaId , new ThreadLocal<Session>());
 					genericDaos.put(schemaId , new GenericDao(schemaId));
 				}
 				running = true;
@@ -110,17 +110,23 @@ public class HibernateManager {
 		try {
 			log("killing sessions...");
 			for (ThreadLocal<Session> sTL : sessionsTL.values()) {
-				if (sTL != null && sTL.get() != null && sTL.get().isOpen()) {//verifica se a sessao esta aberta se estiver fecha ela
-					sTL.get().close();
-					sTL.set(null);
+				if (sTL != null && sTL.get() != null) {//verifica se a sessao esta aberta se estiver fecha ela
+					if(sTL.get().isOpen()){
+						sTL.get().close();
+					}
 					sTL.remove();
 				}
 			}
+			
 			for (SessionFactory sf : factories.values()) {
 				if (sf != null && !sf.isClosed()) { //se a fabrica de sessao não estiver fechada fecha ela
 					sf.close();
 				}
 			}
+			sessionsTL.clear();
+			genericDaos.clear();
+			sessionsTL.clear();
+
 			log("sessions killed.");
 		} catch (Exception ex) {
 			log("Não foi possível matar hibernate-sessions:");
@@ -142,10 +148,12 @@ public class HibernateManager {
 
 	static void closeSessions() {
 		for(String schemaId : configurations.keySet()){
-			Session session = getSessionTL(schemaId).get();
+			ThreadLocal<Session> sessionTL =  getSessionTL(schemaId);
+			Session session =sessionTL.get();
 			if(session!=null && session.isOpen()){
 				session.close();
 			}
+			sessionTL.remove();
 		}
 	}
 }
