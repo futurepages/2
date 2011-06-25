@@ -16,14 +16,14 @@ public class SchemaGeneration {
             File[] modules = ModuleUtil.getIstance().getModules();
 			
             (new SchemaGeneratorsManager(modules)).execute();
-			if(schemaUpdate.getExceptions().size()>0){
-				log("Found "+schemaUpdate.getExceptions().size()+" Exception(s) while updating");
-				for (Object obj : schemaUpdate.getExceptions()) {
-//					if(!((Exception)obj).getMessage().contains("doesn't exist")){ //comentaado para entender o pq deste if
-						log("  "+((Exception)obj).getMessage());
-//					}
-				}
-			}
+//			if(schemaUpdate.getExceptions().size()>0){
+//				log("Found "+schemaUpdate.getExceptions().size()+" Exception(s) while updating");
+//				for (Object obj : schemaUpdate.getExceptions()) {
+////					if(!((Exception)obj).getMessage().contains("doesn't exist")){ //comentaado para entender o pq deste if
+//						log("  "+((Exception)obj).getMessage());
+////					}
+//				}
+//			}
             log("Schema-Generation UPDATE ---- END ----");
     }
 
@@ -33,14 +33,14 @@ public class SchemaGeneration {
             schemaExport.create(true, true);
 			(new SchemaGeneratorsManager(ModuleUtil.getIstance().getModules())).execute();
 
-			if(schemaExport.getExceptions().size()>0){
-				log("Found "+schemaExport.getExceptions().size()+" Exception(s) while exporting");
-				for (Object obj : schemaExport.getExceptions()) {
+//			if(schemaExport.getExceptions().size()>0){
+//				log("Found "+schemaExport.getExceptions().size()+" Exception(s) while exporting");
+//				for (Object obj : schemaExport.getExceptions()) {
 //					if(!((Exception)obj).getMessage().contains("doesn't exist")){ //comentaado para entender o pq deste if
-						log("  "+((Exception)obj).getMessage());
+//						log("  "+((Exception)obj).getMessage());
 //					}
-				}
-			}
+//				}
+//			}
             log("Schema-Generation EXPORT ---- END ----");
     }
 
