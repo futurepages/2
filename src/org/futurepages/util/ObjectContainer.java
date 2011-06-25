@@ -1,6 +1,8 @@
 package org.futurepages.util;
 
-public class ObjectContainer<VALUETYPE1, VALUETYPE2> {
+import java.io.Serializable;
+
+public class ObjectContainer<VALUETYPE1, VALUETYPE2> implements Serializable {
 
 	private VALUETYPE1 value1;
 	private VALUETYPE2 value2;
