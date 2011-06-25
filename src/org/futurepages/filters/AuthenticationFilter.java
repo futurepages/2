@@ -53,9 +53,9 @@ public class AuthenticationFilter implements Filter {
             if (!LoginAction.isLogged(session)) {
                 boolean shouldRedirect = false;
 				
-                    RedirectAfterLogin ral = (RedirectAfterLogin) action;
-                    if ((action instanceof RedirectAfterLogin) && !(AsynchronousManager.isAsynchronousAction(chain))) {
-                    shouldRedirect = ral.shouldRedirect(innerAction);
+				if ((action instanceof RedirectAfterLogin) && !(AsynchronousManager.isAsynchronousAction(chain))) {
+					RedirectAfterLogin ral = (RedirectAfterLogin) action;
+					shouldRedirect = ral.shouldRedirect(innerAction);
                 }
                 //maker ??
                 if (!shouldRedirect) {
