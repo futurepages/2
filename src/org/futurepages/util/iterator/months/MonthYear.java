@@ -50,6 +50,18 @@ public class MonthYear implements Comparable<MonthYear> {
 		return new MonthYear(nextMonth, nextYear);
 	}
 
+	public MonthYear getPrevious(){
+		int previousMonth;
+		int previousYear = year;
+		if (month != 1) {
+			previousMonth = month-1;
+		} else {
+			previousYear = year-1;
+			previousMonth = 12;
+		}
+		return new MonthYear(previousMonth, previousYear);
+	}
+
 		/**
 	 * Copara este monthYear com um segundo
 	 * @param that
@@ -79,5 +91,5 @@ public class MonthYear implements Comparable<MonthYear> {
 	@Override
 	public String toString() {
 		return this.year + "/" + The.intWithLeftZeros(month, 2);
-	}
+	}	
 }
