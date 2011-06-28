@@ -17,11 +17,6 @@ public class AsynchronousManagerTest {
 		actions = new ActionImpl();
 	}
 
-
-	//	public static boolean isAsynchronousAction(InvocationChain chain) {
-	//	public static boolean isDynAction(InvocationChain chain) {
-	//	public static boolean isAjaxAction(InvocationChain chain) {
-
 	@Test
 	public void isDynActionDeveSer_True_QuandoActionImplementar_DynAction(){
 
@@ -127,5 +122,28 @@ public class AsynchronousManagerTest {
 		boolean result = AsynchronousManager.isAjaxAction(chain);
 		Assert.assertFalse("Deve ser true quando a action não implementar AjaxAction", result);
 	}
-
+	
+	@Test
+	public void isAjaxActionDeveSer_False_QuandoActionImplementar_AjaxAction_MetodoDyn(){
+		InvocationChain chain = mock(InvocationChain.class);
+		when(chain.getAction()).thenReturn(actions.new ClasseAjaxImplements_metodoDyn());
+		when(chain.getInnerAction()).thenReturn("action");
+		when(chain.getMethod()).thenCallRealMethod();
+		
+		boolean result = AsynchronousManager.isAjaxAction(chain);
+		Assert.assertFalse("idAjax deve ser false quando a action implementar AjaxAction, mas o método sobrescrever " +
+				"anotando com Dyn ", result);
+	}
+	
+	@Test
+	public void isDynActionDeveSer_False_QuandoActionImplementar_DynAction_MetodoAjaxs(){
+		InvocationChain chain = mock(InvocationChain.class);
+		when(chain.getAction()).thenReturn(actions.new ClasseDynImplements_metodoAjax());
+		when(chain.getInnerAction()).thenReturn("action");
+		when(chain.getMethod()).thenCallRealMethod();
+		
+		boolean result = AsynchronousManager.isDynAction(chain);
+		Assert.assertFalse("isDyn deve ser false quando a action implementar DynAction, mas o método sobrescrever " +
+				"anotando com Ajax ", result);
+	}
 }

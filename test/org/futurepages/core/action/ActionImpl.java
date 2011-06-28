@@ -50,6 +50,16 @@ public class ActionImpl implements Action{
 	public class ClasseAjaxImplements extends ActionImpl implements AjaxAction{}
 	public class ClasseDynImplements extends ActionImpl implements DynAction{}
 	
+	public class ClasseDynImplements_metodoAjax extends ActionImpl implements DynAction{
+		@AsynchronousAction(AsynchronousActionType.AJAX)
+		public String action(){return null;}
+	}
+	
+	public class ClasseAjaxImplements_metodoDyn extends ActionImpl implements AjaxAction{
+		@AsynchronousAction(AsynchronousActionType.DYN)
+		public String action(){return null;}
+	}
+	
 	class ClasseNaoAsynchronousAction extends ActionImpl{
 		public String action(){return null;}
 	}
