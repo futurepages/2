@@ -39,7 +39,7 @@ public class AsynchronousManagerTest {
 	@Test
 	public void isDynActionDeveSer_True_QuandoInnerActionPossuirAnnotation_AsynchronousAction_DYN(){
 		InvocationChain chain = mock(InvocationChain.class);
-		when(chain.getAction()).thenReturn(actions.new ClasseInnterActionDynAnotada());
+		when(chain.getAction()).thenReturn(actions.new ClasseInnerActionDynAnotada());
 		when(chain.getInnerAction()).thenReturn("action");
 		when(chain.getMethod()).thenCallRealMethod();
 
@@ -51,7 +51,7 @@ public class AsynchronousManagerTest {
 	public void isDynActionDeveSer_False_QuandoInnerActionNaoPossuirAnnotation_AsynchronousAction(){
 
 		InvocationChain chain = mock(InvocationChain.class);
-		when(chain.getAction()).thenReturn(actions.new ClasseInnterActionDynNaoAnotada());
+		when(chain.getAction()).thenReturn(actions.new ClasseInnerActionDynNaoAnotada());
 		when(chain.getInnerAction()).thenReturn("action");
 		when(chain.getMethod()).thenCallRealMethod();
 
@@ -92,7 +92,7 @@ public class AsynchronousManagerTest {
 	@Test
 	public void isAjaxActionDeveSer_True_QuandoInnerActionPossuirAnnotation_AsynchronousAction_AJAX(){
 		InvocationChain chain = mock(InvocationChain.class);
-		when(chain.getAction()).thenReturn(actions.new ClasseInnterActionAjaxAnotada());
+		when(chain.getAction()).thenReturn(actions.new ClasseInnerActionAjaxAnotada());
 		when(chain.getInnerAction()).thenReturn("action");
 		when(chain.getMethod()).thenCallRealMethod();
 		
@@ -104,7 +104,7 @@ public class AsynchronousManagerTest {
 	public void isAjaxActionDeveSer_False_QuandoInnerActionNaoPossuirAnnotation_AsynchronousAction(){
 		
 		InvocationChain chain = mock(InvocationChain.class);
-		when(chain.getAction()).thenReturn(actions.new ClasseInnterActionAjaxNaoAnotada());
+		when(chain.getAction()).thenReturn(actions.new ClasseInnerActionAjaxNaoAnotada());
 		when(chain.getInnerAction()).thenReturn("action");
 		when(chain.getMethod()).thenCallRealMethod();
 		
