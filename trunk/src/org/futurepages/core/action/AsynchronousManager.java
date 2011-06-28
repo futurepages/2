@@ -18,25 +18,44 @@ public class AsynchronousManager {
 	}
 
 	public static boolean isDynAction(InvocationChain chain) {
-		return isLike(chain, DynAction.class, DYN);
+		if(isInnerActionAnnotatedWith(chain, DYN)){
+			return true;
+		}
+		if(isInnerActionAnnotatedWith(chain, AJAX)){
+			return false;
+		}
+		if(DynAction.class.isAssignableFrom(chain.getAction().getClass())||isClassAnnotatedWIth(chain, DYN)){
+			return true;
+		}
+		return false;
 	}
 
 	public static boolean isAjaxAction(InvocationChain chain) {
-		return isLike(chain, AjaxAction.class, AJAX);
-	}
-
-	private static boolean isLike(InvocationChain chain, Class<? extends org.futurepages.core.action.AsynchronousAction> classe,	AsynchronousActionType type) {
-		return classe.isAssignableFrom(chain.getAction().getClass()) || isAnnotatedWIth(chain, type);
-	}
-
-	public static boolean isAnnotatedWIth(InvocationChain chain, AsynchronousActionType tipo){
-		AsynchronousAction annotation = chain.getAction().getClass().getAnnotation(AsynchronousAction.class);
-		if(annotation!=null && annotation.value().equals(tipo)){
+		if(isInnerActionAnnotatedWith(chain, AJAX)){
 			return true;
 		}
-
+		if(isInnerActionAnnotatedWith(chain, DYN)){
+			return false;
+		}
+		if(AjaxAction.class.isAssignableFrom(chain.getAction().getClass())||isClassAnnotatedWIth(chain, AJAX)){
+			return true;
+		}
+		return false;
+	}
+	
+	private static boolean isInnerActionAnnotatedWith(InvocationChain chain, AsynchronousActionType tipo){
 		Method method = chain.getMethod();
-		annotation = method.getAnnotation(AsynchronousAction.class);
+		if(method!=null){
+			AsynchronousAction annotation = method.getAnnotation(AsynchronousAction.class);
+			if(annotation!=null && annotation.value().equals(tipo)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static boolean isClassAnnotatedWIth(InvocationChain chain, AsynchronousActionType tipo){
+		AsynchronousAction annotation = chain.getAction().getClass().getAnnotation(AsynchronousAction.class);
 		if(annotation!=null && annotation.value().equals(tipo)){
 			return true;
 		}
