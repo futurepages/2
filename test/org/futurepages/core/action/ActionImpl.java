@@ -29,21 +29,21 @@ public class ActionImpl implements Action{
 	@AsynchronousAction(AsynchronousActionType.AJAX)
 	class ClasseAjaxAnotada extends ActionImpl{}
 	
-	class ClasseInnterActionDynAnotada extends ActionImpl{
+	class ClasseInnerActionDynAnotada extends ActionImpl{
 		@AsynchronousAction(AsynchronousActionType.DYN)
 		public String action(){return null;}
 	}
 
-	class ClasseInnterActionAjaxAnotada extends ActionImpl{
+	class ClasseInnerActionAjaxAnotada extends ActionImpl{
 		@AsynchronousAction(AsynchronousActionType.AJAX)
 		public String action(){return null;}
 	}
 
-	class ClasseInnterActionDynNaoAnotada extends ActionImpl{
+	class ClasseInnerActionDynNaoAnotada extends ActionImpl{
 		public String action(){return null;}
 	}
 	
-	class ClasseInnterActionAjaxNaoAnotada extends ActionImpl{
+	class ClasseInnerActionAjaxNaoAnotada extends ActionImpl{
 		public String action(){return null;}
 	}
 	
