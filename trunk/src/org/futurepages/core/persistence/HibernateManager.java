@@ -1,6 +1,10 @@
 package org.futurepages.core.persistence;
 
 import java.io.UnsupportedEncodingException;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import org.futurepages.core.exception.DefaultExceptionLogger;
@@ -132,6 +136,19 @@ public class HibernateManager {
 			log("Não foi possível matar hibernate-sessions:");
 			DefaultExceptionLogger.getInstance().execute(ex);
 		}
+
+		// This manually deregisters JDBC drivers
+        Enumeration<Driver> drivers = DriverManager.getDrivers();
+        while (drivers.hasMoreElements()) {
+            Driver driver = drivers.nextElement();
+            try {
+                DriverManager.deregisterDriver(driver);
+                log("Deregistering jdbc-driver: "+  driver);
+            } catch (SQLException e) {
+                log("Error deregistering driver: "+e);
+            }
+
+        }
 	}
 
 	private static void log(String msg) {
