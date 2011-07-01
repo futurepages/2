@@ -40,7 +40,7 @@ public abstract class CrudActions extends AbstractAction implements RedirectAfte
 
 	protected String getType() {
 			Object value = input.getValue(TYPE);
-			if (value instanceof String[]) {
+			if (value != null && value instanceof String[]) {
 				String[] array = (String[]) value;
 				if (array.length > 0) {
 					value = array[0];
