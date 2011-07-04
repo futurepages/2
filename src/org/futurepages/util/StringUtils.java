@@ -16,7 +16,7 @@ public class StringUtils {
     public static String concat(Object... args){
 		StringBuilder sb = new StringBuilder();
 		for (Object string : args) {
-			sb.append(string);
+			sb.append(string.toString());
 		}
 		return sb.toString();
 	}
