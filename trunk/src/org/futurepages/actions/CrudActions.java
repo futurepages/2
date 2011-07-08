@@ -45,6 +45,8 @@ public abstract class CrudActions extends AbstractAction implements RedirectAfte
 				if (array.length > 0) {
 					value = array[0];
 				}
+			}else if(value==null){
+				value = getChain().getInnerAction();
 			}
 		return  (String) value;
 	}
