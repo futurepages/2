@@ -73,7 +73,7 @@ public class CalendarUtil {
 
 	/** 1 minute == 3.600.000 miliseconds //(60 * 60 * 1000)*/
 	public static int getDifferenceInHours(Calendar start, Calendar end) {
-		int milliseconds = 60000;
+		int milliseconds = 3600000;
 		return getDifference(start, end, milliseconds);
 	}
 
