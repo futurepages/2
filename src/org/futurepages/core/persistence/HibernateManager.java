@@ -31,7 +31,8 @@ public class HibernateManager {
 	 */
 	static {
 		try {
-			configurations = HibernateConfigurationFactory.getInstance().getApplicationConfigurations();
+			HibernateConfigurationFactory hiberCfgFac = HibernateConfigurationFactory.getInstance();
+			configurations = hiberCfgFac.getApplicationConfigurations();
 			if (!configurations.isEmpty()) {
 				for (String schemaId : configurations.keySet()) {
 					log("registering '"+schemaId+ "' schema.");
