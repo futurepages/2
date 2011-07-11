@@ -68,6 +68,7 @@ class ClassFileParser<K extends Object> extends FileParser<Class<K>> {
 		Class<?> klass = null;
 
 		if (isDotClass(classFile)) {
+//			System.out.println("Parsing for Bean Verification: "+classFile.getName());  //for DEBUG-MODE
 			try {
 				klass = Class.forName(className);
 				if (isSubClass(klass) && isAnnotatedClass(klass)) {
