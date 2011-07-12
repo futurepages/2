@@ -80,6 +80,7 @@ public class AuthenticationFilter implements Filter {
                 if (AsynchronousManager.isDynAction(chain)) {
                     return DYN_LOGIN;
                 }
+				action.getOutput().setValue("login_needed", true);
                 return LOGIN;
             }
         }
