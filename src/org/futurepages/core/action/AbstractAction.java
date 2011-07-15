@@ -22,6 +22,7 @@ import org.futurepages.core.output.Output;
 import org.futurepages.core.pagination.Pageable;
 import org.futurepages.core.pagination.PaginationSlice;
 import org.futurepages.core.pagination.Paginator;
+import org.futurepages.core.path.Paths;
 import org.futurepages.core.validation.Validator;
 import org.futurepages.exceptions.ErrorException;
 import org.futurepages.filters.HeadTitleFilter;
@@ -163,7 +164,7 @@ public abstract class AbstractAction implements Pageable, Action {
 	}
 
 	protected String redir(String url) {
-			return redir(url,false);
+			return redir(Paths.context(getRequest())+url,false);
 	}
 
 	protected String redir(String url, boolean keepOutput) {
