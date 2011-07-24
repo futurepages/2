@@ -42,15 +42,15 @@ public class SVNUtils {
 
 	private static void removeDeleted(String sufixo, String source, File destino) throws IOException {
 		File origem = new File(source+SEPARATOR+sufixo);
-		removeDeleted(sufixo, origem, destino);
-	}
-
-	private static void removeDeleted(String sufixo, File origem, File destino) throws IOException {
 		if(!destino.getName().equals(".svn")){
 			boolean temDestino = destino.exists();
 			boolean naoTemOrigem = !origem.exists();
 			if(temDestino && naoTemOrigem ){
-				destino.delete();
+				if(destino.isDirectory()){
+					removeFileTree(destino);
+				}
+					destino.delete();
+
 			}else{
 				if(destino.isDirectory() ){
 					for (File filho : destino.listFiles()) {
@@ -58,6 +58,19 @@ public class SVNUtils {
 						removeDeleted(novoSuf, origem.getAbsolutePath()  ,filho);
 					}
 				}
+			}
+		}
+	}
+
+	private static void removeFileTree(File file) {
+		File[] files = file.listFiles();
+		if(files.length>0){
+			for(File subFile : files){
+				if(subFile.isDirectory()){
+					removeFileTree(subFile);
+				}
+				subFile.delete();
+				subFile.delete();
 			}
 		}
 	}
