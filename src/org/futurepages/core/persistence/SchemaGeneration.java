@@ -8,14 +8,16 @@ import org.hibernate.tool.hbm2ddl.SchemaUpdate;
 
 public class SchemaGeneration {
 
-	public static void update() throws Exception  {
+	public static void update(boolean justBeans) throws Exception  {
             log("Schema-Generation UPDATE ---- BEGIN ----");
             SchemaUpdate schemaUpdate = new SchemaUpdate(HibernateManager.getConfigurations().getTablesConfig());
             schemaUpdate.execute(true, true);
 			
-            File[] modules = ModuleUtil.getIstance().getModules();
-			
-            (new SchemaGeneratorsManager(modules)).execute();
+
+			if(!justBeans){
+				File[] modules = ModuleUtil.getIstance().getModules();
+				(new SchemaGeneratorsManager(modules)).execute();
+			}
 //			if(schemaUpdate.getExceptions().size()>0){
 //				log("Found "+schemaUpdate.getExceptions().size()+" Exception(s) while updating");
 //				for (Object obj : schemaUpdate.getExceptions()) {
