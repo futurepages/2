@@ -52,10 +52,16 @@ public class ApplicationListener implements ServletContextListener {
 				log("Hibernate OK");
 
 				// Atualiza/gera esquema do banco como solicitado no arquivo de configuração.
-				if (Params.get("SCHEMA_GENERATION_TYPE").equals("update")) {
-					log("SCHEMA UPDATE - Begin");
-					SchemaGeneration.update();
-					log("SCHEMA UPDATE - End");
+				if (Params.get("SCHEMA_GENERATION_TYPE").startsWith("update")) {
+					if(Params.get("SCHEMA_GENERATION_TYPE").equals("update")){
+						log("SCHEMA UPDATE - Begin");
+						SchemaGeneration.update(false);
+						log("SCHEMA UPDATE - End");
+					}else if(Params.get("SCHEMA_GENERATION_TYPE").equals("update_beans")){
+						log("SCHEMA UPDATE JUST BEANS - Begin");
+						SchemaGeneration.update(true);
+						log("SCHEMA UPDATE JUST BEANS - End");
+					}
 				} else if (Params.get("SCHEMA_GENERATION_TYPE").equals("export")) {
 					log("SCHEMA EXPORT - Begin");
 					SchemaGeneration.export();
