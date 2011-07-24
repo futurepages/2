@@ -15,7 +15,10 @@ import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import org.futurepages.core.exception.DefaultExceptionLogger;
 import org.futurepages.core.input.Input;
 import org.futurepages.core.output.Output;
@@ -161,7 +164,7 @@ public class InjectionUtils {
 			value = (String) source;
 		} else if (tryNumber && source instanceof Number) {
 			value = source.toString();
-		} else {
+		} else if (!(source instanceof String[])){
 			return null;
 		}
 
@@ -244,6 +247,18 @@ public class InjectionUtils {
 					return null;
 				}
 			}
+		}
+		else if (className.equals("java.util.Calendar") && loc != null) {
+			DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, loc); // change
+			df.setLenient(false);
+			try {
+				Date date = df.parse(value);
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(date);
+				newValue = calendar;
+			} catch (Exception e) {
+				return null;
+			}
 		} else if (className.equals("java.util.Date") && loc != null && LocaleManager.getDateMask(loc) != null) {
 			SimpleDateFormat sdf = new SimpleDateFormat(LocaleManager.getDateMask(loc));
 			try {
@@ -260,23 +275,34 @@ public class InjectionUtils {
 				return null;
 			}
 		} //byLeandro
-		else if (className.equals("java.util.Calendar") && loc != null) {
-			DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, loc); // change
-			df.setLenient(false);
-			try {
-				Date date = df.parse(value);
-				Calendar calendar = Calendar.getInstance();
-				calendar.setTime(date);
-				newValue = calendar;
-			} catch (Exception e) {
-				return null;
-			}
-		} else if (targetType.isEnum()) {
+		else if (targetType.isEnum()) {
 			try {
 				newValue = Enum.valueOf(targetType, value);
 			} catch (Exception e) {
 				return null;
 			}
+		} else if (Collection.class.isAssignableFrom(targetType)){
+				String[] array = null;
+				if(source instanceof String){
+					array = new String[]{value};
+				}else if(source instanceof String[]){
+					array = (String[]) source;
+				}else {
+					return null;
+				}
+				Collection col;
+				if(List.class.isAssignableFrom(targetType)){
+					col = new ArrayList();
+				}else if(Set.class.isAssignableFrom(targetType)){
+					col = new LinkedHashSet();
+				}else {
+					return null;
+				}
+
+				for(String element : array){
+					col.add(element);
+				}
+				return col;
 		}
 		return newValue;
 	}
