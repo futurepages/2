@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.Locale;
 import org.futurepages.core.formatter.Formatter;
 import org.futurepages.enums.MonthEnum;
-import org.futurepages.util.DateUtil;
 
 /**
  *
@@ -12,11 +11,12 @@ import org.futurepages.util.DateUtil;
  */
 public class LiteralAnniversaryFormatter implements Formatter {
 
+	@Override
     public String format(Object value, Locale loc) {
     	String retornoFormater = "";
     	if(value!= null){
     		Calendar cal = (Calendar) value;
-    		retornoFormater = DateUtil.format(cal, "d")+" de "+MonthEnum.get(cal);
+    		retornoFormater = cal.get(Calendar.DAY_OF_MONTH)+" de "+MonthEnum.get(cal);
     	}
 		return retornoFormater;
     }
