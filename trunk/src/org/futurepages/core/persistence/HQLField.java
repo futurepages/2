@@ -197,7 +197,7 @@ public class HQLField implements HQLable {
     }
 
 	public String lowerEqualsThen(double value) {
-        return fieldName + LOWER + value;
+        return fieldName + LOWER_EQUALS + value;
     }
 
     public String hasAllWordsInSameSequence(String[] words) {
