@@ -8,6 +8,7 @@ import org.futurepages.core.persistence.Dao;
 import org.futurepages.core.tags.build.ContentTypeEnum;
 import org.futurepages.util.ReflectionUtil;
 import org.futurepages.core.tags.cerne.HTMLTag;
+import org.futurepages.util.The;
 
 @Tag(bodyContent = ContentTypeEnum.EMPTY)
 public class RadioOptions extends HTMLTag {
@@ -33,6 +34,7 @@ public class RadioOptions extends HTMLTag {
 	@TagAttribute
     private String value = null;
 
+	@Override
     public String getStringToPrint() throws JspException {
 
         String[] values = findValues(name);
@@ -58,7 +60,10 @@ public class RadioOptions extends HTMLTag {
                     } else {
                         value_input = value_id;
                     }
-					//TODO if novo atributo
+					//TODO 
+//					if (atributo!=null){
+//						sb.append("<").append(atributo).append(">");
+//					}
                     sb.append("<input id=\"" + name + value_id + "\" type=\"radio\" value=\"" + value_input + "\" name=\"" + name + "\"");
 
                     if ((values == null || values.length == 0) && selected != null && selected.equals(value_id)) {
@@ -74,7 +79,11 @@ public class RadioOptions extends HTMLTag {
                         sb.append("/>&nbsp;" + ReflectionUtil.getField(list.get(i), showAttr).toString());
                     }
 					//TODO if(novo atributo)
+//					if(atributo==null){
 					sb.append("<br/>");
+//					}else{
+//						sb.append("</").append(The.firstTokenOf(atributo," ")).append(">");
+//					}
                 }
             }
         }
