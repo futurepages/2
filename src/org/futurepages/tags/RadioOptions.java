@@ -69,10 +69,12 @@ public class RadioOptions extends HTMLTag {
 
                     sb.append("");
                     if (showAttr == null) {
-                        sb.append("/>&nbsp;" + list.get(i) + "<br/>");
+                        sb.append("/>&nbsp;" + list.get(i));
                     } else {
-                        sb.append("/>&nbsp;" + ReflectionUtil.getField(list.get(i), showAttr).toString() + "<br/>");
+                        sb.append("/>&nbsp;" + ReflectionUtil.getField(list.get(i), showAttr).toString());
                     }
+					//TODO if(novo atributo)
+					sb.append("<br/>");
                 }
             }
         }
