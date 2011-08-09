@@ -34,6 +34,9 @@ public class RadioOptions extends HTMLTag {
 	@TagAttribute
     private String value = null;
 
+	@TagAttribute(required=false)
+    private String itemOuterTag = null;
+
 	@Override
     public String getStringToPrint() throws JspException {
 
@@ -60,10 +63,9 @@ public class RadioOptions extends HTMLTag {
                     } else {
                         value_input = value_id;
                     }
-					//TODO 
-//					if (atributo!=null){
-//						sb.append("<").append(atributo).append(">");
-//					}
+					if (itemOuterTag!=null){
+						sb.append("<").append(itemOuterTag).append(">");
+					}
                     sb.append("<input id=\"" + name + value_id + "\" type=\"radio\" value=\"" + value_input + "\" name=\"" + name + "\"");
 
                     if ((values == null || values.length == 0) && selected != null && selected.equals(value_id)) {
@@ -74,16 +76,15 @@ public class RadioOptions extends HTMLTag {
 
                     sb.append("");
                     if (showAttr == null) {
-                        sb.append("/>&nbsp;" + list.get(i));
+                        sb.append("/>&nbsp;").append(list.get(i));
                     } else {
-                        sb.append("/>&nbsp;" + ReflectionUtil.getField(list.get(i), showAttr).toString());
+                        sb.append("/>&nbsp;").append(ReflectionUtil.getField(list.get(i), showAttr).toString());
                     }
-					//TODO if(novo atributo)
-//					if(atributo==null){
+					if(itemOuterTag==null){
 					sb.append("<br/>");
-//					}else{
-//						sb.append("</").append(The.firstTokenOf(atributo," ")).append(">");
-//					}
+					}else{
+						sb.append("</").append(The.firstTokenOf(itemOuterTag," ")).append(">");
+					}
                 }
             }
         }
@@ -120,4 +121,8 @@ public class RadioOptions extends HTMLTag {
     public void setValue(String value) {
         this.value = value;
     }
+
+	public void setItemOuterTag(String itemOuterTag) {
+		this.itemOuterTag = itemOuterTag;
+	}
 }
