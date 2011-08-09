@@ -58,7 +58,7 @@ public class RadioOptions extends HTMLTag {
                     } else {
                         value_input = value_id;
                     }
-
+					//TODO if novo atributo
                     sb.append("<input id=\"" + name + value_id + "\" type=\"radio\" value=\"" + value_input + "\" name=\"" + name + "\"");
 
                     if ((values == null || values.length == 0) && selected != null && selected.equals(value_id)) {
