@@ -57,9 +57,9 @@ public class PIFilter implements Filter {
 	public String filter(InvocationChain chain) throws Exception {
 		Input input = chain.getAction().getInput();
 		
+		Serializable obj = null;
 		Object keyFound = input.getValue(keyToInject);
 		if (keyFound!=null) {
-			Serializable obj = null;
 			Class pkType = this.dao.getIdType(classToInject);
 			if (pkType == StringType.class) {
 				obj = this.dao.get(classToInject, input.getStringValue(keyToInject));
@@ -70,8 +70,8 @@ public class PIFilter implements Filter {
 				obj = this.dao.get(classToInject, input.getIntValue(keyToInject));
 			}
 			
-			inject(input, obj);
 		}
+		inject(input, obj);
 		return chain.invoke();
 	}
 
