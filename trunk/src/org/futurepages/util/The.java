@@ -72,6 +72,18 @@ public class The {
 		}
     }
 
+	/**
+     * Retorna o primeiro token da String
+     */
+    public static String lastTokenOf(String str, String separator) {
+		if(str!=null){
+			String[] tokens = str.split(separator);
+			return tokens[tokens.length-1];
+		} else {
+			return null;
+		}
+    }
+
     /**
      * Retorna o token localizado numa determinada posição dentro de uma string com separadoes
      * caso não encontre, o retorno é null
