@@ -164,7 +164,7 @@ public class InjectionUtils {
 			value = (String) source;
 		} else if (tryNumber && source instanceof Number) {
 			value = source.toString();
-		} else if (!(source instanceof String[])){
+		} else {
 			return null;
 		}
 
@@ -281,28 +281,6 @@ public class InjectionUtils {
 			} catch (Exception e) {
 				return null;
 			}
-		} else if (Collection.class.isAssignableFrom(targetType)){
-				String[] array = null;
-				if(source instanceof String){
-					array = new String[]{value};
-				}else if(source instanceof String[]){
-					array = (String[]) source;
-				}else {
-					return null;
-				}
-				Collection col;
-				if(List.class.isAssignableFrom(targetType)){
-					col = new ArrayList();
-				}else if(Set.class.isAssignableFrom(targetType)){
-					col = new LinkedHashSet();
-				}else {
-					return null;
-				}
-
-				for(String element : array){
-					col.add(element);
-				}
-				return col;
 		}
 		return newValue;
 	}
