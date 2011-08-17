@@ -15,6 +15,7 @@ public interface HQLable {
     public static final String DESC = " DESC";
     public static final String IN = " IN ";
     public static final String NOT_IN = " NOT IN ";
+    public static final String NOT_LIKE  = " NOT LIKE ";
     public static final String AS  = " AS ";
     public static final String LIKE  = " LIKE ";
     public static final String OR  = " OR ";

@@ -325,6 +325,10 @@ public class HQLField implements HQLable {
         return likeExpression("'", value, "%'");
     }
 
+	public String notStartsWith(String value) {
+        return notLikeExpression("'", value, "%'");
+    }
+
     public String endsWith(String value) {
         return likeExpression("'%", value, "'");
     }
@@ -338,6 +342,13 @@ public class HQLField implements HQLable {
             return "";
         }
         return concat(fieldName , LIKE  , prefix, escLike(value), sufix);
+	}
+
+	private String notLikeExpression(String prefix, String value,  String sufix) {
+		if (Is.empty(value)) {
+            return "";
+        }
+        return concat(fieldName , NOT_LIKE  , prefix, escLike(value), sufix);
 	}
 
     public String as(String alias) {
