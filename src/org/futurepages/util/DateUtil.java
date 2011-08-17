@@ -1,5 +1,6 @@
 package org.futurepages.util;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -91,7 +92,14 @@ public class DateUtil {
 	}
 
 	public static Calendar viewDateToCalendar(String in) {
-		return new GregorianCalendar(Integer.parseInt(in.substring(6)), Integer.parseInt(in.substring(3, 5)) - 1, Integer.parseInt(in.substring(0, 2)));
+			try {
+				DateFormat df =  new SimpleDateFormat("yyyy-MM-dd"); // change
+				df.setLenient(false);
+				df.parse(in);
+				return new GregorianCalendar(Integer.parseInt(in.substring(6)), Integer.parseInt(in.substring(3, 5)) - 1, Integer.parseInt(in.substring(0, 2)));
+			} catch(Exception ex){
+				return null;
+			}
 	}
 
 	public static String literalDateFromDB(Object in) {
