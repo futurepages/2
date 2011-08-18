@@ -130,10 +130,6 @@ public class JPEGUtil2 {
 	}
 
 	public static void resizeImageByOneDimension(boolean byWidth, File file, int width, int quality, String pathNewFile, boolean poorWhenSmaller) throws MalformedURLException, FileNotFoundException, IOException {
-//		SeekableStream seekableStream =  new FileSeekableStream(file);
-//		ParameterBlock pb = new ParameterBlock();
-//		pb.add(seekableStream);
-//		BufferedImage image = JAI.create("jpeg", pb).getAsBufferedImage();
 		BufferedImage image = getBufferedImage(file);
 		
 		resizeByWidth(byWidth, image, width, quality, pathNewFile, poorWhenSmaller);
