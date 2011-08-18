@@ -14,14 +14,22 @@ import javax.swing.ImageIcon;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGEncodeParam;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
+import com.sun.media.jai.codec.FileSeekableStream;
+import com.sun.media.jai.codec.SeekableStream;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.image.renderable.ParameterBlock;
 import javax.imageio.ImageIO;
+import javax.media.jai.JAI;
 
 /**
  * Utilidades para manipulação de JPEG
  */
 public class JPEGUtil {
+	
+	public static BufferedImage getBufferedImage(File file) throws IOException {
+		return ImageIO.read(file);
+	}
 
 	/**
 	 * Retorna a largura em pixels da imagem.
@@ -49,19 +57,19 @@ public class JPEGUtil {
 	 * pathNewFile: endereço real completo incluindo o nome do arquivo
 	 */
 	public static void resizeImage(File file, int width, int height, int quality, String pathNewFile) throws MalformedURLException, FileNotFoundException, IOException {
-		BufferedImage image = ImageIO.read(file);
+		BufferedImage image = getBufferedImage(file);
 		resize(image, width, height, quality, pathNewFile, true, null);
 		image.flush();
 	}
 
 	public static void resizeImage(File file, int width, int height, int quality, String pathNewFile, int[] subimage) throws MalformedURLException, FileNotFoundException, IOException {
-		BufferedImage image = ImageIO.read(file);
+		BufferedImage image = getBufferedImage(file);
 		resize(image, width, height, quality, pathNewFile, true, subimage);
 		image.flush();
 	}
 
 	public static void resizeImagePriorHeight(File file, int width, int height, int quality, String pathNewFile) throws MalformedURLException, FileNotFoundException, IOException {
-		BufferedImage image = ImageIO.read(file);
+		BufferedImage image = getBufferedImage(file);
 		resize(image, width, height, quality, pathNewFile, false, null);
 		image.flush();
 	}
@@ -119,7 +127,8 @@ public class JPEGUtil {
 	}
 
 	public static void resizeImageByOneDimension(boolean byWidth, File file, int width, int quality, String pathNewFile, boolean poorWhenSmaller) throws MalformedURLException, FileNotFoundException, IOException {
-		BufferedImage image = ImageIO.read(file);
+		BufferedImage image = getBufferedImage(file);
+		
 		resizeByWidth(byWidth, image, width, quality, pathNewFile, poorWhenSmaller);
 		image.flush();
 	}
