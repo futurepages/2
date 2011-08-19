@@ -320,7 +320,7 @@ public class Controller extends HttpServlet {
 			throw new ServletException("Action has no consequence for result: " + ac.getName() + " - " + result);
 		}
 
-//		System.out.println("<#"+Thread.currentThread().getId()+"#>"+  ac.getName()+ ((innerAction!=null)?"."+innerAction:"")+"["+result.toUpperCase()+"] -> "+(c!=null?c.toString():" NULL")); //for DEBUG-MODE
+//		System.out.println("<#"+Thread.currentThread().getId()+"#>"+ ac.getName() + "(" + ac.getActionClass().getName() + ")" + ((innerAction!=null)?"."+innerAction:"")+"["+result.toUpperCase()+"] -> "+(c!=null?c.toString():" NULL")); //for DEBUG-MODE
 
 		return c;
 	}
