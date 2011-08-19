@@ -19,7 +19,6 @@ import com.sun.media.jai.codec.SeekableStream;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.renderable.ParameterBlock;
-import javax.imageio.ImageIO;
 import javax.media.jai.JAI;
 
 /**
