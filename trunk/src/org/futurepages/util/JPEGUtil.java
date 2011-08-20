@@ -14,13 +14,9 @@ import javax.swing.ImageIcon;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGEncodeParam;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
-import com.sun.media.jai.codec.FileSeekableStream;
-import com.sun.media.jai.codec.SeekableStream;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.image.renderable.ParameterBlock;
 import javax.imageio.ImageIO;
-import javax.media.jai.JAI;
 
 /**
  * Utilidades para manipulação de JPEG
