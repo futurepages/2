@@ -22,7 +22,8 @@ import java.awt.image.renderable.ParameterBlock;
 import javax.media.jai.JAI;
 
 /**
- * Utilidades para manipulação de JPEG
+ * Utilidades para manipulação de JPEG - Utiliza o Leitor da biblioteca JAI
+ * Ler arquivos que fogem da especificação padrão do JPEG
  */
 public class JPEGUtil2 {
 	
