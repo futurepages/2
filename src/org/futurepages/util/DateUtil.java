@@ -93,7 +93,7 @@ public class DateUtil {
 
 	public static Calendar viewDateToCalendar(String in) {
 			try {
-				DateFormat df =  new SimpleDateFormat("yyyy-MM-dd"); // change
+				DateFormat df =  new SimpleDateFormat("dd/MM/yyyy"); // change
 				df.setLenient(false);
 				df.parse(in);
 				return new GregorianCalendar(Integer.parseInt(in.substring(6)), Integer.parseInt(in.substring(3, 5)) - 1, Integer.parseInt(in.substring(0, 2)));
@@ -102,6 +102,7 @@ public class DateUtil {
 			}
 	}
 
+	
 	public static String literalDateFromDB(Object in) {
 		String value = "";
 		if (in instanceof Date) {
