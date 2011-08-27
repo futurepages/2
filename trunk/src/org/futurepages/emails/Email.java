@@ -88,8 +88,6 @@ public abstract class Email {
 
     public static final String FILE_SERVER = "file.server";
 
-    public static final String MAIL_DEBUG = "mail.debug";
-
     public static final String KOI8_R = "koi8-r";
 
     public static final String ISO_8859_1 = "iso-8859-1";
@@ -117,8 +115,6 @@ public abstract class Email {
     /** The content type  */
     protected String contentType;
 
-    /** Set session debugging on or off */
-    protected boolean debug;
 
     /** Sent date */
     protected Date sentDate;
@@ -301,15 +297,6 @@ public abstract class Email {
     }
 
     /**
-     * Setting to true will enable the display of debug information.
-     *
-     * @param d A boolean.
-     */
-    public void setDebug(boolean d) {
-        this.debug = d;
-    }
-
-    /**
      * Sets the userName and password if authentication is needed.  If this
      * method is not used, no authentication will be performed.
      * <p>
@@ -450,7 +437,6 @@ public abstract class Email {
 	
 	            properties.setProperty( MAIL_PORT, this.smtpPort );
 	            properties.setProperty( MAIL_HOST, this.hostName );
-	            properties.setProperty( MAIL_DEBUG, String.valueOf(this.debug) );
 	
 	            if ( this.authenticator != null ) {
 	                properties.setProperty( MAIL_SMTP_AUTH, "true" );
