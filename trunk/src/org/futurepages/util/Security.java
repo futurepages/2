@@ -47,6 +47,7 @@ public class Security {
      * Filtra a string de entrada e retorna uma string vazia caso exista algum
      * caractere malicioso.
      */
+	@Deprecated
     public static String filtered(String in){
         if(in.contains("'")){
             in = in.replaceAll("'","''");
@@ -60,6 +61,7 @@ public class Security {
     /**
      * Inserção segura, previne injeção de scripts
      */
+	@Deprecated
     public static String filteredInsert(String in){
         if(in.contains("'"))  in = in.replaceAll("'","''");
         if(in.contains("<"))  in = in.replaceAll("<"," ");
