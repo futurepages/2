@@ -1,5 +1,8 @@
 package org.futurepages.util;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.Security;
 import java.security.spec.AlgorithmParameterSpec;
 import javax.crypto.Cipher;
@@ -15,8 +18,33 @@ import org.futurepages.core.exception.DefaultExceptionLogger;
  */
 public class CryptoUtil {
 
-	private static final String DES_INTERNAL_KEY = "fpg:cryp"; //não alterar!!
+	private static final String DES_INTERNAL_KEY = "cryp:gpf"; //não alterar!!
 
+    public static String md5FromUB64(String password){
+		 BigInteger hash = new BigInteger(1, ub64decode(password));
+		 password = hash.toString(16);
+
+        //correção da falta de zeros
+        if(password.length()<32){
+            int numZeros = 32 - password.length();
+            StringBuffer zeros = new StringBuffer("");
+            for(int i = 1 ; i<=numZeros;i++){
+                zeros.append("0");
+            }
+            return (zeros + password);
+        }
+        return password;
+	}
+
+    public static String md5UB64(String senha){
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("MD5"); //SHA1, TIGER
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+        return  ub64encode(md.digest(senha.getBytes()));
+    }
 
 	public static String encryptDES(String keyDES, String clearText) {
 		try {
