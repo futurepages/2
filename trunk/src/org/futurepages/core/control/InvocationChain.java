@@ -92,10 +92,8 @@ public class InvocationChain {
 		
 		if (!filters.isEmpty()) {
 			Filter f = (Filter) filters.removeFirst();
-//			System.out.println("Filter "+f.getClass().getName()); //for DEBUG-MODE
 			return f.filter(this);
 		}
-//		System.out.println("executing action method..."); //for DEBUG-MODE
 		Method metodo = getMethod();
 		if(metodo != null){
 			Object[] paramValues = getParametersValues(metodo);
