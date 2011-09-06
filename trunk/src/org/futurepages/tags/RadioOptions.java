@@ -69,9 +69,9 @@ public class RadioOptions extends HTMLTag {
                     sb.append("<input id=\"" + name + value_id + "\" type=\"radio\" value=\"" + value_input + "\" name=\"" + name + "\"");
 
                     if ((values == null || values.length == 0) && selected != null && selected.equals(value_id)) {
-                        sb.append(" selected=\"true\" ");
+                        sb.append(" checked=\"checked\" ");
                     } else if (contains(values, value_id)) {
-                        sb.append(" selected=\"true\" ");
+                        sb.append(" checked=\"checked\" ");
                     }
 
                     sb.append("");
