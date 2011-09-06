@@ -51,19 +51,19 @@ public final class ReflectionUtil {
 	}
 
 	/**
-	 * Invoke the Get access fields of the given object with the given field name.
+	 * Invoke the Get access fields of the given object with the given field path.
 	 * @param object
-	 * @param fieldName
+	 * @param fieldPath
 	 * @return Object
 	 */
-	public static Object getField(Object object, String fieldName) {
+	public static Object getField(Object object, String fieldPath) {
 		Object target = object;
-		if (fieldName.contains(".")) {
-			int lastPoint = fieldName.lastIndexOf(".");
-			target = getParent(object, fieldName);
-			fieldName = fieldName.substring(++lastPoint);
+		if (fieldPath.contains(".")) {
+			int lastPoint = fieldPath.lastIndexOf(".");
+			target = getParent(object, fieldPath);
+			fieldPath = fieldPath.substring(++lastPoint);
 		}
-		return invokeGetMethodOf(target, fieldName);
+		return invokeGetMethodOf(target, fieldPath);
 	}
 
 	
