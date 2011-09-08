@@ -10,6 +10,7 @@ import org.jdom.JDOMException;
 
 import org.futurepages.exceptions.BadFormedConfigFileException;
 import org.futurepages.exceptions.ConfigFileNotFoundException;
+import org.futurepages.util.FileUtil;
 import org.futurepages.util.XmlUtil;
 
 /**
@@ -64,6 +65,7 @@ public class Params {
 		//só quando for dar suporte a mais de um banco de dados
 		paramsMap.put("CONNECT_EXTERNAL_MODULES", "false");
 		paramsMap.put("DATABASE_DIR_NAME", "database");
+		paramsMap.put("DEPLOY_MODE" , "none");
 		paramsMap.put("DEV_MODE" , "off");
 		paramsMap.put("DYN_EXCEPTION_FILE_PATH", "/exceptions/dyn/exception.jsp");
     	paramsMap.put("EMAIL_ACTIVE", "false");
@@ -86,11 +88,13 @@ public class Params {
         paramsMap.put("THEMES_DIR_NAME", "themes");
 	}
 
+
+	private static String pathParamsFile = null;
 	/**
 	 * Lê os parâmetros do arquivo xml
 	 */
 	private static void parseXML() {
-		String pathParamsFile = paramsMap.get("CLASSES_PATH")+CONFIGURATION_DIR_NAME+"/"+PARAMS_FILE_NAME;
+		pathParamsFile = paramsMap.get("CLASSES_PATH")+CONFIGURATION_DIR_NAME+"/"+PARAMS_FILE_NAME;
 		Element appParams;
 		try {
 			appParams = XmlUtil.getRootElement(pathParamsFile);
@@ -136,5 +140,22 @@ public class Params {
 
 	public static boolean devMode(){
 		return Params.get("DEV_MODE").equals("on");
+	}
+
+	private static String regexParam(String key){
+		return "<param\\s+[^/]*name\\s*=\\s*\""+key+"\"[^/]*/>";
+	}
+
+	/**
+	 * Remove os parâmetros de geração de banco e de compactação de recursos para que
+	 * não sejam executados sempre que a aplicação for restartada.
+	 * @throws Exception
+	 */
+	public static void removeFileAutomations() throws Exception {
+		HashMap<String, String> map = new HashMap();
+		map.put(regexParam("MINIFY_RESOURCE_MODE"),"");
+		map.put(regexParam("SCHEMA_GENERATION_TYPE"),"");
+		map.put(regexParam("INSTALL_MODE"),"");
+		FileUtil.putStrings(map, pathParamsFile, pathParamsFile, true);
 	}
 }

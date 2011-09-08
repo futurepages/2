@@ -74,7 +74,7 @@ public class FileUtil {
 		BufferedInputStream source = new BufferedInputStream(sourceUrl.openStream());
 		BufferedOutputStream target = null;
 		try {
-			byte[] content = replaceAll(map, source).getBytes();
+			byte[] content = replaceAll(map, source,false).getBytes();
 			target = new BufferedOutputStream(new FileOutputStream(targetUrl));
 			target.write(content);
 			target.flush();
@@ -87,7 +87,7 @@ public class FileUtil {
 		}
 	}
 
-	private static String replaceAll(Map<String, String> map, InputStream source) throws IOException {
+	private static String replaceAll(Map<String, String> map, InputStream source, boolean regexKey) throws IOException {
 		try {
 			if (source == null) {
 				throw new Exception(new FileNotFoundException("File doesn´t exist."));
@@ -97,7 +97,11 @@ public class FileUtil {
 			String layout = new String(content);
 
 			for (String key : map.keySet()) {
-				layout = StringUtils.replace(layout, key, map.get(key));
+				if(regexKey){
+					layout = layout.replaceAll(key, map.get(key));
+				}else{
+					layout = StringUtils.replace(layout, key, map.get(key));
+				}
 			}
 			return layout;
 		} catch (Exception e) {
@@ -144,13 +148,22 @@ public class FileUtil {
 
 	/**
 	 * Replaces the file keys with the given key-value map.
+	 * where the key is not a regex, it's a plain text.
+	 */
+	public static String replaceAll(Map<String, String> map, String sourceUrl) throws Exception {
+		return replaceAll(map, new FileInputStream(sourceUrl), false);
+	}
+
+	/**
+	 * Replaces the file keys with the given key-value map.
 	 * @param map
 	 * @param sourceUrl
+	 * @param regexKey - true when trying to replace using key as a regex pattern
 	 * @return String
 	 * @throws Exception
 	 */
-	public static String replaceAll(Map<String, String> map, String sourceUrl) throws Exception {
-		return replaceAll(map, new FileInputStream(sourceUrl));
+	public static String replaceAll(Map<String, String> map, String sourceUrl, boolean regexKey) throws Exception {
+		return replaceAll(map, new FileInputStream(sourceUrl), regexKey);
 	}
 
 	/**
@@ -161,9 +174,13 @@ public class FileUtil {
 	 * @throws Exception
 	 */
 	public static void putStrings(Map<String, String> map, String sourceUrl, String targetUrl) throws Exception {
+		putStrings(map, sourceUrl, targetUrl, false);
+	}
+
+	public static void putStrings(Map<String, String> map, String sourceUrl, String targetUrl, boolean regexKey) throws Exception {
 		FileOutputStream target = null;
 		try {
-			byte[] content = replaceAll(map, sourceUrl).getBytes();
+			byte[] content = replaceAll(map, sourceUrl,regexKey).getBytes();
 			target = new FileOutputStream(targetUrl);
 			target.write(content);
 		} catch (Exception e) {
