@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 import org.apache.commons.lang.StringUtils;
 import org.futurepages.core.exception.DefaultExceptionLogger;
@@ -63,6 +64,9 @@ public final class ReflectionUtil {
 			target = getParent(object, fieldPath);
 			fieldPath = fieldPath.substring(++lastPoint);
 		}
+		if(fieldPath.isEmpty()){
+			fieldPath = "toString";
+		}
 		return invokeGetMethodOf(target, fieldPath);
 	}
 
@@ -113,7 +117,12 @@ public final class ReflectionUtil {
 	 */
 	public static Object invokeGetMethodOf(Object object, String fieldName) {
 		try {
-			String methodName = "get" + StringUtils.capitalize(fieldName);
+			String methodName;
+			if(fieldName != "toString"){
+				methodName = "get" + StringUtils.capitalize(fieldName);
+			} else{
+				methodName = fieldName;
+			}
 			Method method = object.getClass().getMethod(methodName);
 			return method.invoke(object);
 		} catch (Exception e) {
