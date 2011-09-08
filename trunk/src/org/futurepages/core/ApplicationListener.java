@@ -52,28 +52,31 @@ public class ApplicationListener implements ServletContextListener {
 				log("Hibernate OK");
 
 				// Atualiza/gera esquema do banco como solicitado no arquivo de configuração.
-				if (Params.get("SCHEMA_GENERATION_TYPE").startsWith("update")) {
-					if(Params.get("SCHEMA_GENERATION_TYPE").equals("update")){
-						log("SCHEMA UPDATE - Begin");
-						SchemaGeneration.update(false);
-						log("SCHEMA UPDATE - End");
-					}else if(Params.get("SCHEMA_GENERATION_TYPE").equals("update_beans")){
-						log("SCHEMA UPDATE JUST BEANS - Begin");
-						SchemaGeneration.update(true);
-						log("SCHEMA UPDATE JUST BEANS - End");
+				// somente se NÃO estiver em DEPLOY_MODE=production
+				if (!Params.get("DEPLOY_MODE").equals("production")) {
+					if (Params.get("SCHEMA_GENERATION_TYPE").startsWith("update")) {
+						if (Params.get("SCHEMA_GENERATION_TYPE").equals("update")) {
+							log("SCHEMA UPDATE - Begin");
+							SchemaGeneration.update(false);
+							log("SCHEMA UPDATE - End");
+						} else if (Params.get("SCHEMA_GENERATION_TYPE").equals("update_beans")) {
+							log("SCHEMA UPDATE JUST BEANS - Begin");
+							SchemaGeneration.update(true);
+							log("SCHEMA UPDATE JUST BEANS - End");
+						}
+					} else if (Params.get("SCHEMA_GENERATION_TYPE").equals("export")) {
+						log("SCHEMA EXPORT - Begin");
+						SchemaGeneration.export();
+						log("SCHEMA EXPORT - End");
 					}
-				} else if (Params.get("SCHEMA_GENERATION_TYPE").equals("export")) {
-					log("SCHEMA EXPORT - Begin");
-					SchemaGeneration.export();
-					log("SCHEMA EXPORT - End");
-				}
 
-				//Se o modo de instalação estiver ligado, serão feitas as instalações de cada módulo.
-				String installMode = Params.get("INSTALL_MODE");
-				if (!installMode.equals("off") && !installMode.equals("none")) {
-					log("Install Mode: " + installMode);
-					InstallersManager.initialize(modules, installMode);
-					log("Install - End");
+					//Se o modo de instalação estiver ligado, serão feitas as instalações de cada módulo.
+					String installMode = Params.get("INSTALL_MODE");
+					if (!installMode.equals("off") && !installMode.equals("none")) {
+						log("Install Mode: " + installMode);
+						InstallersManager.initialize(modules, installMode);
+						log("Install - End");
+					}
 				}
 			} else {
 				log("WARNING: HIBERNATE is not running!");
@@ -110,6 +113,10 @@ public class ApplicationListener implements ServletContextListener {
 				log("MINIFY RESOURCE MODE = " + minifyMode);
 				(new ResourceMinifier()).execute(minifyMode);
 				log("MINIFY RESOURCE DONE.");
+			}
+			if (Params.get("DEPLOY_MODE").equals("production")
+			 || Params.get("DEPLOY_MODE").equals("pre-production")) {
+				Params.removeFileAutomations();
 			}
 
 			log(servletContext.getServletContextName() + " inicializado.");
