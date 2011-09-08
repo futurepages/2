@@ -16,6 +16,7 @@ import org.futurepages.core.quartz.QuartzManager;
 import org.futurepages.core.resource.ResourceMinifier;
 import org.futurepages.core.session.SessionListenerManager;
 import org.futurepages.core.tags.build.TagLibBuilder;
+import org.futurepages.util.Is;
 import org.futurepages.util.The;
 import org.quartz.SchedulerException;
 
@@ -72,7 +73,7 @@ public class ApplicationListener implements ServletContextListener {
 
 					//Se o modo de instalação estiver ligado, serão feitas as instalações de cada módulo.
 					String installMode = Params.get("INSTALL_MODE");
-					if (!installMode.equals("off") && !installMode.equals("none")) {
+					if (!installMode.equals("off") && !installMode.equals("none") && !Is.empty(installMode)) {
 						log("Install Mode: " + installMode);
 						InstallersManager.initialize(modules, installMode);
 						log("Install - End");
