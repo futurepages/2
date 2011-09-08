@@ -8,6 +8,7 @@ import org.futurepages.core.persistence.Dao;
 import org.futurepages.core.tags.build.ContentTypeEnum;
 import org.futurepages.util.ReflectionUtil;
 import org.futurepages.core.tags.cerne.HTMLTag;
+import org.futurepages.util.The;
 
 /**
  *
@@ -33,6 +34,9 @@ public class CheckOptions extends HTMLTag {
 
     @TagAttribute
     private String cssClass = "";
+	
+	@TagAttribute(required=false)
+    private String itemOuterTag = null;
 
     @Override
     public String getStringToPrint() throws JspException {
@@ -51,7 +55,10 @@ public class CheckOptions extends HTMLTag {
             if (list != null) {
                 for (int i = 0; i < fullList.size(); i++) {
                     value1 = ReflectionUtil.getField(fullList.get(i), attributePath[attributePath.length-1]).toString();
-                    sb.append("<label><input value=\"").append(value1).append("\" id=\"")
+                    if (itemOuterTag!=null){
+						sb.append("<").append(itemOuterTag).append(">");
+					}
+					sb.append("<input value=\"").append(value1).append("\" id=\"")
 					  .append(name).append("_").append(i).append("\" type=\"checkbox\" name=\"").append(name)
 					  .append("\" ").append(cssClass);
                     for (int j = 0; j < list.size(); j++) {
@@ -60,15 +67,28 @@ public class CheckOptions extends HTMLTag {
                             sb.append("checked=\"checked\"");
                         }
                     }
-                    sb.append("/>&#32;").append(ReflectionUtil.getField(fullList.get(i), showAttr).toString()).append("</label>");
+                    sb.append("/>&nbsp;").append(ReflectionUtil.getField(fullList.get(i), showAttr).toString());
+					if(itemOuterTag==null){
+						sb.append("<br/>");
+					}else{
+						sb.append("</").append(The.firstTokenOf(itemOuterTag," ")).append(">");
+					}
                 }
             } else {
                 for (int i = 0; i < fullList.size(); i++) {
                     value1 = ReflectionUtil.getField(fullList.get(i), attribute).toString();
-                    sb.append("<label><input value=\"").append(value1).append("\" id=\"").append(name)
+                    if (itemOuterTag!=null){
+						sb.append("<").append(itemOuterTag).append(">");
+					}
+                    sb.append("<input value=\"").append(value1).append("\" id=\"").append(name)
 					  .append("_").append(i).append("\" type=\"checkbox\" name=\"").append(name)
-					  .append("\" ").append(cssClass).append("/>&#32;")
-					  .append(ReflectionUtil.getField(fullList.get(i), showAttr).toString()).append("</label>");
+					  .append("\" ").append(cssClass).append("/>&nbsp;")
+					  .append(ReflectionUtil.getField(fullList.get(i), showAttr).toString());
+					if(itemOuterTag==null){
+						sb.append("<br/>");
+					}else{
+						sb.append("</").append(The.firstTokenOf(itemOuterTag," ")).append(">");
+					}
                 }
 
             }
@@ -109,5 +129,9 @@ public class CheckOptions extends HTMLTag {
 			targetObject = ReflectionUtil.getField(targetObject, attributePath[i]);
 		}
 		return targetObject.toString();
+	}
+
+	public void setItemOuterTag(String itemOuterTag) {
+		this.itemOuterTag = itemOuterTag;
 	}
 }
