@@ -53,7 +53,7 @@ public class HtmlStripper {
 		Pattern tagsPattern  = getCompiledTagsPattern();
 		IterableString iter = new IterableString(tagsPattern, strippedHtml);
 		StringBuilder sb     = new StringBuilder();
-		String end = "";
+		String end = strippedHtml;
 		for (MatchedToken token : iter) {
 			sb.append(token.getBefore());
 			sb.append(tagRep.treated(token.getMatched()));
