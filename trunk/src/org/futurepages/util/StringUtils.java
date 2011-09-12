@@ -5,6 +5,10 @@ import java.util.Map;
 
 public class StringUtils {
 
+	public static String replace(String text, String textToBeReplaced, String replacement){
+		return org.apache.commons.lang.StringUtils.replace(text, textToBeReplaced, replacement);
+	}
+
 	public static String concat(String... args){
 		StringBuilder sb = new StringBuilder();
 		for (String string : args) {
