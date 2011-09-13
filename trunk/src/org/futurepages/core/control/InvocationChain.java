@@ -19,7 +19,7 @@ import org.futurepages.util.InjectionUtils;
  * When an action is executed, a chain of filters is created.
  * The last step of any InvocationChain is the action.
  * An action may have one or more filters and global filters.
- * 
+ *
  * @author Sergio Oliveira
  */
 public class InvocationChain {
@@ -87,13 +87,14 @@ public class InvocationChain {
 	 *
 	 * @return The result of a filter or the action.
 	 */
-	//TODO TEST
 	public String invoke() throws Exception {
-		
+
 		if (!filters.isEmpty()) {
 			Filter f = (Filter) filters.removeFirst();
+//			System.out.println("Filter "+f.getClass().getName()); //for DEBUG-MODE
 			return f.filter(this);
 		}
+//		System.out.println("executing action method..."); //for DEBUG-MODE
 		Method metodo = getMethod();
 		if(metodo != null){
 			Object[] paramValues = getParametersValues(metodo);
@@ -106,7 +107,7 @@ public class InvocationChain {
 			} else{
 				if (valorRetornado == null) {
 					result = Action.NULL;
-				} else { 
+				} else {
 					result = valorRetornado.toString();
 				}
 			}
@@ -115,7 +116,7 @@ public class InvocationChain {
 			throw new ServletException("The inner action does not exist: " + innerAction);
 		}
 	}
-	
+
 	/**
 	 * Returns the {@link Method} to be invoked.
 	 * @return
