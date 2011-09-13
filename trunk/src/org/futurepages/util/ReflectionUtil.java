@@ -6,7 +6,6 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.StringTokenizer;
 import org.apache.commons.lang.StringUtils;
 import org.futurepages.core.exception.DefaultExceptionLogger;
@@ -22,7 +21,7 @@ public final class ReflectionUtil {
 	 * @param object
 	 * @param fieldName
 	 * @return Object
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public static Object getParent(Object object, String fieldName) {
 		Object child = object;
@@ -64,13 +63,10 @@ public final class ReflectionUtil {
 			target = getParent(object, fieldPath);
 			fieldPath = fieldPath.substring(++lastPoint);
 		}
-		if(fieldPath.isEmpty()){
-			fieldPath = "toString";
-		}
 		return invokeGetMethodOf(target, fieldPath);
 	}
 
-	
+
 	public static Field getObjectField(String name, Class klass){
 		if(klass == null){
 			return null;
@@ -117,12 +113,7 @@ public final class ReflectionUtil {
 	 */
 	public static Object invokeGetMethodOf(Object object, String fieldName) {
 		try {
-			String methodName;
-			if(fieldName != "toString"){
-				methodName = "get" + StringUtils.capitalize(fieldName);
-			} else{
-				methodName = fieldName;
-			}
+			String methodName = "get" + StringUtils.capitalize(fieldName);
 			Method method = object.getClass().getMethod(methodName);
 			return method.invoke(object);
 		} catch (Exception e) {
@@ -164,7 +155,7 @@ public final class ReflectionUtil {
 //		Class[] paramClass = new Class[value.length];
 //		for (int i = 0; i < value.length; i++)
 //			paramClass[i] = value[i].getClass();
-//		
+//
 //		Method method = object.getClass().getMethod(methodName, paramClass);
 
 		if (method.getReturnType() == Void.TYPE) {
@@ -257,7 +248,7 @@ public final class ReflectionUtil {
 //			Class[] paramClass = new Class[value.length];
 //			for (int i = 0; i < value.length; i++)
 //				paramClass[i] = value[i].getClass();
-//			
+//
 //			Method method = object.getClass().getMethod(methodName, paramClass);
 
 			if (method.getReturnType() != Void.TYPE) {
@@ -300,8 +291,8 @@ public final class ReflectionUtil {
 	 * @param klass
 	 * @param fieldName
 	 * @return Class
-	 * @throws IllegalAccessException 
-	 * @throws Exception 
+	 * @throws IllegalAccessException
+	 * @throws Exception
 	 */
 	public static Class getFieldType(Class klass, String fieldName) throws Exception, IllegalAccessException {
 		Class type = klass;
@@ -471,7 +462,7 @@ public final class ReflectionUtil {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Internal method to find the most specific applicable method
 	 */
