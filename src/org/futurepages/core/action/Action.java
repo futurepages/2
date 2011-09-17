@@ -40,6 +40,8 @@ public interface Action extends Manipulable {
 
 	public void setSession(Context context);
 
+	public void setCallback(Context context);
+
 	public void setApplication(Context context);
 
 	public void setCookies(Context context);
@@ -51,6 +53,8 @@ public interface Action extends Manipulable {
 	public Output getOutput();
 
 	public Context getSession();
+
+	public Context getCallback();
 
 	public HttpSession getHttpSession();
 

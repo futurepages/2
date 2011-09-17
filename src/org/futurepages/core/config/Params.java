@@ -105,7 +105,7 @@ public class Params {
 				paramsMap.put(name, value);
 			}
 		} catch (IOException e) {
-			throw new ConfigFileNotFoundException("Arquivo de parâmetros da aplicação de template não encontrado: "+pathParamsFile);
+			throw new ConfigFileNotFoundException("Arquivo de parâmetros da aplicação não encontrado: "+pathParamsFile);
 		} catch (JDOMException e) {
 			throw new BadFormedConfigFileException("Arquivo de parâmetros da aplicação mal formado: "+pathParamsFile);
 		}

@@ -10,6 +10,7 @@ import org.futurepages.core.filter.Filter;
 import org.futurepages.core.action.Action;
 import org.futurepages.core.config.Params;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,9 +23,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.futurepages.actions.DynAction;
+import org.futurepages.core.callback.ConsequenceCallback;
 
 import org.futurepages.core.consequence.ConsequenceProvider;
 import org.futurepages.core.consequence.DefaultConsequenceProvider;
+import org.futurepages.core.context.MapContext;
 import org.futurepages.core.exception.DefaultExceptionLogger;
 import org.futurepages.filters.GlobalFilterFreeFilter;
 import org.futurepages.core.formatter.FormatterManager;
@@ -34,6 +37,7 @@ import org.futurepages.core.i18n.LocaleManager;
 import org.futurepages.core.input.PrettyGlobalURLRequestInput;
 import org.futurepages.core.input.PrettyURLRequestInput;
 import org.futurepages.exceptions.FilterException;
+import org.futurepages.filters.ConsequenceCallbackFilter;
 import org.futurepages.tags.core.webcomponent.ImportComponentRes;
 
 /**
@@ -224,7 +228,7 @@ public class Controller extends HttpServlet {
 			Throwable cause = getRootCause(e);
 			throw new ServletException("Exception while invoking action " + actionName + ": " + e.getMessage() + " / " + e.getClass().getName() + " / " + cause.getMessage() + " / " + cause.getClass().getName(), cause);
 		} finally {
-			if (action instanceof DynAction) { //@TODO local temporário, vai mudar em breve. Mudando, desde que continue ocorrendo após consequência, continuará correto.
+			if (action instanceof DynAction) {
 				ImportComponentRes.destroyAsyncResources();
 			}
 			/*
@@ -233,16 +237,35 @@ public class Controller extends HttpServlet {
 			 * afterConsequence method.
 			 */
 			Iterator<Object> iter = filters.iterator();
+			ArrayList<ConsequenceCallbackFilter> callbackFilters = null;
+			String returnedFromAction = returnedResult.toString().length() > 0 ? returnedResult.toString() : null;
 			while (iter.hasNext()) {
 				Filter f = (Filter) iter.next();
 				if (f instanceof AfterConsequenceFilter) {
 					AfterConsequenceFilter acf = (AfterConsequenceFilter) f;
 					try {
-						String s = returnedResult.toString();
-						acf.afterConsequence(action, c, conseqExecuted, actionExecuted, s.length() > 0 ? s : null);
+						acf.afterConsequence(action, c, conseqExecuted, actionExecuted, returnedFromAction);
 					} catch (Exception e) {
-						throw new ServletException(
-								"Exception while executing the AfterConsequence filters: " + e.getMessage(), e);
+						throw new ServletException("Exception while executing the AfterConsequence filters: " + e.getMessage(), e);
+					}
+					if(f instanceof ConsequenceCallbackFilter){
+						if(callbackFilters == null){
+							callbackFilters = new ArrayList<ConsequenceCallbackFilter>();
+						}
+						callbackFilters.add((ConsequenceCallbackFilter)f);
+					}
+				}
+			}
+			if(actionExecuted && conseqExecuted && callbackFilters!=null){
+				for(ConsequenceCallbackFilter f : callbackFilters){
+					try {
+						ConsequenceCallback cc = f.getCallbackClass().newInstance();
+						cc.setActionData(action.getCallback());
+						cc.setActionReturn(returnedResult.toString());
+						Thread thread = new Thread(cc);
+						thread.start();
+					} catch (Exception ex) {
+						throw new ServletException("Exception while invoking Consequence Callbacks. "+ex.getMessage());
 					}
 				}
 			}
@@ -456,43 +479,23 @@ public class Controller extends HttpServlet {
 		return null;
 	}
 
-	protected void prepareAction(Action action, boolean global, HttpServletRequest req,
-			HttpServletResponse res) {
+	protected void prepareAction(Action action, boolean global, HttpServletRequest req, HttpServletResponse res) {
 
-		if (!withPrettyURL) {
-
-			prepareObsoleteAction(action, req, res);
-
-			return;
-		}
-		if (!global) {
-			action.setInput(new PrettyURLRequestInput(req));
+		if (withPrettyURL) {
+			if (!global) {
+				action.setInput(new PrettyURLRequestInput(req));
+			} else {
+				action.setInput(new PrettyGlobalURLRequestInput(req));
+			}
 		} else {
-			action.setInput(new PrettyGlobalURLRequestInput(req));
+			action.setInput(new RequestInput(req));
 		}
 		action.setOutput(new ResponseOutput(res));
 		action.setSession(new SessionContext(req, res));
 		action.setApplication(appContext);
 		action.setCookies(new CookieContext(req, res));
 		action.setLocale(LocaleManager.getLocale(req));
-	}
-
-	/**
-	 * Subclasses of this controller may override this method to have a chance
-	 * to prepare the action before it is executed. This method creates and
-	 * injects in the action all contexts, input, output and locale.
-	 *
-	 * @param action The action to prepare for execution
-	 * @param req The http request (input will need that)
-	 * @param res The http response (output will need that)
-	 */
-	protected void prepareObsoleteAction(Action action, HttpServletRequest req, HttpServletResponse res) {
-		action.setInput(new RequestInput(req));
-		action.setOutput(new ResponseOutput(res));
-		action.setSession(new SessionContext(req, res));
-		action.setApplication(appContext);
-		action.setCookies(new CookieContext(req, res));
-		action.setLocale(LocaleManager.getLocale(req));
+		action.setCallback(new MapContext());
 	}
 
 	protected String getObsoleteActionName(HttpServletRequest req) {

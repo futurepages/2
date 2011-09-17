@@ -43,6 +43,7 @@ public abstract class AbstractAction implements Pageable, Action {
 	protected Context session;
 	protected Context application;
 	protected Context cookies;
+	protected Context callback;
 	protected Locale loc;
 	private Map<String, String> messages;
 	protected boolean listingDependencies;
@@ -434,6 +435,16 @@ public abstract class AbstractAction implements Pageable, Action {
 	@Override
 	public Output getOutput() {
 		return output;
+	}
+
+	@Override
+	public Context getCallback(){
+		return callback;
+	}
+
+	@Override
+	public void setCallback(Context callback){
+		this.callback = callback;
 	}
 
 	@Override
