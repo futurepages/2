@@ -23,6 +23,15 @@ public class ActionImpl implements Action{
 	public void setChain(InvocationChain chain) {
 	}
 
+	@Override
+	public void setCallback(Context context) {
+	}
+
+	@Override
+	public Context getCallback() {
+		return null;
+	}
+
 	@AsynchronousAction(AsynchronousActionType.DYN)
 	public class ClasseDynAnotada extends ActionImpl{}
 	
