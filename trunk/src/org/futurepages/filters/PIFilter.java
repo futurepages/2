@@ -20,7 +20,6 @@ import org.futurepages.util.The;
  * @author leandro
  * Deprecated Classe. Use {@link PersistenceInjectionFilter}
  */
-@Deprecated
 public class PIFilter implements Filter {
 
 	private Class classToInject;   //classe do objeto a ser injetado
