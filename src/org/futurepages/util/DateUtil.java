@@ -93,7 +93,7 @@ public class DateUtil {
 
 	public static Calendar viewDateToCalendar(String in) {
 			try {
-				DateFormat df =  new SimpleDateFormat("dd/MM/yyyy"); // change
+				DateFormat df =  new SimpleDateFormat("dd/MM/yyyy");
 				df.setLenient(false);
 				df.parse(in);
 				return new GregorianCalendar(Integer.parseInt(in.substring(6)), Integer.parseInt(in.substring(3, 5)) - 1, Integer.parseInt(in.substring(0, 2)));
@@ -295,7 +295,9 @@ public class DateUtil {
 
 	public static Date date(String in) throws ParseException {
 		Date correctDate;
-		correctDate = new SimpleDateFormat("dd/MM/yyyy").parse(in);
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		df.setLenient(false);
+		correctDate = df.parse(in);
 		return correctDate;
 	}
 
