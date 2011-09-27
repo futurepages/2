@@ -87,7 +87,7 @@ public class PIFilter implements Filter {
 		if(targetKey != null){
 			String[] explodedTarget = The.explodedToArray(targetKey, ".");
 			Object targetObject = input.getValue(explodedTarget[0]);
-			if(targetObject != null){
+			if(targetObject != null && obj != null){
 				setField(obj, explodedTarget, targetObject);
 			}else{
 				input.setValue(targetKey, obj);
