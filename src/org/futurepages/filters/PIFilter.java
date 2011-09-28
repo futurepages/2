@@ -23,9 +23,8 @@ import org.futurepages.util.The;
 public class PIFilter implements Filter {
 
 	private Class classToInject;   //classe do objeto a ser injetado
-	private String keyToInject;  //chave do input a ser injetado
-	private String targetKey;   //chave do input do objeto que sofrerá a injeção
-
+	private String targetKey;   //chave do input do objeto alvo - que sofrerá a injeção
+	private String keyToInject;  //chave do input que será injetado no alvo
 	private GenericDao dao;
 
 	public PIFilter(String targetKey, Class classToInject) {
@@ -55,22 +54,22 @@ public class PIFilter implements Filter {
 	@Override
 	public String filter(InvocationChain chain) throws Exception {
 		Input input = chain.getAction().getInput();
-		
-		Serializable obj = null;
-		Object keyFound = input.getValue(keyToInject);
-		if (keyFound!=null) {
+
+		Serializable objectToInject = null;
+		Object keyToInjectFound = input.getValue(keyToInject);
+		boolean keyFound = keyToInjectFound != null;
+		if (keyFound) {
 			Class pkType = this.dao.getIdType(classToInject);
 			if (pkType == StringType.class) {
-				obj = this.dao.get(classToInject, input.getStringValue(keyToInject));
-			} else if(pkType == LongType.class) {
+				objectToInject = this.dao.get(classToInject, input.getStringValue(keyToInject));
+			} else if (pkType == LongType.class) {
 				final long idLong = input.getLongValue(keyToInject);
-				obj = this.dao.get(classToInject, idLong);
-			} else if(pkType == IntegerType.class) {
-				obj = this.dao.get(classToInject, input.getIntValue(keyToInject));
+				objectToInject = this.dao.get(classToInject, idLong);
+			} else if (pkType == IntegerType.class) {
+				objectToInject = this.dao.get(classToInject, input.getIntValue(keyToInject));
 			}
-			
+			inject(input, objectToInject);
 		}
-		inject(input, obj);
 		return chain.invoke();
 	}
 
@@ -80,25 +79,27 @@ public class PIFilter implements Filter {
 	 * <li> se o objeto ainda não existe no input: input.setValue(targetKey, obj)
 	 * 	
 	 * @param input
-	 * @param obj
+	 * @param objToInject
 	 */
-	private void inject(Input input, Serializable obj) {
-		if(targetKey != null){
-			String[] explodedTarget = The.explodedToArray(targetKey, ".");
-			Object targetObject = input.getValue(explodedTarget[0]);
-			if(targetObject != null && obj != null){
-				setField(obj, explodedTarget, targetObject);
-			}else{
-				input.setValue(targetKey, obj);
-			}
+	private void inject(Input input, Serializable objToInject) {
+		String[] explodedTarget = The.explodedToArray(targetKey, ".");
+		Object targetObject = input.getValue(explodedTarget[0]);
+		if (targetObject != null) {
+			setField(objToInject, explodedTarget, targetObject);
+		} else {
+			input.setValue(targetKey, objToInject);
 		}
 	}
 
 	private void setField(Serializable obj, String[] explodedTarget, Object targetObject) {
-		if(explodedTarget.length > 1)
-			for(int i = 1 ; i < explodedTarget.length; i++){
+		if (explodedTarget.length > 1) {
+			for (int i = 1; i < explodedTarget.length; i++) {
 				targetObject = ReflectionUtil.getField(targetObject, explodedTarget[i]);
+				if(targetObject==null){
+					return;
+				}
 			}
+		}
 		ReflectionUtil.setField(targetObject, keyToInject, obj);
 	}
 

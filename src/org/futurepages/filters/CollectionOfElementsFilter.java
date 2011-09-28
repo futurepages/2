@@ -34,31 +34,32 @@ public class CollectionOfElementsFilter implements Filter {
 	@Override
 	public String filter(InvocationChain chain) throws Exception {
 		Input input = chain.getAction().getInput();
-
-		Object inputValue = input.getValue(keyToInject);
-		String toStringValue = input.getValue(keyToInject).toString();
-		String[] array = null;
-		if (inputValue instanceof String) {
-			array = new String[]{toStringValue};
-		} else if (inputValue instanceof String[]) {
-			array = (String[]) inputValue;
-		} else {
-			return null;
-		}
 		Collection col = null;
-		Class beanClass = input.getValue(The.firstTokenOf(beanPath, ".")).getClass();
-		Class targetType = ReflectionUtil.getFieldType(beanClass, keyToInject);
-		if (List.class.isAssignableFrom(targetType)) {
-			col = new ArrayList();
-		} else if (Set.class.isAssignableFrom(targetType)) {
-			col = new LinkedHashSet();
-		} else {
-			col = null;
-		}
-		if (col != null) {
-			for (String element : array) {
-				if (!Is.empty(element)) {
-					col.add(element);
+		Object inputValue = input.getValue(keyToInject);
+		if (inputValue!=null) {
+			String toStringValue = input.getValue(keyToInject).toString();
+			String[] array = null;
+			if (inputValue instanceof String) {
+				array = new String[]{toStringValue};
+			} else if (inputValue instanceof String[]) {
+				array = (String[]) inputValue;
+			} else {
+				return null;
+			}
+			Class beanClass = input.getValue(The.firstTokenOf(beanPath, ".")).getClass();
+			Class targetType = ReflectionUtil.getFieldType(beanClass, keyToInject);
+			if (List.class.isAssignableFrom(targetType)) {
+				col = new ArrayList();
+			} else if (Set.class.isAssignableFrom(targetType)) {
+				col = new LinkedHashSet();
+			} else {
+				col = null;
+			}
+			if (col != null) {
+				for (String element : array) {
+					if (!Is.empty(element)) {
+						col.add(element);
+					}
 				}
 			}
 		}
@@ -76,9 +77,9 @@ public class CollectionOfElementsFilter implements Filter {
 	 * @param objectValue
 	 */
 	private void inject(Input input, Object objectValue) {
-			String[] explodedTarget = The.explodedToArray(beanPath, ".");
-			Object targetObject = input.getValue(explodedTarget[0]);
-			setField(objectValue, explodedTarget, targetObject);
+		String[] explodedTarget = The.explodedToArray(beanPath, ".");
+		Object targetObject = input.getValue(explodedTarget[0]);
+		setField(objectValue, explodedTarget, targetObject);
 	}
 
 	private void setField(Object objectValue, String[] explodedTarget, Object targetObject) {
