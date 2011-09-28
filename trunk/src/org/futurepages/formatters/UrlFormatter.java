@@ -18,6 +18,7 @@ public class UrlFormatter implements Formatter {
 		return false;
 	}
 
+	@Override
 	public String format(Object value, Locale loc) {
 		String url = (String) value;
 
