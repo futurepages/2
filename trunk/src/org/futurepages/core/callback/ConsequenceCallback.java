@@ -22,7 +22,7 @@ public abstract class ConsequenceCallback implements Runnable {
 	}
 
 	protected void handleException(Exception exCause){
-		String message = StringUtils.concat("ConsequenceCallback for "+this.caller,"[",this.actionReturn,"] for data {"+this.actionData.toString()+"} has crashed.");
+		String message = StringUtils.concat("ConsequenceCallback for "+this.caller,"[",this.actionReturn,"] for data "+this.actionData.toString()+" has crashed.");
 		ConsequenceCallbackException ex = new ConsequenceCallbackException(message,exCause);
 		DefaultExceptionLogger.getInstance().execute(ex);
 	}
