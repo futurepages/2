@@ -104,6 +104,22 @@ public class HQLProvider implements HQLable {
 		}
 	}
 
+	public static String notExists(String clause) {
+		if(!Is.empty(clause)) {
+			return NOT_EXISTS + "(" + clause + ")";
+		} else {
+			return "";
+		}
+	}
+
+	public static String notIn(String field, String clause) {
+		if(!Is.empty(field) && !Is.empty(clause)) {
+			return field + NOT_IN + "(" + clause + ")";
+		} else {
+			return "";
+		}
+	}
+
 	public static String where(String whereClause) {
 		if (!Is.empty(whereClause)) {
 			return WHERE + whereClause;
