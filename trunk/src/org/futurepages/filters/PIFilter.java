@@ -68,8 +68,8 @@ public class PIFilter implements Filter {
 			} else if (pkType == IntegerType.class) {
 				objectToInject = this.dao.get(classToInject, input.getIntValue(keyToInject));
 			}
-			inject(input, objectToInject);
 		}
+		inject(input, objectToInject);
 		return chain.invoke();
 	}
 
