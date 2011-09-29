@@ -53,4 +53,9 @@ public class MapContext implements Context {
 	public boolean hasAttribute(String name) {
         return values.containsKey(name);
     }
+
+	@Override
+	public String toString() {
+		return values.toString();
+	}
 }
