@@ -262,6 +262,7 @@ public class Controller extends HttpServlet {
 						ConsequenceCallback cc = f.getCallbackClass().newInstance();
 						cc.setActionData(action.getCallback());
 						cc.setActionReturn(returnedResult.toString());
+						cc.setCaller(ac.getName()+"-"+innerAction);
 						Thread thread = new Thread(cc);
 						thread.start();
 					} catch (Exception ex) {
