@@ -16,23 +16,33 @@ public class Pagination extends PrintTag implements Pageable {
 
 	@TagAttribute(required = true)
 	private String url = null;
+
 	private String cachedUrl;
+
 	@TagAttribute
 	private String params = "";
+
 	@TagAttribute
 	private int maxShowing = 20;
+
 	@TagAttribute
 	private boolean justTop = false;
+
 	@TagAttribute
 	private String target = "";
+
 	@TagAttribute
 	private String cssClass = "pagination";
+
 	@TagAttribute
 	private String nextLabel = "&raquo;";
+
 	@TagAttribute
 	private String previousLabel = "&laquo;";
+
 	@TagAttribute
 	private boolean useImages = false;
+	
 	private static final String NEXT_PAGE = "nextpage";
 	private static final String PREVIOUS_PAGE = "previouspage";
 	private static final String IMAGE_FORMAT = "gif";
@@ -78,6 +88,7 @@ public class Pagination extends PrintTag implements Pageable {
 	}
 
 	public void setUrl(String url) {
+		this.cachedUrl = null;
 		this.url = url;
 	}
 
