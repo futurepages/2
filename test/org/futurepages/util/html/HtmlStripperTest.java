@@ -74,7 +74,7 @@ public class HtmlStripperTest {
 			throws FileNotFoundException, IOException {
 		String expectedContent = FileUtil.getStringContent(root+expectedPath);
 		Assert.assertNotNull("O contéudo do elemento original não pode ser nulo. >"+path,dirtyContent);
-		Assert.assertNotNull("O contéudo do elemento esperado não pode ser nulo. >"+root+expectedPath,expectedContent);
+		Assert.assertNotNull("O contéudo do elemento esperado não pode ser nulo. >"+root+expectedPath, expectedContent);
 		Assert.assertEquals(msg, expectedContent, stripped);
 	}
 	
@@ -98,6 +98,14 @@ public class HtmlStripperTest {
 				"manter tudo (tags e style)");
 	}
 
+	@Test
+	public void testeRichText_textoSemTags() throws FileNotFoundException, IOException{
+															 
+		richTextTestProcedure(false, true, true, true, true, this.getResourcePath()+"/res/noTagsText.html", 
+				"/res/noTagsText.html", 
+				"manter tags mas não manter style");
+	}
+	
 	@Test
 	public void testeRichText_NoStyle() throws FileNotFoundException, IOException{
 		richTextTestProcedure(false, true, true, true, true, "/res/expectedDirtyNoStyle.html", 
