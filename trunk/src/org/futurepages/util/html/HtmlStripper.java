@@ -79,7 +79,7 @@ public class HtmlStripper {
 		Pattern tagsPattern  = getCompiledTagsPattern();
 		IterableString iter = new IterableString(tagsPattern, str);
 
-		String end = "";
+		String end = str;
 		Pattern regexPattern = Pattern.compile(regex);
 		StringBuilder sb     = new StringBuilder();
 		for (MatchedToken token : iter) {
