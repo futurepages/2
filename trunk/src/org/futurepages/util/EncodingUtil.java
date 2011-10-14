@@ -1,13 +1,20 @@
 package org.futurepages.util;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.List;
 import org.futurepages.core.exception.DefaultExceptionLogger;
 
 public class EncodingUtil {
@@ -18,6 +25,30 @@ public class EncodingUtil {
 
 	public static String correctPath(String wrongPath) throws UnsupportedEncodingException {
 		return URLDecoder.decode(wrongPath, EncodingUtil.getSystemEncoding());
+	}
+
+	public static void transform(File source, String srcEncoding, File target, String tgtEncoding) throws IOException {
+		BufferedReader br = null;
+		BufferedWriter bw = null;
+		try {
+			br = new BufferedReader(new InputStreamReader(new FileInputStream(source), srcEncoding));
+			bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(target), tgtEncoding));
+			char[] buffer = new char[16384];
+			int read;
+			while ((read = br.read(buffer)) != -1) {
+				bw.write(buffer, 0, read);
+			}
+		} finally {
+			try {
+				if (br != null) {
+					br.close();
+				}
+			} finally {
+				if (bw != null) {
+					bw.close();
+				}
+			}
+		}
 	}
 
 	public static String convertOutputString(String source, String charset) throws IOException {
@@ -95,5 +126,50 @@ public class EncodingUtil {
 			}
 		}
 		return null;
+	}
+
+	public static void main(String[] args) throws URISyntaxException, Exception {
+		String path = "E:\\Desktop";
+		String pathWEB = path + "\\web";
+		String pathSRC = path + "\\src";
+
+//		migratingISOtoUTF8(pathWEB, ".*\\.jsp");  //NÃO CONVERTER.
+//		migratingISOtoUTF8(pathWEB, ".*\\.tag");  //NÃO CONVERTER.
+		migratingISOtoUTF8(pathWEB, ".*\\.htm");
+		migratingISOtoUTF8(pathWEB, ".*\\.html");
+		migratingISOtoUTF8(pathWEB, ".*\\.js");
+		migratingISOtoUTF8(pathWEB, ".*\\.css");
+		migratingISOtoUTF8(pathWEB, ".*\\.txt");
+		migratingISOtoUTF8(pathWEB, ".*\\.xml");
+		migratingISOtoUTF8(pathWEB, "[^\\.]*"); //epseciais da WEB - VÃO TER QUE SER ALTERADOS DEPOIS MANUALMENTE
+
+
+		migratingISOtoUTF8(pathSRC, ".*\\.txt");
+		migratingISOtoUTF8(pathSRC, ".*\\.properties");
+		migratingISOtoUTF8(pathSRC, ".*\\.java");
+		migratingISOtoUTF8(pathSRC, ".*\\.htm"); //alguns precisarão ser verificados no Olho
+		migratingISOtoUTF8(pathSRC, ".*\\.html");  //alguns precisarão ser verificados no Olho
+		migratingISOtoUTF8(pathSRC, "[^\\.]*"); //epseciais da WEB - VÃO TER QUE SER ALTERADOS DEPOIS MANUALMENTE
+// aqui corresponde a estes a seguir:
+//		migratingISOtoUTF8(pathSRC, "uselessTags");
+//		migratingISOtoUTF8(pathSRC, "[1|2|3|4|5|6|7|8|9]");
+//		migratingISOtoUTF8(pathSRC, "link");
+//		migratingISOtoUTF8(pathSRC, "textohtml");
+//		migratingISOtoUTF8(pathSRC, "palavrasReservadas");
+//		migratingISOtoUTF8(pathSRC, ".*\\.sql");
+	}
+
+	public static void migratingISOtoUTF8(String path, String patternRegex) throws IOException {
+		System.out.println("");
+		System.out.println("================== " + patternRegex + " =========================");
+		List<File> files = FileUtil.listFilesFromDirectory(new File(path), true, patternRegex);
+		for (File file : files) {
+			if (!file.isDirectory()&&!file.getAbsolutePath().contains("\\.svn\\")) {
+				File tempFile = File.createTempFile("88591", ".tmp");
+				EncodingUtil.transform(file, "ISO-8859-1", tempFile, "UTF-8");
+				FileUtil.copy(tempFile.getAbsolutePath(), file.getAbsolutePath());
+				System.out.println(file.getAbsolutePath());
+			}
+		}
 	}
 }
