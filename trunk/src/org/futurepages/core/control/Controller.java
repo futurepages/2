@@ -179,13 +179,18 @@ public class Controller extends HttpServlet {
 		if (appManager == null) {
 			throw new ServletException("The Application manager is not loaded");
 		}
-		res.setCharacterEncoding(Params.get("PAGE_ENCODING"));
+		String charset = Params.get("PAGE_ENCODING");
+		req.setCharacterEncoding(charset);
+		res.setCharacterEncoding(charset);
 
 		appManager.service(appContext, req, res);
 
 		String prettyActionUri = (withPrettyURL ? getActionPlusInnerAction(req) : null);
 		String actionName = getActionName(req, prettyActionUri);
 		String innerAction = getInnerActionName(req, prettyActionUri);
+
+		// Para exibir a url requisitada que chegou ao Controller.
+//		System.out.println(">> "+req.getRequestURL().append((req.getQueryString()!=null?"?"+req.getQueryString():""))); //for DEBUG-MODE
 
 		ActionConfig ac = null;
 
