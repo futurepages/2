@@ -64,7 +64,7 @@ public class EncodingUtil {
 		int CHAR_BUFFER_SIZE = 8096;
 		ByteArrayInputStream bais = new ByteArrayInputStream(input.getBytes());
 		InputStreamReader in = new InputStreamReader(bais, charset);
-		StringBuffer output = new StringBuffer();
+		StringBuilder output = new StringBuilder();
 		char buff[] = new char[CHAR_BUFFER_SIZE];
 		int count = 0;
 		while ((count = in.read(buff, 0, CHAR_BUFFER_SIZE)) > 0) {
@@ -128,35 +128,30 @@ public class EncodingUtil {
 		return null;
 	}
 
+	//Migração de projeto de ISO para UTF-8
 	public static void main(String[] args) throws URISyntaxException, Exception {
-		String path = "E:\\Desktop";
+		String path = "C:\\Users\\leandro\\Documents\\Workspaces\\netbeans\\placitum";
 		String pathWEB = path + "\\web";
 		String pathSRC = path + "\\src";
+		String pathTEST = path + "\\test";
 
-//		migratingISOtoUTF8(pathWEB, ".*\\.jsp");  //NÃO CONVERTER.
-//		migratingISOtoUTF8(pathWEB, ".*\\.tag");  //NÃO CONVERTER.
 		migratingISOtoUTF8(pathWEB, ".*\\.htm");
 		migratingISOtoUTF8(pathWEB, ".*\\.html");
 		migratingISOtoUTF8(pathWEB, ".*\\.js");
 		migratingISOtoUTF8(pathWEB, ".*\\.css");
 		migratingISOtoUTF8(pathWEB, ".*\\.txt");
 		migratingISOtoUTF8(pathWEB, ".*\\.xml");
-		migratingISOtoUTF8(pathWEB, "[^\\.]*"); //epseciais da WEB - VÃO TER QUE SER ALTERADOS DEPOIS MANUALMENTE
+		migratingISOtoUTF8(pathWEB, "[^\\.]*");
 
 
 		migratingISOtoUTF8(pathSRC, ".*\\.txt");
 		migratingISOtoUTF8(pathSRC, ".*\\.properties");
 		migratingISOtoUTF8(pathSRC, ".*\\.java");
-		migratingISOtoUTF8(pathSRC, ".*\\.htm"); //alguns precisarão ser verificados no Olho
-		migratingISOtoUTF8(pathSRC, ".*\\.html");  //alguns precisarão ser verificados no Olho
-		migratingISOtoUTF8(pathSRC, "[^\\.]*"); //epseciais da WEB - VÃO TER QUE SER ALTERADOS DEPOIS MANUALMENTE
-// aqui corresponde a estes a seguir:
-//		migratingISOtoUTF8(pathSRC, "uselessTags");
-//		migratingISOtoUTF8(pathSRC, "[1|2|3|4|5|6|7|8|9]");
-//		migratingISOtoUTF8(pathSRC, "link");
-//		migratingISOtoUTF8(pathSRC, "textohtml");
-//		migratingISOtoUTF8(pathSRC, "palavrasReservadas");
-//		migratingISOtoUTF8(pathSRC, ".*\\.sql");
+		migratingISOtoUTF8(pathSRC, ".*\\.htm");
+		migratingISOtoUTF8(pathSRC, ".*\\.html"); 
+		migratingISOtoUTF8(pathSRC, "[^\\.]*");
+		
+		migratingISOtoUTF8(pathTEST, ".*\\.java");
 	}
 
 	public static void migratingISOtoUTF8(String path, String patternRegex) throws IOException {
