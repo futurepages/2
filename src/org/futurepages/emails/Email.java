@@ -91,6 +91,8 @@ public abstract class Email {
     public static final String KOI8_R = "koi8-r";
 
     public static final String ISO_8859_1 = "iso-8859-1";
+	
+    public static final String UTF_8 = "utf-8";
 
     public static final String US_ASCII = "us-ascii";
 
