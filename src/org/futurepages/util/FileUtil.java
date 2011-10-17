@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.futurepages.core.exception.DefaultExceptionLogger;
@@ -368,7 +370,7 @@ public class FileUtil {
 		String line = null;
 		try {
 			while ((line = reader.readLine()) != null) {
-				sb.append(line + "\n");
+				sb.append(line).append("\n");
 			}
 		} catch (IOException e) {
 			DefaultExceptionLogger.getInstance().execute(e);
@@ -408,15 +410,22 @@ public class FileUtil {
     }
 
 	class PatternFileParser extends FileParser<File>{
-		private String pattern;
-		public PatternFileParser(String pattern) {
-			this.pattern = pattern;
+		private Pattern pattern = null;
+
+
+		public PatternFileParser(String patternRegex) {
+			if(!Is.empty(patternRegex) ){
+				this.pattern = Pattern.compile(patternRegex);
+			}
 		}
 
 		@Override
 		File parse(File file){
-			if((pattern == null) || (pattern.equals("")) || (file.getName().matches(pattern))){
-				return file;
+			if(this.pattern!=null){
+				Matcher m = pattern.matcher(file.getName());
+				if(m.matches()){
+					return file;
+				}
 			}
 			return null;
 		}
