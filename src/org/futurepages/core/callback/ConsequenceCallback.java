@@ -2,6 +2,7 @@ package org.futurepages.core.callback;
 
 import org.futurepages.core.context.Context;
 import org.futurepages.core.exception.DefaultExceptionLogger;
+import org.futurepages.core.persistence.HibernateManager;
 import org.futurepages.util.StringUtils;
 
 public abstract class ConsequenceCallback implements Runnable {
@@ -33,5 +34,13 @@ public abstract class ConsequenceCallback implements Runnable {
 			super(message, exCause);
 		}
 	}
+
+	@Override
+	public final void run() {
+		doRun();
+		HibernateManager.closeSessions();
+	}
+	
+	public abstract void doRun();
 }
 
