@@ -164,7 +164,7 @@ public class HibernateManager {
 		return genericDaos.get(DEFAULT);
 	}
 
-	static void closeSessions() {
+	public static void closeSessions() {
 		for(String schemaId : configurations.keySet()){
 			ThreadLocal<Session> sessionTL =  getSessionTL(schemaId);
 			Session session =sessionTL.get();
