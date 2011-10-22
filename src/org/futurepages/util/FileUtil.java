@@ -92,7 +92,7 @@ public class FileUtil {
 	private static String replaceAll(Map<String, String> map, InputStream source, boolean regexKey) throws IOException {
 		try {
 			if (source == null) {
-				throw new Exception(new FileNotFoundException("File doesn´t exist."));
+				throw new Exception(new FileNotFoundException("File doesnï¿½t exist."));
 			}
 			byte[] content = new byte[source.available()];
 			source.read(content);
@@ -116,7 +116,7 @@ public class FileUtil {
 	}
 
 	/**
-	 * Puts the given items into the given key´s place by replacing it.
+	 * Puts the given items into the given keyï¿½s place by replacing it.
 	 * @param items
 	 * @param key
 	 * @param fileUrl
@@ -131,7 +131,7 @@ public class FileUtil {
 	}
 
 	/**
-	 * Puts the given items into the given key´s place by replacing it.
+	 * Puts the given items into the given keyï¿½s place by replacing it.
 	 * @param key
 	 * @param value
 	 * @param sourceUrl
@@ -224,7 +224,7 @@ public class FileUtil {
 		// Move file to new directory
 		boolean success = file.renameTo(new File(dir, file.getName()));
 		if (!success) {
-			throw new Exception("Não foi possível renomear/mover arquivo.");
+			throw new Exception("Nï¿½o foi possï¿½vel renomear/mover arquivo.");
 		}
 	}
 
@@ -435,7 +435,7 @@ public class FileUtil {
 	 * @return all the files from the directory 'directory'
 	 */
 	public static ArrayList<File> listFilesFromDirectory(File directory, boolean recursive) {
-		return new ArrayList<File>(new FileUtil().filesFromDirectory(directory, recursive, ""));
+		return new ArrayList<File>(FileUtil.getInstance().filesFromDirectory(directory, recursive, ""));
 	}
 
 	/**
@@ -446,7 +446,7 @@ public class FileUtil {
 	}
 
 	public static ArrayList<File> listFilesFromDirectory(File directory, boolean recursive, String pattern) {
-		final Collection<File> collection = new FileUtil().filesFromDirectory(directory, recursive, pattern);
+		final Collection<File> collection = FileUtil.getInstance().filesFromDirectory(directory, recursive, pattern);
 		return new ArrayList<File>(collection);
 	}
 
