@@ -118,6 +118,14 @@ public abstract class AbstractAction implements Pageable, Action {
 		return getPaginator().paginateList(pageSize, entityClass, where, order);
 	}
 
+	/**
+	 * Atenção: Este método é legado do Futurepages 1 e aparentemente não está funcionando corretamente
+	 * na contagem dos itens para paginação.
+	 * 
+	 * Utilize Dao.reportPage() or Dao.listReports()
+	 * 
+	 * @deprecated
+	 */
 	@Deprecated
 	public List paginateReport(int pageSize, Class entityClass, String fields, String where, String group, String order, Class resultClass) {
 		return getPaginator().paginateReport(pageSize, entityClass, resultClass,fields, where, group, order);
