@@ -7,9 +7,9 @@ import java.util.HashMap;
  */
 public class HtmlMapChars {
 
-    private static HashMap<String, String> simpleTable    = new HashMap<String, String>();
-    private static HashMap<String, String> completeTable  = new HashMap<String, String>();
-    private static HashMap<Character, String> textareaTable  = new HashMap<Character, String>();
+    private static final HashMap<String, String> simpleTable    = new HashMap<String, String>();
+    private static final HashMap<String, String> completeTable  = new HashMap<String, String>();
+    private static final HashMap<Character, String> textareaTable  = new HashMap<Character, String>();
 
     static
     {
@@ -115,7 +115,7 @@ public class HtmlMapChars {
     public static String htmlSimpleValue(String strIn){
         if(strIn == null) return "&nbsp;";
 
-		StringBuffer outBuffer = new StringBuffer();
+		StringBuilder outBuffer = new StringBuilder();
         for(int i = 0; i < strIn.length();i++){
             String htmlValue = getSimple(strIn.charAt(i));
             if(htmlValue != null){
@@ -137,7 +137,7 @@ public class HtmlMapChars {
     public static String htmlValue(String strIn){
         if(strIn == null) return "&nbsp;";
 
-        StringBuffer outBuffer = new StringBuffer();
+        StringBuilder outBuffer = new StringBuilder();
         for(int i = 0; i < strIn.length();i++){
             String htmlValue = getComplete(strIn.charAt(i));
             if(htmlValue != null){
@@ -159,7 +159,7 @@ public class HtmlMapChars {
 
         char[] strInChars = strIn.toCharArray();
 
-        StringBuffer outBuffer = new StringBuffer();
+        StringBuilder outBuffer = new StringBuilder();
         for(char c : strInChars){
             if(getTextArea(c)==null)
                 outBuffer.append(c);
