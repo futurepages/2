@@ -3,6 +3,7 @@ package org.futurepages.util;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -14,6 +15,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -55,6 +57,39 @@ public class FileUtil {
 		fr.close();
 		return new String(buffer);
 	}
+
+    public static byte[] getBytesFromUrl(String url, StringBuilder sbContentType, Long maxAllowed)  throws IOException {
+		ByteArrayOutputStream bais = new ByteArrayOutputStream();
+		InputStream is = null;
+		URL theURL = new URL(url.replace(" ","%20").replace("+","%20"));
+        URLConnection c =  theURL.openConnection();
+		try {
+		  if(sbContentType!=null){
+			sbContentType.append(c.getContentType());
+		  }
+		  if(maxAllowed!=null){
+			if(maxAllowed.longValue() < Long.parseLong(c.getHeaderField("Content-Length"))){
+				return null;
+			}
+		  }
+	      is = c.getInputStream();
+		  byte[] byteChunk = new byte[4096];
+		  int n;
+		  while ( (n = is.read(byteChunk)) > 0 ) {
+			bais.write(byteChunk, 0, n);
+		  }
+		  return bais.toByteArray();
+		}
+		catch (IOException e) {
+		  throw e;
+		}
+		finally {
+		  if (is != null) {
+			  bais.close();
+			  is.close();
+		  }
+		}
+    }
 
 	public static String getStringContent(Class cls, String path) throws FileNotFoundException, IOException {
 		return getStringContent(classRealPath(cls)+path);

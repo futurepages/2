@@ -14,11 +14,16 @@ import javax.swing.ImageIcon;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGEncodeParam;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
+import com.sun.media.jai.codec.ByteArraySeekableStream;
 import com.sun.media.jai.codec.FileSeekableStream;
 import com.sun.media.jai.codec.SeekableStream;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.renderable.ParameterBlock;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import javax.media.jai.JAI;
 
 /**
@@ -29,6 +34,13 @@ public class JPEGUtil2 {
 	
 	public static BufferedImage getBufferedImage(File file) throws IOException {
 		SeekableStream seekableStream =  new FileSeekableStream(file);
+		ParameterBlock pb = new ParameterBlock();
+		pb.add(seekableStream);
+		return JAI.create("jpeg", pb).getAsBufferedImage();
+	}
+
+	public static BufferedImage getBufferedImage(byte[] bytes) throws IOException {
+		SeekableStream seekableStream =  new ByteArraySeekableStream(bytes);
 		ParameterBlock pb = new ParameterBlock();
 		pb.add(seekableStream);
 		return JAI.create("jpeg", pb).getAsBufferedImage();
@@ -135,6 +147,39 @@ public class JPEGUtil2 {
 		resizeByWidth(byWidth, image, width, quality, pathNewFile, poorWhenSmaller);
 		image.flush();
 	}
+
+	public static void resizeImageByOneDimension(boolean byWidth, byte[] bytesOfImageFile, int width, int quality, String pathNewFile, boolean poorWhenSmaller) throws MalformedURLException, FileNotFoundException, IOException {
+
+		BufferedImage image  = getBufferedImage(bytesOfImageFile);
+
+		resizeByWidth(byWidth, image, width, quality, pathNewFile, poorWhenSmaller);
+		image.flush();
+	}
+
+    public static byte[] getBytesFromUrl(String url)  throws IOException {
+		ByteArrayOutputStream bais = new ByteArrayOutputStream();
+		InputStream is = null;
+		URL theURL = new URL(url);
+        URLConnection c =  theURL.openConnection();
+		try {
+	      is = c.getInputStream();
+		  byte[] byteChunk = new byte[4096];
+		  int n;
+		  while ( (n = is.read(byteChunk)) > 0 ) {
+			bais.write(byteChunk, 0, n);
+		  }
+		  return bais.toByteArray();
+		}
+		catch (IOException e) {
+		  throw e;
+		}
+		finally {
+		  if (is != null) {
+			  bais.close();
+			  is.close();
+		  }
+		}
+    }
 
 	/**
 	 * Redimensiona imagens (criar thubmnails) - prioriza a largura
