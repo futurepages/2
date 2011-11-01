@@ -180,7 +180,9 @@ public class Controller extends HttpServlet {
 			throw new ServletException("The Application manager is not loaded");
 		}
 		String charset = Params.get("PAGE_ENCODING");
-		req.setCharacterEncoding(charset);
+		if(charset.equals("UTF-8")){
+			req.setCharacterEncoding(charset);
+		}
 		res.setCharacterEncoding(charset);
 
 		appManager.service(appContext, req, res);
