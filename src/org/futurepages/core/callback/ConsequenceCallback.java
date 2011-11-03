@@ -2,6 +2,7 @@ package org.futurepages.core.callback;
 
 import org.futurepages.core.context.Context;
 import org.futurepages.core.exception.DefaultExceptionLogger;
+import org.futurepages.core.persistence.Dao;
 import org.futurepages.core.persistence.HibernateManager;
 import org.futurepages.util.StringUtils;
 
@@ -37,8 +38,18 @@ public abstract class ConsequenceCallback implements Runnable {
 
 	@Override
 	public final void run() {
-		doRun();
-		HibernateManager.closeSessions();
+		try {
+			Thread.sleep(10000); //para dar o tempo necessário para que a ação seja efetivada no banco de dados.
+			doRun();
+		} catch (InterruptedException ex) {
+			handleException(ex);
+			if (Dao.isTransactionActive()) {
+				Dao.rollBackTransaction();
+			}
+		} finally {
+			Dao.close();
+			HibernateManager.closeSessions();
+		}
 	}
 	
 	public abstract void doRun();
