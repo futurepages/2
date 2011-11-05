@@ -394,8 +394,8 @@ public final class ReflectionUtil {
 	 * Um objeto 'child' recebe todos os valores herdados de seu pai 'parent'.
 	 * Os campos não herdados continuam com o valor nulo.
 	 *
-	 * @param parent é o pai de onde os campos serão herdados.
-	 * @param child é quem herdará os campos.
+	 * @param fromObj é o pai de onde os campos serão herdados.
+	 * @param toObj é quem herdará os campos.
 	 */
 	public static void setWithSuperFields(Object parent, Object child) {
 		Class clss = child.getClass();
@@ -410,6 +410,22 @@ public final class ReflectionUtil {
 					DefaultExceptionLogger.getInstance().execute(ex);
 				}
 			}
+		}
+	}
+
+	public static void cloneFields(Object fromObj, Object toObj) {
+		Class clss = toObj.getClass();
+		while (clss != null) {
+			Field[] fields = clss.getDeclaredFields();
+			for (Field field : fields) {
+				try {
+					field.setAccessible(true);
+					field.set(toObj, ReflectionUtil.getField(fromObj, field.getName()));
+				} catch (Exception ex) {
+					DefaultExceptionLogger.getInstance().execute(ex);
+				}
+			}
+			clss = clss.getSuperclass();
 		}
 	}
 
