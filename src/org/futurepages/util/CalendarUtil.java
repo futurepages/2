@@ -66,6 +66,7 @@ public class CalendarUtil {
 	}
 
 	/** 1 day == 86.400.000 miliseconds; //(24 * 60 * 60 * 1000)  */
+	//CUIDADO, E UM ARREDONDAMENTO. SE POSSUIR 1,2 dia CONTARÁ COMO 1 e 1,6 dia contará como 2.
 	public static int getDifferenceInDays(Calendar start, Calendar end) {
 		int milliseconds = 86400000;
 		return getDifference(start, end, milliseconds);
@@ -120,6 +121,10 @@ public class CalendarUtil {
 		Calendar novaData = CalendarUtil.buildCalendar(dataInicial);
 		novaData.add(field, addValue);
 		return novaData;
+	}
+
+	public static Calendar buildDate(Calendar calendar) {
+		return new GregorianCalendar(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
 	}
 
 	public static Calendar buildCalendar(int year, int month, int day) {
@@ -516,6 +521,13 @@ public class CalendarUtil {
 		Calendar calFim = new GregorianCalendar(mYearFim.getYear(),mYearFim.getMonth()-1,1);
 		return 	CalendarUtil.getDifferenceInMonths(calIni, calFim);
 
+	}
+
+	/**
+	 * Se são dias vizinhos, retorna true
+	 */
+	public static boolean isNeighborDays(Calendar cal1, Calendar cal2) {
+				return CalendarUtil.getDifferenceInDays(CalendarUtil.buildDate(cal1),CalendarUtil.buildDate(cal2))==1;
 	}
 
 	public static class TooBigDateException extends Exception {
