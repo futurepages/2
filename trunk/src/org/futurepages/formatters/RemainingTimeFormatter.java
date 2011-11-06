@@ -8,6 +8,7 @@ import org.futurepages.util.CalendarUtil;
 import org.futurepages.util.DateUtil;
 import org.futurepages.core.formatter.Formatter;
 
+//TODO - falta contemplar o "amanhã"
 public class RemainingTimeFormatter implements Formatter<Calendar> {
 
 	@Override
