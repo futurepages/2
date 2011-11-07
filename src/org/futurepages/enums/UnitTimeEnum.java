@@ -84,9 +84,9 @@ public enum UnitTimeEnum implements Serializable {
 		return null;
 	}
 
-	public String apropriateUnitDescription(int valor) {
+	public String apropriateUnitDescription(int valor, boolean noAbbrs) {
 		String unitName;
-		if(this.getOrder()<3){
+		if(this.getOrder()<3 || noAbbrs){
 			if(valor>1){
 				unitName = this.getPluralName();
 			}else{
