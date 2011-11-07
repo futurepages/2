@@ -399,7 +399,7 @@ public class CalendarUtil {
 	 *
 	 * @param start
 	 * @param end
-	 * @return array int[ano,mes,dia, minuto, segundo]
+	 * @return array int[ano,mes,dia,minuto,segundo]
 	 */
 	public static int[] getElapsedTime(Calendar startI, Calendar endI) {
 
@@ -556,8 +556,8 @@ public class CalendarUtil {
 	 * @return Expressão do tipo "1 ano 2 meses"
 	 * @throws TooBigDateException
 	 */
-	public static String getElapsedTimeStatement(int[] time, UnitTimeEnum unitLimit, int limitValue, boolean mostrarSegundoValor) throws TooBigDateException {
-		String tempo = "menos de 1 minuto";
+	public static String getElapsedTimeStatement(int[] time, UnitTimeEnum unitLimit, int limitValue, boolean withAbrrs) throws TooBigDateException {
+		String tempo = withAbrrs? "menos de 1 minuto": "1 minuto";
 
 		for (int i = 0; i < time.length; i++) {
 			int valor = time[i];
@@ -571,14 +571,14 @@ public class CalendarUtil {
 				}
 				UnitTimeEnum unit = UnitTimeEnum.getByOrder(i);
 				if (unit != null) {
-					String primUnitName = unit.apropriateUnitDescription(valor);
+					String primUnitName = unit.apropriateUnitDescription(valor,!withAbrrs);
 					String separador = " ";
-					if (unit.getOrder() > 2) {
+					if (unit.getOrder() > 2 && withAbrrs) {
 						separador = "";
 					}
 					tempo = valor + separador + primUnitName;
-					if (mostrarSegundoValor) {
-						tempo = adicionarProximoValor(time, tempo, i);
+					if (withAbrrs) {
+						tempo = adicionarProximoValor(time, tempo, i, withAbrrs);
 					}
 					break;
 				} else {
@@ -593,14 +593,14 @@ public class CalendarUtil {
 		return tempo;
 	}
 
-	private static String adicionarProximoValor(int[] time, String tempo, int i) {
+	private static String adicionarProximoValor(int[] time, String tempo, int i, boolean withAbbrs) {
 		UnitTimeEnum unit;
 		if (i < time.length - 1) {
 			i++;
 			int valor = time[i];
 			if (valor > 0) {
 				unit = UnitTimeEnum.getByOrder(i);
-				String segUnitName = unit.apropriateUnitDescription(valor);
+				String segUnitName = unit.apropriateUnitDescription(valor, !withAbbrs);
 				String separador2 = " ";
 				if (unit.getOrder() > 2) {
 					separador2 = "";
