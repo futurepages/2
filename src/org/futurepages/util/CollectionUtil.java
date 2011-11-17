@@ -74,4 +74,13 @@ public class CollectionUtil {
 		}
 		throw new EmptyCollectionException();
 	}
+	
+	 public static boolean empty(Collection colecao) {
+        if (colecao == null) {
+            return true;
+        } else if (colecao.size()<=0) {
+            return true;
+        }
+        return false;
+    }
 }
