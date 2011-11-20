@@ -307,6 +307,59 @@ public class CalendarUtilTest {
 		Calendar c1 = Calendar.getInstance();
 		getDifferenceInDays_testProcedure(c1, c1, 0, "Erro quando as duas datas são iguais");
 	}
+
+	@Test
+	public void testIsCalendarDateEquals(){
+		Calendar c1 = DateUtil.dbDateTimeToCalendar("2011-11-03 00:06:00");
+		Calendar c2 = DateUtil.dbDateTimeToCalendar("2011-11-03 07:06:00");
+		Calendar c3 = DateUtil.dbDateTimeToCalendar("2011-11-03 11:59:00");
+
+		Calendar c3_ = DateUtil.dbDateTimeToCalendar("2012-11-03 20:59:00");
+		Calendar c4 = DateUtil.dbDateTimeToCalendar("2011-11-13 01:59:00");
+		Calendar c5 = DateUtil.dbDateTimeToCalendar("2011-12-03 18:59:00");
+
+		Assert.assertTrue(CalendarUtil.isCalendarDateEquals(c1, c1));
+		Assert.assertTrue(CalendarUtil.isCalendarDateEquals(c1, c2));
+		Assert.assertTrue(CalendarUtil.isCalendarDateEquals(c2, c1));
+		Assert.assertTrue(CalendarUtil.isCalendarDateEquals(c2, c2));
+		Assert.assertTrue(CalendarUtil.isCalendarDateEquals(c1, c3));
+		Assert.assertTrue(CalendarUtil.isCalendarDateEquals(c3, c1));
+		Assert.assertTrue(CalendarUtil.isCalendarDateEquals(c3, c3));
+
+		Assert.assertFalse(CalendarUtil.isCalendarDateEquals(c3, c3_));
+		Assert.assertFalse(CalendarUtil.isCalendarDateEquals(c3_, c3));
+		Assert.assertFalse(CalendarUtil.isCalendarDateEquals(c1, c4));
+		Assert.assertFalse(CalendarUtil.isCalendarDateEquals(c4, c1));
+		Assert.assertFalse(CalendarUtil.isCalendarDateEquals(c1, c5));
+	}
+
+	@Test
+	public void testIsNeighborDays(){
+		Calendar c1 = DateUtil.dbDateTimeToCalendar("2011-11-03 00:06:00");
+		Calendar c2 = DateUtil.dbDateTimeToCalendar("2011-11-04 07:06:00");
+		Calendar c3 = DateUtil.dbDateTimeToCalendar("2011-11-05 11:59:00");
+		Calendar c4 = DateUtil.dbDateTimeToCalendar("2011-11-06 20:59:00");
+		Calendar c5 = DateUtil.dbDateTimeToCalendar("2011-11-07 01:59:00");
+		Calendar c6 = DateUtil.dbDateTimeToCalendar("2011-11-08 18:59:00");
+		Calendar c7 = DateUtil.dbDateTimeToCalendar("2012-11-09 18:59:00");
+		Calendar c8 = DateUtil.dbDateTimeToCalendar("2012-10-08 00:06:00");
+		Assert.assertFalse(CalendarUtil.isNeighborDays(c1, c1));
+		Assert.assertTrue(CalendarUtil.isNeighborDays(c1, c2));
+		Assert.assertFalse(CalendarUtil.isNeighborDays(c1, c3));
+		Assert.assertFalse(CalendarUtil.isNeighborDays(c1, c4));
+		Assert.assertFalse(CalendarUtil.isNeighborDays(c1, c5));
+		Assert.assertFalse(CalendarUtil.isNeighborDays(c1, c6));
+		Assert.assertFalse(CalendarUtil.isNeighborDays(c1, c7));
+		Assert.assertFalse(CalendarUtil.isNeighborDays(c1, c8));
+		Assert.assertFalse(CalendarUtil.isNeighborDays(c1, c1));
+
+		Assert.assertTrue(CalendarUtil.isNeighborDays(c2, c3));
+		Assert.assertTrue(CalendarUtil.isNeighborDays(c3, c4));
+		Assert.assertTrue(CalendarUtil.isNeighborDays(c4, c5));
+		Assert.assertTrue(CalendarUtil.isNeighborDays(c5, c6));
+		Assert.assertFalse(CalendarUtil.isNeighborDays(c6, c7));
+		Assert.assertFalse(CalendarUtil.isNeighborDays(c7, c8));
+	}
 	
 	@Test
 	public void testGetDifferenceInDays_segundaDataMaior_DiferencaPequena(){
