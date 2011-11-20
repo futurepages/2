@@ -10,7 +10,7 @@ import org.futurepages.util.iterator.months.MonthYear;
 
 public class CalendarUtil {
 
-    private static final long millisecondsDayFactor = 86400000L;
+	private static final long millisecondsDayFactor = 86400000L;
 
 	/**
 	 * Retorna o iésimo dia do ano da data informada.
@@ -99,7 +99,7 @@ public class CalendarUtil {
 		return getDifference(m1, m2, millisecondsFactor);
 	}
 
-    public static int getDifferenceInDays(long m1, long m2) {
+	public static int getDifferenceInDays(long m1, long m2) {
 		return getDifference(m1, m2, millisecondsDayFactor);
 	}
 
@@ -116,7 +116,7 @@ public class CalendarUtil {
 		dataInicial.add(field, addValue);
 		return dataInicial;
 	}
-	
+
 	public static Calendar buildCalendar(int field, int addValue, Calendar dataInicial) {
 		Calendar novaData = CalendarUtil.buildCalendar(dataInicial);
 		novaData.add(field, addValue);
@@ -464,33 +464,22 @@ public class CalendarUtil {
 
 	public static String getElapsedTimeUntilNowStatement(Calendar start, UnitTimeEnum unitLimit, int limitValue,
 			String commonPrefix, String exceptionPrefix) {
-		return getElapsedTimeUntilNowStatement(start, Calendar.getInstance(), unitLimit, limitValue, commonPrefix, exceptionPrefix);
+		return getElapsedTimeUntilNowStatementPriv(start, Calendar.getInstance(), unitLimit, limitValue, commonPrefix, exceptionPrefix);
 	}
 
-	public static String getElapsedTimeUntilNowStatement(Calendar start, Calendar end, UnitTimeEnum unitLimit, int limitValue,
+	private static String getElapsedTimeUntilNowStatementPriv(Calendar start, Calendar end, UnitTimeEnum unitLimit, int limitValue,
 			String commonPrefix, String exceptionPrefix) {
 		return getElapsedTimeUntilNowStatement(start, end, unitLimit, limitValue, commonPrefix, exceptionPrefix, true);
 	}
 
 	public static String getElapsedTimeUntilNowStatement(Calendar start, Calendar end, UnitTimeEnum unitLimit, int limitValue,
 			String commonPrefix, String exceptionPrefix, boolean mostrarSegundoValor) {
+			return getDifferenceToNowStatement(start, end, unitLimit, limitValue, commonPrefix, exceptionPrefix, mostrarSegundoValor, false);
+	}
 
-		String prefix;
-		String exp;
-		try {
-			int[] time = getElapsedTime(start, end);
-			exp = getElapsedTimeStatement(time, unitLimit, limitValue, mostrarSegundoValor);
-			prefix = commonPrefix;
-
-		} catch (TooBigDateException e) {
-			prefix = exceptionPrefix;
-			exp = DateUtil.viewDateTime(start);
-		}
-
-		if (!Is.empty(prefix)) {
-			return prefix + exp;
-		}
-		return exp;
+	public static String getRemainingTimeFromNowStatement(Calendar start, Calendar end, UnitTimeEnum unitLimit, int limitValue,
+			String commonPrefix, String exceptionPrefix, boolean mostrarSegundoValor) {
+			return getDifferenceToNowStatement(start, end, unitLimit, limitValue, commonPrefix, exceptionPrefix, mostrarSegundoValor, true);
 	}
 
 	/**
@@ -513,13 +502,13 @@ public class CalendarUtil {
 
 	public static int getDifferenceInMonths(Calendar date1, Calendar date2) {
 		int[] elapsed = getElapsedTime(date1, date2);
-		return (12*elapsed[0] + elapsed[1] + ( (elapsed[2]>0 || elapsed[3]>0 || elapsed[4]>0) ? 1 : 0) );
+		return (12 * elapsed[0] + elapsed[1] + ((elapsed[2] > 0 || elapsed[3] > 0 || elapsed[4] > 0) ? 1 : 0));
 	}
 
 	public static int getDifferenceInMonths(MonthYear mYearIni, MonthYear mYearFim) {
-		Calendar calIni = new GregorianCalendar(mYearIni.getYear(),mYearIni.getMonth()-1 , 1);
-		Calendar calFim = new GregorianCalendar(mYearFim.getYear(),mYearFim.getMonth()-1,1);
-		return 	CalendarUtil.getDifferenceInMonths(calIni, calFim);
+		Calendar calIni = new GregorianCalendar(mYearIni.getYear(), mYearIni.getMonth() - 1, 1);
+		Calendar calFim = new GregorianCalendar(mYearFim.getYear(), mYearFim.getMonth() - 1, 1);
+		return CalendarUtil.getDifferenceInMonths(calIni, calFim);
 
 	}
 
@@ -527,7 +516,29 @@ public class CalendarUtil {
 	 * Se são dias vizinhos, retorna true
 	 */
 	public static boolean isNeighborDays(Calendar cal1, Calendar cal2) {
-				return CalendarUtil.getDifferenceInDays(CalendarUtil.buildDate(cal1),CalendarUtil.buildDate(cal2))==1;
+		return CalendarUtil.getDifferenceInDays(CalendarUtil.buildDate(cal1), CalendarUtil.buildDate(cal2)) == 1;
+	}
+
+
+	public static String getDifferenceToNowStatement(Calendar start, Calendar end, UnitTimeEnum unitLimit, int limitValue,
+			String commonPrefix, String exceptionPrefix, boolean mostrarSegundoValor, boolean nowFirst) {
+
+		String prefix;
+		String exp;
+		try {
+			int[] time = getElapsedTime(start, end);
+			exp = getElapsedTimeStatement(time, unitLimit, limitValue, mostrarSegundoValor);
+			prefix = commonPrefix;
+
+		} catch (TooBigDateException e) {
+			prefix = exceptionPrefix;
+			exp = DateUtil.viewDateTime((nowFirst? end : start));
+		}
+
+		if (!Is.empty(prefix)) {
+			return prefix + exp;
+		}
+		return exp;
 	}
 
 	public static class TooBigDateException extends Exception {
@@ -557,7 +568,7 @@ public class CalendarUtil {
 	 * @throws TooBigDateException
 	 */
 	public static String getElapsedTimeStatement(int[] time, UnitTimeEnum unitLimit, int limitValue, boolean withAbrrs) throws TooBigDateException {
-		String tempo = withAbrrs? "menos de 1 minuto": "1 minuto";
+		String tempo = withAbrrs ? "menos de 1 minuto" : "1 minuto";
 
 		for (int i = 0; i < time.length; i++) {
 			int valor = time[i];
@@ -571,7 +582,7 @@ public class CalendarUtil {
 				}
 				UnitTimeEnum unit = UnitTimeEnum.getByOrder(i);
 				if (unit != null) {
-					String primUnitName = unit.apropriateUnitDescription(valor,!withAbrrs);
+					String primUnitName = unit.apropriateUnitDescription(valor, !withAbrrs);
 					String separador = " ";
 					if (unit.getOrder() > 2 && withAbrrs) {
 						separador = "";

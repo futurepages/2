@@ -1,7 +1,5 @@
 package org.futurepages.enums;
 
-import org.futurepages.annotations.AsynchronousAction;
-
 public enum DateFormatEnum {
 
 	DATE_PT_BR_DAY_MONTH("dd-MM"),
