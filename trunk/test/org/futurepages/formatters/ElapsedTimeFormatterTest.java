@@ -35,6 +35,7 @@ public class ElapsedTimeFormatterTest {
 		assertFormatValue("2011-11-07 00:30:35", "2011-11-06 12:30:50", "há ± 12 horas");
 		assertFormatValue("2011-11-07 00:30:35", "2011-11-06 12:30:45", "há ± 12 horas");
 		assertFormatValue("2011-11-07 00:30:35", "2011-11-06 12:30:40", "há ± 12 horas");
+
 		assertFormatValue("2011-11-07 00:30:35", "2011-11-06 12:30:30", "ontem às 12:30");
 		assertFormatValue("2011-11-07 00:30:35", "2011-11-06 12:30:00", "ontem às 12:30");
 		assertFormatValue("2011-11-07 00:30:35", "2011-11-06 12:20:00", "ontem às 12:20");
@@ -59,18 +60,38 @@ public class ElapsedTimeFormatterTest {
 		assertFormatValue("2011-11-07 00:30:35", "2011-11-06 02:00:00", "ontem às 02:00");
 		assertFormatValue("2011-11-07 00:30:35", "2011-11-06 01:00:00", "ontem às 01:00");
 		assertFormatValue("2011-11-07 00:30:35", "2011-11-06 00:00:00", "ontem às 00:00");
-		assertFormatValue("2011-11-07 00:30:35", "2011-11-05 20:00:00", "em 05/11/2011 - 20:00");
-		assertFormatValue("2011-11-07 00:30:35", "2011-11-04 20:00:00", "em 04/11/2011 - 20:00");
-		assertFormatValue("2011-11-07 00:30:35", "2011-11-03 20:00:00", "em 03/11/2011 - 20:00");
-		assertFormatValue("2011-11-07 00:30:35", "2011-11-02 20:00:00", "em 02/11/2011 - 20:00");
-		assertFormatValue("2011-11-07 00:30:35", "2010-11-07 00:30:35", "em 07/11/2010 - 00:30");
 
+		assertFormatValue("2011-11-07 00:30:35", "2011-11-05 20:00:00", "em 5 de novembro");
+		assertFormatValue("2011-11-07 00:30:35", "2011-10-04 20:00:00", "em 4 de outubro");
+		assertFormatValue("2011-11-07 00:30:35", "2011-08-04 20:00:00", "em 4 de agosto");
+		assertFormatValue("2011-11-07 00:30:35", "2011-04-04 20:00:00", "em 4 de abril");
+		assertFormatValue("2011-11-07 00:30:35", "2011-02-04 20:00:00", "em 4 de fevereiro");
+		assertFormatValue("2011-11-07 00:30:35", "2011-01-01 20:00:00", "em 1º de janeiro");
+		assertFormatValue("2011-11-07 00:30:35", "2010-12-20 20:00:00", "em 20 de dezembro de 2010");
+
+		assertFormatValue("2011-02-01 00:30:35", "2011-01-01 20:00:00", "em 1º de janeiro");
+		assertFormatValue("2011-01-31 00:30:35", "2010-12-01 20:00:00", "em 1º de dezembro");
+		assertFormatValue("2011-02-01 00:30:35", "2010-12-01 20:00:00", "em 1º de dezembro de 2010");
+		assertFormatValue("2011-02-01 00:30:35", "2010-11-01 20:00:00", "em 1º de novembro de 2010");
+		assertFormatValue("2011-02-01 00:30:35", "2010-10-01 20:00:00", "em 1º de outubro de 2010");
+		assertFormatValue("2011-02-01 00:30:35", "2010-08-01 20:00:00", "em 1º de agosto de 2010");
+		assertFormatValue("2011-02-01 00:30:35", "2010-06-01 20:00:00", "em 1º de junho de 2010");
+		assertFormatValue("2011-02-01 00:30:35", "2010-02-01 20:00:00", "em 1º de fevereiro de 2010");
+		assertFormatValue("2011-02-01 00:30:35", "2010-01-01 20:00:00", "em 1º de janeiro de 2010");
+		assertFormatValue("2011-01-01 00:30:35", "2009-12-01 20:00:00", "em 1º de dezembro de 2009");
+		assertFormatValue("2011-01-01 00:30:35", "2009-11-01 20:00:00", "em 1º de novembro de 2009");
+		assertFormatValue("2011-01-01 00:30:35", "2010-11-01 20:00:00", "em 1º de novembro de 2010");
 	}
 
 	private void assertFormatValue(String bdBaseDateTime, String bdElapsedDateTime, String expectedText) {
+//		System.out.println(
+//				ElapsedTimeFormatter.formatValue(DateUtil.dbDateTimeToCalendar(bdBaseDateTime),
+//				DateUtil.dbDateTimeToCalendar(bdElapsedDateTime))
+//	);
 		Assert.assertEquals(
+				expectedText,
 				ElapsedTimeFormatter.formatValue(DateUtil.dbDateTimeToCalendar(bdBaseDateTime),
-				DateUtil.dbDateTimeToCalendar(bdElapsedDateTime)),
-				expectedText);
+				DateUtil.dbDateTimeToCalendar(bdElapsedDateTime))
+				);
 	}
 }
