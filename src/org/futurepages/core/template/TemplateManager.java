@@ -3,7 +3,10 @@ package org.futurepages.core.template;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -14,6 +17,7 @@ import org.futurepages.exceptions.TemplateException;
 import org.futurepages.core.config.Params;
 import org.futurepages.exceptions.BadFormedConfigFileException;
 import org.futurepages.exceptions.ConfigFileNotFoundException;
+import org.futurepages.util.EncodingUtil;
 
 /**
  * Gerenciador de Templates. Configura/inicializa o template.
@@ -31,18 +35,21 @@ public class TemplateManager extends AbstractTemplateManager {
 	}
 
 	private void initialize(){
-		String templateFilePath = Params.get("CLASSES_PATH")+ Params.CONFIGURATION_DIR_NAME+"/app-template.xml";
-		File templateFile = new File(templateFilePath);
-
-		SAXBuilder sb = new SAXBuilder();
-		Document doc;
 		try {
+			String classRealPath = EncodingUtil.correctPath(this.getClass().getResource("/").getPath());
+			String templateFilePath = classRealPath+ Params.CONFIGURATION_DIR_NAME+"/app-template.xml";
+			File templateFile = new File(templateFilePath);
+
+			SAXBuilder sb = new SAXBuilder();
+			Document doc;
 			doc = sb.build(templateFile);
 			build(doc);
-		} catch (IOException e) {
-			throw new ConfigFileNotFoundException("Arquivo de configuração de template não encontrado: "+templateFilePath);
-		} catch (JDOMException e) {
-			throw new BadFormedConfigFileException("Arquivo de configuração de template mal formado: "+templateFilePath);
+		} catch (UnsupportedEncodingException ex) {
+			throw new ConfigFileNotFoundException(ex);
+		} catch (IOException ex) {
+			throw new ConfigFileNotFoundException(ex);
+		} catch (JDOMException ex) {
+			throw new BadFormedConfigFileException(ex);
 		}
 
 	}
