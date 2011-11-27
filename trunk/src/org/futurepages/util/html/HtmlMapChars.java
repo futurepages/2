@@ -7,12 +7,20 @@ import java.util.HashMap;
  */
 public class HtmlMapChars {
 
+    private static final HashMap<Character, String> plainTable    = new HashMap<Character, String>();
     private static final HashMap<String, String> simpleTable    = new HashMap<String, String>();
     private static final HashMap<String, String> completeTable  = new HashMap<String, String>();
     private static final HashMap<Character, String> textareaTable  = new HashMap<Character, String>();
 
     static
     {
+
+		plainTable.put('<'  ,"&lt;");
+        plainTable.put('>'  ,"&gt;");
+        plainTable.put('\t' ,"&nbsp;"); //  \t
+        plainTable.put('\n' ,"<br/>");  //  \n
+        plainTable.put('\r' ,"");
+		
         //Povoando tabela de textarea
         textareaTable.put('\"' ,"&quot;");
         textareaTable.put('<'  ,"&lt;");
@@ -151,7 +159,7 @@ public class HtmlMapChars {
     }
 
     /**
-     * Converte as quebras de texto escrito em textarea para as quebras de html.
+     * Converte as quebras de texto e aspas escrito em textarea para os caracteres válidos de html.
      * @param strIn
      */
     public static String textAreaValue(String strIn){
@@ -165,6 +173,24 @@ public class HtmlMapChars {
                 outBuffer.append(c);
             else
                 outBuffer.append(getTextArea(c));
+        }
+        return outBuffer.toString();
+    }
+    /**
+     * Converte as quebras de texto escrito em textarea para as quebras de html.
+     * @param strIn
+     */
+    public static String plainTextValue(String strIn){
+        if(strIn == null) return "&nbsp;";
+
+        char[] strInChars = strIn.toCharArray();
+
+        StringBuilder outBuffer = new StringBuilder();
+        for(char c : strInChars){
+            if(plainTable.get(c)==null)
+                outBuffer.append(c);
+            else
+                outBuffer.append(plainTable.get(c));
         }
         return outBuffer.toString();
     }
