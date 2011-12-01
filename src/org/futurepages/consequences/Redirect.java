@@ -166,7 +166,7 @@ public class Redirect implements Consequence {
 	private StringBuilder builBasicUrlToRedir(URI uri) {
 		StringBuilder urlToRedir = new StringBuilder();
 		if(uri.getHost()!=null) {
-				urlToRedir.append(concat(uri.getScheme(),"://",uri.getHost(),(uri.getPort()!=80 && uri.getPort()!=-1 ? ":"+uri.getPort() : "")));
+				urlToRedir.append(concat(uri.getScheme(),"://",uri.getHost(),(uri.getPort()!=80 && uri.getPort()!=443 && uri.getPort()!=-1 ? ":"+uri.getPort() : "")));
 		}
 		return urlToRedir;
 	}

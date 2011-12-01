@@ -17,19 +17,39 @@ import org.futurepages.util.Is;
 public class AutoRedirectDomainFilter implements Filter {
 
 	private String mainDomain;
+	private String mainProtocol;
 
-	public AutoRedirectDomainFilter(String uniqueDomain) {
-		if(!Is.validStringKey(uniqueDomain)){
+	public AutoRedirectDomainFilter(String baseURL) {
+		int posiProtocol = baseURL.indexOf("://");
+		if(posiProtocol>-1){
+			mainProtocol = baseURL.substring(0, posiProtocol);
+			mainDomain = baseURL.substring(posiProtocol+3);
+		}else{
+			this.mainDomain = baseURL;
+			this.mainProtocol = null;
+		}
+		System.out.println(mainProtocol);
+		System.out.println(mainDomain);
+		if(!Is.validStringKey(this.mainDomain)){
 			throw new RuntimeException("Erro ao inicializar o filtro AutoRedirectDomainFilter. Especifique um domínio válido em app-params.xml[param=AUTO_REDIRECT_DOMAIN]");
 		}
-		this.mainDomain = uniqueDomain;
 	}
 
 	@Override
 	public String filter(InvocationChain chain) throws Exception {
-		if(!chain.getAction().getRequest().getHeader("Host").split("\\:")[0].equals(mainDomain)){
-			chain.getAction().getOutput().setValue(Action.REDIR_URL, changeDomain(chain.getAction().getRequest()));
-			return REDIR;
+		HttpServletRequest req = chain.getAction().getRequest();
+		if(mainProtocol==null){
+			if(!req.getHeader("Host").split("\\:")[0].equals(mainDomain)){
+				chain.getAction().getOutput().setValue(Action.REDIR_URL, changeDomain(chain.getAction().getRequest()));
+				return REDIR;
+			}
+		}else{
+			if(!req.getHeader("Host").split("\\:")[0].equals(mainDomain)
+		    || !req.getScheme().equals(mainProtocol)
+			  ) {
+				chain.getAction().getOutput().setValue(Action.REDIR_URL, changeDomainAndProtocol(chain.getAction().getRequest()));
+				return REDIR;
+			}
 		}
 		return chain.invoke();
 	}
@@ -41,9 +61,19 @@ public class AutoRedirectDomainFilter implements Filter {
 	 */
 	private String changeDomain(HttpServletRequest request){
 		StringBuffer newUrl = new StringBuffer();
-		newUrl.append(request.getScheme()).append("://");
-		newUrl.append(this.mainDomain);
-		newUrl.append(request.getLocalPort()!=80 ? ":"+request.getLocalPort() : "" );
+		newUrl.append(request.getScheme()).append("://").append(this.mainDomain);
+		newUrl.append(request.getLocalPort()!=80 && request.getLocalPort()!=443 ? ":"+request.getLocalPort() : "" );
+		newUrl.append(request.getRequestURI());
+		if(request.getQueryString()!=null){
+			newUrl.append("?").append(request.getQueryString());
+		}
+		return newUrl.toString();
+	}
+
+	private String changeDomainAndProtocol(HttpServletRequest request){
+		StringBuffer newUrl = new StringBuffer();
+		newUrl.append(this.mainProtocol).append("://").append(this.mainDomain);
+		newUrl.append(request.getLocalPort()!=80 && request.getLocalPort()!=443 ? ":"+request.getLocalPort() : "" );
 		newUrl.append(request.getRequestURI());
 		if(request.getQueryString()!=null){
 			newUrl.append("?").append(request.getQueryString());
