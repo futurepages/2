@@ -74,7 +74,7 @@ public class Paths {
      * @return a url completa do host server da aplicação
      */
     public static String host(HttpServletRequest req){
-        return req.getScheme()+"://"+req.getServerName()+(req.getServerPort()!=80 ? ":"+req.getServerPort() : "" );
+        return StringUtils.concat(req.getScheme(),"://",req.getServerName(),(req.getServerPort()!=80 && req.getServerPort()!= 443 ? ":"+req.getServerPort() : "" ));
     }
 
 	public static String template(HttpServletRequest req, String module) {
