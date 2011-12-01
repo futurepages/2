@@ -37,6 +37,7 @@ import org.futurepages.filters.AutoRedirectDomainFilter;
 import org.futurepages.formatters.CollectionSizeFormatter;
 import org.futurepages.formatters.MonthFormatter;
 import org.futurepages.formatters.RemainingTimeFormatter;
+import org.futurepages.formatters.SmartTextFormatter;
 import org.futurepages.formatters.UrlFormatter;
 import org.futurepages.json.JSONGenericRenderer;
 import org.futurepages.util.Is;
@@ -114,6 +115,7 @@ public class InitManager extends AbstractApplicationManager{
         FormatterManager.addFormatter("seoURL"	     	   , new SEOURLFormatter());
         FormatterManager.addFormatter("noSpecials"  	   , new NoSpecialsFormatter());
         FormatterManager.addFormatter("textarea"		   , new TextAreaFormatter());
+        FormatterManager.addFormatter("smartText"		   , new SmartTextFormatter());
         FormatterManager.addFormatter("uppercase"		   , new UpperCaseFormatter());
 		FormatterManager.addFormatter("url"                , new UrlFormatter());
     }
