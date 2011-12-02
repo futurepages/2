@@ -53,7 +53,8 @@ public class ApplicationListener implements ServletContextListener {
 				log("Hibernate OK");
 
 				// Atualiza/gera esquema do banco como solicitado no arquivo de configuração.
-				// somente se NÃO estiver em DEPLOY_MODE=production
+				// somente se NÃO estiver em DEPLOY_MODE=production (tentará gerar e instalar banco de dados.
+				log("Deploy Mode: "+Params.get("DEPLOY_MODE"));
 				if (!Params.get("DEPLOY_MODE").equals("production")) {
 					if (Params.get("SCHEMA_GENERATION_TYPE").startsWith("update")) {
 						if (Params.get("SCHEMA_GENERATION_TYPE").equals("update")) {
@@ -77,6 +78,16 @@ public class ApplicationListener implements ServletContextListener {
 						log("Install Mode: " + installMode);
 						InstallersManager.initialize(modules, installMode);
 						log("Install - End");
+					}
+				}else{
+					//Micro-migração. Instancia a classe - onde espera-se que estejam as execuções de migração.
+					if(!Is.empty(Params.get("MIGRATION_CLASSPATH"))){
+						try{
+							log("Inicializando Migração em: "+Params.get("MIGRATION_CLASSPATH"));
+							Class.forName(Params.get("MIGRATION_CLASSPATH")).newInstance();
+						}catch(Exception ex){
+							log("Erro de Migração... "+ex.getMessage());
+						}
 					}
 				}
 			} else {
