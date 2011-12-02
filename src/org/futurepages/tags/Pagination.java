@@ -9,7 +9,7 @@ import org.futurepages.core.path.Paths;
 import org.futurepages.core.config.Params;
 import org.futurepages.core.tags.PrintTag;
 import org.futurepages.core.tags.build.ContentTypeEnum;
-import org.futurepages.util.StringUtils;
+import static org.futurepages.util.StringUtils.*;
 
 @Tag(bodyContent = ContentTypeEnum.JSP)
 public class Pagination extends PrintTag implements Pageable {
@@ -24,6 +24,9 @@ public class Pagination extends PrintTag implements Pageable {
 
 	@TagAttribute
 	private int maxShowing = 20;
+
+	@TagAttribute
+	private String descriptor = "";
 
 	@TagAttribute
 	private boolean justTop = false;
@@ -58,14 +61,16 @@ public class Pagination extends PrintTag implements Pageable {
 			String pagesLinks = allPaginationLinks(totalPages);
 			if (totalPages > 1) {
 				if (justTop) {
-					return pagesLinks + getBodyContent().getString();
+					return concat(descriptor,pagesLinks,getBodyContent().getString());
 				} else {
-					return pagesLinks + getBodyContent().getString() + pagesLinks;
+					return concat(descriptor, pagesLinks , getBodyContent().getString() , descriptor,pagesLinks);
 				}
 			}
-		}
 		//Se não possui mais de uma página.
-		return getBodyContent().getString();
+		}else if(justTop){
+				return descriptor+getBodyContent().getString();
+		}
+		return concat(descriptor,getBodyContent().getString(),descriptor);
 	}
 
 	public void setNextLabel(String nextLabel) {
@@ -115,6 +120,11 @@ public class Pagination extends PrintTag implements Pageable {
 	public void setUseImages(boolean useImages) {
 		this.useImages = useImages;
 	}
+
+	public void setDescriptor(String descriptor) {
+		this.descriptor = descriptor;
+	}
+
 
 	// MÉTODOS PRIVADOS //////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////
@@ -172,9 +182,9 @@ public class Pagination extends PrintTag implements Pageable {
 		//enabled
 		if (pageNum > 1) {
 			if (isPrettyUrl) {
-				return StringUtils.concat("<a href=\"", getUrl(), params, symbol, _PAGE_NUM, "=", (pageNum - 1), "\" ", target, ">", previousButton(true), "</a>");
+				return concat("<a href=\"", getUrl(), params, symbol, _PAGE_NUM, "=", (pageNum - 1), "\" ", target, ">", previousButton(true), "</a>");
 			} else {
-				return StringUtils.concat("<a href=\"", getUrl(), symbol, _PAGE_NUM, "=", (pageNum - 1), params, "\" ", target, ">", previousButton(true), "</a>");
+				return concat("<a href=\"", getUrl(), symbol, _PAGE_NUM, "=", (pageNum - 1), params, "\" ", target, ">", previousButton(true), "</a>");
 			}
 		} //disabled
 		else {
@@ -192,9 +202,9 @@ public class Pagination extends PrintTag implements Pageable {
 		} //enabled
 		else {
 			if (isPrettyUrl) {
-				return StringUtils.concat("<a href=\"", getUrl(), params, symbol, _PAGE_NUM, "=", (pageNum + 1), "\" ", target, ">", nextButton(true), "</a>");
+				return concat("<a href=\"", getUrl(), params, symbol, _PAGE_NUM, "=", (pageNum + 1), "\" ", target, ">", nextButton(true), "</a>");
 			} else {
-				return StringUtils.concat("<a href=\"", getUrl(), symbol, _PAGE_NUM, "=", (pageNum + 1), params, "\" ", target, ">", nextButton(true), "</a>");
+				return concat("<a href=\"", getUrl(), symbol, _PAGE_NUM, "=", (pageNum + 1), params, "\" ", target, ">", nextButton(true), "</a>");
 			}
 		}
 	}
@@ -224,9 +234,9 @@ public class Pagination extends PrintTag implements Pageable {
 
 	private String pageLink(int pageNum) {
 		if (isPrettyUrl) {
-			return StringUtils.concat("<a href=\"", getUrl(), params, symbol, _PAGE_NUM, "=", pageNum, "\" ", target, ">", pageNum, "</a>");
+			return concat("<a href=\"", getUrl(), params, symbol, _PAGE_NUM, "=", pageNum, "\" ", target, ">", pageNum, "</a>");
 		} else {
-			return StringUtils.concat("<a href=\"", getUrl(), symbol, _PAGE_NUM, "=", pageNum, params, "\" ", target, ">", pageNum, "</a>");
+			return concat("<a href=\"", getUrl(), symbol, _PAGE_NUM, "=", pageNum, params, "\" ", target, ">", pageNum, "</a>");
 		}
 	}
 
@@ -248,6 +258,6 @@ public class Pagination extends PrintTag implements Pageable {
 
 	private String adjImgButton(String type, boolean enabled) {
 		String enabledResult = enabled ? "" : "_disable";
-		return StringUtils.concat("<img src=\"", Paths.theme(action.getRequest()), "/res/", cssClass, "/", type + enabledResult, ".", IMAGE_FORMAT, "\"/>");
+		return concat("<img src=\"", Paths.theme(action.getRequest()), "/res/", cssClass, "/", type + enabledResult, ".", IMAGE_FORMAT, "\"/>");
 	}
 }
