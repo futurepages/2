@@ -136,8 +136,7 @@ public class HtmlStripper {
 
 		htmlContent = replaceInTags(htmlContent, attrPattern("class"), "");
 		htmlContent = htmlContent.replaceAll(spanWithStylePropertiePattern("font-weight","bold"),tagWithContentReplacement("strong"));    //estilizados com negrito
-		htmlContent = htmlContent.replaceAll(spanWithStylePropertiePattern("text-decoration","underline"),tagWithContentReplacement("u"))//estilizados com sublinhado
-		;
+		htmlContent = htmlContent.replaceAll(spanWithStylePropertiePattern("text-decoration","underline"),tagWithContentReplacement("u"));//estilizados com sublinhado
 		htmlContent = replaceInTags(htmlContent, attrPattern("style"), "");
 		return htmlContent;
 	}

@@ -46,7 +46,11 @@ public class FileUtil {
 
 	public static String getStringContent(String path) throws FileNotFoundException, IOException {
 		File file = new File(path);
+		return getStringContent(file);
+	
+	}
 
+	public static String getStringContent(File file) throws FileNotFoundException, IOException {
 		if (!file.exists()) {
 			return null;
 		}
@@ -99,8 +103,13 @@ public class FileUtil {
 		return getStringLines(classRealPath(cls)+"/"+path);
 	}
 
+
 	public static String[] getStringLines(String path) throws FileNotFoundException, IOException {
-		return getStringContent(path).split("\r\n");
+		return getStringLines(new File(path));
+	}
+
+	public static String[] getStringLines(File file) throws FileNotFoundException, IOException {
+		return getStringContent(file).split("\r\n");
 	}
 
 	public static void putKeyValue(Map<String, String> map, URL srcURL, String targetPath) throws Exception {
