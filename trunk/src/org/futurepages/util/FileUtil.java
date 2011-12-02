@@ -281,6 +281,10 @@ public class FileUtil {
 		return EncodingUtil.correctPath(klass.getResource("").getPath());
 	}
 
+	public static String classesPath(Class<?> klass) throws UnsupportedEncodingException {
+		return EncodingUtil.correctPath(klass.getResource("/").getPath());
+	}
+
 	public static void copy(String fromFileName, String toFileName) throws IOException {
 
 		File fromFile = new File(fromFileName);

@@ -621,6 +621,10 @@ public class GenericDao extends HQLProvider {
 					|| trimmedSql.startsWith("/*")) {
 				continue;
 			} else {
+				int posComment = trimmedSql.indexOf("--");
+				if(posComment>0){
+					trimmedSql = trimmedSql.substring(0, posComment);
+				}
 				if (trimmedSql.length() > 10 && trimmedSql.substring(0, 10).toLowerCase().equals("delimiter ")) {
 					delimiter = trimmedSql.substring(10);
 				} else {

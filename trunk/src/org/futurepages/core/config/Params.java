@@ -79,6 +79,7 @@ public class Params {
 		paramsMap.put("INSTALL_MODE", "off");
 		paramsMap.put("PAGE_ENCODING", "ISO-8859-1");
 		paramsMap.put("PRETTY_URL", "false");
+		paramsMap.put("MIGRATION_CLASSPATH", "");
 		paramsMap.put("MINIFY_RESOURCE_MODE", "none"); //none, css, js, both
 		paramsMap.put("QUARTZ_MODE", "off");
 		paramsMap.put("RELEASE", "");
@@ -156,6 +157,7 @@ public class Params {
 		map.put(regexParam("MINIFY_RESOURCE_MODE"),"");
 		map.put(regexParam("SCHEMA_GENERATION_TYPE"),"");
 		map.put(regexParam("INSTALL_MODE"),"");
+		map.put(regexParam("MIGRATION_CLASSPATH"),"");
 		FileUtil.putStrings(map, pathParamsFile, pathParamsFile, true);
 	}
 }
