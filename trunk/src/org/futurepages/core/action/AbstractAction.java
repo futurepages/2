@@ -138,7 +138,8 @@ public abstract class AbstractAction implements Pageable, Action {
 	protected Object input(String key){
 		return input.getValue(key);
 	}
-	
+
+	@Override
 	public void output(String key, Object obj){
 		output.setValue(key, obj);
 	}
