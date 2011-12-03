@@ -38,6 +38,8 @@ public interface Action extends Manipulable {
 
 	public void setOutput(Output output);
 
+	public void output(String key, Object object);
+
 	public void setSession(Context context);
 
 	public void setCallback(Context context);
