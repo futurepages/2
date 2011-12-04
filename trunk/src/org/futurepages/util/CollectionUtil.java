@@ -14,6 +14,12 @@ public class CollectionUtil {
 		return array;
 	}
 
+	public static void touch(Collection collection){
+		if(collection!=null){
+			collection.size();
+		}
+	}
+
 	public static <T> int addListToList(List<T> origem, List<List<T>> destino, int limite){
 			
 		int vagasRestantes = limite;
