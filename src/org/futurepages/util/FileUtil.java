@@ -483,7 +483,7 @@ public class FileUtil {
 	 * @return all the files from the directory 'directory'
 	 */
 	public static ArrayList<File> listFilesFromDirectory(File directory, boolean recursive) {
-		return new ArrayList<File>(FileUtil.getInstance().filesFromDirectory(directory, recursive, ""));
+		return new ArrayList<File>(FileUtil.getInstance().filesFromDirectory(directory, recursive, ".*"));
 	}
 
 	/**
