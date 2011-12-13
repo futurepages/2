@@ -190,7 +190,7 @@ public class JPEGUtil2 {
 			oDim2 = oW;
 		}
 
-		if (oW != oH) {
+		if (oW != oH && (!(thumbW >= oW || thumbH >= oH))) {
 			int pos1 = 0, pos2 = 0, posX = 0, posY = 0, canv1 = 0, canv2 = 0, canvW = 0, canvH = 0;
 			if (colorSquare != null) {
 				if (oDim1 >= dim1) { //se largura original maior ou igual à largura final (imageWidth >= newWidth):
