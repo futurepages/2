@@ -341,9 +341,9 @@ public class The {
 
 	static String stringWithoutInitialNumbers(String str) {
 		char[] c = str.toCharArray();		
-		while(Character.isDigit(c[0])){			
+		while(c!=null && Character.isDigit(c[0])){
 			str = str.substring(1, str.length());
-			c = str.toCharArray();
+			c = (str.length()>0? str.toCharArray() : null);
 		}					
 		return str;
 	}
