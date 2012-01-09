@@ -52,6 +52,6 @@ public abstract class ConsequenceCallback implements Runnable {
 		}
 	}
 	
-	public abstract void doRun();
+	public abstract void doRun() throws Exception;
 }
 
