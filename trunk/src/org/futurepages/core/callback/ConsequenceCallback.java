@@ -41,7 +41,7 @@ public abstract class ConsequenceCallback implements Runnable {
 		try {
 			Thread.sleep(10000); //para dar o tempo necessário para que a ação seja efetivada no banco de dados.
 			doRun();
-		} catch (InterruptedException ex) {
+		} catch (Exception ex) {
 			handleException(ex);
 			if (Dao.isTransactionActive()) {
 				Dao.rollBackTransaction();
