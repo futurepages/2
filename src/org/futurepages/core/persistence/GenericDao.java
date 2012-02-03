@@ -16,6 +16,7 @@ import org.futurepages.core.pagination.PaginationSlice;
 import org.futurepages.util.Is;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.transform.Transformers;
 
 public class GenericDao extends HQLProvider {
 
@@ -58,13 +59,20 @@ public class GenericDao extends HQLProvider {
     }
 
     public SQLQuery sqlQuery(String sqlQuery) {
+//		System.out.println("SQL: "+sqlQuery); //para depurar SQls, descomente. // for DEBUG-MODE.
 		return session().createSQLQuery(sqlQuery);
 	}
 
     public Query query(String hqlQuery) {
-//		System.out.println("HQL: "+hqlQuery); //para depurar HQls, descomente.
+//		System.out.println("HQL: "+hqlQuery); //para depurar HQls, descomente. // for DEBUG-MODE.
 		Query query = session().createQuery(hqlQuery).setCacheable(true);
         return query;
+    }
+
+	public <T extends Serializable> List<T> sqlQueryList(String sql, Class<T> clss) {
+		SQLQuery query = sqlQuery(sql);
+		query.setResultTransformer(Transformers.aliasToBean(clss));
+        return query.list();
     }
 
     public String getIdName(Class entity) {
