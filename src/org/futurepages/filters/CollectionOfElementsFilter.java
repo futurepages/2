@@ -1,6 +1,5 @@
 package org.futurepages.filters;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -14,13 +13,6 @@ import org.futurepages.util.Is;
 import org.futurepages.util.ReflectionUtil;
 import org.futurepages.util.The;
 
-/**
- * PIFilter - Persistent Injection Filter
- * Recupera no banco um objeto do tipo 'classToInject' com o id passado no input com a chave 'keyToInject'
- * em seguida injeta no objeto que está referenciado no input com a chave 'targetKey'
- * @author leandro
- * Deprecated Classe. Use {@link PersistenceInjectionFilter}
- */
 public class CollectionOfElementsFilter implements Filter {
 
 	private String beanPath;
