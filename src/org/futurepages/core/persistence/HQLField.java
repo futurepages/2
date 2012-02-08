@@ -287,17 +287,30 @@ public class HQLField implements HQLable {
     }
 
     public String inList(List list) {
+		if(list==null || list.size()==0){
+			return "";
+		}
 		return concat(fieldName , IN , "(" , HQLUtil.imploded(list) , ")");
     }
 
     public String notInList(List list) {
+		if(list==null || list.size()==0){
+			return "";
+		}
 		return concat(fieldName , NOT_IN , "(" , HQLUtil.imploded(list) , ")");
     }
 
     public String inSubQuery(String subQuery) {
+		if(subQuery==null || subQuery.length()==0){
+			return "";
+		}
         return concat(fieldName , IN , "(" , subQuery , ")");
     }
+
     public String notInSubQuery(String subQuery) {
+		if(subQuery==null || subQuery.length()==0){
+			return "";
+		}
         return concat(fieldName , NOT_IN , "(" , subQuery , ")");
     }
 
@@ -310,11 +323,19 @@ public class HQLField implements HQLable {
     }
 
     public String notIn(List<String> elements) {
-        return concat(fieldName , NOT_IN +"(" , HQLUtil.imploded(elements) , ")");
+		if(elements!=null && elements.size()>0){
+			return concat(fieldName , NOT_IN +"(" , HQLUtil.imploded(elements) , ")");
+		}else{
+			return "";
+		}
     }
 
     public String notIn(String tokensStr) {
-        return concat(fieldName , NOT_IN+"(" , HQLUtil.imploded(tokensStr) , ")");
+		if(tokensStr!=null && tokensStr.length()>0){
+			return concat(fieldName , NOT_IN+"(" , HQLUtil.imploded(tokensStr) , ")");
+		}else{
+			return "";
+		}
     }
 
     public String notIn(long... tokens) {
