@@ -35,6 +35,7 @@ import org.futurepages.core.formatter.FormatterManager;
 import org.futurepages.core.i18n.LocaleManager;
 import org.futurepages.filters.AutoRedirectDomainFilter;
 import org.futurepages.formatters.CollectionSizeFormatter;
+import org.futurepages.formatters.ExtensionFileNameFormatter;
 import org.futurepages.formatters.MonthFormatter;
 import org.futurepages.formatters.RemainingTimeFormatter;
 import org.futurepages.formatters.SmartTextFormatter;
@@ -100,6 +101,7 @@ public class InitManager extends AbstractApplicationManager{
         FormatterManager.addFormatter("date"         	   , new DateFormatter());
         FormatterManager.addFormatter("dateTime"     	   , new DateTimeFormatter());
         FormatterManager.addFormatter("elapsedTime"   	   , new ElapsedTimeFormatter());
+        FormatterManager.addFormatter("extensionFileName"  , new ExtensionFileNameFormatter());
         FormatterManager.addFormatter("remainingTime"	   , new RemainingTimeFormatter());
         FormatterManager.addFormatter("html"        	   , new HTMLFormatter());
         FormatterManager.addFormatter("javascript"         , new JavascriptFormatter());
