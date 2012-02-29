@@ -200,4 +200,13 @@ public class NumberUtil {
 		}
 		return retorno.trim();
 	}
+
+
+	public Long strToLong(String number){
+		try {
+			return Long.parseLong(number);
+		}catch(NumberFormatException ex){
+			return null;
+		}
+	}
 }
