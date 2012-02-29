@@ -202,7 +202,7 @@ public class NumberUtil {
 	}
 
 
-	public Long strToLong(String number){
+	public static Long strToLong(String number){
 		try {
 			return Long.parseLong(number);
 		}catch(NumberFormatException ex){
