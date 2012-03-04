@@ -639,19 +639,19 @@ public class GenericDao extends HQLProvider {
 					if (i == sqls.length - 1 && !trimmedSql.endsWith(delimiter)) {
 						sqlToExecute.append(trimmedSql);
 						String sql = sqlToExecute.toString();
-						executeSQL(sql);
 						if(withLog){
 							System.out.println("  "+sql);
 						}
+						executeSQL(sql);
 						sqlToExecute.delete(0, sqlToExecute.length());
 					} else {
 						if (trimmedSql.endsWith(delimiter)) {
 							sqlToExecute.append(trimmedSql.substring(0, trimmedSql.length() - delimiter.length()));
 							String sql = sqlToExecute.toString();
-							executeSQL(sql);
 							if(withLog){
 								System.out.println("  "+sql);
 							}
+							executeSQL(sql);
 							sqlToExecute.delete(0, sqlToExecute.length());
 						} else {
 							sqlToExecute.append(trimmedSql + " ");
