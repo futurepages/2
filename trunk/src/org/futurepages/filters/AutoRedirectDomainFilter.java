@@ -28,8 +28,8 @@ public class AutoRedirectDomainFilter implements Filter {
 			this.mainDomain = baseURL;
 			this.mainProtocol = null;
 		}
-		System.out.println(mainProtocol);
-		System.out.println(mainDomain);
+//		System.out.println(mainProtocol);
+//		System.out.println(mainDomain);
 		if(!Is.validStringKey(this.mainDomain)){
 			throw new RuntimeException("Erro ao inicializar o filtro AutoRedirectDomainFilter. Especifique um domínio válido em app-params.xml[param=AUTO_REDIRECT_DOMAIN]");
 		}
