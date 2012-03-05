@@ -29,6 +29,17 @@ public class CalendarUtil {
 		return nDia;
 	}
 
+	public static boolean areEquals(Calendar cal1, Calendar cal2){
+
+		return (   cal1.get(Calendar.DAY_OF_MONTH)==cal2.get(Calendar.DAY_OF_MONTH)
+				&& cal1.get(Calendar.MONTH)==cal2.get(Calendar.MONTH)
+				&& cal1.get(Calendar.YEAR)==cal2.get(Calendar.YEAR)
+				&& cal1.get(Calendar.HOUR_OF_DAY)==cal2.get(Calendar.HOUR_OF_DAY)
+				&& cal1.get(Calendar.MINUTE)==cal2.get(Calendar.MINUTE)
+				&& cal1.get(Calendar.SECOND)==cal2.get(Calendar.SECOND)
+				);
+	}
+
 	/** @return true se o ano do calendário informado for um ano bisexto, false caso contrário. */
 	public static boolean isLeapYear(Calendar cal) {
 		int year = cal.get(Calendar.YEAR);
@@ -589,7 +600,7 @@ public class CalendarUtil {
 					}
 					tempo = valor + separador + primUnitName;
 					if (withAbrrs) {
-						tempo = adicionarProximoValor(time, tempo, i, withAbrrs);
+						tempo = addNextValue(time, tempo, i, withAbrrs);
 					}
 					break;
 				} else {
@@ -604,7 +615,7 @@ public class CalendarUtil {
 		return tempo;
 	}
 
-	private static String adicionarProximoValor(int[] time, String tempo, int i, boolean withAbbrs) {
+	private static String addNextValue(int[] time, String tempo, int i, boolean withAbbrs) {
 		UnitTimeEnum unit;
 		if (i < time.length - 1) {
 			i++;
