@@ -402,6 +402,10 @@ public class HQLField implements HQLable {
         return concat(fieldName , comparator , "'" , escQuoteAndSlashes(DateUtil.dbDateTime(cal.getTime())) , "'");
     }
 
+    public String equalsTo(Calendar cal) {
+        return timeExpression(cal, EQUALS);
+    }
+
     public String greaterEqualsThen(Calendar cal) {
         return timeExpression(cal, GREATER_EQUALS);
     }
