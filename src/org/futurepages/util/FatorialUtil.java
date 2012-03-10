@@ -4,10 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FatorialUtil {
-
-
 	
 	private static  Map<Long, Long> fatoriais = new HashMap<Long, Long>();
+	
 	static {
 		fatoriais.put(0L, 1L);
 		fatoriais.put(1L, 1L);
