@@ -25,7 +25,7 @@ public class HtmlStripperTest_noStyleText {
 	
 	@Test
 	public void testTreated() {
-		String result = HtmlStripper.noStylesText(this.tag);
+		String result = RichTextTagReplacer.noStylesText(this.tag);
 		Assert.assertEquals(caso, expected, result);
 	}
 
