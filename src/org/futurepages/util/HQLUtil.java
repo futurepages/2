@@ -69,6 +69,17 @@ public class HQLUtil {
 		return out.toString();
 	}
 
+	public static String imploded(Enum[] elements) {
+		StringBuffer out = new StringBuffer("");
+		String virgula = "";
+		for (Enum element : elements) {
+			out.append(virgula);
+			out.append("'" + escQuotesAndSlashes(element.name()) + "'");
+			if(virgula.equals(""))  virgula = "," ;
+		}
+		return out.toString();
+	}
+
 	public static String imploded(String tokensStr) {
 		return imploded(The.explodedToArray(tokensStr, " "));
 	}
