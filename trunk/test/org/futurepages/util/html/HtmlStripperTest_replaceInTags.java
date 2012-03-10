@@ -29,7 +29,7 @@ public class HtmlStripperTest_replaceInTags {
 	
 	@Test
 	public void testTreated() {
-		String result = HtmlStripper.replaceInTags(original,regex,replacement);
+		String result = RichTextTagReplacer.replaceInTags(original,regex,replacement);
 		Assert.assertEquals(caso, expected, result);
 	}
 

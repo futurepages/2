@@ -50,7 +50,7 @@ public class HtmlStripperTest {
 	 */
 	private void richTextTestProcedure(boolean styles, boolean lists, boolean image, boolean anchor, boolean table, String expectedPath, String msg) throws FileNotFoundException, IOException{
 		String root = this.getResourcePath();
-		String path = root+"/res/testHtml.html";
+		String path = root+"res/testHtml.html";
 		richTextTestProcedure(styles, lists, image, anchor, table, path, expectedPath, msg);
 	}
 	

@@ -12,12 +12,12 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(Parameterized.class)
 public class HtmlTagReplacerTest_treated {
 
-	private HtmlTagReplacer replacer;
+	private RichTextTagReplacer replacer;
 	private String tag;
 	private String expected;
 	private String caso;
 	
-	public HtmlTagReplacerTest_treated(HtmlTagReplacer replacer, String tag,
+	public HtmlTagReplacerTest_treated(RichTextTagReplacer replacer, String tag,
 			String expected, String caso) {
 		super();
 		this.replacer = replacer;
@@ -32,47 +32,53 @@ public class HtmlTagReplacerTest_treated {
 		Assert.assertEquals(caso, expected, result);
 	}
 
-	private static HtmlTagReplacer styles(){
-		return new HtmlTagReplacer(true, false, false, false, false);
-	}
-	
-	private static HtmlTagReplacer noStyles(){
-		return new HtmlTagReplacer(false, false, false, false, false);
-	}
-	
-	private static HtmlTagReplacer lists(boolean style){
-		return new HtmlTagReplacer(style, true, false, false, false);
-	}
-	
-	private static HtmlTagReplacer noLists(boolean style){
-		return new HtmlTagReplacer(style, false, false, false, false);
-		
-	}
-	private static HtmlTagReplacer noLists(){
-		return new HtmlTagReplacer(false, false, false, false, false);
+	private static RichTextTagReplacer tagRep(boolean styles, boolean lists, boolean image, boolean anchor, boolean table){
+		RichTextTagReplacer tagRep =  new RichTextTagReplacer(styles, lists, image, anchor, table);
+		tagRep.init();
+		return tagRep;
 	}
 
-	private static HtmlTagReplacer image(boolean style){
-		return new HtmlTagReplacer(style, false, true, false, false);
-	}
-	private static HtmlTagReplacer noImage(boolean style){
-		return new HtmlTagReplacer(style, false, false, false, false);
+	private static RichTextTagReplacer styles(){
+		return tagRep(true, false, false, false, false);
 	}
 	
-	private static HtmlTagReplacer anchor(boolean style){
-		return new HtmlTagReplacer(style, false, false, true, false );
+	private static RichTextTagReplacer noStyles(){
+		return tagRep(false, false, false, false, false);
 	}
 	
-	private static HtmlTagReplacer noAnchor(boolean style){
-		return new HtmlTagReplacer(style, false, false, false, false );
+	private static RichTextTagReplacer lists(boolean style){
+		return tagRep(style, true, false, false, false);
 	}
 	
-	private static HtmlTagReplacer noTable(boolean style){
-		return new HtmlTagReplacer(style, false, false, false, false);
+	private static RichTextTagReplacer noLists(boolean style){
+		return tagRep(style, false, false, false, false);
+		
+	}
+	private static RichTextTagReplacer noLists(){
+		return tagRep(false, false, false, false, false);
+	}
+
+	private static RichTextTagReplacer image(boolean style){
+		return tagRep(style, false, true, false, false);
+	}
+	private static RichTextTagReplacer noImage(boolean style){
+		return tagRep(style, false, false, false, false);
 	}
 	
-	private static HtmlTagReplacer table(boolean style){
-		return new HtmlTagReplacer(style, false, false, false, true);
+	private static RichTextTagReplacer anchor(boolean style){
+		return tagRep(style, false, false, true, false );
+	}
+	
+	private static RichTextTagReplacer noAnchor(boolean style){
+		return tagRep(style, false, false, false, false );
+	}
+	
+	private static RichTextTagReplacer noTable(boolean style){
+		return tagRep(style, false, false, false, false);
+	}
+	
+	private static RichTextTagReplacer table(boolean style){
+		return tagRep(style, false, false, false, true);
 	}
 	
 	@Parameters
