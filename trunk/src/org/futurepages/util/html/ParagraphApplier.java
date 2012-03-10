@@ -4,17 +4,21 @@ import org.futurepages.util.Is;
 import org.futurepages.util.iterator.string.IterableString;
 import org.futurepages.util.iterator.string.MatchedToken;
 /**
+ * @deprecated descoberto que está furado tanto requisitos, tanto propósito, tanto resultados. Testes falhando.
+ * Favor não usar esta classe para seu bem.
+ * 
  * Encapsula uma string em blocos <p></p> e torna consistente os grupos <p>*</p> existentes 
  * @author Danilo Medeiros
- *
  */
+@Deprecated
 public class ParagraphApplier {
 
 	private static final String oP = "<p>";
-	private static final Object cP = "</p>";
+	private static final String cP = "</p>";
 
 	/**
-	 * Corrige os <p> existentes em rawContent: fecha os abertos e abre os não abertos(todo o conteúdo deverá estar contido dentro de tags <p>).
+	 * Corrige os <p> existentes em rawContent: fecha os abertos e abre os não abertos
+	 * (todo conteúdo encontrado na raíz deverá estar contido dentro de tags <p>, exceto aquelas tags <ul .. > , <ol> ... ).
 	 * Retorna uma string contida em tags <p>
 	 * 	 * @param rawContent
 	 * @return rawContent com tags <p> consistentes e encapsulando todo o conteudo 'rawContent'
@@ -25,11 +29,11 @@ public class ParagraphApplier {
 		MatchedToken ultimo;
 		boolean ultimoJaUsado= false;
 
-		if(iter.hasNext()){
+		if(iter.hasNext()){ // quando é <p>... ou ....</p>
 			ultimo = iter.next();
 			ultimoJaUsado = appendBefore(sb, ultimo);
 			ultimoJaUsado = appendAfter(sb, ultimo);
-		}else{
+		}else{ //quando não tem tags p.
 			return oP+rawContent+cP;
 		}
 

@@ -2,224 +2,121 @@ package org.futurepages.util.html;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.futurepages.util.StringUtils;
-
-import static org.futurepages.util.StringUtils.concat;
+import org.futurepages.util.iterator.string.IterableString;
+import org.futurepages.util.iterator.string.MatchedToken;
+import static org.futurepages.util.html.HtmlRegex.*;
 
 /**
  *
  * @author Leandro
  */
-public class HtmlTagReplacer {
+public abstract class HtmlTagReplacer {
 
-	private String PLAIN_LI = "&nbsp; - ";
-	private String STYLE_UNDERLINE = "style=\"text-decoration:underline;\"";
-	private String BREAK_LINE = "<br/>";
-	private String P_STRONG_OPEN  = "<p><strong>";
-	private String P_STRONG_CLOSE = "</strong></p>";
+	public static String PLAIN_LI = "&nbsp; - ";
+	public static String STYLE_UNDERLINE = "style=\"text-decoration:underline;\"";
+	public static String BREAK_LINE = "<br/>";
+	public static String P_STRONG_OPEN  = "<p><strong>";
+	public static String P_STRONG_CLOSE = "</strong></p>";
+	public Pattern NON_WORD_REGEX_PATTERN;
 
-	private Pattern NON_WORD_REGEX_PATTERN;
-	private boolean styles;
-	private boolean lists;
-	private boolean image;
-	private boolean anchor;
-	private boolean table;
 	private Map<String, TagReplacement> tagsToCare = new HashMap<String, TagReplacement>();
 
-	public HtmlTagReplacer(boolean styles, boolean lists, boolean image, boolean anchor, boolean table) {
-		initParams(styles, lists, image, anchor, table);
-		makeTagsToCare();
-	}
-
-	private void initParams(boolean styles, boolean lists, boolean image, boolean anchor, boolean table) {
-		this.styles = styles;
-		this.lists = lists;
-		this.image = image;
-		this.anchor = anchor;
-		this.table = table;
+	public HtmlTagReplacer() {
 		NON_WORD_REGEX_PATTERN = Pattern.compile("\\W");
 	}
 
-	/**
-	 * Ao construir-se o replacer, serão adicionados ao mapa as tags a serem
-	 * tratadas de acordo com os parâmetros.
-	 *
-	 * Formas de tratar as tags:
-	 * 1) KEEP    - Mantém toda a estrutura da tag, modificando somente o
-	 *				identificador passado como parâmetro.
-	 *    -> ex.: in = <a href="#">  keep("a","b")  ==>  <b href="#">
-	 * 2) REDUCE  - reduz a estrutura de atributos da tag
-	 *     -> ex.: in = <a href="#">  reduce("a","b")  ==>  <b>
-	 * 3) REPLACE - substitui toda a tag pelo conteúdo passado por parâmetro
-	 *     -> ex.: in = <a href="#">  reduce("a","b")  ==>  b
-	 *
-	 */
-	private void makeTagsToCare() {
-		reduce("br");
-		if (styles) {
-			keep("div");
-			keep("p");
-			keep("strong", "strong");
-			keep("em");
 
-			keep("i"   , "em");
-			keep("cite", "em");
-			keep("var" , "em");
-			keep("code", "em");
-			keep("samp", "em");
-			keep("kbd" , "em");
-			keep("dfn" , "em");
+	abstract void init();
 
-			keep("u", "span " + STYLE_UNDERLINE, "span");
-			keep("address", "em");
-			keep("b", "strong");
-			keep("big", "strong");
-			keep("h1");
-			keep("h2");
-			keep("h3");
-			keep("h4");
-			keep("h5");
-			keep("h6");
+	public String beforeTreatment(String strippedHtml){
+		return strippedHtml;
+	}
 
-		} else {
-			reduce("div","p");
-			reduce("p");
-			reduce("strong");
+	public abstract String treated(String tag);
 
-			reduce("em");
-			reduce("i"   , "em");
-			reduce("cite", "em");
-			reduce("var" , "em");
-			reduce("code", "em");
-			reduce("samp", "em");
-			reduce("kbd" , "em");
-			reduce("dfn" , "em");
-
-			reduce("u", "span " + STYLE_UNDERLINE, "span");
-			reduce("address", "em");
-			reduce("b", "strong");
-			reduce("big", "strong");
-			replace("h1", P_STRONG_OPEN , P_STRONG_CLOSE);
-			replace("h2", P_STRONG_OPEN , P_STRONG_CLOSE);
-			replace("h3", P_STRONG_OPEN , P_STRONG_CLOSE);
-			replace("h4", P_STRONG_OPEN , P_STRONG_CLOSE);
-			replace("h5", P_STRONG_OPEN , P_STRONG_CLOSE);
-			replace("h6", P_STRONG_OPEN , P_STRONG_CLOSE);
-		}
-
-		if (lists) {
-			if (styles) {
-				keep("ul");
-				keep("ol");
-				keep("li");
-				keep("blockote");
-				keep("cite");
-				keep("var");
-				keep("code");
-				keep("samp");
-				keep("kbd");
-				keep("dfn");
-			} else {
-				reduce("ul");
-				reduce("ol");
-				reduce("li");
-				reduce("blockote");
-				reduce("cite");
-				reduce("var");
-				reduce("code");
-				reduce("samp");
-				reduce("kbd");
-				reduce("dfn");
-			}
-		} else { // !lists
-			reduce("ul", "p");
-			reduce("ol", "p");
-			replace("li", PLAIN_LI, BREAK_LINE);
-		}
-
-		if (image) {
-			keep("object");
-			keep("embed");
-			keep("param");
-			keep("iframe");
-			if(styles){
-				keep("img");
-			} else {
-				reduce("img", attrs("src","alt"));
-			}
-		}
-
-		if (anchor) {
-			if(styles){
-				keep("a");
-			} else {
-				reduce("a",attrs("href","target"));
-			}
-		} else {
-			reduce("a", "span "+STYLE_UNDERLINE, "span");
-		}
-
-		if (table) {
-			if (styles) {
-				keep("table");
-				keep("caption");
-				keep("tbody");
-				keep("thead");
-				keep("tfoot");
-				keep("tr");
-				keep("th");
-				keep("td");
-			} else {
-				reduce("table");
-				reduce("caption");
-				reduce("tbody");
-				reduce("thead");
-				reduce("tfoot");
-				reduce("tr", attrs("rowspan"));
-				reduce("th", attrs("colspan"));
-				reduce("td", attrs("colspan"));
-			}
-		} else { //!table
-			if (styles) {
-				keep("tr",    "p");
-				keep("th",    "p");
-				keep("thead", "p");
-				keep("tfoot", "p");
-			} else {
-				reduce("tr",    "p");
-				reduce("th",    "p");
-				reduce("thead", "p");
-				reduce("tfoot", "p");
-			}
-			replace("td", PLAIN_LI, BREAK_LINE);
-		}
+	public String afterTreatment(String treatedHtml) {
+		return treatedHtml;
 	}
 
 	/**
+	 * Substitui texto 'str' encontrado somente dentro das tags pela regex
+	 * com o valor do atributo 'replacement'
 	 *
-	 * @param tag tanto de abertura como de fechamento, com os limitadores <>
-	 * @return retorna a tag convertida de acordo com os parâmetros passados.
+	 * @param str texto html a ser varrido
+	 * @param regex padrão para substituição
+	 * @param replacement novo valor
+	 *
+	 * @return texto substituído
 	 */
-	public String treated(String tag) {
-		if(StringUtils.isEmpty(tag)){
-			return "";
+	public static String replaceInTags(String str, String regex, String replacement){
+
+		Pattern tagsPattern  = getCompiledTagsPattern();
+		IterableString iter = new IterableString(tagsPattern, str);
+
+		String end = str;
+		Pattern regexPattern = Pattern.compile(regex);
+		StringBuilder sb     = new StringBuilder();
+		for (MatchedToken token : iter) {
+			sb.append(token.getBefore());
+			sb.append(regexPattern.matcher(token.getMatched()).replaceAll(replacement));
+			end = token.getAfter();
 		}
-		boolean isClosing = isClosingTag(tag);
-		String[] tagParts = tagParts(tag, isClosing);
-		String treated ;
-		TagReplacement tagRep = tagsToCare.get(tagParts[0]);
-		if (tagRep == null) {
-			treated = "";
-		}else{
-			treated = treat(tagParts, isClosing, tagRep);
-		}
-		return treated;
+		sb.append(end);
+		return sb.toString();
 	}
 
-	private String treat(String[] tagParts, boolean closing, TagReplacement tagRep) {
+	/**
+	 * retira lixo do html:
+	 * 1) remove comentários
+	 * 2) remove tag xml gerada pelo word
+	 * 3) remove html script (javascript por exemplo)
+	 * 4) remove tags vazias
+	 * 5  troca aspas simples por aspas duplas dentro das tags
+	 * 6) remove atributos inválidos
+	 */
+	public static String noTrashText(String htmlContent) {
+		String commentPattern   = commentPattern();
+		String xmlPattern       = tagAndContentPattern("xml");
+		String headPattern       = tagAndContentPattern("head");
+		String scriptPattern    = tagAndContentPattern("script");
+
+
+		htmlContent =htmlContent.replaceAll(commentPattern   ,  ""); //remove comentários
+		htmlContent =htmlContent.replaceAll(xmlPattern       ,  ""); //remove tag xml gerada pelo word
+		htmlContent =htmlContent.replaceAll(headPattern      ,  ""); //remove tag xml gerada pelo word
+		htmlContent =htmlContent.replaceAll(scriptPattern    ,  ""); //remove html script (javascript por exemplo)
+
+		//Comentado - decidiu-se não tirar tags vazias
+		//String emptyTagsPattern = emptyTagsPattern();
+		//htmlContent =htmlContent.replaceAll(emptyTagsPattern ,  ""); //remove tags vazias
+
+		htmlContent = replaceInTags(htmlContent, "'" , "\"");                 //aspas simples por aspas duplas
+		htmlContent = replaceInTags(htmlContent, invalidAttrPattern()  ,  "");//atributos inválidos
+
+		return htmlContent;
+	}
+
+	/**
+	 * 0) Retira-se o lixo utilizando-se do método noTrashText
+	 * 1) Retira-se as tags [style] com seu conteúdo
+	 * 2) Retira os atributos "style" e "class" das tags com duas ressalvas:
+	 *  - [span style="font-weight:bold"] é substituído e [strong]
+	 *  - [span style="text-decoration:underline"] é substituído por [u]
+	 * @return texto sem estilo, exceto estilos com bold e underline
+	 */
+	public static String noStylesText(String htmlContent) {
+		htmlContent = noTrashText(htmlContent);
+		htmlContent = htmlContent.replaceAll(tagAndContentPattern("style") , "");
+
+		htmlContent = replaceInTags(htmlContent, attrPattern("class"), "");
+		htmlContent = htmlContent.replaceAll(spanWithStylePropertiePattern("font-weight","bold"),tagWithContentReplacement("strong"));    //estilizados com negrito
+		htmlContent = htmlContent.replaceAll(spanWithStylePropertiePattern("text-decoration","underline"),tagWithContentReplacement("u"));//estilizados com sublinhado
+		htmlContent = replaceInTags(htmlContent, attrPattern("style"), "");
+		return htmlContent;
+	}
+
+	protected String treat(String[] tagParts, boolean closing, TagReplacement tagRep) {
 		if (tagRep.reduce == null) {
 			return closing ? tagRep.close : tagRep.open;
 		} else {
@@ -227,7 +124,11 @@ public class HtmlTagReplacer {
 		}
 	}
 
-	private String[] tagParts(String tag, boolean closing) {
+	/**
+	 * Exemplo 1: entrada <a href="#"> , a saída será: {'a', 'href="#"' , '>'}
+	 * Exemplo 2: entrada </a> , a saída será: {'a', '' , '>'}
+	 */
+	protected String[] tagParts(String tag, boolean closing) {
 		int start = (closing) ? 2 : 1;
 		String tagId = NON_WORD_REGEX_PATTERN.split(tag.substring(start))[0].toLowerCase();
 
@@ -240,134 +141,78 @@ public class HtmlTagReplacer {
 		return new String[]{tagId,attributes,endFlag};
 	}
 
-	private boolean isClosingTag(String tag) {
+	protected boolean isClosingTag(String tag) {
 		return tag.charAt(1) == '/';
 	}
 
-	private void register(String tagId, TagReplacement tagReplacement) {
+	protected TagReplacement getReplacement(String tagId) {
+		return tagsToCare.get(tagId);
+	}
+
+	protected void register(String tagId, TagReplacement tagReplacement) {
 		tagsToCare.put(tagId, tagReplacement);
 	}
 
 	// REPLACE ###################################
-	private void replace(String tagIdFrom, String tagIdTo) {
+	protected void replace(String tagIdFrom, String tagIdTo) {
 		register(tagIdFrom, new TagReplacement(tagIdTo, tagIdTo, null));
 	}
 
-	private void replace(String tagIdFrom, String tagIdToOpen, String tagIdToClose) {
+	protected void replace(String tagIdFrom, String tagIdToOpen, String tagIdToClose) {
 		register(tagIdFrom, new TagReplacement(tagIdToOpen, tagIdToClose, null));
 	}
 
 	// KEEP #####################################
-	private void keep(String tagId) {
+	protected void keep(String tagId) {
 		register(tagId, new TagReplacement(tagId, tagId, false));
 	}
 
-	private void keep(String tagIdFrom, String tagIdTo) {
+	protected void keep(String tagIdFrom, String tagIdTo) {
 		register(tagIdFrom, new TagReplacement(tagIdTo, tagIdTo, false));
 	}
 
-	private void keep(String tagIdFrom, String tagIdToOpen, String tagIdToClose) {
+	protected void keep(String tagIdFrom, String tagIdToOpen, String tagIdToClose) {
 		register(tagIdFrom, new TagReplacement(tagIdToOpen, tagIdToClose, false));
 	}
 
-	private void keep(String tagId, String[] tagsAttributes) {
+	protected void keep(String tagId, String[] tagsAttributes) {
 		register(tagId, new TagReplacement(tagId, tagId, false, tagsAttributes));
 	}
 
-	private void keep(String tagIdFrom, String tagIdTo, String[] tagsAttributes) {
+	protected void keep(String tagIdFrom, String tagIdTo, String[] tagsAttributes) {
 		register(tagIdFrom, new TagReplacement(tagIdTo, tagIdTo, false, tagsAttributes));
 	}
 
-	private void keep(String tagIdFrom, String tagIdToOpen, String tagIdToClose, String[] tagsAttributes) {
+	protected void keep(String tagIdFrom, String tagIdToOpen, String tagIdToClose, String[] tagsAttributes) {
 		register(tagIdFrom, new TagReplacement(tagIdToOpen, tagIdToClose, false, tagsAttributes));
 	}
 
 	// REDUCE #####################################
-	private void reduce(String tagId) {
+	protected void reduce(String tagId) {
 		register(tagId, new TagReplacement(tagId, tagId, true));
 	}
 
-	private void reduce(String tagIdFrom, String tagIdTo) {
+	protected void reduce(String tagIdFrom, String tagIdTo) {
 		register(tagIdFrom, new TagReplacement(tagIdTo, tagIdTo, true));
 	}
 
-	private void reduce(String tagIdFrom, String tagToOpen, String tagToClose) {
+	protected void reduce(String tagIdFrom, String tagToOpen, String tagToClose) {
 		register(tagIdFrom, new TagReplacement(tagToOpen, tagToClose, true));
 	}
 
-	private void reduce(String tagId, String[] tagsAttributes) {
+	protected void reduce(String tagId, String[] tagsAttributes) {
 		register(tagId, new TagReplacement(tagId, tagId, true, tagsAttributes));
 	}
 
-	private void reduce(String tagIdFrom, String tagIdTo, String[] tagsAttributes) {
+	protected void reduce(String tagIdFrom, String tagIdTo, String[] tagsAttributes) {
 		register(tagIdFrom, new TagReplacement(tagIdTo, tagIdTo, true, tagsAttributes));
 	}
 
-	private void reduce(String tagIdFrom, String tagToOpen, String tagToClose, String[] tagsAttributes) {
+	protected void reduce(String tagIdFrom, String tagToOpen, String tagToClose, String[] tagsAttributes) {
 		register(tagIdFrom, new TagReplacement(tagToOpen, tagToClose, true, tagsAttributes));
 	}
 
-	private String[] attrs(String... attrIds){
+	protected String[] attrs(String... attrIds){
 		return attrIds;
-	}
-}
-
-class TagReplacement {
-
-	Boolean reduce;
-	String open;
-	String close;
-	String[] attributesToCare;
-
-	TagReplacement(String open, String close, Boolean reduce) {
-		this.open = open;
-		this.close = close;
-		this.reduce = reduce;
-	}
-
-	TagReplacement(String open, String close, Boolean reduce, String[] attributesToKeep) {
-		this(open, close, reduce);
-		this.attributesToCare = attributesToKeep;
-	}
-
-	String execute(String[] tagParts, boolean closing) {
-		if (!closing) {
-			return concat("<", this.open , careAttrs(tagParts[1]) , tagParts[2]);
-		} else {
-			return concat("</", this.close , tagParts[2]);
-		}
-	}
-
-	String careAttrs(String tagSecondPart){
-		if(attributesToCare==null){
-			if(reduce){
-				return "";
-			}
-		} else { //has attributes to care
-			if(reduce){ //need to keep some attributes when reducing
-				String attributes = "";
-
-				for(String attr : attributesToCare){
-					Matcher matcher = Pattern.compile(regexAttr(attr)).matcher(tagSecondPart);
-					if(matcher.find()){
-						String foundOne = tagSecondPart.substring(matcher.start(),matcher.end());
-						attributes = concat(attributes,(foundOne.charAt(0)==' ')?"":" ",foundOne);
-					}
-				}
-				tagSecondPart = attributes;
-			}else{ //need to remove some attributes when keeping
-				for(String attr : attributesToCare){
-					tagSecondPart = tagSecondPart.replaceAll(regexAttrWithGroups(attr), "$1$2");
-				}
-			}
-		}
-		return tagSecondPart;
-	}
-
-	private String regexAttr(String attr){
-		return HtmlRegex.attrPattern(attr);
-	}
-	private String regexAttrWithGroups(String attr){
-		return HtmlRegex.attrPatternWithGroups(attr);
 	}
 }
