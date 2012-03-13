@@ -1,5 +1,6 @@
 package org.futurepages.core.persistence;
 
+import java.math.BigDecimal;
 import org.futurepages.util.StringUtils;
 import java.util.Calendar;
 import java.util.Date;
@@ -108,6 +109,13 @@ public class HQLField implements HQLable {
         return fieldName + " = " + value;
     }
 
+	public String equalsTo(BigDecimal value){
+		if (value == null) {
+            return "";
+        }
+		return fieldName + " = " + value;
+	}
+	
     public String equalsTo(Boolean value) {
         if (value == null) {
             return isNull();
