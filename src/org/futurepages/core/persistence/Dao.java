@@ -144,6 +144,10 @@ public class Dao extends HQLProvider {
 	public static <T extends Serializable> List<T> list(String hqlQuery) {
 		return getInstance().list(hqlQuery);
 	}
+	
+	public static <T extends Serializable> List<T> list(Query query) {
+		return (List<T>) query.list();
+	}
 
 	public static <T> List<T> list(String hqlQuery, Class<T> resultClass) {
 		return getInstance().list(hqlQuery, resultClass);
