@@ -208,6 +208,10 @@ public class HQLField implements HQLable {
         return fieldName + LOWER_EQUALS + value;
     }
 
+    public String hasAllWordsInSequence(String... words) {
+		return hasAllWordsInSameSequence(words);
+	}
+
     public String hasAllWordsInSameSequence(String[] words) {
         if (words == null) {
             return "";
