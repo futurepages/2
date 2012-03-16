@@ -1,5 +1,6 @@
 package org.futurepages.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -9,36 +10,37 @@ public class CollectionUtil {
 
 	//TODO FIX ME não estou funcionando :(
 	@Deprecated
-	public static <T>  T[] toArray(Collection<T> colecao) {
+	public static <T> T[] toArray(Collection<T> colecao) {
 		T[] array = (T[]) colecao.toArray();
 		return array;
 	}
 
-	public static void touch(Collection collection){
-		if(collection!=null){
+	public static void touch(Collection collection) {
+		if (collection != null) {
 			collection.size();
 		}
 	}
 
-	public static <T> int addListToList(List<T> origem, List<List<T>> destino, int limite){
-			
+	public static <T> int addListToList(List<T> origem, List<List<T>> destino, int limite) {
+
 		int vagasRestantes = limite;
-		if(vagasRestantes < 0){
+		if (vagasRestantes < 0) {
 			return vagasRestantes;
 		}
 		List<T> subList;
-		if(origem.size() > limite){
+		if (origem.size() > limite) {
 			subList = origem.subList(0, limite);
 			vagasRestantes -= subList.size();
-		}else{
+		} else {
 			subList = origem;
-			vagasRestantes -=origem.size();
+			vagasRestantes -= origem.size();
 		}
-		if(!subList.isEmpty()){
+		if (!subList.isEmpty()) {
 			destino.add(subList);
 		}
 		return vagasRestantes;
 	}
+
 	/**
 	 * 
 	 * @param <T> tipo do elemento
@@ -47,46 +49,56 @@ public class CollectionUtil {
 	 * @param limite quantidade maxima de elementos que podem ser copiados de origem para destino
 	 * @return
 	 */
-	public static <T> int addElementsToList(List<T> origem, List<T> destino, int limite){
-		
+	public static <T> int addElementsToList(List<T> origem, List<T> destino, int limite) {
+
 		int vagasRestantes = limite;
-		if(vagasRestantes < 0){
+		if (vagasRestantes < 0) {
 			return vagasRestantes;
 		}
 		List<T> subList;
-		if(origem.size() > limite){
+		if (origem.size() > limite) {
 			subList = origem.subList(0, limite);
 			vagasRestantes -= subList.size();
-		}else{
+		} else {
 			subList = origem;
-			vagasRestantes -=origem.size();
+			vagasRestantes -= origem.size();
 		}
-		if(!subList.isEmpty()){
+		if (!subList.isEmpty()) {
 			destino.addAll(subList);
 		}
 		return vagasRestantes;
 	}
-	
-	public static <T> T getLast(List<T> list) throws EmptyCollectionException{
-		if(!list.isEmpty()){
-			return list.get(list.size()-1);
+
+	public static <T> T getLast(List<T> list) throws EmptyCollectionException {
+		if (!list.isEmpty()) {
+			return list.get(list.size() - 1);
 		}
 		throw new EmptyCollectionException();
 	}
-	
-	public static <T> T getFirst(List<T> list) throws EmptyCollectionException{
-		if(!list.isEmpty()){
+
+	public static <T> T getFirst(List<T> list) throws EmptyCollectionException {
+		if (!list.isEmpty()) {
 			return list.get(0);
 		}
 		throw new EmptyCollectionException();
 	}
-	
-	 public static boolean empty(Collection colecao) {
-        if (colecao == null) {
-            return true;
-        } else if (colecao.size()<=0) {
-            return true;
-        }
-        return false;
-    }
+
+	public static boolean empty(Collection colecao) {
+		if (colecao == null) {
+			return true;
+		} else if (colecao.size() <= 0) {
+			return true;
+		}
+		return false;
+	}
+
+	public static <T> ArrayList<T> getListToElements(T... elementsList) {
+		ArrayList<T> list = new ArrayList<T>();
+		if (elementsList != null) {
+			for (int i = 0; i < elementsList.length; i++) {
+				list.add(elementsList[i]);
+			}
+		}
+		return list;
+	}
 }
