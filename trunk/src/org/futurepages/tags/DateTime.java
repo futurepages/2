@@ -1,5 +1,6 @@
 package org.futurepages.tags;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.servlet.jsp.JspException;
@@ -20,7 +21,7 @@ public class DateTime extends PrintTag{
 	private String mask;
 	
 	@TagAttribute
-	private Date date;
+	private Object date;
 	
 	public DateTime(){
 		mask = "dd/MM/yyyy";
@@ -30,13 +31,17 @@ public class DateTime extends PrintTag{
 		this.mask = mask;
 	}
 	
-    public void setDate(Date date) {
+    public void setDate(Object date) {
 		this.date = date;
 	}
 
 	public String getStringToPrint() throws JspException {
 		if(date!=null){
-    		return DateUtil.format(date,mask);
+			if(date instanceof Date){
+				return DateUtil.format((Date) date,mask);
+			}else{
+				return DateUtil.format((Calendar) date,mask);
+			}
     	}
     	return DateUtil.viewToday(mask);
     }
