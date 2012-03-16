@@ -48,13 +48,19 @@ public final class WebContainer extends SimpleTagSupport {
 		this.setLang("pt-br");
 	}
 
-	public static void importRes(JspContext page, String key, String version, boolean noJS, boolean noCSS, boolean jsInHead) {
+	public static void importRes(JspContext page, String key, String version, boolean noJS, boolean noCSS, boolean jsInHead) throws JspException, IOException {
+		importRes(page, key, version, noJS, noCSS, jsInHead, null, false);
+	}
+
+	public static void importRes(JspContext page, String key, String version, boolean noJS, boolean noCSS, boolean jsInHead, String moduleId, boolean pseudo) throws JspException, IOException {
 		ImportComponentRes icr = new ImportComponentRes();
 		icr.setKey(key);
 		icr.setVersion(version);
 		icr.setJsInHead(jsInHead);
-		WebContainer wcc = get();
-		wcc.addComponent(key, icr);
+		icr.setModuleId(moduleId);
+		icr.setPseudo(pseudo);
+		icr.setJspContext(page);
+		icr.doTag();
 	}
 
 	Map<String, ImportComponentRes> getComponents() {
