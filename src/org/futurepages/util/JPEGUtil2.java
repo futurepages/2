@@ -156,7 +156,7 @@ public class JPEGUtil2 {
 	//				    #### redimensiona (diminui) para preencher a largura com a cor.
 	//2) se a largura original menor que a largura final (imageWidth < newWidth):
 	//2.1) se largura maior que altura (imageWidth > imageHeight):
-	//		            #### completa com a cor na altura para formar.
+	//		            #### completa com a cor na altura para formar.j
 	//2.2) se altura maior que a largura:
 	//		            #### redimensiona (aumenta) para preencher a largura com a cor até form um quadrado ou até que alcanse a largura desejada.
 	//		            #### somente resize padrão (sem esticar para crescer)
@@ -190,9 +190,9 @@ public class JPEGUtil2 {
 			oDim2 = oW;
 		}
 
-		if (oW != oH) { // && (!(thumbW >= oW || thumbH >= oH))) { antes tinha esse AND, não lembro por que eu coloquei, mas quando tirei resolveu alguns problemas (Leandro).
-			int pos1 = 0, pos2 = 0, posX = 0, posY = 0, canv1 = 0, canv2 = 0, canvW = 0, canvH = 0;
+		if (oW != oH) {
 			if (colorSquare != null) {
+				int pos1 = 0, pos2 = 0, posX = 0, posY = 0, canv1 = 0, canv2 = 0, canvW = 0, canvH = 0;
 				if (oDim1 >= dim1) { //se largura original maior ou igual à largura final (imageWidth >= newWidth):
 					if (oDim1 > oDim2) { //se largura maior que altura (imageWidth > imageHeight): //	completa com a cor na altura.
 						pos1 = 0;
@@ -251,8 +251,13 @@ public class JPEGUtil2 {
 				graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 				graphics2D.drawImage(image, posX, posY, thumbW, thumbH, null);
 				image = thumbImage;
-			} else {
-				image = GraphicsUtilities.createThumbnail(image, thumbW, thumbH);
+			} else { //colorSquare == null
+				if(stretchWhenSmaller && (thumbW > oW || thumbH > oH)){
+					poorResize(image, null, thumbW, thumbH, quality, pathNewFile);
+					return;
+				}else{
+					image = GraphicsUtilities.createThumbnail(image, thumbW, thumbH); //dont stretchWhenSmaller
+				}
 			}
 
 			createJPEG(image, quality, pathNewFile);
