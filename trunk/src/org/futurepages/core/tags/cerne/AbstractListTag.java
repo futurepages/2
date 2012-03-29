@@ -27,6 +27,9 @@ public abstract class AbstractListTag<T extends Object> extends AbstractListCont
 	private String orderBy = null;
 
 	@TagAttribute
+	private boolean mapKeys = false;
+
+	@TagAttribute
 	private boolean desc = false;
 
 	public void setValue(String value) {
@@ -106,6 +109,7 @@ public abstract class AbstractListTag<T extends Object> extends AbstractListCont
 
 				} else if (object instanceof Map) {
 
+
 					Collection coll = ((Map) object).values();
 
 					List<T> list = new ArrayList<T>(coll);
@@ -182,18 +186,32 @@ public abstract class AbstractListTag<T extends Object> extends AbstractListCont
 			return list;
 
 		} else if (obj instanceof Map) {
+			if(mapKeys){
+				Set<T> set = ((Map) obj).keySet();
+				List<T> list = new ArrayList<T>(set);
 
-			Collection coll = ((Map) obj).values();
+				if (orderBy != null) {
+					return (List<T>) ListSorter.sort((List<Object>) list,orderBy, desc);
+				}
+				return list;
+			}else{
+				Collection coll = ((Map) obj).values();
 
-			List<T> list = new ArrayList<T>(coll);
+				List<T> list = new ArrayList<T>(coll);
 
-			if (orderBy != null) {
-				return (List<T>) ListSorter.sort((List<Object>) list,orderBy, desc);
+				if (orderBy != null) {
+					return (List<T>) ListSorter.sort((List<Object>) list,orderBy, desc);
+				}
+
+				return list;
+			
 			}
 
-			return list;
 		}
-
 		throw new JspException("Tag List: Value " + value + " (" + obj.getClass().getName() + ") is not an instance of List or Object[], List or Set!");
+	}
+
+	public void setMapKeys(boolean mapKeys) {
+		this.mapKeys = mapKeys;
 	}
 }
