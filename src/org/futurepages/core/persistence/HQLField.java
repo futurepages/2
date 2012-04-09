@@ -95,6 +95,10 @@ public class HQLField implements HQLable {
         return fieldName + " = " + value;
     }
 
+	public String equalsTo(double value) {
+        return fieldName + " = " + value;
+    }
+	
     public String equalsTo(Integer value) {
         if (value == null) {
             return "";
