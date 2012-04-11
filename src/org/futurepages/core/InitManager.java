@@ -28,6 +28,7 @@ import org.futurepages.formatters.TextAreaFormatter;
 import org.futurepages.formatters.UpperCaseFormatter;
 import org.futurepages.core.control.AbstractApplicationManager;
 import org.futurepages.consequences.NullConsequence;
+import org.futurepages.consequences.StringConsequence;
 import org.futurepages.core.exception.DefaultExceptionLogger;
 import org.futurepages.filters.FileUploadFilter;
 import org.futurepages.filters.InjectionFilter;
@@ -72,6 +73,7 @@ public class InitManager extends AbstractApplicationManager{
             on(NULL, new NullConsequence());
 			on(EXCEPTION, fwd(Params.get("EXCEPTION_FILE_PATH")));
 			on(DYN_EXCEPTION, fwd(Params.get("DYN_EXCEPTION_FILE_PATH")));
+			on(STRING, new StringConsequence() );
 			on(REDIR, redir());
 			on(AJAX_REDIR,   ajax(new JSONGenericRenderer()));
 			on(AJAX_ERROR,   ajax(new JSONGenericRenderer()));

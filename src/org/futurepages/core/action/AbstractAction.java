@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.futurepages.consequences.AjaxConsequence;
+import org.futurepages.consequences.StringConsequence;
 import org.futurepages.core.admin.DefaultUser;
 import org.futurepages.core.context.Context;
 import org.futurepages.core.context.SessionContext;
@@ -239,6 +240,10 @@ public abstract class AbstractAction implements Pageable, Action {
 
 	protected void outputAjax(Object object) {
 		output(AjaxConsequence.KEY, object);
+	}
+
+	protected void outputString(String responseValue) {
+		output(StringConsequence.KEY, responseValue);
 	}
 
 	public void doListDependencies() {
