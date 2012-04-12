@@ -37,6 +37,7 @@ import org.futurepages.filters.AutoRedirectDomainFilter;
 import org.futurepages.formatters.CollectionSizeFormatter;
 import org.futurepages.formatters.ExtensionFileNameFormatter;
 import org.futurepages.formatters.FullDateTimeFormatter;
+import org.futurepages.formatters.LiteralDateTimeFormatter;
 import org.futurepages.formatters.MonthFormatter;
 import org.futurepages.formatters.RemainingTimeFormatter;
 import org.futurepages.formatters.SmartTextFormatter;
@@ -108,6 +109,7 @@ public class InitManager extends AbstractApplicationManager{
         FormatterManager.addFormatter("html"        	   , new HTMLFormatter());
         FormatterManager.addFormatter("javascript"         , new JavascriptFormatter());
         FormatterManager.addFormatter("literalDate" 	   , new LiteralDateFormatter());
+        FormatterManager.addFormatter("literalDateTime"	   , new LiteralDateTimeFormatter());
         FormatterManager.addFormatter("extensiveDateTime"  , new LiteralDateFormatter());
         FormatterManager.addFormatter("fullDateTime"	   , new FullDateTimeFormatter());
         FormatterManager.addFormatter("literalDayOfWeek"   , new LiteralDayOfWeekFormatter());
