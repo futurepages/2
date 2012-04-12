@@ -25,7 +25,18 @@ import org.futurepages.util.NumberUtil;
 			}else{
 				sb.append(" à ");
 			}
-			sb.append(NumberUtil.numeroPorExteso(hora));
+			if(hora == 1){
+				sb.append("uma");
+			}else if(hora == 2){
+				sb.append("duas");
+			}else if(hora == 21){
+				sb.append("vinte e uma");
+			}else if(hora == 22){
+				sb.append("vinte e duas");
+			}
+			else{
+				sb.append(NumberUtil.numeroPorExteso(hora));
+			}
 			if(hora!=1){
 				sb.append(" horas");
 			}else{
