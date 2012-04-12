@@ -110,8 +110,8 @@ public class InitManager extends AbstractApplicationManager{
         FormatterManager.addFormatter("javascript"         , new JavascriptFormatter());
         FormatterManager.addFormatter("literalDate" 	   , new LiteralDateFormatter());
         FormatterManager.addFormatter("literalDateTime"	   , new LiteralDateTimeFormatter());
-        FormatterManager.addFormatter("extensiveDateTime"  , new LiteralDateFormatter());
-        FormatterManager.addFormatter("fullDateTime"	   , new FullDateTimeFormatter());
+        FormatterManager.addFormatter("fullDate"		   , new FullDateTimeFormatter(false));
+        FormatterManager.addFormatter("fullDateTime"	   , new FullDateTimeFormatter(true));		
         FormatterManager.addFormatter("literalDayOfWeek"   , new LiteralDayOfWeekFormatter());
         FormatterManager.addFormatter("anniversary"        , new AnniversaryFormatter());
         FormatterManager.addFormatter("anniversaryAbbr"    , new AnniversaryAbbrFormatter());
