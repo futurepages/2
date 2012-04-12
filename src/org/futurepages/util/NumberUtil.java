@@ -161,6 +161,9 @@ public class NumberUtil {
 		return number;
 	}
 
+	public static String numeroPorExteso(int number) throws Exception {
+		return numeroPorExteso(String.valueOf(number));
+	}
 	public static String numeroPorExteso(String number) throws Exception {
 		String retorno = "";
 		String ultimo = "";
