@@ -19,6 +19,10 @@ public class FullDateTimeFormatter implements Formatter<Calendar> {
 	}
 
 	public String format(Calendar cal, Locale loc) {
+		return valueOf(cal);
+	}
+
+	public String valueOf(Calendar cal){
 		try {
 			StringBuilder sb = new StringBuilder();
 			int dia = cal.get(Calendar.DAY_OF_MONTH);
@@ -71,6 +75,5 @@ public class FullDateTimeFormatter implements Formatter<Calendar> {
 			DefaultExceptionLogger.getInstance().execute(ex);
 			return "";
 		}
-
 	}
 }
