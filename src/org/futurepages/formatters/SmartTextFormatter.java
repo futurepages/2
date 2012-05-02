@@ -29,7 +29,7 @@ import org.futurepages.util.iterator.string.MatchedToken;
 			sb.append(token.getBefore());
 			String url = token.getMatched();
 			sb.append("<a href=\"")
-			  .append(url)
+			  .append(url.startsWith("www.")?"http://"+url:url)
 			  .append("\" target=\"_blank\" title=\"").append(url).append("\">")
 			  .append(shortUrl(url))
 			  .append("</a>");
