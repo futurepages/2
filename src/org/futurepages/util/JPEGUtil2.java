@@ -63,6 +63,16 @@ public class JPEGUtil2 {
 		Image image = new ImageIcon(file.toURI().toURL()).getImage();
 		return image.getHeight(null);
 	}
+	
+	public static int []getWidthAndHeight(File file) throws MalformedURLException {
+		Image image = new ImageIcon(file.toURI().toURL()).getImage();
+		int [] wh = new int[2];
+		
+		wh[0] = image.getWidth(null);
+		wh[1] = image.getHeight(null);
+		
+		return wh;
+	}
 
 	/**
 	 * Redimensiona arquivo (File) e retorna a imagem redimensionada (pathNewFile)
