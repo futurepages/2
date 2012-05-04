@@ -208,6 +208,10 @@ public abstract class AbstractAction implements Pageable, Action {
 		return getPaginator().getPageSize(defaultPageSize);
 	}
 
+	protected int getPageSize(int defaultPageSize, int maxPageSize) {
+		return getPaginator().getPageSize(defaultPageSize, maxPageSize);
+	}
+
 	/**
 	 * Pega o objeto que se encontra no input com uma determinada chave String passada
 	 * por parâmetro e coloca-o no output com a mesma chave.
