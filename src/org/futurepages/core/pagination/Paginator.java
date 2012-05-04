@@ -100,6 +100,23 @@ public class Paginator implements Pageable {
 		return pageSize;
 	}
 
+	public int getPageSize(int defaultPageSize, int maxPageSize) {
+		int pageSize;
+		try {
+			pageSize = input.getIntValue(_PAGE_SIZE);
+			if (!Is.selected(pageSize)) {
+				pageSize = defaultPageSize;
+			}else{
+				if(pageSize > maxPageSize){
+					pageSize = maxPageSize;
+				}
+			}
+		} catch (InputException e) {
+			pageSize = defaultPageSize;
+		}
+		return pageSize;
+	}
+
 	public void setDefaultPageSize(int defPageSize){
 		this.defaultPageSize = defPageSize;
 	}
