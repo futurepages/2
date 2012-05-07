@@ -266,6 +266,10 @@ public class JPEGUtil2 {
 					poorResize(image, null, thumbW, thumbH, quality, pathNewFile);
 					return;
 				}else{
+					if(thumbW > oW || thumbH > oH){
+						thumbW = oW;
+						thumbH = oH;
+					}
 					image = GraphicsUtilities.createThumbnail(image, thumbW, thumbH); //dont stretchWhenSmaller
 				}
 			}
