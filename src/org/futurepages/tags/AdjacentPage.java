@@ -7,6 +7,7 @@ import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.pagination.Pageable;
 import org.futurepages.core.tags.PrintTag;
 import org.futurepages.core.tags.build.ContentTypeEnum;
+import org.futurepages.util.Is;
 import org.futurepages.util.StringUtils;
 
 /**
@@ -30,13 +31,22 @@ public class AdjacentPage extends PrintTag implements Pageable {
     @TagAttribute(rtexprvalue = false)
     private String title;
 	
+	@TagAttribute(required = false)
+    private String clss;
+	
 	@Override
 	public String getStringToPrint() throws JspException {
 		StringBuilder html = new StringBuilder();
 		if(hasAdjacentUrl()){
 			Boolean hasNextPage = (Boolean) action.getOutput().getValue(inputOf(type));
 			if(hasNextPage!=null && hasNextPage){
-				html.append("<a href=\"" + href +"\" "+title+">"+getBodyContent().getString()+"</a> ");
+				html.append("<a href=\"").append(href).append("\" ").append(title);
+
+				if (!Is.empty(clss)) {
+					html.append(" class=\"").append(clss).append("\"");
+				}
+
+				html.append(">").append(getBodyContent().getString()).append("</a> ");
 			}else{
 				html.append("<strong>"+getBodyContent().getString()+" </strong>");
 			}
@@ -65,4 +75,8 @@ public class AdjacentPage extends PrintTag implements Pageable {
     public void setType(String type) {
         this.type = type;
     }
+	
+	public void setClss(String clss) {
+		this.clss = clss;
+	}
 }
