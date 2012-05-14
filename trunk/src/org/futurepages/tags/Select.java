@@ -87,12 +87,13 @@ public class Select extends HTMLTag {
             if (actionList.size() > 0) {
 				Class objectClass = actionList.get(0).getClass();
 				boolean entityClass = (objectClass.isAnnotationPresent(Entity.class));
-				if (entityClass && idName == null) {
-					idName = Dao.getIdName(objectClass);
+				String idNameTry = idName;
+				if (entityClass && idNameTry == null) {
+					idNameTry = Dao.getIdName(objectClass);
 				}
                 for (int i = 0; i < actionList.size(); i++) {
-					if(idName!=null){
-						value_id = ReflectionUtil.getField(actionList.get(i), idName).toString();
+					if(idNameTry!=null){
+						value_id = ReflectionUtil.getField(actionList.get(i), idNameTry).toString();
 					} else {
 						value_id = actionList.get(i).toString();
 					}
