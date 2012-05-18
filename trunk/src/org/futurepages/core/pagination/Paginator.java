@@ -100,6 +100,10 @@ public class Paginator implements Pageable {
 		return pageSize;
 	}
 
+	/*
+	 * Primeiro parâmetro é o default e é o mínimo também.
+	 * O segundo parâmetro é o máximo permitido.
+	 */
 	public int getPageSize(int defaultPageSize, int maxPageSize) {
 		int pageSize;
 		try {
@@ -109,6 +113,8 @@ public class Paginator implements Pageable {
 			}else{
 				if(pageSize > maxPageSize){
 					pageSize = maxPageSize;
+				}else if(pageSize < defaultPageSize){
+					pageSize = defaultPageSize;
 				}
 			}
 		} catch (InputException e) {
