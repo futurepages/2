@@ -20,10 +20,10 @@ public class HQLUtil {
 	 */
 	public static String fieldHasAllWordsInSameSequence(String field, String... words) {
 		StringBuffer sb = new StringBuffer();
-		if(words!=null && words.length!=0){
+		if (words != null && words.length != 0) {
 			sb.append(field + " LIKE '");
 			for (int i = 0; i < words.length; i++) {
-				sb.append("%"+escLike(words[i]));
+				sb.append("%" + escLike(words[i]));
 			}
 			sb.append("%'");
 		}
@@ -37,7 +37,7 @@ public class HQLUtil {
 	public static String fieldHasWords(String field, String[] words, String logicalConect) {
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < words.length; i++) {
-			sb.append(StringUtils.concat(field , " LIKE '%",escLike(words[i]),"%'",needed(i,words," "+logicalConect+" ")));
+			sb.append(StringUtils.concat(field, " LIKE '%", escLike(words[i]), "%'", needed(i, words, " " + logicalConect + " ")));
 		}
 		return sb.toString();
 	}
@@ -49,7 +49,7 @@ public class HQLUtil {
 	public static String fieldHasAllWordsInSameSequence(String field, String value) {
 		StringTokenizer in = new StringTokenizer(value, " ");
 		StringBuffer out = new StringBuffer();
-		out.append(field+ " LIKE '");
+		out.append(field + " LIKE '");
 		while (in.hasMoreTokens()) {
 			out.append("%" + escLike(in.nextToken()));
 		}
@@ -57,14 +57,16 @@ public class HQLUtil {
 
 		return out.toString();
 	}
-	
+
 	public static String imploded(List elements) {
 		StringBuffer out = new StringBuffer("");
 		String virgula = "";
 		for (Object element : elements) {
 			out.append(virgula);
 			out.append("'" + escQuotesAndSlashes(element.toString()) + "'");
-			if(virgula.equals(""))  virgula = "," ;
+			if (virgula.equals("")) {
+				virgula = ",";
+			}
 		}
 		return out.toString();
 	}
@@ -75,7 +77,9 @@ public class HQLUtil {
 		for (Enum element : elements) {
 			out.append(virgula);
 			out.append("'" + escQuotesAndSlashes(element.name()) + "'");
-			if(virgula.equals(""))  virgula = "," ;
+			if (virgula.equals("")) {
+				virgula = ",";
+			}
 		}
 		return out.toString();
 	}
@@ -85,10 +89,9 @@ public class HQLUtil {
 	}
 
 	private static String needed(int position, String[] list, String string) {
-		if(position<list.length-1){
+		if (position < list.length - 1) {
 			return string;
-		}
-		else{
+		} else {
 			return "";
 		}
 	}
@@ -101,7 +104,7 @@ public class HQLUtil {
 	 */
 	public static String escLike(String original) {
 		original = escQuotesAndSlashes(original);
-		original = original.replace("%","\\%").replace("_","\\_");
+		original = original.replace("%", "\\%").replace("_", "\\_");
 		return original;
 	}
 
@@ -111,7 +114,7 @@ public class HQLUtil {
 	 * @param original HQL de entrada
 	 */
 	public static String escQuotesAndSlashes(String original) {
-		original = original.replace("'", "''").replace("\\","\\\\");
+		original = original.replace("'", "''").replace("\\", "\\\\");
 		return original;
 	}
 
@@ -137,6 +140,10 @@ public class HQLUtil {
 		return out.toString();
 	}
 
+	public static String matches(String field, String value) {
+		return matches(field, value, true, false);
+	}
+
 	/**
 	 * Implementa uma busca inteligente parecida com o padrão google.
 	 * 
@@ -147,64 +154,126 @@ public class HQLUtil {
 	 *</ui>
 	 *
 	 * Exemplo com field = "campo" e o seguinte value:
-	 * maria da silva "pereira" a "costinha da silva" -caramba pereira
+	 * maria da silva "pereira" a "costinha da silva" -caramba pereira oi pi
 	 * Temos o seguinte resultado:
 	 *   campo LIKE '%pereira%'
 	 *   AND campo LIKE '%silva%'
 	 *   AND campo LIKE '%maria%'
 	 *   AND campo LIKE '%costinha da silva%'
 	 *   AND campo NOT LIKE '%caramba%'
-	 */	
-	public static String matches(String field, String value) {
+	 *   AND (campo like '% oi %' OR campo LIKE '% oi>%' OR ...) -- ISTO SOMENTE SE findSmaller == true
+	 *
+	 *  SE bringAll = false --> se a busca ficar vazia, ele não retorna nada.
+	 */
+	public static String matches(String field, String value, boolean bringAll, boolean findSmaller) {
 		value = escLike(value);
 		value = value.replaceAll("\\*[\\*]*", "*");
-		final int TAMANHO_MINIMO_TOKEN = 2;
-		Pattern aspasPattern = Pattern.compile("\".*?\"");
+		final int MIN_TOKEN_SIZE = 2;
+		Pattern aspasPattern = Pattern.compile("-?\".*?\"");
 		Matcher aspasMatcher = aspasPattern.matcher(value);
 		String[] conteudoSemAspas = aspasPattern.split(value);
 
 		HashSet<String> tokensLike = new LinkedHashSet<String>();
 		HashSet<String> tokensNotLike = new LinkedHashSet<String>();
-		
-		while(aspasMatcher.find()){ //palavras entre aspas
-			String foundOne = value.substring(aspasMatcher.start()+1,aspasMatcher.end()-1);
-			if(!foundOne.trim().equals("") && foundOne.trim().length()>TAMANHO_MINIMO_TOKEN ){
-				if(foundOne.contains("*")){
+		HashSet<String> tokensRegexP = new LinkedHashSet<String>();
+
+		//## PARTE 1 - Lista os caras ...
+
+		while (aspasMatcher.find()) { //palavras entre aspas
+			int flagStart = (value.charAt(aspasMatcher.start())=='-') ? 2 : 1;
+			String foundOne = value.substring(aspasMatcher.start() + flagStart, aspasMatcher.end() - 1);
+			if (!foundOne.trim().equals("") && foundOne.trim().length() > MIN_TOKEN_SIZE) {
+				if (foundOne.contains("*")) {
 					foundOne = foundOne.replaceAll("[\\s]?\\*[\\s]?", "%");
 				}
-				tokensLike.add(foundOne);
+				if(flagStart==1){
+					tokensLike.add(foundOne);
+				}else{
+					tokensNotLike.add(foundOne);
+				}
 			}
 		}
 
-		for(String token : conteudoSemAspas){
+		for (String token : conteudoSemAspas) {
 			StringTokenizer st = new StringTokenizer(token);
-			while(st.hasMoreTokens()){
-				String palavra = st.nextToken();
-				if(palavra.charAt(0)=='-'){
+			while (st.hasMoreTokens()) {
+				String palavra = st.nextToken().trim();
+				if (palavra.charAt(0) == '-') {
 					palavra = palavra.substring(1);
-					if(palavra.trim().length()>TAMANHO_MINIMO_TOKEN){
+					if (palavra.length() > MIN_TOKEN_SIZE) {
 						tokensNotLike.add(palavra);
 					}
-				}
-				else if(!palavra.equals("") && (palavra.length()>TAMANHO_MINIMO_TOKEN)){
-					tokensLike.add(palavra);
+				} else {
+					if (!palavra.equals("") && (palavra.length() > MIN_TOKEN_SIZE)) {
+						tokensLike.add(palavra);
+					} else {
+						if (findSmaller && palavra.length() == MIN_TOKEN_SIZE
+							&& !palavra.equalsIgnoreCase("de")
+							&& !palavra.equalsIgnoreCase("do")
+							&& !palavra.equalsIgnoreCase("da")
+							&& !palavra.equalsIgnoreCase("ao")
+						) {
+							tokensRegexP.add(palavra);
+						}
+					}
 				}
 			}
 		}
 
+		//## PARTE 2 - Monta SQL com os caras listados
 		StringBuffer hqlQueryBuffer = new StringBuffer();
-		
+
 		boolean primeiro = true;
-		for(String token : tokensLike){
-			hqlQueryBuffer.append((!primeiro? " AND ":"")+field+" LIKE '%"+token+"%'");
+		for (String token : tokensLike) {
+			hqlQueryBuffer.append((!primeiro ? " AND " : ""))
+						  .append(field)
+						  .append(" LIKE '%")
+						  .append(token)
+						  .append("%'");
 			primeiro = false;
 		}
 
-		for(String token : tokensNotLike){
-			hqlQueryBuffer.append((!primeiro? " AND ":"")+field+" NOT LIKE '%"+token+"%'");
+		for (String token : tokensNotLike) {
+			hqlQueryBuffer.append((!primeiro ? " AND " : ""))
+						  .append(field)
+						  .append(" NOT LIKE '%")
+						  .append(token)
+						  .append("%'");
 			primeiro = false;
 		}
 
+    	if (tokensRegexP.size() > 0) {
+			boolean sohEle = primeiro;
+			if(!sohEle){
+				hqlQueryBuffer.append("AND (");
+			}
+			boolean primeiroAqui = true;
+			for (String token : tokensRegexP) {
+				String[] strs = new String[]{" "+token+" " , " "+token+"-" , "-"+token+" " , "-"+token+"-", 
+											 " "+token+"?" , " "+token+"!" , " "+token+"." , " "+token+"," ,
+											 " "+token+"\\n"  , " "+token+"\\r" , " "+token+"\\t",">"+token+"<" ,
+											 ">"+token+" " , " "+token+"<" , " "+token+")" , "("+token+" " ,
+											 "\""+token+"\"" , "("+token+")","''"+token+"''"," "+token+"''", "''"+token+" "};
+
+				for(String str : strs){
+					hqlQueryBuffer.append((!primeiroAqui ? " OR " : ""))
+								  .append(field)
+								  .append(" LIKE '%")
+								  .append(str)
+								  .append("%'");
+
+					primeiroAqui = false;
+				}
+			}
+			if(!sohEle){
+				hqlQueryBuffer.append(")");
+			}
+		}
+		if(tokensLike.size() == 0
+		&& tokensNotLike.size() == 0
+		&& tokensRegexP.size() == 0 && !bringAll){
+			return "true = false"; //return nothing
+		}
 		return hqlQueryBuffer.toString();
 	}
 }
