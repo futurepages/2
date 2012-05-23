@@ -237,7 +237,7 @@ public class HQLUtilTest {
     @Test
     public void testMatches_minusEmGrupoAspas(){
     	final String busca = "maria -\"primeiro grupo\"";
-    	final String esperado = "campo LIKE '%primeiro grupo%' AND campo LIKE '%maria%'";
+    	final String esperado = "campo LIKE '%maria%' AND campo NOT LIKE '%primeiro grupo%'";
     	final String errorMsg = "msg";
     	matchesTestProcedure(errorMsg, "campo", busca,esperado);
     }
