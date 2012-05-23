@@ -84,6 +84,13 @@ public class HQLField implements HQLable {
         return HQLUtil.matches(fieldName, value);
     }
 
+    public String matches(String value, boolean bringAll, boolean findSmaller) {
+        if (Is.empty(value)) {
+            return "";
+        }
+        return HQLUtil.matches(fieldName, value,bringAll,findSmaller);
+	}
+
     public String is(Boolean bool) {
         if (Is.empty(bool)) {
             return "";
