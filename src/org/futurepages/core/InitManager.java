@@ -41,6 +41,7 @@ import org.futurepages.formatters.LiteralDateTimeFormatter;
 import org.futurepages.formatters.MonthFormatter;
 import org.futurepages.formatters.RemainingTimeFormatter;
 import org.futurepages.formatters.SmartTextFormatter;
+import org.futurepages.formatters.TimeFormatter;
 import org.futurepages.formatters.UrlFormatter;
 import org.futurepages.json.JSONGenericRenderer;
 import org.futurepages.util.Is;
@@ -102,6 +103,7 @@ public class InitManager extends AbstractApplicationManager{
         FormatterManager.addFormatter("collectionSize" 	   , new CollectionSizeFormatter());
         FormatterManager.addFormatter("cpfCnpj"		 	   , new CPFCNPJFormatter());
         FormatterManager.addFormatter("date"         	   , new DateFormatter());
+        FormatterManager.addFormatter("time"			   , new TimeFormatter());
         FormatterManager.addFormatter("dateTime"     	   , new DateTimeFormatter());
         FormatterManager.addFormatter("elapsedTime"   	   , new ElapsedTimeFormatter());
         FormatterManager.addFormatter("extensionFileName"  , new ExtensionFileNameFormatter());
