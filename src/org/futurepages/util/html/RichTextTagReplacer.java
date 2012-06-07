@@ -37,7 +37,7 @@ public class RichTextTagReplacer extends HtmlTagReplacer {
 	 * 2) REDUCE  - reduz a estrutura de atributos da tag
 	 *     -> ex.: in = <a href="#">  reduce("a","b")  ==>  <b>
 	 * 3) REPLACE - substitui toda a tag pelo conteúdo passado por parâmetro
-	 *     -> ex.: in = <a href="#">  reduce("a","b")  ==>  b
+	 *     -> ex.: in = <a href="#">  replace("a","b")  ==>  b
 	 *
 	 */
 	@Override
