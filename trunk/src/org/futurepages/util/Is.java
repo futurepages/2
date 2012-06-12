@@ -46,7 +46,7 @@ public class Is {
     public static boolean validMail(String mailStr) {
         String[] mailParts = mailStr.split("@");
 
-        // como o operador && é curto-circuito, as duas próximas operações
+        // Como o operador && é curto-circuito, as duas próximas operações
 		// só serão realizadas se a primeira operação "mailParts.length == 2"
 		// for verdadeira. Evitando assim que hava uma exceção, caso o array
 		// possua menos de 2 elementos.
