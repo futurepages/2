@@ -39,6 +39,7 @@ import org.futurepages.formatters.ExtensionFileNameFormatter;
 import org.futurepages.formatters.FullDateTimeFormatter;
 import org.futurepages.formatters.LiteralDateTimeFormatter;
 import org.futurepages.formatters.MonthFormatter;
+import org.futurepages.formatters.PoorTextFormatter;
 import org.futurepages.formatters.RemainingTimeFormatter;
 import org.futurepages.formatters.SmartTextFormatter;
 import org.futurepages.formatters.TimeFormatter;
@@ -100,33 +101,34 @@ public class InitManager extends AbstractApplicationManager{
     
     @Override
     public void loadFormatters() {
+        FormatterManager.addFormatter("anniversary"        , new AnniversaryFormatter());
+        FormatterManager.addFormatter("anniversaryAbbr"    , new AnniversaryAbbrFormatter());
         FormatterManager.addFormatter("collectionSize" 	   , new CollectionSizeFormatter());
         FormatterManager.addFormatter("cpfCnpj"		 	   , new CPFCNPJFormatter());
         FormatterManager.addFormatter("date"         	   , new DateFormatter());
-        FormatterManager.addFormatter("time"			   , new TimeFormatter());
         FormatterManager.addFormatter("dateTime"     	   , new DateTimeFormatter());
         FormatterManager.addFormatter("elapsedTime"   	   , new ElapsedTimeFormatter());
         FormatterManager.addFormatter("extensionFileName"  , new ExtensionFileNameFormatter());
-        FormatterManager.addFormatter("remainingTime"	   , new RemainingTimeFormatter());
+        FormatterManager.addFormatter("float"        	   , new FloatFormatter());
+        FormatterManager.addFormatter("fullDate"		   , new FullDateTimeFormatter(false));
+        FormatterManager.addFormatter("fullDateTime"	   , new FullDateTimeFormatter(true));		
         FormatterManager.addFormatter("html"        	   , new HTMLFormatter());
         FormatterManager.addFormatter("javascript"         , new JavascriptFormatter());
         FormatterManager.addFormatter("literalDate" 	   , new LiteralDateFormatter());
         FormatterManager.addFormatter("literalDateTime"	   , new LiteralDateTimeFormatter());
-        FormatterManager.addFormatter("fullDate"		   , new FullDateTimeFormatter(false));
-        FormatterManager.addFormatter("fullDateTime"	   , new FullDateTimeFormatter(true));		
         FormatterManager.addFormatter("literalDayOfWeek"   , new LiteralDayOfWeekFormatter());
-        FormatterManager.addFormatter("anniversary"        , new AnniversaryFormatter());
-        FormatterManager.addFormatter("anniversaryAbbr"    , new AnniversaryAbbrFormatter());
         FormatterManager.addFormatter("literalAnniversary" , new LiteralAnniversaryFormatter());
         FormatterManager.addFormatter("money"              , new MoneyFormatter());
         FormatterManager.addFormatter("month"              , new MonthFormatter());
-        FormatterManager.addFormatter("float"        	   , new FloatFormatter());
-        FormatterManager.addFormatter("seoURL"	     	   , new SEOURLFormatter());
         FormatterManager.addFormatter("noSpecials"  	   , new NoSpecialsFormatter());
-        FormatterManager.addFormatter("textarea"		   , new TextAreaFormatter());
+        FormatterManager.addFormatter("poorText" 	   , new PoorTextFormatter());
+        FormatterManager.addFormatter("remainingTime"	   , new RemainingTimeFormatter());
+        FormatterManager.addFormatter("seoURL"	     	   , new SEOURLFormatter());
         FormatterManager.addFormatter("smartText"		   , new SmartTextFormatter());
+        FormatterManager.addFormatter("textarea"		   , new TextAreaFormatter());
+        FormatterManager.addFormatter("time"			   , new TimeFormatter());
         FormatterManager.addFormatter("uppercase"		   , new UpperCaseFormatter());
-		FormatterManager.addFormatter("url"                , new UrlFormatter());
+	FormatterManager.addFormatter("url"                , new UrlFormatter());
     }
 
 	@Override
