@@ -1,11 +1,13 @@
 package org.futurepages.core.exception;
 
+import java.util.Date;
 import javax.servlet.ServletException;
 import org.futurepages.core.action.AsynchronousManager;
 import org.futurepages.core.action.Manipulable;
 import org.futurepages.core.control.InvocationChain;
 import org.futurepages.exceptions.FuturepagesServletException;
 import org.futurepages.exceptions.ServletErrorException;
+import org.futurepages.util.DateUtil;
 import org.futurepages.util.StringUtils;
 
 
@@ -27,7 +29,7 @@ public class DefaultExceptionLogger implements ExceptionLogger, Manipulable{
 		String numeroProtocolo = System.currentTimeMillis()+"-"+Thread.currentThread().getId();
 
 		String exceptionId =  StringUtils.concat("[",errorType.toUpperCase(),"] ",numeroProtocolo);
-        log(exceptionId ," >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        log(exceptionId , "  ("  , DateUtil.viewDateTime(new Date()) , ") >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 						 
 		throwable.printStackTrace();
 
