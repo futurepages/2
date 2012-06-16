@@ -121,14 +121,14 @@ public class InitManager extends AbstractApplicationManager{
         FormatterManager.addFormatter("money"              , new MoneyFormatter());
         FormatterManager.addFormatter("month"              , new MonthFormatter());
         FormatterManager.addFormatter("noSpecials"  	   , new NoSpecialsFormatter());
-        FormatterManager.addFormatter("poorText" 	   , new PoorTextFormatter());
+        FormatterManager.addFormatter("poorText"		   , new PoorTextFormatter());
         FormatterManager.addFormatter("remainingTime"	   , new RemainingTimeFormatter());
         FormatterManager.addFormatter("seoURL"	     	   , new SEOURLFormatter());
         FormatterManager.addFormatter("smartText"		   , new SmartTextFormatter());
         FormatterManager.addFormatter("textarea"		   , new TextAreaFormatter());
         FormatterManager.addFormatter("time"			   , new TimeFormatter());
         FormatterManager.addFormatter("uppercase"		   , new UpperCaseFormatter());
-	FormatterManager.addFormatter("url"                , new UrlFormatter());
+		FormatterManager.addFormatter("url"                , new UrlFormatter());
     }
 
 	@Override
