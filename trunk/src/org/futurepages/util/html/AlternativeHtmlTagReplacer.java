@@ -26,6 +26,9 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 		this.styles = styles;
 	}
 
+	/**
+	 * Se internalAnchors == null , significa que não manteremos os links (serão eliminados)
+	 */
 	public void init() {
 
 		//STYLES GERAIS
