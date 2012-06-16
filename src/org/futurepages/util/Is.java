@@ -1,8 +1,5 @@
 package org.futurepages.util;
 
-import java.util.StringTokenizer;
-import org.futurepages.exceptions.ErrorException;
-
 /**
  * Classe responsável por comparações diversas com retornos lógicos (true/false).
  *
@@ -121,4 +118,60 @@ public class Is {
         return false;
 
     }
+
+	public static boolean validCapitalizedPersonName(String in){
+		if(in.equals(in.toUpperCase()) || in.equals(in.toLowerCase())){
+			return false;
+		}
+		String[] palavras = in.split("[ |\\t]+");
+		if(palavras.length==1){
+			return false;
+		}
+		for (String palavra : palavras) {
+			if(palavra.length()>1){
+				String primeiraLetra = String.valueOf(palavra.charAt(0));
+				String segundaLetra = String.valueOf(palavra.charAt(1));
+				if(primeiraLetra.equals(primeiraLetra.toLowerCase())
+				   && (segundaLetra.equals(segundaLetra.toUpperCase()) && !segundaLetra.equals("'") && !segundaLetra.equals("`") ) ){
+					return false;
+				}
+				if(palavra.length()>3){
+					if(primeiraLetra.equals(primeiraLetra.toLowerCase())
+					&& !palavra.contains("'") && !palavra.contains("`")){
+						return false;
+					}
+				}
+			}else if(palavra.equalsIgnoreCase("e")){
+				if(palavra.equals("E")){
+					return false;
+				}
+			}
+			if(palavra.equalsIgnoreCase("de")
+			|| palavra.equalsIgnoreCase("do")
+			|| palavra.equalsIgnoreCase("da")
+			|| palavra.equalsIgnoreCase("dos")
+			|| palavra.equalsIgnoreCase("das")
+			|| palavra.equalsIgnoreCase("e")
+			){
+				if(!palavra.equals(palavra.toLowerCase())){
+					return false;
+				}
+			}else if(
+					 palavra.equalsIgnoreCase("I")
+				  || palavra.equalsIgnoreCase("II")
+				  || palavra.equalsIgnoreCase("III")
+				  || palavra.equalsIgnoreCase("IV")
+				  || palavra.equalsIgnoreCase("V")
+				  || palavra.equalsIgnoreCase("VI")
+				  || palavra.equalsIgnoreCase("VII")
+				  || palavra.equalsIgnoreCase("VIII")
+				  //TO-DO seria interessante os demais??
+			){
+				if(!palavra.equals(palavra.toUpperCase())){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 }
