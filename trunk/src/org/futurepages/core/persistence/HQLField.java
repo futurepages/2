@@ -126,7 +126,8 @@ public class HQLField implements HQLable {
         }
 		return fieldName + " = " + value;
 	}
-	
+
+	//Este foge do padrão dos demais. Portanto, não modificá-lo para padronizar, para não causar transtorno em sistemas legados.
     public String equalsTo(Boolean value) {
         if (value == null) {
             return isNull();
@@ -424,7 +425,7 @@ public class HQLField implements HQLable {
     private String timeExpression(Calendar cal, String comparator) {
 		if(cal == null){
 			return "";
-		}
+	    }
         return concat(fieldName , comparator , "'" , escQuoteAndSlashes(DateUtil.dbDateTime(cal.getTime())) , "'");
     }
 
