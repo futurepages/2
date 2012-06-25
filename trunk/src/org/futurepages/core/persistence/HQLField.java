@@ -422,6 +422,9 @@ public class HQLField implements HQLable {
     }
 
     private String timeExpression(Calendar cal, String comparator) {
+		if(cal == null){
+			return "";
+		}
         return concat(fieldName , comparator , "'" , escQuoteAndSlashes(DateUtil.dbDateTime(cal.getTime())) , "'");
     }
 
