@@ -17,7 +17,7 @@ public class HtmlRegex {
 	 * @return
 	 */
 	public static String tagAndContentPattern(String tagName){
-		return concat("(?i)(?s)<",tagName,".*?>.*?</",tagName,"*>");
+		return concat("(?i)(?s)<",tagName,"\\s+.*?>.*?</",tagName,"*>");
 	}
 
 	//(?s)(?i)<span\s*style\s*=\s*"text-decoration:\s*underline\b.*?"[^>]*>.*?</span\s*>
