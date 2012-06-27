@@ -38,7 +38,7 @@ public class DefaultExceptionLogger implements ExceptionLogger, Manipulable{
 	}
 
 	public String execute(Throwable throwable, InvocationChain chain, boolean status500) throws ServletException {
-		
+
 		String actionType = null;
 		if(chain!=null){
 			if(AsynchronousManager.isAsynchronousAction(chain)){
@@ -51,8 +51,14 @@ public class DefaultExceptionLogger implements ExceptionLogger, Manipulable{
 		String protocolNumber = execute(throwable,(status500?ExceptionLogType.SERVLET_500.name():actionType));
 
 		if(status500){
-			if(throwable instanceof ServletErrorException){
-				throw (ServletErrorException) throwable;
+			Throwable ex;
+			if(throwable.getCause() != null){
+				ex = throwable.getCause();
+			}else{
+				ex = throwable;
+			}
+			if(ex instanceof ServletErrorException){
+				throw (ServletErrorException) ex;
 			}
 			throw new FuturepagesServletException(protocolNumber, actionType, throwable);
 		}else if(chain!=null){
