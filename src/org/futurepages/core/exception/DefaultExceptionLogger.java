@@ -48,7 +48,6 @@ public class DefaultExceptionLogger implements ExceptionLogger, Manipulable{
 			}
 		}
 
-		String protocolNumber = execute(throwable,(status500?ExceptionLogType.SERVLET_500.name():actionType));
 
 		if(status500){
 			Throwable ex;
@@ -60,11 +59,12 @@ public class DefaultExceptionLogger implements ExceptionLogger, Manipulable{
 			if(ex instanceof ServletErrorException){
 				throw (ServletErrorException) ex;
 			}
-			throw new FuturepagesServletException(protocolNumber, actionType, throwable);
+			String protocolNumber = execute(ex,ExceptionLogType.SERVLET_500.name());
+			throw new FuturepagesServletException(protocolNumber, actionType, ex);
 		}else if(chain!=null){
+			String protocolNumber = execute(throwable,actionType);
 			chain.getAction().getOutput().setValue(EXCEPTION, new Exception(protocolNumber,throwable));
-		}
-		
+		}		
 		return actionType;
 	}
 
