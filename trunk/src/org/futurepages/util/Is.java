@@ -108,7 +108,7 @@ public class Is {
 			loginVerify = str;
 		}
 
-        loginVerify = The.stringKeyIn(loginVerify);//TIRA CARACTERES ESPECIAIS E NÚMEROS NO INÍCIO
+        loginVerify = The.stringKeyIn(loginVerify);//TIRA CARACTERES ESPECIAIS
         loginVerify = SEOUtil.stringKeyValid(loginVerify);//TIRA ACENTOS E Ç
 
         if (loginVerify.equalsIgnoreCase(str)) {
