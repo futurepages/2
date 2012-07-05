@@ -87,4 +87,42 @@ public class IsTest {
   	public void testValidURL_COM_https() {
 		assertTrue("com ponto com https", Is.validURL("https://www.orkut.com"));
 	}
+
+	@Test
+  	public void validCapitalizedPersonName() {
+		assertTrue("", Is.validCapitalizedPersonName("Leandro Santana Pereira"));
+		assertTrue("", Is.validCapitalizedPersonName("Leandro da Silva Pereira"));
+		assertTrue("", Is.validCapitalizedPersonName("Leandro dos Santos e Silva I"));
+		assertTrue("", Is.validCapitalizedPersonName("Leandro de Silva e Santos da Costa II"));
+		assertTrue("", Is.validCapitalizedPersonName("Leandro dos Santos jr")); //nao é muito interessante ser true
+		assertTrue("", Is.validCapitalizedPersonName("Leandro dos Santos XIII")); //por enquanto é true, mas não é interessante ser
+		assertTrue("", Is.validCapitalizedPersonName("Leandro dos Santos Xiii")); //por enquanto é true, mas não é interessante ser
+		assertTrue("", Is.validCapitalizedPersonName("Maria da Silva e João"));
+		assertTrue("", Is.validCapitalizedPersonName("Leonardo di Caprio"));
+		assertTrue("", Is.validCapitalizedPersonName("Leonardo Di Caprio"));
+		assertTrue("", Is.validCapitalizedPersonName("Leonardo d'Caprio"));
+		assertTrue("", Is.validCapitalizedPersonName("Leonardo d`Caprio"));
+		assertTrue("", Is.validCapitalizedPersonName("Joana D`arque"));
+		assertTrue("", Is.validCapitalizedPersonName("Joana D`Arque"));
+		assertTrue("", Is.validCapitalizedPersonName("Joana D'arque"));
+		assertTrue("", Is.validCapitalizedPersonName("Joana D'Arque"));
+		assertTrue("", Is.validCapitalizedPersonName("Leonardo de Caprio"));
+		assertTrue("", Is.validCapitalizedPersonName("Leandro A Santana Pereira")); //seria mesmo interessante este caso?
+
+		assertFalse("", Is.validCapitalizedPersonName("leandro"));
+		assertFalse("", Is.validCapitalizedPersonName("Leandro"));
+		assertFalse("", Is.validCapitalizedPersonName("LEANDRO"));
+		assertFalse("", Is.validCapitalizedPersonName("lEANDRO dE sANTANA"));
+		assertFalse("", Is.validCapitalizedPersonName("Leonardo diCaprio"));
+		assertFalse("", Is.validCapitalizedPersonName("Leandro dos Santos xiii")); //por enquanto é true, mas não é interessante ser
+		assertFalse("", Is.validCapitalizedPersonName("leandro santana pereira"));
+		assertFalse("", Is.validCapitalizedPersonName("Leandro De Santana Pereira"));
+		assertFalse("", Is.validCapitalizedPersonName("LEANDRO SANTANA DE PEREIRA"));
+		assertFalse("", Is.validCapitalizedPersonName("LEANDRO SANTANA PEREIRA"));
+		assertFalse("", Is.validCapitalizedPersonName("Leandro santana pereira"));
+		assertFalse("", Is.validCapitalizedPersonName("lEANDRO DE sANTANA pEREIRA"));
+		assertFalse("", Is.validCapitalizedPersonName("Leandro santana de Pereira"));
+		assertFalse("", Is.validCapitalizedPersonName("Leandro Dos Santos goe"));
+
+	}
 }
