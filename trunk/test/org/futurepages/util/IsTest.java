@@ -1,7 +1,6 @@
 package org.futurepages.util;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.futurepages.test.factory.StringFactory;
 import org.junit.Test;
