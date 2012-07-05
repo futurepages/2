@@ -51,7 +51,7 @@ public class CalendarUtil {
 	}
 
 	/**
-	 * Copara dois Calendar utilizando os campos ano, mes e ano
+	 * Compara dois Calendar utilizando os campos ano, mes e ano
 	 * @param calendar1
 	 * @param calencdar2
 	 * @return -1 (quando a primeira data é menor que a segunda)

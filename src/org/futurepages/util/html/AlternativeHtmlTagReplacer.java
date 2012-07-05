@@ -1,6 +1,10 @@
 package org.futurepages.util.html;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.futurepages.util.StringUtils;
+import org.futurepages.util.iterator.string.IterableString;
+import org.futurepages.util.iterator.string.MatchedToken;
 import static org.futurepages.util.html.HtmlRegex.*;
 
 /**
@@ -15,15 +19,18 @@ import static org.futurepages.util.html.HtmlRegex.*;
  */
 public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 
-	private String internalAnchors;
+
+	private String host;
 	private boolean styles;
+	private static final int MAX_CHARS = 28;
 
 	private AlternativeHtmlTagReplacer() {
 	}
 
-	public AlternativeHtmlTagReplacer(String internalAnchors, boolean styles) {
-		this.internalAnchors = internalAnchors;
+
+	public AlternativeHtmlTagReplacer(String host, boolean styles) {
 		this.styles = styles;
+		this.host=host;
 	}
 
 	/**
@@ -56,7 +63,6 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 			reduce("p");
 		}
 
-		//LISTS
 		reduce("ul");
 		reduce("ol");
 		reduce("li");
@@ -71,7 +77,7 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 		//reduce("img", attrs("src","alt"));
 
 		//âncoras
-		if (internalAnchors != null) {
+		if (host != null) {
 			if (styles) {
 				keep("a");
 			} else {
@@ -109,7 +115,18 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 
 	@Override
 	public String afterTreatment(String treatedHtml) {
-		return super.afterTreatment(treatedHtml);
+		//Tratamento da anchor
+		Pattern tagsPattern = HtmlRegex.getCompiledTagsWithContentPattern("a");
+		IterableString iter = new IterableString(tagsPattern, treatedHtml);
+		StringBuilder sb = new StringBuilder();
+		String end = treatedHtml;
+		for (MatchedToken token : iter) {
+			sb.append(token.getBefore());
+			sb.append(treatedAnchor(token.getMatched()));
+			end = token.getAfter();
+		}
+		sb.append(end);
+		return sb.toString();
 	}
 
 	/**
@@ -132,5 +149,69 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 			treated = treat(tagParts, isClosing, tagRep);
 		}
 		return treated;
+	}
+
+	public String treatedAnchor(String tagA){
+		
+		Pattern linkPattern = Pattern.compile("(<a(\\s+).*?>)(.*?)(</a>)");
+		Matcher matcher = linkPattern.matcher(tagA);
+		StringBuilder sb = new StringBuilder();
+		if (matcher.find()) {
+			String parteAbertura = matcher.group(1);
+			String conteudo = matcher.group(3);
+			String parteFechar = matcher.group(4);
+
+			IterableString iter = new IterableString(Pattern.compile(HtmlRegex.attrsPattern()), parteAbertura);
+
+			sb.append("<a");
+			for (MatchedToken tokenOpen : iter) {
+				if (iter.getMatcher().group(1).equalsIgnoreCase("href")) {
+					String url = iter.getMatcher().group(2);
+
+					sb.append(" href=\"");
+					if (url.startsWith(host)) {
+						sb.append(tokenOpen.getMatched().replaceAll(host, "")).append("\" ");
+					} else {
+						if (!url.startsWith("javascript")) {
+							sb.append(tokenOpen.getMatched()).append("\" ").append(TARGET_BLANK);
+						}
+						else{
+							sb.append("\" ");
+						}
+					}
+					if (url.equalsIgnoreCase(conteudo)) {
+						conteudo = shortUrl(conteudo);
+					}
+					sb.append("title=\"").append(url).append("\"");
+				} else if (styles && !iter.getMatcher().group(1).equalsIgnoreCase("target")) {
+					sb.append(tokenOpen.getMatched());
+				}
+			}
+			sb.append(">").append(conteudo).append(parteFechar);
+
+			return sb.toString();
+		}
+		else{
+			Matcher matcherOutro = Pattern.compile("(<a>)(.*?)(</a>)").matcher(tagA);
+			return matcherOutro.group(2);
+		}
+}
+	
+	private String shortUrl(String url){
+		if(url.startsWith("http://")){
+			url = url.substring(7);
+		}else if(url.startsWith("https://")){
+			url = url.substring(8);
+		}
+		if(url.length()>MAX_CHARS){
+			if(url.length()<=MAX_CHARS+8){
+				return url;
+			}else{
+				String sufix = url.substring(url.length()-8,url.length());
+				return StringUtils.concat(url.substring(0, MAX_CHARS),"...",sufix);
+			}
+		}else{
+			return url;
+		}
 	}
 }
