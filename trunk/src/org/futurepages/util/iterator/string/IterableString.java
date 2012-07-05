@@ -56,13 +56,13 @@ public class IterableString implements Iterator<MatchedToken>, Iterable<MatchedT
 		if(hasNext()){
 			int start = matcher.start();
 			int end = matcher.end();
-			String antes = before(start);
+			String before = before(start);
 			String matched = content.substring(start,end);
 			pos = end;
 			used = true;
 			String after = after(end);
 			cacheAntes = after;
-			MatchedToken token = new MatchedToken(matched, antes, after);
+			MatchedToken token = new MatchedToken(matched, before, after);
 			return token;
 		}else{
 			return null;
@@ -88,4 +88,10 @@ public class IterableString implements Iterator<MatchedToken>, Iterable<MatchedT
 		}
 		return antes;
 	}
+
+	public Matcher getMatcher() {
+		return matcher;
+	}
+
+
 }

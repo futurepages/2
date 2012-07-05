@@ -10,6 +10,7 @@ import static org.futurepages.util.StringUtils.concat;
 public class HtmlRegex {
 
 	private static Pattern COMPILED_TAGS_PATTERN;
+	private static Pattern COMPILED_TAGS_WITH_CONTENT_PATTERN;
 	/**
 	 * Casa padrão da tag com seu conteúdo
 	 * @param tagName
@@ -17,7 +18,7 @@ public class HtmlRegex {
 	 * @return
 	 */
 	public static String tagAndContentPattern(String tagName){
-		return concat("(?i)(?s)<",tagName,"\\s+.*?>.*?</",tagName,"*>");
+		return concat("(?i)(?s)(<",tagName,"((\\s+).*?>.*?</",tagName,">)|(<",tagName,">.*?</",tagName,">))");		
 	}
 
 	//(?s)(?i)<span\s*style\s*=\s*"text-decoration:\s*underline\b.*?"[^>]*>.*?</span\s*>
@@ -45,6 +46,20 @@ public class HtmlRegex {
 	//(?i)(?s) ?\bstyle\s*=\s*"[^"]+"
 	public static String attrPattern(String name) {
 		return "(?i)(?s) ?\\b"+name+"\\s*=\\s*\"[^\"]+\"";
+	}
+
+	public static String attrsPattern(String... attrs) {
+		String atributos="";
+		if(attrs!=null && attrs.length>0){
+			for(String attr:attrs){
+				atributos=concat(atributos,attr,"|");
+			}
+			atributos=atributos.substring(0, atributos.length()-1);
+		}
+		else{
+			atributos=".*";
+		}
+		return "(?i)(?s) ?\\b("+atributos+")\\s*=\\s*\"([^\"]+)\"";
 	}
 
 	public static String attrPatternWithGroups(String name) {
@@ -91,5 +106,12 @@ public class HtmlRegex {
 			COMPILED_TAGS_PATTERN = Pattern.compile(tagsPattern(true));
 		}
 		return COMPILED_TAGS_PATTERN;
+	}
+
+	public static Pattern getCompiledTagsWithContentPattern(String tagName) {
+		if(COMPILED_TAGS_WITH_CONTENT_PATTERN == null){
+			COMPILED_TAGS_WITH_CONTENT_PATTERN = Pattern.compile(tagAndContentPattern(tagName));
+		}
+		return COMPILED_TAGS_WITH_CONTENT_PATTERN;
 	}
 }
