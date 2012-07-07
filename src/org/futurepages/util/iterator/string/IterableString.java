@@ -43,6 +43,7 @@ public class IterableString implements Iterator<MatchedToken>, Iterable<MatchedT
 
 	@Override
 	public boolean hasNext() {
+		hasNext = true;
 		return matcher.find();
 	}
 
