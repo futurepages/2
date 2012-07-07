@@ -12,10 +12,9 @@ public class IterableString implements Iterator<MatchedToken>, Iterable<MatchedT
 	private Matcher matcher;
 	private String content;
 	private boolean hasNext;
-	private boolean used;
 	private Pattern pattern;
 	private int pos;
-	private String cacheAntes;
+	private String beforeCache;
 	
 	public IterableString(String regex, String content) {
 		this(Pattern.compile(regex), content);
@@ -28,9 +27,9 @@ public class IterableString implements Iterator<MatchedToken>, Iterable<MatchedT
 	}
 
 	private void init(){
-		this.used = true;
+		this.hasNext = false;
 		this.pos = 0;
-		this.cacheAntes = null;
+		this.beforeCache = null;
 		this.matcher = pattern.matcher(this.content);
 	}
 
@@ -44,24 +43,19 @@ public class IterableString implements Iterator<MatchedToken>, Iterable<MatchedT
 
 	@Override
 	public boolean hasNext() {
-		if(used){
-			hasNext = matcher.find();
-			used = false;
-		}
-		return hasNext;
+		return matcher.find();
 	}
 
 	@Override
 	public MatchedToken next() {
-		if(hasNext()){
+		if(hasNext){
 			int start = matcher.start();
 			int end = matcher.end();
 			String before = before(start);
 			String matched = content.substring(start,end);
 			pos = end;
-			used = true;
-			String after = after(end);
-			cacheAntes = after;
+			String after = after(start,end);
+			beforeCache = after;
 			MatchedToken token = new MatchedToken(matched, before, after);
 			return token;
 		}else{
@@ -69,22 +63,23 @@ public class IterableString implements Iterator<MatchedToken>, Iterable<MatchedT
 		}
 	}
 	
-	private String after(int end) {
-		int start;
-		String depois = ""; 
-		if(hasNext()){
-			start = matcher.start();
-			depois = content.substring(pos, start);
+	private String after(int startActual, int endActual) {
+		String after = "";
+		if(matcher.find()){
+			int startNext;
+			startNext = matcher.start();
+			after = content.substring(endActual, startNext);
+			matcher.find(startActual);
 		}else{
-			depois = content.substring(pos);
+			after = content.substring(startActual);
 		}
-		return depois;
+		return after;
 	}
 
-	private String before(int start) {
-		String antes = cacheAntes;
-		if(cacheAntes == null){
-			antes = content.substring(pos, start);
+	private String before(int startActual) {
+		String antes = beforeCache;
+		if(beforeCache == null){
+			antes = content.substring(pos, startActual);
 		}
 		return antes;
 	}
