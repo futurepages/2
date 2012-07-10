@@ -2,7 +2,9 @@ package org.futurepages.util.html;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.futurepages.util.Is;
 import org.futurepages.util.StringUtils;
+import org.futurepages.util.The;
 import org.futurepages.util.iterator.string.IterableString;
 import org.futurepages.util.iterator.string.MatchedToken;
 import static org.futurepages.util.html.HtmlRegex.*;
@@ -83,9 +85,10 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 			} else {
 				reduce("a", attrs("href", "target"));
 			}
-		} else {
-			reduce("a", "span " + STYLE_UNDERLINE, "span");
 		}
+//		else {
+//			reduce("a", "span " + STYLE_UNDERLINE, "span");
+//		}
 
 
 		//tabelas
@@ -153,37 +156,34 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 
 	public String treatedAnchor(String tagA){
 		
-		Pattern linkPattern = Pattern.compile("(<a(\\s+).*?>)(.*?)(</a>)");
+		Pattern linkPattern = Pattern.compile("(?i)(?s)(<a(\\s+).*?>)(.*?)(</a>)");
 		Matcher matcher = linkPattern.matcher(tagA);
 		StringBuilder sb = new StringBuilder();
 		if (matcher.find()) {
 			String parteAbertura = matcher.group(1);
-			String conteudo = matcher.group(3);
+			String conteudo = matcher.group(3).replaceFirst("^[\\s+]", "").replaceFirst("[\\s+]$", "");
 			String parteFechar = matcher.group(4);
 
-			IterableString iter = new IterableString(Pattern.compile(HtmlRegex.attrsPattern()), parteAbertura);
+			IterableString iter = new IterableString(Pattern.compile(HtmlRegex.attrsPattern("href","style","target","title")), parteAbertura);
 
-			sb.append("<a");
+			sb.append("<a ");
 			for (MatchedToken tokenOpen : iter) {
-				if (iter.getMatcher().group(1).equalsIgnoreCase("href")) {
-					String url = iter.getMatcher().group(2);
-
-					sb.append(" href=\"");
+				String[] group = tokenOpen.getMatched().split("=");
+				String attr = group[0].replaceAll("\\s","");
+				String url = group[1].replaceAll("(\")|(\\s)", "");
+				if (attr.equalsIgnoreCase("href")) {
 					if (url.startsWith(host)) {
-						sb.append(tokenOpen.getMatched().replaceAll(host, "")).append("\" ");
+						sb.append(" href=\"").append(url.replaceAll(host, "")).append("\" ");
 					} else {
 						if (!url.startsWith("javascript")) {
-							sb.append(tokenOpen.getMatched()).append("\" ").append(TARGET_BLANK);
-						}
-						else{
-							sb.append("\" ");
+							sb.append(" href=\"").append(url).append("\" ").append(TARGET_BLANK);
 						}
 					}
 					if (url.equalsIgnoreCase(conteudo)) {
 						conteudo = shortUrl(conteudo);
 					}
 					sb.append("title=\"").append(url).append("\"");
-				} else if (styles && !iter.getMatcher().group(1).equalsIgnoreCase("target")) {
+				} else if (styles && !attr.equalsIgnoreCase("target") && !attr.equalsIgnoreCase("title") ) {
 					sb.append(tokenOpen.getMatched());
 				}
 			}
@@ -192,7 +192,7 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 			return sb.toString();
 		}
 		else{
-			Matcher matcherOutro = Pattern.compile("(<a>)(.*?)(</a>)").matcher(tagA);
+			Matcher matcherOutro = Pattern.compile("(?i)(?s)(<a>)(.*?)(</a>)").matcher(tagA);
 			return matcherOutro.group(2);
 		}
 }
