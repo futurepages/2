@@ -57,7 +57,7 @@ public class HtmlRegex {
 			atributos=atributos.substring(0, atributos.length()-1);
 		}
 		else{
-			atributos=".*";
+			atributos="\\w+?";
 		}
 		return "(?i)(?s) ?\\b("+atributos+")\\s*=\\s*\"([^\"]+)\"";
 	}
