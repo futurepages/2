@@ -80,16 +80,10 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 
 		//âncoras
 		if (host != null) {
-			if (styles) {
-				keep("a");
-			} else {
-				reduce("a", attrs("href", "target"));
-			}
+			reduce("a", attrs("href", "target", "title"));
+		} else {
+			reduce("a", "span " + STYLE_UNDERLINE, "span");
 		}
-//		else {
-//			reduce("a", "span " + STYLE_UNDERLINE, "span");
-//		}
-
 
 		//tabelas
 		reduce("tr", "p");
