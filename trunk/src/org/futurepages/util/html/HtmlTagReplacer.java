@@ -15,7 +15,7 @@ public abstract class HtmlTagReplacer {
 
 	public static String PLAIN_LI = "&nbsp; - ";
 	public static String STYLE_UNDERLINE = "style=\"text-decoration:underline;\"";
-	public static String TARGET_BLANK= " target=\"_blank\" ";
+	public static String TARGET_BLANK= "target=\"_blank\"";
 	public static String BREAK_LINE = "<br/>";
 	public static String P_STRONG_OPEN  = "<p><strong>";
 	public static String P_STRONG_CLOSE = "</strong></p>";

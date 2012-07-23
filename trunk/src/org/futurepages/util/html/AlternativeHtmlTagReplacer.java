@@ -161,29 +161,36 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 		StringBuilder sb = new StringBuilder();
 		if (matcher.find()) {
 			String parteAbertura = matcher.group(1);
-			String conteudo = matcher.group(3).replaceFirst("^[\\s+]", "").replaceFirst("[\\s+]$", "");
+			String conteudo = matcher.group(3).trim();
 			String parteFechar = matcher.group(4);
 
-			IterableString iter = new IterableString(Pattern.compile(HtmlRegex.attrsPattern("href","style","target","title")), parteAbertura);
+			IterableString iter = new IterableString(Pattern.compile(HtmlRegex.attrsPattern()), parteAbertura);
 
 			sb.append("<a ");
 			for (MatchedToken tokenOpen : iter) {
-				String[] group = tokenOpen.getMatched().split("=");
-				String attr = group[0].replaceAll("\\s","");
-				String url = group[1].replaceAll("(\")|(\\s)", "");
+				String[] group = tokenOpen.getMatched().split("\\s*=",2);
+				String attr = group[0].trim();
+				String url = group[1].trim().replaceAll("(\")", "");
 				if (attr.equalsIgnoreCase("href")) {
 					if (url.startsWith(host)) {
-						sb.append(" href=\"").append(url.replaceAll(host, "")).append("\" ");
+						sb.append("href=\"").append(url.replaceAll(host, "")).append("\" ");
 					} else {
 						if (!url.startsWith("javascript")) {
-							sb.append(" href=\"").append(url).append("\" ").append(TARGET_BLANK);
+							sb.append("href=\"").append(url).append("\" ").append(TARGET_BLANK).append(" ");
 						}
 					}
-					if (url.equalsIgnoreCase(conteudo)) {
+					if (attr.equalsIgnoreCase("href") && url.equalsIgnoreCase(conteudo)) {
 						conteudo = shortUrl(conteudo);
+						if(!tagA.contains("title=\"")){
+							sb.append("title=\"").append(url).append("\" ");
+						}
 					}
-					sb.append("title=\"").append(url).append("\"");
-				} else if (styles && !attr.equalsIgnoreCase("target") && !attr.equalsIgnoreCase("title") ) {
+				}
+				else if (styles && !attr.equalsIgnoreCase("target") && !attr.equalsIgnoreCase("title")) {
+					sb.append(tokenOpen.getMatched());
+				}
+				
+				if(attr.equalsIgnoreCase("title") && !sb.toString().contains("title=\"") ){
 					sb.append(tokenOpen.getMatched());
 				}
 			}
