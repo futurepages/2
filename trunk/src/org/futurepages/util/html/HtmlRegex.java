@@ -62,6 +62,21 @@ public class HtmlRegex {
 		return "(?i)(?s) ?\\b("+atributos+")\\s*=\\s*\"([^\"]+)\"";
 	}
 
+//text-decoration:underline;padding-left : 30px;
+	public static String attrValuesPattern(String... attrs) {
+		String atributos="";
+		if(attrs!=null && attrs.length>0){
+			for(String attr:attrs){
+				atributos=concat(atributos,attr,"|");
+			}
+			atributos=atributos.substring(0, atributos.length()-1);
+		}
+		else{
+			atributos="[^:]*";
+		}
+		return "(?i)(?s) ?\\b("+atributos+")\\s*:\\s*([^;]*)";
+	}
+
 	public static String attrPatternWithGroups(String name) {
 		return "(?i)(?s)((?=.*)) ?\\b"+name+"\\s*=\\s*\"[^\"]+\"( ?(?=.*))";
 	}
