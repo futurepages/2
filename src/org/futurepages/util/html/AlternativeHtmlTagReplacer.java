@@ -112,25 +112,43 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 
 	@Override
 	public String afterTreatment(String treatedHtml) {
-		//Tratamento da anchor
-		Pattern tagsPattern = HtmlRegex.getCompiledTagsWithContentPattern("a");
-		IterableString iter = new IterableString(tagsPattern, treatedHtml);
-		StringBuilder sb = new StringBuilder();
-		String end = treatedHtml;
-		for (MatchedToken token : iter) {
-			sb.append(token.getBefore());
-			sb.append(treatedAnchor(token.getMatched()));
-			end = token.getAfter();
-		}
-		sb.append(end);
-		return sb.toString();
-	}
 
-	/**
-	 *
-	 * @param tag tanto de abertura como de fechamento, com os limitadores <>
-	 * @return retorna a tag convertida
-	 */
+		//Tratamento da anchor
+		if(!Is.empty(host)){
+			Pattern tagsPattern = Pattern.compile(HtmlRegex.tagAndContentPattern("a"));
+			IterableString iter = new IterableString(tagsPattern, treatedHtml);
+			StringBuilder sb = new StringBuilder();
+			String end = treatedHtml;
+			for (MatchedToken token : iter) {
+				sb.append(token.getBefore());
+				sb.append(treatedAnchor(token.getMatched()));
+				end = token.getAfter();
+			}
+			sb.append(end);
+			treatedHtml=sb.toString();
+		}
+		if(styles){
+			Pattern tagsPatternP = Pattern.compile(HtmlRegex.tagAndContentPattern("p"));
+			IterableString iterP = new IterableString(tagsPatternP, treatedHtml);
+			StringBuilder sbP = new StringBuilder();
+			String endP = treatedHtml;
+			for (MatchedToken tokenP : iterP) {
+				sbP.append(tokenP.getBefore());
+				sbP.append(treatedP(tokenP.getMatched()));
+				endP = tokenP.getAfter();
+			}
+			sbP.append(endP);
+			treatedHtml=sbP.toString();
+		}
+		// \b & "
+		return treatedHtml;
+	}
+	
+/**
+ *
+ * @param tag tanto de abertura como de fechamento, com os limitadores <>
+ * @return retorna a tag convertida
+ */
 	@Override
 	public String treated(String tag) {
 		if (StringUtils.isEmpty(tag)) {
@@ -215,4 +233,41 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 			return url;
 		}
 	}
+
+	public String treatedP(String tagP){
+
+		Pattern linkPattern = Pattern.compile("(?i)(?s)(<p(\\s+).*?>)(.*?)(</p>)");
+		Matcher matcher = linkPattern.matcher(tagP);
+		StringBuilder sb = new StringBuilder();
+		if (matcher.find()) {
+			String parteAbertura = matcher.group(1);
+			String conteudo = matcher.group(3).trim();
+			String parteFechar = matcher.group(4);
+
+			IterableString iter = new IterableString(Pattern.compile(HtmlRegex.attrsPattern("style")), parteAbertura);
+
+			sb.append("<p ");
+			for (MatchedToken tokenOpen : iter) {
+				String[] group = tokenOpen.getMatched().split("\\s*=",2);
+				String attr = group[0].trim();
+				String attrValue = group[1].trim().replaceAll("(\")", "");
+				// aqui colocar outros atributos do style que devem ser mantidos
+				IterableString iterValue = new IterableString(Pattern.compile(HtmlRegex.attrValuesPattern("padding-left")), attrValue);
+				String value="";
+				for (MatchedToken tokenValueAttr : iterValue) {
+					value=StringUtils.concat(value,tokenValueAttr.getMatched(),";");
+				}
+				if(!Is.empty(value)){
+					sb.append("style=\"").append(value).append("\" ");
+				}
+			}
+			sb.append(">").append(conteudo).append(parteFechar);
+
+			return sb.toString();
+		}
+		else{
+			return tagP;
+		}
+	}
+
 }
