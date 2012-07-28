@@ -11,6 +11,7 @@ public class HtmlRegex {
 
 	private static Pattern COMPILED_TAGS_PATTERN;
 	private static Pattern COMPILED_TAGS_WITH_CONTENT_PATTERN;
+	private static Pattern COMPILED_URL_PATTERN;
 	/**
 	 * Casa padrão da tag com seu conteúdo
 	 * @param tagName
@@ -121,6 +122,13 @@ public class HtmlRegex {
 			COMPILED_TAGS_PATTERN = Pattern.compile(tagsPattern(true));
 		}
 		return COMPILED_TAGS_PATTERN;
+	}
+
+	public static Pattern getCompiledUrlPattern() {
+		if(COMPILED_URL_PATTERN == null){
+			COMPILED_URL_PATTERN = Pattern.compile("(?i)\\b(?:(?:https?|ftp|file)://|www\\.|ftp\\.)[-A-Z0-9+&@#/%=~_|$?!:,\\.]*[A-Z0-9+&@#/%=~_|$]");
+		}
+		return COMPILED_URL_PATTERN;
 	}
 
 	public static Pattern getCompiledTagsWithContentPattern(String tagName) {

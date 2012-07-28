@@ -2,6 +2,7 @@ package org.futurepages.util.html;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.futurepages.formatters.SmartTextFormatter;
 import org.futurepages.util.Is;
 import org.futurepages.util.StringUtils;
 import org.futurepages.util.The;
@@ -24,7 +25,6 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 
 	private String host;
 	private boolean styles;
-	private static final int MAX_CHARS = 28;
 
 	private AlternativeHtmlTagReplacer() {
 	}
@@ -112,23 +112,40 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 
 	@Override
 	public String afterTreatment(String treatedHtml) {
-
 		//Tratamento da anchor
 		if(!Is.empty(host)){
-			Pattern tagsPattern = Pattern.compile(HtmlRegex.tagAndContentPattern("a"));
-			IterableString iter = new IterableString(tagsPattern, treatedHtml);
+			Pattern aTagsPattern = Pattern.compile(HtmlRegex.tagAndContentPattern("a"));
+			IterableString iter = new IterableString(aTagsPattern, treatedHtml);
 			StringBuilder sb = new StringBuilder();
+			StringBuilder sbUrlOuts = new StringBuilder();
 			String end = treatedHtml;
 			for (MatchedToken token : iter) {
 				sb.append(token.getBefore());
 				sb.append(treatedAnchor(token.getMatched()));
 				end = token.getAfter();
+				sbUrlOuts.append(token.getBefore());
+				sbUrlOuts.append(The.sequence('#', token.getMatched().length())); //marca as tags a com seus conteúdos
 			}
 			sb.append(end);
+			sbUrlOuts.append(end);
+
+			//Procura de urls avulsas (fora da tag 'a')
+			end = sbUrlOuts.toString();
+			iter = new IterableString(getCompiledUrlPattern(), end);
+			for (MatchedToken token : iter) {
+				sb.replace(token.getStart(), token.getEnd() ,
+				   treatedAnchor(The.concat("<a href=\"",token.getMatched(),"\">",token.getMatched(),"</a>"))
+				);
+
+			}
+
+			
 			treatedHtml=sb.toString();
+
+			//ISSO NAO
 		}
 		if(styles){
-			Pattern tagsPatternP = Pattern.compile(HtmlRegex.tagAndContentPattern("p"));
+			Pattern tagsPatternP = pTagPattern();
 			IterableString iterP = new IterableString(tagsPatternP, treatedHtml);
 			StringBuilder sbP = new StringBuilder();
 			String endP = treatedHtml;
@@ -140,7 +157,9 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 			sbP.append(endP);
 			treatedHtml=sbP.toString();
 		}
-		// \b & "
+
+
+
 		return treatedHtml;
 	}
 	
@@ -168,7 +187,7 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 
 	public String treatedAnchor(String tagA){
 		
-		Pattern linkPattern = Pattern.compile("(?i)(?s)(<a(\\s+).*?>)(.*?)(</a>)");
+		Pattern linkPattern = aTagPattern();
 		Matcher matcher = linkPattern.matcher(tagA);
 		StringBuilder sb = new StringBuilder();
 		if (matcher.find()) {
@@ -192,7 +211,7 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 						}
 					}
 					if (attr.equalsIgnoreCase("href") && url.equalsIgnoreCase(conteudo)) {
-						conteudo = shortUrl(conteudo);
+						conteudo = SmartTextFormatter.shortUrl(conteudo);
 						if(!tagA.contains("title=\"")){
 							sb.append("title=\"").append(url).append("\" ");
 						}
@@ -216,28 +235,28 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 		}
 }
 	
-	private String shortUrl(String url){
-		if(url.startsWith("http://")){
-			url = url.substring(7);
-		}else if(url.startsWith("https://")){
-			url = url.substring(8);
+	private static Pattern P_TAG_PATTERN = null;
+	private static Pattern A_TAG_PATTERN = null;
+
+	private static Pattern pTagPattern(){
+		if(P_TAG_PATTERN==null){
+			P_TAG_PATTERN = Pattern.compile("(?i)(?s)(<p(\\s+).*?>)(.*?)(</p>)");
 		}
-		if(url.length()>MAX_CHARS){
-			if(url.length()<=MAX_CHARS+8){
-				return url;
-			}else{
-				String sufix = url.substring(url.length()-8,url.length());
-				return StringUtils.concat(url.substring(0, MAX_CHARS),"...",sufix);
-			}
-		}else{
-			return url;
-		}
+		return P_TAG_PATTERN;
 	}
+
+	private static Pattern aTagPattern(){
+		if(A_TAG_PATTERN==null){
+			A_TAG_PATTERN = Pattern.compile("(?i)(?s)(<a(\\s+).*?>)(.*?)(</a>)");
+		}
+		return A_TAG_PATTERN;
+	}
+
 
 	public String treatedP(String tagP){
 
-		Pattern linkPattern = Pattern.compile("(?i)(?s)(<p(\\s+).*?>)(.*?)(</p>)");
-		Matcher matcher = linkPattern.matcher(tagP);
+		Pattern pTagPattern = pTagPattern();
+		Matcher matcher = pTagPattern.matcher(tagP);
 		StringBuilder sb = new StringBuilder();
 		if (matcher.find()) {
 			String parteAbertura = matcher.group(1);
@@ -249,7 +268,7 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 			sb.append("<p ");
 			for (MatchedToken tokenOpen : iter) {
 				String[] group = tokenOpen.getMatched().split("\\s*=",2);
-				String attr = group[0].trim();
+//				String attr = group[0].trim(); //PQ ISTO EXISTIRIA? COMENTADO POIS NAO ESTAVA SENDO USADO.
 				String attrValue = group[1].trim().replaceAll("(\")", "");
 				// aqui colocar outros atributos do style que devem ser mantidos
 				IterableString iterValue = new IterableString(Pattern.compile(HtmlRegex.attrValuesPattern("padding-left")), attrValue);
