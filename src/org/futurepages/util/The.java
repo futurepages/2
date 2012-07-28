@@ -347,4 +347,16 @@ public class The {
 		}					
 		return str;
 	}
+
+	public static String concat(String... strs){
+		return StringUtils.concat(strs);
+	}
+
+	public static String sequence(char ch, int len){
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0; i < len; i++){
+			sb.append(ch);
+		}
+		return sb.toString();
+	}
 }

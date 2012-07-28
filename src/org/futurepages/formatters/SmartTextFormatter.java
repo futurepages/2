@@ -2,9 +2,9 @@ package org.futurepages.formatters;
 
 import org.futurepages.util.html.HtmlMapChars;
 import java.util.Locale;
-import java.util.regex.Pattern;
 import org.futurepages.core.formatter.Formatter;
 import org.futurepages.util.StringUtils;
+import org.futurepages.util.html.HtmlRegex;
 import org.futurepages.util.iterator.string.IterableString;
 import org.futurepages.util.iterator.string.MatchedToken;
  
@@ -13,8 +13,6 @@ import org.futurepages.util.iterator.string.MatchedToken;
  */
  public class SmartTextFormatter implements Formatter {
 
-	private Pattern urlPattern = Pattern.compile("(?i)\\b(?:(?:https?|ftp|file)://|www\\.|ftp\\.)[-A-Z0-9+&@#/%=~_|$?!:,\\.]*[A-Z0-9+&@#/%=~_|$]");
-
 	private static final int MAX_CHARS = 28;
 
 	@Override
@@ -22,7 +20,7 @@ import org.futurepages.util.iterator.string.MatchedToken;
         String result =  HtmlMapChars.plainTextValue((String) value);
 
 		
-		IterableString iter = new IterableString(urlPattern, result);
+		IterableString iter = new IterableString(HtmlRegex.getCompiledUrlPattern(), result);
 		StringBuilder sb     = new StringBuilder();
 		String end = result;
 		for (MatchedToken token : iter) {
@@ -39,7 +37,7 @@ import org.futurepages.util.iterator.string.MatchedToken;
 		return sb.toString();
  	}
 
-	private String shortUrl(String url){
+	public static String shortUrl(String url){
 		if(url.startsWith("http://")){
 			url = url.substring(7);
 		}else if(url.startsWith("https://")){
