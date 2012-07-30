@@ -1,6 +1,7 @@
 package org.futurepages.core.persistence;
 
 import java.lang.reflect.Method;
+import javax.servlet.ServletException;
 
 import org.futurepages.annotations.NonTransactional;
 import org.futurepages.annotations.Transactional;
@@ -62,10 +63,12 @@ public class HibernateFilter implements AfterConsequenceFilter {
 	 * <br>true: se a Classe ou o método estiverem anotados com {@link Transactional} o métoro retornará true.
 	 * <br>false: se o método estiver anotado com {@link Transactional} e {@link NonTransactional} simultaneamente
 	 */
-	protected boolean isTransactional(InvocationChain chain) {
+	protected boolean isTransactional(InvocationChain chain) throws ServletException {
 		boolean result = false;
-
 		Method method = chain.getMethod();
+		if(method == null){
+			throw new ServletException("Inner action '"+chain.getInnerAction()+"' for action '"+chain.getActionName()+"' not found.");
+		}
 		boolean metodoNaoTransacional = method.isAnnotationPresent(NonTransactional.class);
 		if(metodoNaoTransacional){
 			result = false;
