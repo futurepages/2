@@ -25,6 +25,7 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 
 	private String host;
 	private boolean styles;
+	private boolean textAlign;
 
 	private AlternativeHtmlTagReplacer() {
 	}
@@ -32,7 +33,14 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 
 	public AlternativeHtmlTagReplacer(String host, boolean styles) {
 		this.styles = styles;
+		this.textAlign = styles;
 		this.host=host;
+	}
+
+	public AlternativeHtmlTagReplacer(String host, boolean styles, boolean textAlign) {
+		this.styles = styles;
+		this.host=host;
+		this.textAlign=textAlign;
 	}
 
 	/**
@@ -271,7 +279,7 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 //				String attr = group[0].trim(); //PQ ISTO EXISTIRIA? COMENTADO POIS NAO ESTAVA SENDO USADO.
 				String attrValue = group[1].trim().replaceAll("(\")", "");
 				// aqui colocar outros atributos do style que devem ser mantidos
-				IterableString iterValue = new IterableString(Pattern.compile(HtmlRegex.attrValuesPattern("padding-left")), attrValue);
+				IterableString iterValue = new IterableString(Pattern.compile(HtmlRegex.attrValuesPattern(textAlign? new String[]{"padding-left","text-align"} : new String[]{"padding-left"})), attrValue);
 				String value="";
 				for (MatchedToken tokenValueAttr : iterValue) {
 					value=StringUtils.concat(value,tokenValueAttr.getMatched(),";");
