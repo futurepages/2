@@ -29,6 +29,9 @@ public class Pagination extends PrintTag implements Pageable {
 	private String descriptor = "";
 
 	@TagAttribute
+	private boolean withoutNumbers = false; //withNumbers is default
+
+	@TagAttribute
 	private boolean justTop = false;
 
 	@TagAttribute
@@ -45,7 +48,7 @@ public class Pagination extends PrintTag implements Pageable {
 
 	@TagAttribute
 	private boolean useImages = false;
-	
+
 	private static final String NEXT_PAGE = "nextpage";
 	private static final String PREVIOUS_PAGE = "previouspage";
 	private static final String IMAGE_FORMAT = "gif";
@@ -61,16 +64,16 @@ public class Pagination extends PrintTag implements Pageable {
 			String pagesLinks = allPaginationLinks(totalPages);
 			if (totalPages > 1) {
 				if (justTop) {
-					return concat(descriptor,pagesLinks,getBodyContent().getString());
+					return concat(descriptor, pagesLinks, getBodyContent().getString());
 				} else {
-					return concat(descriptor, pagesLinks , getBodyContent().getString() , descriptor,pagesLinks);
+					return concat(descriptor, pagesLinks, getBodyContent().getString(), descriptor, pagesLinks);
 				}
 			}
-		//Se não possui mais de uma página.
-		}else if(justTop){
-				return descriptor+getBodyContent().getString();
+			//Se não possui mais de uma página.
+		} else if (justTop) {
+			return descriptor + getBodyContent().getString();
 		}
-		return concat(descriptor,getBodyContent().getString(),descriptor);
+		return concat(descriptor, getBodyContent().getString(), descriptor);
 	}
 
 	public void setNextLabel(String nextLabel) {
@@ -81,10 +84,14 @@ public class Pagination extends PrintTag implements Pageable {
 		this.previousLabel = previousLabel;
 	}
 
+	public void setWithoutNumbers(boolean withoutNumbers) {
+		this.withoutNumbers = withoutNumbers;
+	}
+
 	public String getUrl() {
 		if (cachedUrl == null) {
 			if (url.startsWith("/")) {
-				this.cachedUrl =  Paths.context(req) + url;
+				this.cachedUrl = Paths.context(req) + url;
 			} else {
 				this.cachedUrl = this.url;
 			}
@@ -125,50 +132,65 @@ public class Pagination extends PrintTag implements Pageable {
 		this.descriptor = descriptor;
 	}
 
-
 	// MÉTODOS PRIVADOS //////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////
 	private String pageNumLinks(int pageNum, int totalPages) {
 		StringBuffer sb = new StringBuffer();
 
-		//Resultado com até 20 páginas.
-		if (totalPages <= maxShowing) {
-			for (int i = 1; i <= totalPages; i++) {
-				if (pageNum != i) {
-					sb.append(pageLink(i));
+		if (!withoutNumbers) {
+			//Resultado com até 20 páginas.
+			if (totalPages <= maxShowing) {
+				for (int i = 1; i <= totalPages; i++) {
+					if (pageNum != i) {
+						sb.append(pageLink(i));
+					} else {
+						sb.append("<span class=\"current\">" + pageNum + "</span>");
+					}
+				}
+			} else {
+				//Resultado com mais de 20 páginas.
+				if (pageNum > 6) {
+					for (int i = 1; i <= 3; i++) {
+						sb.append(pageLink(i));
+					}
+					sb.append(" ... ");
+					for (int i = pageNum - 3; i <= pageNum - 1; i++) {
+						sb.append(pageLink(i));
+					}
 				} else {
-					sb.append("<span class=\"current\">" + pageNum + "</span>");
+					for (int i = 1; i < pageNum; i++) {
+						sb.append(pageLink(i));
+					}
+				}
+
+				sb.append("<strong class=\"current\">" + pageNum + "</strong>");
+
+				if (pageNum < totalPages - 6) {
+					for (int i = pageNum + 1; i <= pageNum + 3; i++) {
+						sb.append(pageLink(i));
+					}
+					sb.append(" ... ");
+					for (int i = totalPages - 2; i <= totalPages; i++) {
+						sb.append(pageLink(i));
+					}
+				} else {
+					for (int i = pageNum + 1; i <= totalPages; i++) {
+						sb.append(pageLink(i));
+					}
 				}
 			}
 		} else {
-			//Resultado com mais de 20 páginas.
-			if (pageNum > 6) {
-				for (int i = 1; i <= 3; i++) {
-					sb.append(pageLink(i));
-				}
-				sb.append(" ... ");
-				for (int i = pageNum - 3; i <= pageNum - 1; i++) {
-					sb.append(pageLink(i));
-				}
-			} else {
-				for (int i = 1; i < pageNum; i++) {
-					sb.append(pageLink(i));
-				}
-			}
-
-			sb.append("<strong class=\"current\">" + pageNum + "</strong>");
-
-			if (pageNum < totalPages - 6) {
-				for (int i = pageNum + 1; i <= pageNum + 3; i++) {
-					sb.append(pageLink(i));
-				}
-				sb.append(" ... ");
-				for (int i = totalPages - 2; i <= totalPages; i++) {
-					sb.append(pageLink(i));
-				}
-			} else {
-				for (int i = pageNum + 1; i <= totalPages; i++) {
-					sb.append(pageLink(i));
+			boolean prevOK = false;
+			boolean nextOK = false;
+			for (int i = 1; i <= totalPages; i++) {
+				if (pageNum < i && !prevOK) {
+					sb.append("<span class=\"disabled\"> ... </span>");
+					prevOK = true;
+				} else if(pageNum > i && !nextOK){
+					sb.append("<span class=\"disabled\"> ... </span>");
+					nextOK = true;
+				} else if(pageNum == i){
+					sb.append("<span class=\"current\">" + pageNum + "</span>");
 				}
 			}
 		}
