@@ -840,6 +840,12 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
             <type>boolean</type>
         </attribute>
         <attribute>
+            <name>withoutNumbers</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>boolean</type>
+        </attribute>
+        <attribute>
             <name>descriptor</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
