@@ -53,6 +53,7 @@ public class JPEGUtil2 {
 	 */
 	public static int getWidth(File file) throws MalformedURLException {
 		Image image = new ImageIcon(file.toURI().toURL()).getImage();
+		image.flush();
 		return image.getWidth(null);
 	}
 
@@ -61,16 +62,19 @@ public class JPEGUtil2 {
 	 */
 	public static int getHeight(File file) throws MalformedURLException {
 		Image image = new ImageIcon(file.toURI().toURL()).getImage();
+		image.flush();
 		return image.getHeight(null);
 	}
 	
-	public static int []getWidthAndHeight(File file) throws MalformedURLException {
+	public static int[] getWidthAndHeight(File file) throws MalformedURLException {
 		Image image = new ImageIcon(file.toURI().toURL()).getImage();
+		image.flush();
 		int [] wh = new int[2];
+
 		
 		wh[0] = image.getWidth(null);
 		wh[1] = image.getHeight(null);
-		
+
 		return wh;
 	}
 
