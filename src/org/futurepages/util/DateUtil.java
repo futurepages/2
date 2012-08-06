@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import org.futurepages.core.i18n.LocaleManager;
 
 import org.futurepages.enums.DateFormatEnum;
 import org.futurepages.enums.MonthEnum;
@@ -93,7 +94,7 @@ public class DateUtil {
 
 	public static Calendar viewDateToCalendar(String in) {
 			try {
-				DateFormat df =  new SimpleDateFormat("dd/MM/yyyy");
+				DateFormat df =  new SimpleDateFormat("dd/MM/yyyy", LocaleManager.getDefaultLocale());
 				df.setLenient(false);
 				df.parse(in);
 				return new GregorianCalendar(Integer.parseInt(in.substring(6)), Integer.parseInt(in.substring(3, 5)) - 1, Integer.parseInt(in.substring(0, 2)));
@@ -157,7 +158,7 @@ public class DateUtil {
 	}
 
 	public static String dbDate(Date date) {
-		String bdDate = new SimpleDateFormat("yyyy-MM-dd").format(date).toString();
+		String bdDate = new SimpleDateFormat("yyyy-MM-dd", LocaleManager.getDefaultLocale()).format(date).toString();
 		return bdDate;
 	}
 
@@ -168,7 +169,7 @@ public class DateUtil {
 	public static String dbDate(Calendar calendar) {
 		String bdDate = "";
 		if (calendar != null) {
-			bdDate = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime()).toString();
+			bdDate = new SimpleDateFormat("yyyy-MM-dd", LocaleManager.getDefaultLocale()).format(calendar.getTime()).toString();
 		}
 
 		return bdDate;
@@ -179,7 +180,7 @@ public class DateUtil {
 	 * Formato da saída: YYYY-MM-DD HH:mm
 	 */
 	public static String dbDateTime(Date date) {
-		String bdDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date).toString();
+		String bdDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", LocaleManager.getDefaultLocale()).format(date).toString();
 		return bdDate;
 	}
 
@@ -198,11 +199,11 @@ public class DateUtil {
 				data = dia + "/" + mes + "/" + ano;
 				return data;
 			} else if (in instanceof Date) {
-				return new SimpleDateFormat("dd/MM/yyyy").format((Date) in).toString();
+				return new SimpleDateFormat("dd/MM/yyyy", LocaleManager.getDefaultLocale()).format((Date) in).toString();
 			}
 			if (in instanceof GregorianCalendar) {
 				GregorianCalendar date = (GregorianCalendar) in;
-				return new SimpleDateFormat("dd/MM/yyyy").format((Date) date.getTime()).toString();
+				return new SimpleDateFormat("dd/MM/yyyy", LocaleManager.getDefaultLocale()).format((Date) date.getTime()).toString();
 			}
 		} catch (Exception ex) {
 		}
@@ -222,11 +223,11 @@ public class DateUtil {
 			horas = ((String) in).substring(11, 16);
 			return dia + "/" + mes + "/" + ano + " - " + horas;
 		} else if (in instanceof Date) {
-			return new SimpleDateFormat(mask).format((Date) in).toString();
+			return new SimpleDateFormat(mask, LocaleManager.getDefaultLocale()).format((Date) in).toString();
 		} else if (in instanceof Calendar) {
-			return new SimpleDateFormat(mask).format(((GregorianCalendar) in).getTime()).toString();
+			return new SimpleDateFormat(mask, LocaleManager.getDefaultLocale()).format(((GregorianCalendar) in).getTime()).toString();
 		} else if (in instanceof Long) {
-			return new SimpleDateFormat(mask).format(new Date((Long) in)).toString();
+			return new SimpleDateFormat(mask, LocaleManager.getDefaultLocale()).format(new Date((Long) in)).toString();
 		}
 		return null;
 	}
@@ -245,7 +246,7 @@ public class DateUtil {
 	 */
 	public static String dbToday() {
 		Date hoje = new Date();
-		String hojeStr = new SimpleDateFormat("yyyy-MM-dd").format(hoje).toString();
+		String hojeStr = new SimpleDateFormat("yyyy-MM-dd", LocaleManager.getDefaultLocale()).format(hoje).toString();
 		return hojeStr;
 	}
 
@@ -258,7 +259,7 @@ public class DateUtil {
 	 */
 	public static String viewToday(String format) {
 		Date hoje = new Date();
-		String str = new SimpleDateFormat(format).format(hoje).toString();
+		String str = new SimpleDateFormat(format, LocaleManager.getDefaultLocale()).format(hoje).toString();
 		return str;
 	}
 
@@ -289,13 +290,13 @@ public class DateUtil {
 	}
 
 	public static String rawDateIn6(Date dataIn) {
-		String in = new SimpleDateFormat("dd/MM/yyyy").format(dataIn).toString();
+		String in = new SimpleDateFormat("dd/MM/yyyy", LocaleManager.getDefaultLocale()).format(dataIn).toString();
 		return rawDateIn6(in);
 	}
 
 	public static Date date(String in) throws ParseException {
 		Date correctDate;
-		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy", LocaleManager.getDefaultLocale());
 		df.setLenient(false);
 		correctDate = df.parse(in);
 		return correctDate;
@@ -305,7 +306,7 @@ public class DateUtil {
 		if (date == null) {
 			return "";
 		} else {
-			return new SimpleDateFormat("dd/MM/yyyy").format(date).toString();
+			return new SimpleDateFormat("dd/MM/yyyy", LocaleManager.getDefaultLocale()).format(date).toString();
 		}
 	}
 
@@ -355,7 +356,7 @@ public class DateUtil {
 	public static Date parse(String dateString, String formatString) {
 		Date data = null;
 		if (!Is.empty(dateString)) {
-			SimpleDateFormat sdf = new SimpleDateFormat(formatString);
+			SimpleDateFormat sdf = new SimpleDateFormat(formatString, LocaleManager.getDefaultLocale());
 			sdf.setLenient(false);
 			try {
 				data = sdf.parse(dateString);
@@ -415,11 +416,11 @@ public class DateUtil {
 		if (date == null) {
 			return "";
 		}
-		return new SimpleDateFormat(mask).format(date).toString();
+		return new SimpleDateFormat(mask, LocaleManager.getDefaultLocale()).format(date).toString();
 	}
 
 	public static String viewHourMin(Date date) {
-		return (new SimpleDateFormat("HH:mm").format(date).toString());
+		return (new SimpleDateFormat("HH:mm", LocaleManager.getDefaultLocale()).format(date).toString());
 	}
 
 	public static Calendar dateTimeToCalendar(Date date) {
