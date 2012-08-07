@@ -129,10 +129,11 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 			String end = treatedHtml;
 			for (MatchedToken token : iter) {
 				sb.append(token.getBefore());
-				sb.append(treatedAnchor(token.getMatched()));
+				String treatedAnchor = treatedAnchor(token.getMatched());
+				sb.append(treatedAnchor);
 				end = token.getAfter();
 				sbUrlOuts.append(token.getBefore());
-				sbUrlOuts.append(The.sequence('#', token.getMatched().length())); //marca as tags a com seus conteúdos
+				sbUrlOuts.append(The.sequence('#', treatedAnchor.length())); //marca as tags a com seus conteúdos
 			}
 			sb.append(end);
 			sbUrlOuts.append(end);
@@ -140,10 +141,17 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 			//Procura de urls avulsas (fora da tag 'a')
 			end = sbUrlOuts.toString();
 			iter = new IterableString(getCompiledUrlPattern(), end);
+			int offset = 0;
 			for (MatchedToken token : iter) {
-				sb.replace(token.getStart(), token.getEnd() ,
-				   treatedAnchor(The.concat("<a href=\"",token.getMatched(),"\">",token.getMatched(),"</a>"))
+				String foundURL = token.getMatched();
+				if(!foundURL.contains("://")){
+					foundURL = "http://"+foundURL;
+				}
+				String treatedAnchor = treatedAnchor(The.concat("<a href=\"",foundURL,"\">",foundURL,"</a>"));
+				sb.replace(token.getStart()+offset, token.getEnd()+offset ,
+				   treatedAnchor
 				);
+				offset =  offset + treatedAnchor.length() + token.getBefore().length();
 
 			}
 
