@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Cookie;
 import org.futurepages.core.admin.DefaultUser;
 import org.futurepages.core.context.Context;
 import org.futurepages.core.control.InvocationChain;
@@ -67,6 +68,8 @@ public interface Action extends Manipulable {
 	public Context getApplication();
 
 	public Context getCookies();
+
+	public Cookie getCookie(String key);
 
 	public Locale getLocale();
 
