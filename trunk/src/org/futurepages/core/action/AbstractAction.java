@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import javax.servlet.http.Cookie;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -478,6 +479,19 @@ public abstract class AbstractAction implements Pageable, Action {
 	@Override
 	public Context getCookies() {
 		return cookies;
+	}
+
+	@Override
+	public Cookie getCookie(String key) {
+        Cookie[] cookiesArray = this.getRequest().getCookies();
+        if (cookiesArray != null) {
+            for (int i = 0; i < cookiesArray.length; i++) {
+                if (cookiesArray[i].getName().equals(key)) {
+                    return cookiesArray[i];
+                }
+            }
+        }
+        return null;
 	}
 
 	@Override
