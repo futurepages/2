@@ -2,6 +2,7 @@ package org.futurepages.core.action;
 
 import java.util.Locale;
 import java.util.Map;
+import javax.servlet.http.Cookie;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +30,10 @@ public class ActionImpl implements Action{
 
 	@Override
 	public Context getCallback() {
+		return null;
+	}
+
+	public Cookie getCookie(String key) {
 		return null;
 	}
 

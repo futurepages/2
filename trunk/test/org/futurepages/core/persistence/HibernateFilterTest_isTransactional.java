@@ -3,6 +3,7 @@ package org.futurepages.core.persistence;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
+import javax.servlet.ServletException;
 
 import org.futurepages.core.action.Action;
 import org.futurepages.core.control.InvocationChain;
@@ -48,7 +49,7 @@ public class HibernateFilterTest_isTransactional {
 	}
 
 	@Test
-	public void testeIsTransational() throws SecurityException, NoSuchMethodException, InstantiationException, IllegalAccessException{
+	public void testeIsTransational() throws SecurityException, NoSuchMethodException, InstantiationException, IllegalAccessException, ServletException{
 		HibernateFilter filter = new HibernateFilter();
 		
 		Action action = actionClass.newInstance();
