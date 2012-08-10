@@ -37,6 +37,18 @@ public class ActionImpl implements Action{
 		return null;
 	}
 
+	public String success() {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public String success(String msg) {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public String getIpsFromClient() {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
 	@AsynchronousAction(AsynchronousActionType.DYN)
 	public class ClasseDynAnotada extends ActionImpl{}
 	
