@@ -295,6 +295,7 @@ public abstract class AbstractAction implements Pageable, Action {
 		return ((SessionContext) session).getSession();
 	}
 
+	@Override
 	public String getIpsFromClient() {
 		String ipClientReal = getRequest().getHeader("x-forwarded-for");
 		String ipResult;
@@ -326,11 +327,13 @@ public abstract class AbstractAction implements Pageable, Action {
 		return loggedUser(session);
 	}
 
+	@Override
 	public String success() {
 		return success("");
 	}
 
-	protected String success(String msg) {
+	@Override
+	public String success(String msg) {
 		return this.putMessage(SUCCESS, msg);
 	}
 

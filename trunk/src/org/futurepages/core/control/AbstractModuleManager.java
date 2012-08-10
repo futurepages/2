@@ -15,6 +15,7 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
 
 	protected String webPath;
     protected String moduleId;
+	protected String[] directDependencies;
 
     private boolean withPrettyURL = false;
     private char innerActionSeparator;
@@ -156,5 +157,9 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
 
 	public void setInnerActionSeparator(char innerActionSeparator) {
 		this.innerActionSeparator = innerActionSeparator;
+	}
+
+	protected void dependsOf(String ... dependencies){
+		directDependencies = dependencies;
 	}
 }
