@@ -80,6 +80,12 @@ public interface Action extends Manipulable {
 	public String getSuccess();
 
 	public boolean hasSuccess();
+	
+	public String success();
+
+	public String success(String msg);
+
+	public String getIpsFromClient();
 
 	public boolean hasNoCache();
 
