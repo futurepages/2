@@ -5,7 +5,9 @@ import javax.servlet.jsp.JspException;
 
 import org.futurepages.annotations.Tag;
 import org.futurepages.annotations.TagAttribute;
+import org.futurepages.core.ApplicationManager;
 import org.futurepages.core.config.Params;
+import org.futurepages.core.control.Controller;
 import org.futurepages.core.path.Paths;
 import org.futurepages.core.tags.PrintTag;
 import org.futurepages.core.tags.build.ContentTypeEnum;
@@ -30,14 +32,23 @@ public class IncludeModuleFunctions extends PrintTag{
 		try{
 			StringBuffer sb = new StringBuffer();
 			boolean autoImporting = !Is.empty(autoImportModule);
-			String moduleId =ModuleIdFilter.getModuleId(action);
+			String moduleId = ModuleIdFilter.getModuleId(action);
 			if(autoImporting){
 				sb.append(scriptFunctionsTag(autoImportModule));
-				if(!Is.empty(moduleId) && !moduleId.equals(autoImportModule)){
+			}
+			if (!Is.empty(moduleId)) {
+				if (Params.get("USE_MODULE_DEPENDENCY").equals("true")) {
+					java.util.Set<String> dependencies = ((ApplicationManager) Controller.getInstance().getAppManager()).getDependenciesOf(moduleId);
+					for (String dependency : dependencies) {
+						if (!autoImporting || !autoImportModule.equals(dependency)) {
+							sb.append(scriptFunctionsTag(dependency));
+						}
+					}
+				}
+
+				if (!autoImporting || !moduleId.equals(autoImportModule)) {
 					sb.append(scriptFunctionsTag(moduleId));
 				}
-			} else if(!Is.empty(moduleId)){
-					sb.append(scriptFunctionsTag(moduleId));
 			}
 			return sb.toString();
 		}
@@ -47,6 +58,6 @@ public class IncludeModuleFunctions extends PrintTag{
     }
 
 	private String scriptFunctionsTag(String moduleId){
-		return "<script type=\"text/javascript\" src=\""+Paths.module(req,moduleId)+"/template/functions.js"+Params.get("RELEASE_QUERY")+"\"></script>";
+		return "<script type=\"text/javascript\" src=\""+Paths.module(req,moduleId)+"/template/functions.js"+Params.get("RELEASE_QUERY")+"\"></script>\n";
 	}
 }

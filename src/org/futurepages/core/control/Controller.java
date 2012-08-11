@@ -582,4 +582,8 @@ public class Controller extends HttpServlet {
 	public boolean isModule(String pattern) {
 		return moduleIDs.contains(pattern);
 	}
+
+	public AbstractApplicationManager getAppManager() {
+		return appManager;
+	}
 }
