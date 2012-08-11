@@ -19,7 +19,7 @@ public class Modules {
             //Registra o Manager do Módulo, caso ele exista.
             if (moduleManagerFile.exists()) {
                 Class<? extends AbstractApplicationManager> moduleAppManager = (Class<? extends AbstractApplicationManager>) Class.forName(moduleName);
-                manager.register(moduleAppManager);
+                manager.register(module.getName(), moduleAppManager);
             }
         }
     }

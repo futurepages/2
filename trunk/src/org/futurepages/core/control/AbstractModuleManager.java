@@ -16,6 +16,7 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
 	protected String webPath;
     protected String moduleId;
 	protected String[] directDependencies;
+    protected boolean integrationModule = false;
 
     private boolean withPrettyURL = false;
     private char innerActionSeparator;
@@ -132,6 +133,10 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
         return addChain(modulePath(moduleId), actionName);
     }
 
+	public String getModuleId(){
+		return this.moduleId;
+	}
+
 	private Consequence addChain(String... actionPath){
 		return addChain(new Chain(StringUtils.concat(actionPath)));
 	}
@@ -160,6 +165,26 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
 	}
 
 	protected void dependsOf(String ... dependencies){
+		if(directDependencies!=null){
+			throw new RuntimeException("Não utilize mais de uma chamada de 'dependsOf()' dentro do mesmo loadDependencies() do ModuleManager");
+		}
 		directDependencies = dependencies;
 	}
+
+    public void loadDependencies() {
+		directDependencies = new String[]{};
+	}
+
+    public String[] getDirectDependencies() {
+		return directDependencies;
+	}
+
+	public void integrationModule(){
+		this.integrationModule = true;
+	}
+
+	public boolean isIntegrationModule() {
+		return this.integrationModule;
+	}
+
 }
