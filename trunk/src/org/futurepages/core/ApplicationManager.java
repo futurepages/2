@@ -87,20 +87,20 @@ public class ApplicationManager extends AbstractApplicationManager {
 					}
 				}
 
-				//for Test!!!
-				System.out.println("USE_MODULE_DEPENDENCY = TRUE ============");
-				for (AbstractApplicationManager m : managers.values()) {
-					if (m instanceof AbstractModuleManager) {
-						AbstractModuleManager mm = (AbstractModuleManager) m;
-						System.out.println("module '" + mm.getModuleId()+ "' depends of: ");
-						for(String dependency : moduleDependencies.get(mm.getModuleId())){
-								System.out.println("   - "+dependency);
-						}
-					}else{
+				//for Test!!! @DEBUG-MODE
+//				System.out.println("USE_MODULE_DEPENDENCY = TRUE ============");
+//				for (AbstractApplicationManager m : managers.values()) {
+//					if (m instanceof AbstractModuleManager) {
+//						AbstractModuleManager mm = (AbstractModuleManager) m;
+//						System.out.println("module '" + mm.getModuleId()+ "' depends of: ");
+//						for(String dependency : moduleDependencies.get(mm.getModuleId())){
+//								System.out.println("   - "+dependency);
+//						}
+//					}else{
 //						System.out.println(">> Other Manager: "+m.getClass().getName());
-					}
-				}
-				System.out.println("=========================================");
+//					}
+//				}
+//				System.out.println("=========================================");
 			}
 			log("Managers Iniciados");
 		} catch (Exception ex) {
