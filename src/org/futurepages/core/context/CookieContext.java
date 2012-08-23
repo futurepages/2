@@ -100,10 +100,22 @@ public class CookieContext implements Context, Map<String, Object> {
      */
 	@Override
     public void removeAttribute(String name) {
-        Cookie c = new Cookie(name, "");
-        c.setMaxAge(0);
-        res.addCookie(c);
-    }
+		Cookie c=null;
+		Cookie[] cookies = req.getCookies();
+        if (cookies != null) {
+            for (int i = 0; i < cookies.length; i++) {
+                if (cookies[i].getName().equals(name)) {
+                    c = cookies[i];
+					break;
+                }
+            }
+        }
+		if(c!=null){
+			c.setValue("");
+			c.setMaxAge(0);
+			res.addCookie(c);
+		}
+   }
     
 	@Override
     public void reset() {
