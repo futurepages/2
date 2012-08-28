@@ -87,7 +87,7 @@ public class SEOUtil {
      * @see urlMappingAlphabetics
      * @see urlMappingEspeciais
      */
-	public static String stringKeyValid(String strIn){
+	public static String replaceSpecialAlphas(String strIn){
         strIn = strIn.toLowerCase().trim();
         return StringUtils.replace(strIn, alphabetics);
     }
