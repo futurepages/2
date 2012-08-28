@@ -112,6 +112,8 @@ public class CookieContext implements Context, Map<String, Object> {
         }
 		if(c!=null){
 			c.setMaxAge(0);
+			c.setPath("/");
+			c.setValue("");
 			res.addCookie(c);
 		}
    }
