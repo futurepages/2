@@ -63,6 +63,26 @@ public class IsTest {
 	}
 
 	@Test
+	public void testValidStringKey_invalidoComArroba() {
+		assertFalse("com @ não é válido", Is.validStringKey("usuario@gmail.com"));
+	}
+
+	@Test
+	public void testValidStringKey_comNumeroValido() {
+		assertTrue("iniciando com número é válido", Is.validStringKey("123login"));
+	}
+
+	@Test
+	public void testValidStringKey_comNumeroInvalido() {
+		assertFalse("iniciando com número e é inválido", Is.validStringKey("123login",5,30,false));
+	}
+
+	@Test
+	public void testValidStringKey_comNumeroValido2() {
+		assertTrue("iniciando com número e é inválido", Is.validStringKey("123login",5,30,true));
+	}
+
+	@Test
 	public void testValidStringKey_invalido_muitoGrande_50() {
 		assertFalse("Muito grnade- 'size 50'", Is.validStringKey(StringFactory.getRandom(50)));
 	}
