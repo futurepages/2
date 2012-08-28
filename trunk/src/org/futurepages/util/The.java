@@ -5,6 +5,9 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
+import org.futurepages.util.iterator.string.IterableString;
+import org.futurepages.util.iterator.string.MatchedToken;
 
 /**
  * Esta é "A" Classe
@@ -269,24 +272,28 @@ public class The {
      * Retornar wIn sem caracteres especiais.
      * @param wIn
      */
-    public static String wordIn(String wIn){
-        String[] specials = new String[]{":",";",",",".","!","?","(",")","\\","/",
-                                         "\"","'","%","#","{","}","[","]","º","ª",
-                                         "<",">","´","`"};
+    public static String wordIn(String str){
 
-       return wordWithoutSpecials(specials, wIn," ").trim();
+
+        str = SEOUtil.replaceSpecialAlphas(str);  //CONVERTE ACENTUADOS E Ç
+
+		 String regexPatternChars = "[\\d|A-Z|a-z]";
+
+		return wordInRegex(str, regexPatternChars);
     }
 
     /**
      * Remove caracteres especiais.
-     * @param str
+     * @param str somente alfanumericos puros sem acentuaçao, ponto, underline e hifen
      * @return
      */
-	 public static String stringKeyIn(String str){        
-		 String[] specials = new String[]{":",";",",","!","?","(",")","\\","/",
-                                         "\"","'","%","#","{","}","[","]","º","ª",
-                                         "<",">","´","`","~"," ","\\t","\\n","\\r","\\h"};
-		return wordWithoutSpecials(specials, str,"");
+	 public static String stringKeyIn(String str){
+
+        str = SEOUtil.replaceSpecialAlphas(str);  //CONVERTE ACENTUADOS E Ç
+
+		 String regexPatternChars = "[\\d|A-Z|a-z|\\.|\\-|_]";
+
+		return wordInRegex(str, regexPatternChars);
 
     }
 	 
@@ -356,6 +363,16 @@ public class The {
 		StringBuilder sb = new StringBuilder();
 		for(int i = 0; i < len; i++){
 			sb.append(ch);
+		}
+		return sb.toString();
+	}
+
+	private static String wordInRegex(String str, String regexPatternChars) {
+		Pattern tagsPattern  = Pattern.compile(regexPatternChars);
+		IterableString iter = new IterableString(tagsPattern, str);
+		StringBuilder sb     = new StringBuilder();
+		for (MatchedToken token : iter) {
+			sb.append(token.getMatched());
 		}
 		return sb.toString();
 	}
