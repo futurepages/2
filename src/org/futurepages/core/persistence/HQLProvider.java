@@ -103,6 +103,14 @@ public class HQLProvider implements HQLable {
 			return "";
 		}
 	}
+    
+	public static String leftJoin(String joinClause) {
+		if (!Is.empty(joinClause)) {
+			return LEFT_JOIN + joinClause;
+		} else {
+			return "";
+		}
+	}
 
 	public static String notExists(String clause) {
 		if(!Is.empty(clause)) {
