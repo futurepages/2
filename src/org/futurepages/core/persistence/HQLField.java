@@ -77,27 +77,6 @@ public class HQLField implements HQLable {
         return concat(fieldName , " = '" , escQuoteAndSlashes(value) , "'");
     }
 
-    public String matches(String value) {
-        if (Is.empty(value)) {
-            return "";
-        }
-        return HQLUtil.matches(fieldName, value);
-    }
-
-    public String matches(String value, boolean bringAll, boolean findSmaller) {
-        if (Is.empty(value)) {
-            return "";
-        }
-        return HQLUtil.matches(fieldName, value,bringAll,findSmaller);
-	}
-
-    public String is(Boolean bool) {
-        if (Is.empty(bool)) {
-            return "";
-        }
-        return fieldName + " is " + bool;
-    }
-
     public String equalsTo(long value) {
         return fieldName + " = " + value;
     }
@@ -128,13 +107,27 @@ public class HQLField implements HQLable {
 	}
 
 	//Este foge do padrão dos demais. Portanto, não modificá-lo para padronizar, para não causar transtorno em sistemas legados.
-    public String equalsTo(Boolean value) {
+	public String equalsTo(Boolean value) {
         if (value == null) {
             return isNull();
         } else if (value == false) {
             return isFalse();
         }
         return isTrue();
+    }
+
+    public String matches(String value, boolean bringAll, boolean findSmaller) {
+        if (Is.empty(value)) {
+            return "";
+        }
+        return HQLUtil.matches(fieldName, value,bringAll,findSmaller);
+	}
+
+    public String is(Boolean bool) {
+        if (Is.empty(bool)) {
+            return "";
+        }
+        return fieldName + " is " + bool;
     }
 
     public String differentFrom(String value) {
