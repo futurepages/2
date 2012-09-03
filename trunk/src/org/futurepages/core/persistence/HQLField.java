@@ -26,9 +26,14 @@ public class HQLField implements HQLable {
         this.fieldName = fieldName;
     }
 
+
+
+
     public String between(String dateBegin, String dateEnd) {
         return concat("((" , fieldName , GREATER_EQUALS , "'" , escQuoteAndSlashes(dateBegin) , "') " , AND , " (" , fieldName , LOWER_EQUALS , "'" , escQuoteAndSlashes(dateEnd) , "'))");
     }
+
+
 
     public String inDate(Date date) {
         Calendar cal = Calendar.getInstance();
@@ -58,6 +63,8 @@ public class HQLField implements HQLable {
         return this.between(dateBegin, dateEnd);
     }
 
+
+	
 	/**
 	 * Cuidado: só é dado supor para aquelas enums anotadas com @Enumerated(EnumType.STRING)
 	 * @param enumeration
@@ -116,6 +123,17 @@ public class HQLField implements HQLable {
         return isTrue();
     }
 
+	public String equalsTo(HQLField field) {
+        return compareTo(EQUALS , field);
+    }
+
+	public String equalsTo(Calendar cal) {
+        return timeExpression(cal, EQUALS);
+    }
+
+
+
+
     public String matches(String value, boolean bringAll, boolean findSmaller) {
         if (Is.empty(value)) {
             return "";
@@ -123,18 +141,34 @@ public class HQLField implements HQLable {
         return HQLUtil.matches(fieldName, value,bringAll,findSmaller);
 	}
 
-    public String is(Boolean bool) {
+	public String matches(String value) {
+       if (Is.empty(value)) {
+           return "";
+       }
+       return HQLUtil.matches(fieldName, value);
+   }
+
+
+
+	public String is(Boolean bool) {
         if (Is.empty(bool)) {
             return "";
         }
         return fieldName + " is " + bool;
     }
 
+
+
+
     public String differentFrom(String value) {
         if (Is.empty(value)) {
             return "";
         }
         return concat(fieldName , " != '" , escQuoteAndSlashes(value) , "'");
+    }
+
+	public String differentTo(HQLField field) {
+        return compareTo(DIFFERENT , field) ;
     }
 	
     public String differentFrom(Enum<?> enumeration, EnumType type) {
@@ -150,7 +184,7 @@ public class HQLField implements HQLable {
     }
 
     public String differentFrom(int value) {
-        return fieldName + " != " + value;
+        return fieldName + DIFFERENT + value;
     }
 
     public String differentFrom(long value) {
@@ -165,6 +199,10 @@ public class HQLField implements HQLable {
         return differentFrom(value.intValue());
     }
 
+
+
+
+
     public String greaterThen(String value) {
         return concat(fieldName , GREATER , "'" , escQuoteAndSlashes(value) , "'");
     }
@@ -175,6 +213,22 @@ public class HQLField implements HQLable {
 
 	public String greaterThen(double value) {
         return fieldName + GREATER + value;
+    }
+
+    public String greaterThen(Calendar cal) {
+        return timeExpression(cal, GREATER);
+    }
+
+	public String greaterThen(HQLField field) {
+        return compareTo(GREATER, field);
+    }
+
+
+
+
+
+    public String greaterEqualsThen(Calendar cal) {
+        return timeExpression(cal, GREATER_EQUALS);
     }
 
     public String greaterEqualsThen(String value) {
@@ -189,6 +243,9 @@ public class HQLField implements HQLable {
         return fieldName + GREATER_EQUALS + value;
     }
 
+
+
+
     public String lowerThen(String value) {
         return concat(fieldName , LOWER , "'" , escQuoteAndSlashes(value) , "'");
     }
@@ -200,6 +257,12 @@ public class HQLField implements HQLable {
 	public String lowerThen(double value) {
         return fieldName + LOWER + value;
     }
+	
+	public String lowerThen(Calendar cal) {
+		return timeExpression(cal, LOWER);
+	}
+
+
 
     public String lowerEqualsThen(String value) {
         return concat(fieldName , LOWER_EQUALS , "'" , escQuoteAndSlashes(value) , "'");
@@ -212,6 +275,17 @@ public class HQLField implements HQLable {
 	public String lowerEqualsThen(double value) {
         return fieldName + LOWER_EQUALS + value;
     }
+
+    public String lowerEqualsThen(Calendar cal) {
+        return timeExpression(cal, LOWER_EQUALS);
+    }
+
+
+	public String compareTo(String signal, HQLField field) {
+        return concat(fieldName , signal , field.fieldName) ;
+    }
+
+
 
     public String hasAllWordsInSequence(String... words) {
 		return hasAllWordsInSameSequence(words);
@@ -420,26 +494,6 @@ public class HQLField implements HQLable {
 			return "";
 	    }
         return concat(fieldName , comparator , "'" , escQuoteAndSlashes(DateUtil.dbDateTime(cal.getTime())) , "'");
-    }
-
-    public String equalsTo(Calendar cal) {
-        return timeExpression(cal, EQUALS);
-    }
-
-    public String greaterEqualsThen(Calendar cal) {
-        return timeExpression(cal, GREATER_EQUALS);
-    }
-
-    public String greaterThen(Calendar cal) {
-        return timeExpression(cal, GREATER);
-    }
-
-	public String lowerThen(Calendar cal) {
-		return timeExpression(cal, LOWER);
-	}
-
-    public String lowerEqualsThen(Calendar cal) {
-        return timeExpression(cal, LOWER_EQUALS);
     }
 
 	private String concat(String... str){
