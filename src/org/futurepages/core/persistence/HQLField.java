@@ -28,9 +28,12 @@ public class HQLField implements HQLable {
 
 
 
-
     public String between(String dateBegin, String dateEnd) {
         return concat("((" , fieldName , GREATER_EQUALS , "'" , escQuoteAndSlashes(dateBegin) , "') " , AND , " (" , fieldName , LOWER_EQUALS , "'" , escQuoteAndSlashes(dateEnd) , "'))");
+    }
+
+    public String between(HQLField fieldBegin, HQLField fieldEnd) {
+        return concat("((" , fieldName , GREATER_EQUALS , fieldBegin.fieldName , ") " , AND , " (" , fieldName , LOWER_EQUALS , fieldEnd.fieldName , "))");
     }
 
 
@@ -133,7 +136,6 @@ public class HQLField implements HQLable {
 
 
 
-
     public String matches(String value, boolean bringAll, boolean findSmaller) {
         if (Is.empty(value)) {
             return "";
@@ -154,9 +156,12 @@ public class HQLField implements HQLable {
         if (Is.empty(bool)) {
             return "";
         }
-        return fieldName + " is " + bool;
+        return concat(fieldName , IS , String.valueOf(bool));
     }
 
+	public String is(HQLField field) {
+	        return compareTo(IS , field);
+	}
 
 
 
@@ -164,10 +169,10 @@ public class HQLField implements HQLable {
         if (Is.empty(value)) {
             return "";
         }
-        return concat(fieldName , " != '" , escQuoteAndSlashes(value) , "'");
+        return concat(fieldName , DIFFERENT, "'" , escQuoteAndSlashes(value) , "'");
     }
 
-	public String differentTo(HQLField field) {
+	public String differentFrom(HQLField field) {
         return compareTo(DIFFERENT , field) ;
     }
 	
@@ -201,8 +206,6 @@ public class HQLField implements HQLable {
 
 
 
-
-
     public String greaterThen(String value) {
         return concat(fieldName , GREATER , "'" , escQuoteAndSlashes(value) , "'");
     }
@@ -225,8 +228,6 @@ public class HQLField implements HQLable {
 
 
 
-
-
     public String greaterEqualsThen(Calendar cal) {
         return timeExpression(cal, GREATER_EQUALS);
     }
@@ -243,6 +244,9 @@ public class HQLField implements HQLable {
         return fieldName + GREATER_EQUALS + value;
     }
 
+	public String greaterEqualsThen(HQLField field) {
+        return compareTo(GREATER_EQUALS, field);
+    }
 
 
 
@@ -262,6 +266,10 @@ public class HQLField implements HQLable {
 		return timeExpression(cal, LOWER);
 	}
 
+	public String lowerThen(HQLField field) {
+        return compareTo(LOWER, field);
+    }
+
 
 
     public String lowerEqualsThen(String value) {
@@ -279,6 +287,11 @@ public class HQLField implements HQLable {
     public String lowerEqualsThen(Calendar cal) {
         return timeExpression(cal, LOWER_EQUALS);
     }
+
+	public String lowerEqualsThen(HQLField field) {
+        return compareTo(LOWER_EQUALS, field);
+    }
+
 
 
 	public String compareTo(String signal, HQLField field) {
