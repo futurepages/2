@@ -168,6 +168,12 @@ public class GenericDao extends HQLProvider {
         Query query = query(select(distinct(entityAlias)) + fromAndJoin + where(whereClause) + orderBy(orderClauses));
         return query.list();
     }
+    
+    
+    public <T extends Serializable> List<T> listDistinctWithJoin(String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {       
+        Query query = query(select(distinct(entityAlias)) + fromAndJoin + where(whereClause) + orderBy(orderClauses));
+        return query.list();
+    }
 
     public <T extends Serializable> List<T> list(String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
         Query query = query(select(entityAlias) + fromAndJoin + where(whereClause) + orderBy(orderClauses));
