@@ -367,6 +367,23 @@ public class The {
 		return sb.toString();
 	}
 
+	public static String strWithoutExtraBlanks(String inputText) {
+		inputText = inputText.trim();
+
+		String[] lista = inputText.split(" ");
+		inputText = "";
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < lista.length; i++) {
+			if (lista[i].length() > 0) {
+				sb.append(lista[i]);
+				if(i < lista.length-1){
+					sb.append(" ");
+				}
+			}
+		}
+		return sb.toString();
+	}
+
 	private static String wordInRegex(String str, String regexPatternChars) {
 		Pattern tagsPattern  = Pattern.compile(regexPatternChars);
 		IterableString iter = new IterableString(tagsPattern, str);
