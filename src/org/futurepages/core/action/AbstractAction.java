@@ -345,6 +345,22 @@ public abstract class AbstractAction implements Pageable, Action {
         return this.putMessage(ERROR, msg);
     }
 
+	public String warning(){
+		return warning(false, "");
+	}
+
+	public String warning(String msg){
+		return warning(false, msg);
+	}
+
+	public String info() {
+		return putMessage(INFO, "");
+	}
+
+	public String info(String infoMsg) {
+		return putMessage(INFO, infoMsg);
+	}
+
 	protected String error(ErrorException ex) {
         return this.putError(true, ex);
     }
@@ -373,16 +389,12 @@ public abstract class AbstractAction implements Pageable, Action {
 		return ERROR;
 	}
 
-	public String warning(boolean listDependencies, String warningMsg) {
+	private String warning(boolean listDependencies, String warningMsg) {
 		this.putMessage(WARNING, warningMsg);
 		if (listDependencies) {
 			this.doListDependencies();
 		}
 		return WARNING;
-	}
-
-	public String info(AbstractAction action, String infoMsg) {
-		return action.putMessage(INFO, infoMsg);
 	}
 
 	public String ajaxError(Exception ex) {
