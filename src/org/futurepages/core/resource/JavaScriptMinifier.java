@@ -31,7 +31,7 @@ public class JavaScriptMinifier {
 				inReader.close();
 				System.out.println("COMPACTADO: "+f.getAbsolutePath()+"!");
 			} catch (Exception ex) {
-				System.out.println("ERROR AO COMPACTAR ARQUIVO JS");
+				System.out.println("ERRO AO COMPACTAR ARQUIVO JS");
 				DefaultExceptionLogger.getInstance().execute(ex);
 				try {
 					fis.close();
