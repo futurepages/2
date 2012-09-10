@@ -315,7 +315,7 @@ public class The {
         return in;
     }
 
-	private static String wordWithoutSpecials(String[] specials, String wIn, String newChar) {
+	public static String wordWithoutSpecials(String[] specials, String wIn, String newChar) {
 		for (String special : specials) {
 			if (wIn.contains(special)) {
 				wIn = wIn.replace(special, newChar);
