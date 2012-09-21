@@ -247,7 +247,12 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 		}
 		else{
 			Matcher matcherOutro = Pattern.compile("(?i)(?s)(<a>)(.*?)(</a>)").matcher(tagA);
-			return matcherOutro.group(2);
+			if (matcherOutro.find()) {
+				return matcherOutro.group(2);
+			}
+			else{
+				return "";
+			}
 		}
 }
 	
@@ -284,7 +289,6 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 			sb.append("<p ");
 			for (MatchedToken tokenOpen : iter) {
 				String[] group = tokenOpen.getMatched().split("\\s*=",2);
-//				String attr = group[0].trim(); //PQ ISTO EXISTIRIA? COMENTADO POIS NAO ESTAVA SENDO USADO.
 				String attrValue = group[1].trim().replaceAll("(\")", "");
 				// aqui colocar outros atributos do style que devem ser mantidos
 				IterableString iterValue = new IterableString(Pattern.compile(HtmlRegex.attrValuesPattern(textAlign? new String[]{"padding-left","text-align"} : new String[]{"padding-left"})), attrValue);
