@@ -23,7 +23,9 @@ public class QuartzJobsRegister extends ModulesAutomation{
 		Map<String, List<Class<Job>>> classes = getModulesDirectoryClasses(Job.class, null);
 		for (String moduleName : classes.keySet()) {
 			for (Class<Job> jobKlass : classes.get(moduleName)) {
-				scheduleJob(moduleName, jobKlass);
+				if(jobKlass.isAnnotationPresent(CronTrigger.class)){
+					scheduleJob(moduleName, jobKlass);
+				}
 			}
 		}
 	}
