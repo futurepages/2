@@ -51,13 +51,13 @@ public class StringUtilTest {
 	@Test
 	public void testConcatWith(){
 		String result = StringUtils.concatWith(" - ","A","B","C");
-		Assert.assertEquals("A strings n„o foram concatenadas corretamente", "A - B - C", result );
+		Assert.assertEquals("A strings n√£o foram concatenadas corretamente", "A - B - C", result );
 	}
 
 	@Test
 	public void testConcatWith_nenhumaString(){
 		String result = StringUtils.concatWith(" - ");
-		Assert.assertEquals("A strings n„o foram concatenadas corretamente","", result );
+		Assert.assertEquals("A strings n√£o foram concatenadas corretamente","", result );
 	}
 
 }

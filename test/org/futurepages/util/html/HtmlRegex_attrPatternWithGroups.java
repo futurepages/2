@@ -34,9 +34,9 @@ public class HtmlRegex_attrPatternWithGroups {
 		Collection<Object[]> col =  Arrays.asList(new Object[][] {
 				{"a=\"x\"","a", 			true, "deve casar no caso simples, apenas um atributo "},
 				{"a='x'","a", 				false, "apenas um atributo com aspas simples"},
-				{" a = \"x\"", "a", 		true, "deve casar quando html possui v·rios espaÁos"},
-				{" a = \"x\"", "a", 		true, "deve casar quando html possui v·rios espaÁos"},
-				{"asdfg", "a", 			false, "n„o deve casar quando n„o houver vari·vel"}
+				{" a = \"x\"", "a", 		true, "deve casar quando html possui v√°rios espa√ßos"},
+				{" a = \"x\"", "a", 		true, "deve casar quando html possui v√°rios espa√ßos"},
+				{"asdfg", "a", 			false, "n√£o deve casar quando n√£o houver vari√°vel"}
 		});
 		return col;
 	}

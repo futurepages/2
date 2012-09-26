@@ -46,30 +46,30 @@ public class CalendarUtil_literalRangeOfDatesTest {
 	public void setUp(){
 	}
 	
-//	ANO		M S		DIA		CORRENTE?
+//	ANO		M√äS		DIA		CORRENTE?
 
 //	IGUAL	IGUAL	IGUAL	SIM
-//	IGUAL	IGUAL	IGUAL	N√O
+//	IGUAL	IGUAL	IGUAL	N√ÉO
 //	IGUAL	IGUAL	DIFF	SIM
-//	IGUAL	IGUAL	DIFF	N√O
+//	IGUAL	IGUAL	DIFF	N√ÉO
 
 //	IGUAL	DIFF	IGUAL	SIM
-//	IGUAL	DIFF	IGUAL	N√O
+//	IGUAL	DIFF	IGUAL	N√ÉO
 //	IGUAL	DIFF	DIFF	SIM
-//	IGUAL	DIFF	DIFF	N√O
+//	IGUAL	DIFF	DIFF	N√ÉO
 
 //	DIFF	IGUAL	IGUAL	SIM
-//	DIFF	IGUAL	IGUAL	N√O
+//	DIFF	IGUAL	IGUAL	N√ÉO
 //	DIFF	IGUAL	DIFF	SIM
-//	DIFF	IGUAL	DIFF	N√O
+//	DIFF	IGUAL	DIFF	N√ÉO
 
 //	DIFF	DIFF	IGUAL	SIM
-//	DIFF	DIFF	IGUAL	N√O
+//	DIFF	DIFF	IGUAL	N√ÉO
 //	DIFF	DIFF	DIFF	SIM
-//	DIFF	DIFF	DIFF	N√O
+//	DIFF	DIFF	DIFF	N√ÉO
 	/**
-	 * construÁ„o de array de parÁametros para o construtor:
-	 * dataInicio, dataFim, anoCorrente, saÌda esperada, msg 
+	 * constru√ß√£o de array de par√ßametros para o construtor:
+	 * dataInicio, dataFim, anoCorrente, sa√≠da esperada, msg 
 	 */
 	@Parameters
 	public static Collection<Object[]> parameters() {
@@ -78,28 +78,28 @@ public class CalendarUtil_literalRangeOfDatesTest {
 
 			{mask, "01/01/2009", "01/01/2009 01:00:00", "01/01/2009", "1 de janeiro",					      "Tudo Igual."},
 			{mask, "20/01/2009", "20/01/2009", "19/01/2009", "20 de janeiro",								  "Tudo Igual. Data Corrente antes do evento."},
-			{mask, "20/01/2009", "20/01/2009", "21/01/2009", "20 de janeiro",								  "Tudo Igual. Data Corrente apÛs evento."},
+			{mask, "20/01/2009", "20/01/2009", "21/01/2009", "20 de janeiro",								  "Tudo Igual. Data Corrente ap√≥s evento."},
 
-			{mask, "01/01/2009", "01/01/2009", "01/01/2008", "1 de janeiro de 2009",						  "ANO n„o corrente."},
+			{mask, "01/01/2009", "01/01/2009", "01/01/2008", "1 de janeiro de 2009",						  "ANO n√£o corrente."},
 			{mask, "01/01/2009", "02/01/2009", "01/01/2009", "1 a 2 de janeiro",							  "DIA diferente."},
-			{mask, "01/01/2009", "02/01/2009", "01/01/2008", "1 a 2 de janeiro de 2009",					  "DIA diferente, ANO n„o corrente."},
+			{mask, "01/01/2009", "02/01/2009", "01/01/2008", "1 a 2 de janeiro de 2009",					  "DIA diferente, ANO n√£o corrente."},
 
 			{mask, "01/01/2009", "01/02/2009", "01/01/2009", "1 de janeiro a 1 de fevereiro",				  "MES diferente."},
-			{mask, "01/01/2009", "01/02/2009", "01/01/2008", "1 de janeiro a 1 de fevereiro de 2009",		  "MES diferente, ANO n„o corrente."},
+			{mask, "01/01/2009", "01/02/2009", "01/01/2008", "1 de janeiro a 1 de fevereiro de 2009",		  "MES diferente, ANO n√£o corrente."},
 			{mask, "01/01/2009", "02/02/2009", "01/01/2009", "1 de janeiro a 2 de fevereiro",				  "MES diferente DIA diferente."},
-			{mask, "01/01/2009", "02/02/2009", "01/01/2008", "1 de janeiro a 2 de fevereiro de 2009",		  "MES diferente, DIA diferente, ANO n„o corrente."},
+			{mask, "01/01/2009", "02/02/2009", "01/01/2008", "1 de janeiro a 2 de fevereiro de 2009",		  "MES diferente, DIA diferente, ANO n√£o corrente."},
 
 			{mask, "01/01/2009", "01/01/2010", "01/01/2009", "1 de janeiro de 2009 a 1 de janeiro de 2010",   "ANO diferente."},
-			{mask, "01/01/2009", "01/01/2010", "01/01/2010", "1 de janeiro de 2009 a 1 de janeiro de 2010",   "ANO diferente, ANO n„o corrente."},
+			{mask, "01/01/2009", "01/01/2010", "01/01/2010", "1 de janeiro de 2009 a 1 de janeiro de 2010",   "ANO diferente, ANO n√£o corrente."},
 			{mask, "01/01/2009", "02/01/2010", "01/01/2009", "1 de janeiro de 2009 a 2 de janeiro de 2010",   "ANO diferente, DIA diferente."},
-			{mask, "01/01/2009", "02/01/2010", "01/01/2010", "1 de janeiro de 2009 a 2 de janeiro de 2010",   "ANO diferente, DIA diferente, ANO n„o corrente."},
+			{mask, "01/01/2009", "02/01/2010", "01/01/2010", "1 de janeiro de 2009 a 2 de janeiro de 2010",   "ANO diferente, DIA diferente, ANO n√£o corrente."},
 
 			{mask, "01/01/2009", "01/02/2010", "01/01/2009", "1 de janeiro de 2009 a 1 de fevereiro de 2010", "ANO diferente, MES diferente."},
-			{mask, "01/01/2009", "01/02/2010", "01/01/2010", "1 de janeiro de 2009 a 1 de fevereiro de 2010", "ANO diferente, MES diferente, ANO n„o corrente."},
+			{mask, "01/01/2009", "01/02/2010", "01/01/2010", "1 de janeiro de 2009 a 1 de fevereiro de 2010", "ANO diferente, MES diferente, ANO n√£o corrente."},
 			{mask, "01/01/2009", "02/02/2010", "01/01/2009", "1 de janeiro de 2009 a 2 de fevereiro de 2010", "ANO diferente, MES diferente, DIA diferente."},
-			{mask, "01/01/2009", "02/02/2010", "01/01/2010", "1 de janeiro de 2009 a 2 de fevereiro de 2010", "ANO diferente, MES diferente, DIA diferente, ANO n„o corrente."},
-			{"dd/MM/yyyy hh:mm:ss", "01/01/2009 00:30:00", "01/01/2009 01:30:00", "01/01/2009 00:00:00", "1 de janeiro de 0h30 ‡ 1h30",	 "HORA FINAL MENOR IGUAL A 1"},
-			{"dd/MM/yyyy HH:mm:ss", "01/01/2009 01:00:00", "01/01/2009 23:00:00", "01/01/2009 00:00:00", "1 de janeiro de 1h ‡s 23h",	 		 "DE 1h a 23h MINUTO INICIAL E FINAL IGUAL A ZERO"}
+			{mask, "01/01/2009", "02/02/2010", "01/01/2010", "1 de janeiro de 2009 a 2 de fevereiro de 2010", "ANO diferente, MES diferente, DIA diferente, ANO n√£o corrente."},
+			{"dd/MM/yyyy hh:mm:ss", "01/01/2009 00:30:00", "01/01/2009 01:30:00", "01/01/2009 00:00:00", "1 de janeiro de 0h30 √† 1h30",	 "HORA FINAL MENOR IGUAL A 1"},
+			{"dd/MM/yyyy HH:mm:ss", "01/01/2009 01:00:00", "01/01/2009 23:00:00", "01/01/2009 00:00:00", "1 de janeiro de 1h √†s 23h",	 		 "DE 1h a 23h MINUTO INICIAL E FINAL IGUAL A ZERO"}
 		});
 		return col;
 	}

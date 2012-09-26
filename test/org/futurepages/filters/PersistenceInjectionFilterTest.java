@@ -44,7 +44,7 @@ public class PersistenceInjectionFilterTest {
 		filterTestProcedure();
 		
 		Aluno aluno = (Aluno) input.getValue("aluno");
-		Assert.assertNull("Aluno n„o foi injetado no input",aluno);		
+		Assert.assertNull("Aluno n√£o foi injetado no input",aluno);		
 	}
 	
 	/**
@@ -62,7 +62,7 @@ public class PersistenceInjectionFilterTest {
 		filterTestProcedure();
 		
 		Aluno aluno = (Aluno) input.getValue("aluno");
-		Assert.assertNotNull("Aluno n„o foi injetado no input",aluno);
+		Assert.assertNotNull("Aluno n√£o foi injetado no input",aluno);
 		Assert.assertEquals("Aluno diferente do aluno injetado.",alunoBD.getId(), aluno.getId());
 		
 	}
@@ -82,7 +82,7 @@ public class PersistenceInjectionFilterTest {
 		filterTestProcedure();
 		
 		Aluno aluno = (Aluno) input.getValue("aluno");
-		Assert.assertNotNull("Aluno n„o foi injetado no input",aluno);
+		Assert.assertNotNull("Aluno n√£o foi injetado no input",aluno);
 		Assert.assertEquals("Aluno diferente do aluno injetado.",alunoBD.getId(), aluno.getId());
 		
 	}
@@ -105,8 +105,8 @@ public class PersistenceInjectionFilterTest {
 		filterTestProcedure();
 		
 		Aluno aluno = (Aluno) input.getValue("aluno");
-		Assert.assertNotNull("Aluno n„o foi injetado no input, teste n„o faz sentido",aluno);
-		Assert.assertNotNull("a Turma n„o foi injetado no aluno.",aluno.getTurma());
+		Assert.assertNotNull("Aluno n√£o foi injetado no input, teste n√£o faz sentido",aluno);
+		Assert.assertNotNull("a Turma n√£o foi injetado no aluno.",aluno.getTurma());
 		
 	}
 
@@ -128,8 +128,8 @@ public class PersistenceInjectionFilterTest {
 		filterTestProcedure();
 		
 		Aluno aluno = (Aluno) input.getValue("aluno");
-		Assert.assertNotNull("Aluno n„o foi injetado no input, teste n„o faz sentido",aluno);
-		Assert.assertNotNull("a Turma n„o foi injetado no aluno.",aluno.getTurma());
+		Assert.assertNotNull("Aluno n√£o foi injetado no input, teste n√£o faz sentido",aluno);
+		Assert.assertNotNull("a Turma n√£o foi injetado no aluno.",aluno.getTurma());
 	}
 
 	

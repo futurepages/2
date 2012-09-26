@@ -17,7 +17,7 @@ public class MesEnumTest {
         assertEquals("Janeiro deveria possuir 31 dias.", 31, MonthEnum.daysCount(2006, 1));
         assertEquals("Dezembro deveria possuir 31 dias.", 31, MonthEnum.daysCount(2007, 1));
         assertEquals("Julho deveria possuir 31 dias.", 31, MonthEnum.daysCount(2008, 7));
-        assertEquals("Este fevereiro n„o deveria ser de um ano bisexto.", 28, MonthEnum.daysCount(2009, 2));
+        assertEquals("Este fevereiro n√£o deveria ser de um ano bisexto.", 28, MonthEnum.daysCount(2009, 2));
         assertEquals("Este fevereiro deveria ser de um ano bisexto.", 29,  MonthEnum.daysCount(2008, 2));
     }
 

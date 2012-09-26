@@ -13,7 +13,7 @@ import org.junit.Test;
 public class CalendarUtilTest {
 	private static final String CALENDAR_MASK = "dd/MM/yyyy HH:mm:ss";
 	/**
-	 * CalMinuendo -  CalSubtraendo = CalDifefenÁa
+	 * CalMinuendo -  CalSubtraendo = CalDifefen√ßa
 	 * @param minuendo
 	 * @param subtraendo
 	 * @return
@@ -167,7 +167,7 @@ public class CalendarUtilTest {
 	@Test
 	public void testGetElapsedTimeStatement_maiorMes_UM() throws TooBigDateException{
 		int[] time = new int[]{0,1,3,4,5}; 
-		getElapsedTimeStatementTestProcedure("", time, "1 mÍs e 3 dias");
+		getElapsedTimeStatementTestProcedure("", time, "1 m√™s e 3 dias");
 	}
 	
 	@Test
@@ -209,7 +209,7 @@ public class CalendarUtilTest {
 	@Test
 	public void testGetElapsedTimeStatement_maiorMes_IgualUM() throws TooBigDateException{
 		int[] time = new int[]{0,1,3,4,5}; 
-		getElapsedTimeStatementTestProcedure("", time, "1 mÍs e 3 dias");
+		getElapsedTimeStatementTestProcedure("", time, "1 m√™s e 3 dias");
 	}
 	
 	@Test
@@ -219,7 +219,7 @@ public class CalendarUtilTest {
 	}
 	
 	/*
-	 * os valores para os minutos(apÛs hora) est„o zerados
+	 * os valores para os minutos(ap√≥s hora) est√£o zerados
 	 */
 	@Test
 	public void testGetElapsedTimeStatement_maiorDiaMaior_ProximoValorZero() throws TooBigDateException{
@@ -305,7 +305,7 @@ public class CalendarUtilTest {
 	@Test
 	public void testGetDifferenceInDays_datasIguais(){
 		Calendar c1 = Calendar.getInstance();
-		getDifferenceInDays_testProcedure(c1, c1, 0, "Erro quando as duas datas s„o iguais");
+		getDifferenceInDays_testProcedure(c1, c1, 0, "Erro quando as duas datas s√£o iguais");
 	}
 
 	@Test
@@ -371,7 +371,7 @@ public class CalendarUtilTest {
 	private void getDiffernece_segundaDataMaiorTestProcedure(int diff) {
 		Calendar c1 = CalendarUtil.buildCalendar(Calendar.DATE, -diff);
 		Calendar c2 = Calendar.getInstance();
-		getDifferenceInDays_testProcedure(c1, c2, diff, "Erro com quando a segunda data È Maior e a diferenÁa È "+diff);
+		getDifferenceInDays_testProcedure(c1, c2, diff, "Erro com quando a segunda data √© Maior e a diferen√ßa √© "+diff);
 	}
 	
 	@Test
@@ -384,14 +384,14 @@ public class CalendarUtilTest {
 	private void getDiffernece_segundaDataMenorTestProcedure(int diff) {
 		Calendar c1 = CalendarUtil.buildCalendar(Calendar.DATE, -diff);
 		Calendar c2 = Calendar.getInstance();
-		getDifferenceInDays_testProcedure(c2, c1, diff, "Erro com quando a segunda data È Menor e a diferenÁa È "+diff);
+		getDifferenceInDays_testProcedure(c2, c1, diff, "Erro com quando a segunda data √© Menor e a diferen√ßa √© "+diff);
 	}
 	
 	private void isLeapYearTestProcedure(String msg, int year, boolean expected){
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.YEAR, year);
 		boolean result = CalendarUtil.isLeapYear(cal);
-		Assert.assertEquals("Erro no mÈtodo quando o ano È "+msg, expected, result);
+		Assert.assertEquals("Erro no m√©todo quando o ano √© "+msg, expected, result);
 	}
 	
 	@Test
@@ -401,7 +401,7 @@ public class CalendarUtilTest {
 
 	@Test
 	public void testeIsLeapYear_anoNaoBisexto(){
-		isLeapYearTestProcedure("n„o bisexto", 2009, false);
+		isLeapYearTestProcedure("n√£o bisexto", 2009, false);
 	}
 	
 	private void getOrdinalDayOfYearTestProcedure(String errorMsg, String data, int esperado) {
@@ -419,7 +419,7 @@ public class CalendarUtilTest {
 	 */
 	@Test
 	public void testeGetOrdinalDayOfYear_bisexto_antesMarco(){
-		getOrdinalDayOfYearTestProcedure("ano bisexto e dia antes de marÁo.","29/02/2008", 60);
+		getOrdinalDayOfYearTestProcedure("ano bisexto e dia antes de mar√ßo.","29/02/2008", 60);
 	}
 
 	/**
@@ -430,7 +430,7 @@ public class CalendarUtilTest {
 	 */
 	@Test
 	public void testeGetOrdinalDayOfYear_bisexto_Marco(){
-		getOrdinalDayOfYearTestProcedure("ano bisexto e dia em marÁo.","01/03/2008", 61);
+		getOrdinalDayOfYearTestProcedure("ano bisexto e dia em mar√ßo.","01/03/2008", 61);
 	}
 
 	/**
@@ -440,7 +440,7 @@ public class CalendarUtilTest {
 	 */
 	@Test
 	public void testeGetOrdinalDayOfYear_naoBisexto_antesMarco(){
-		getOrdinalDayOfYearTestProcedure("ano n„o bisexto e dia antes de marÁo.","28/02/2009", 59);
+		getOrdinalDayOfYearTestProcedure("ano n√£o bisexto e dia antes de mar√ßo.","28/02/2009", 59);
 	}
 	
 	/**
@@ -451,12 +451,12 @@ public class CalendarUtilTest {
 	 */
 	@Test
 	public void testeGetOrdinalDayOfYear_naoBisexto_Marco(){
-		getOrdinalDayOfYearTestProcedure("ano n„o bisexto e dia em marÁo","01/03/2009", 61);
+		getOrdinalDayOfYearTestProcedure("ano n√£o bisexto e dia em mar√ßo","01/03/2009", 61);
 	}
 
 	@Test
 	public void testeGetOrdinalDayOfYear_naoBisexto_Dezembro(){
-		getOrdinalDayOfYearTestProcedure("ano n„o bisexto e dia em marÁo","31/12/2009", 366);
+		getOrdinalDayOfYearTestProcedure("ano n√£o bisexto e dia em mar√ßo","31/12/2009", 366);
 	}
 	
 }

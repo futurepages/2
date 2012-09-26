@@ -44,21 +44,21 @@ public class CalendarUtil_literalRangeOfTimesTest {
 	}
 
 	/**
-	 * construÁ„o de array de parÁametros para o construtor:
-	 * dataInicio, dataFim, saÌda esperada, msg
+	 * constru√ß√£o de array de par√ßametros para o construtor:
+	 * dataInicio, dataFim, sa√≠da esperada, msg
 	 */
 	@Parameters
 	public static Collection parameters() {
 		Collection col =  Arrays.asList(new Object[][] {
-			{"01/01/2009 10:00:00", "01/01/2009 10:15:00", "de 10h ‡s 10h15",          "INTERVALO DO MESMO DIA COM HORARIO DE INICIO COM MINUTOS IGUAIS A ZERO"},
+			{"01/01/2009 10:00:00", "01/01/2009 10:15:00", "de 10h √†s 10h15",          "INTERVALO DO MESMO DIA COM HORARIO DE INICIO COM MINUTOS IGUAIS A ZERO"},
 			{"01/01/2009 10:15:00", "02/01/2009 22:20:59", "",          "INTERVALO COM DIAS DIFERENTES"},
-			{"01/01/2009 00:00:00", "01/01/2009 23:59:59", "",          "SEM HOR¡RIO INICIO e FIM PREENCHIDO"},
-			{"01/01/2009 10:15:00", "01/01/2009 10:15:00", "‡s 10h15",          "INTERVALO DO MESMO DIA COM MESMO HORARIO DE INICIO E FIM"},
-			{"01/01/2009 00:00:00", "01/01/2009 13:30:00", "atÈ 13h30",			 "SEM HOR¡RIO INICIO PREENCHIDO"},
+			{"01/01/2009 00:00:00", "01/01/2009 23:59:59", "",          "SEM HOR√ÅRIO INICIO e FIM PREENCHIDO"},
+			{"01/01/2009 10:15:00", "01/01/2009 10:15:00", "√†s 10h15",          "INTERVALO DO MESMO DIA COM MESMO HORARIO DE INICIO E FIM"},
+			{"01/01/2009 00:00:00", "01/01/2009 13:30:00", "at√© 13h30",			 "SEM HOR√ÅRIO INICIO PREENCHIDO"},
 			{"01/01/2009 12:00:00", "01/01/2009 23:59:00", "a partir de 12h",	 "HORARIO FINAL VAZIO SO TEM HORARIO INICIAL"},
-			{"01/01/2009 00:30:00", "01/01/2009 23:49:00", "de 0h30 ‡s 23h49",	 "HORA MAIOR QUE 1 E MENOR QUE 23"},
-			{"01/01/2009 00:30:00", "01/01/2009 01:30:00", "de 0h30 ‡ 1h30",	 "HORA FINAL MENOR IGUAL A 1"},
-                        {"01/01/2009 00:00:00", "01/01/2009 00:00:00", "",			 "SEM HOR¡RIO DE INICIO E FIM PREENCHIDO"}
+			{"01/01/2009 00:30:00", "01/01/2009 23:49:00", "de 0h30 √†s 23h49",	 "HORA MAIOR QUE 1 E MENOR QUE 23"},
+			{"01/01/2009 00:30:00", "01/01/2009 01:30:00", "de 0h30 √† 1h30",	 "HORA FINAL MENOR IGUAL A 1"},
+                        {"01/01/2009 00:00:00", "01/01/2009 00:00:00", "",			 "SEM HOR√ÅRIO DE INICIO E FIM PREENCHIDO"}
 
 		});
 		return col;

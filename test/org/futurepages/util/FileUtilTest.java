@@ -18,7 +18,7 @@ public class FileUtilTest {
 		file = FileMockFactory.getInstance().createFile_File("Name");
 		Assert.assertTrue(file.isFile());
 		Assert.assertFalse(file.isDirectory());
-		Assert.assertNotNull("FileMockFactory n„o est· criando mockFiles corretamente",file.getName());
+		Assert.assertNotNull("FileMockFactory n√£o est√° criando mockFiles corretamente",file.getName());
 	}
 
 	@Test
@@ -44,7 +44,7 @@ public class FileUtilTest {
 		
 		File dir1 = FileMockFactory.getInstance().createMockFileInExistente();
 		Collection<File> files = FileUtil.listFilesFromDirectory(dir1, true);
-		Assert.assertTrue("Erro quando È passado um arquivo que n„o existe.",  files.isEmpty());
+		Assert.assertTrue("Erro quando √© passado um arquivo que n√£o existe.",  files.isEmpty());
 	}
 	
 }

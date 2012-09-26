@@ -22,20 +22,20 @@ public class HQLFieldTest {
 
 	@Test
 	public void testIN_STRING_Elements(){
-		final String msg = "Erro quando n„o È passado nenhum elemento";
+		final String msg = "Erro quando n√£o √© passado nenhum elemento";
 		in_STRING_TestProcedure(msg,"");
 	}
 
 	@Test
 	public void testIN_STRING_emptyOneToken(){
-		final String msg = "Erro quando n„o È apenas um elemento";
+		final String msg = "Erro quando n√£o √© apenas um elemento";
 		String esperado = fieldName + " IN ('AAA')";
 		in_STRING_TestProcedure(msg,esperado,"AAA");
 	}
 
 	@Test
 	public void testIN_STRING_TwoTokens(){
-		final String msg = "Erro quando n„o s„o passado dois elementos";
+		final String msg = "Erro quando n√£o s√£o passado dois elementos";
 		String esperado = fieldName + " IN ('AAA','BBB')";
 		in_STRING_TestProcedure(msg,esperado ,"AAA","BBB");
 	}
@@ -47,20 +47,20 @@ public class HQLFieldTest {
 	
 	@Test
 	public void testNotIn_STRING_Elements(){
-		final String msg = "Erro quando n„o È passado nenhum elemento";
+		final String msg = "Erro quando n√£o √© passado nenhum elemento";
 		notIn_STRING_TestProcedure(msg,"");
 	}
 	
 	@Test
 	public void testNotIn_STRING_emptyOneToken(){
-		final String msg = "Erro quando n„o È passado nenhum elemento";
+		final String msg = "Erro quando n√£o √© passado nenhum elemento";
 		String esperado = fieldName + " NOT IN ('AAA')";
 		notIn_STRING_TestProcedure(msg,esperado,"AAA");
 	}
 	
 	@Test
 	public void testNotIn_STRING_TwoTokens(){
-		final String msg = "Erro quando n„o È passado nenhum elemento";
+		final String msg = "Erro quando n√£o √© passado nenhum elemento";
 		String esperado = fieldName + " NOT IN ('AAA','BBB')";
 		notIn_STRING_TestProcedure(msg,esperado ,"AAA","BBB");
 	}
@@ -72,20 +72,20 @@ public class HQLFieldTest {
 	
 	@Test
 	public void testIn_LONG_emptyLongs(){
-		final String msg = "Erro quando n„o È passado nenhum elemento";
+		final String msg = "Erro quando n√£o √© passado nenhum elemento";
 		in_LONG_TestProcedure(msg, "");
 	}
 	
 	@Test
 	public void testIn_LONG_emptyOneLong(){
-		final String msg = "Erro quando n„o È passado nenhum elemento";
+		final String msg = "Erro quando n√£o √© passado nenhum elemento";
 		String esperado = fieldName + " IN (3)";
 		in_LONG_TestProcedure(msg, esperado, 3L);
 	}
 	
 	@Test
 	public void testIn_LONG_emptyTwoLongs(){
-		final String msg = "Erro quando n„o È passado nenhum elemento long";
+		final String msg = "Erro quando n√£o √© passado nenhum elemento long";
 		String esperado = fieldName + " IN (12,49)";
 		in_LONG_TestProcedure(msg,esperado , 12L, 49L);
 	}
@@ -97,27 +97,27 @@ public class HQLFieldTest {
 	
 	@Test
 	public void testNotIn_LONG_emptyLongs(){
-		final String msg = "Erro quando n„o È passado nenhum elemento";
+		final String msg = "Erro quando n√£o √© passado nenhum elemento";
 		notIn_LONG_TestProcedure(msg, "");
 	}
 	
 	@Test
 	public void testNotIn_LONG_emptyOneLong(){
-		final String msg = "Erro quando n„o È passado nenhum elemento";
+		final String msg = "Erro quando n√£o √© passado nenhum elemento";
 		String esperado = fieldName + " NOT IN (3)";
 		notIn_LONG_TestProcedure(msg, esperado, 3L);
 	}
 	
 	@Test
 	public void testNotIn_LONG_emptyTwoLongs(){
-		final String msg = "Erro quando n„o È passado nenhum elemento long";
+		final String msg = "Erro quando n√£o √© passado nenhum elemento long";
 		String esperado = fieldName + " NOT IN (12,49)";
 		notIn_LONG_TestProcedure(msg,esperado , 12L, 49L);
 	}
 	
 	@Test
 	public void testEqualsTo_(){
-		final String msg = "Erro quando s„o passadas duas stringas iguais";
+		final String msg = "Erro quando s√£o passadas duas stringas iguais";
 		String esperado = fieldName + " = 'ASDF'";
 		equalsTo_String_TestProcedure(msg,esperado , "ASDF");
 	}

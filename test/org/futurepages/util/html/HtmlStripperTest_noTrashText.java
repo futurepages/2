@@ -40,20 +40,20 @@ public class HtmlStripperTest_noTrashText {
 				{"<a CLASS=kx class=xkp style=x align='right'>abc</a>#<UL></ul>#<p style=\"\"></p>def"
 					,"<a align=\"right\">abc</a>#<UL></ul>#<p style=\"\"></p>def","3"},
 				
-				{"<a>#<xml>p:q/><a:c/></xml> abc </a>#<ul></ul><p style=\"\"></p>d<!-- comentário --><xml></xml>ef"
+				{"<a>#<xml>p:q/><a:c/></xml> abc </a>#<ul></ul><p style=\"\"></p>d<!-- comentÃ¡rio --><xml></xml>ef"
 					,"<a># abc </a>#<ul></ul><p style=\"\"></p>def","4"},
 					
-				{"<xml type=\"text\">p:q/><a:c/></xml><ul></ul><p style=\"\"></p><!-- comentário --><xml></xml>"
+				{"<xml type=\"text\">p:q/><a:c/></xml><ul></ul><p style=\"\"></p><!-- comentÃ¡rio --><xml></xml>"
 				,"<ul></ul><p style=\"\"></p>","5"},
 					
-				{"<xml type=\"text\">p:q/><a:c/></xml><ul></ul><script type=\"text/javascript\">alert(},</script><p style=\"\"></p><!-- comentário --><xml></xml>"
+				{"<xml type=\"text\">p:q/><a:c/></xml><ul></ul><script type=\"text/javascript\">alert(},</script><p style=\"\"></p><!-- comentÃ¡rio --><xml></xml>"
 				,"<ul></ul><p style=\"\"></p>","6"},
 					
 				{"<a href=\"http://www.class/\"><u>clique</u> no <em>link</em> do <strong>site</strong></a>"
 					,"<a href=\"http://www.class/\"><u>clique</u> no <em>link</em> do <strong>site</strong></a>","7"},
 				
 				{"<a align='right'>'abc'</a>"
-				,"<a align=\"right\">'abc'</a>","substituição de aspas em atributos."},	
+				,"<a align=\"right\">'abc'</a>","substituiÃ§Ã£o de aspas em atributos."},	
 			});
 		return col;
 	}
