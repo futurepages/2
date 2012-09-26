@@ -73,8 +73,8 @@ public class HtmlStripperTest {
 	private void assertEquals(String expectedPath, String msg, String root,	String path, String dirtyContent, String stripped)
 			throws FileNotFoundException, IOException {
 		String expectedContent = FileUtil.getStringContent(root+expectedPath);
-		Assert.assertNotNull("O contÈudo do elemento original n„o pode ser nulo. >"+path,dirtyContent);
-		Assert.assertNotNull("O contÈudo do elemento esperado n„o pode ser nulo. >"+root+expectedPath, expectedContent);
+		Assert.assertNotNull("O cont√©udo do elemento original n√£o pode ser nulo. >"+path,dirtyContent);
+		Assert.assertNotNull("O cont√©udo do elemento esperado n√£o pode ser nulo. >"+root+expectedPath, expectedContent);
 		Assert.assertEquals(msg, expectedContent, stripped);
 	}
 	
@@ -103,13 +103,13 @@ public class HtmlStripperTest {
 															 
 		richTextTestProcedure(false, true, true, true, true, this.getResourcePath()+"/res/noTagsText.html", 
 				"/res/noTagsText.html", 
-				"manter tags mas n„o manter style");
+				"manter tags mas n√£o manter style");
 	}
 	
 	@Test
 	public void testeRichText_NoStyle() throws FileNotFoundException, IOException{
 		richTextTestProcedure(false, true, true, true, true, "/res/expectedDirtyNoStyle.html", 
-				"manter tags mas n„o manter style");
+				"manter tags mas n√£o manter style");
 	}
 	
 	
@@ -117,7 +117,7 @@ public class HtmlStripperTest {
 	public void testeRichText_HtmlBronken() throws FileNotFoundException, IOException{
 		String path = getResourcePath()+"/res/bronkenHtml.html";
 		richTextTestProcedure(true, true, true, true, true, path,
-				"/res/expectedBronkenHtml.html", "html quebrado(tags n„o fechadas, aspas nao fechadas)");
+				"/res/expectedBronkenHtml.html", "html quebrado(tags n√£o fechadas, aspas nao fechadas)");
 	}
 	
 	@Test
@@ -131,7 +131,7 @@ public class HtmlStripperTest {
 	public void testeRichText_longHtmlTable_span() throws FileNotFoundException, IOException{
 		String path = getResourcePath()+"/res/longTableSpan.html";
 		richTextTestProcedure(false, false, false, false, false, path,
-				"/res/expectedLongTableSpan.html", "html quebrado(tags n„o fechadas, aspas nao fechadas)");
+				"/res/expectedLongTableSpan.html", "html quebrado(tags n√£o fechadas, aspas nao fechadas)");
 	}
 	
 }

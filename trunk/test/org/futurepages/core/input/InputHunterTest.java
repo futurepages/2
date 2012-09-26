@@ -39,7 +39,7 @@ public class InputHunterTest {
 		String path = "aluno.turma.nome";
 		hunter = new InputHunter(path);
 		Object[] result = hunter.getValues(input);
-		AssertUtil.assertArrayEquals("Erro quando n„o h· nenhum valor no input", new Object[3], result);
+		AssertUtil.assertArrayEquals("Erro quando n√£o h√° nenhum valor no input", new Object[3], result);
 	}
 	
 	@Test
@@ -48,7 +48,7 @@ public class InputHunterTest {
 		EasyMock.expect(input.getValue("aluno")).andReturn(aluno);
 		EasyMock.replay(input);
 		String path = "aluno.turma.nome";
-		String msg = "Erro quando n„o h· elemento com atributo nulo";
+		String msg = "Erro quando n√£o h√° elemento com atributo nulo";
 		Object[] expected = new Object[]{aluno, null, null};
 		getValuesTestProcedure(path, msg, expected);
 	}
@@ -63,7 +63,7 @@ public class InputHunterTest {
 		EasyMock.expect(input.getValue("aluno")).andReturn(aluno);
 		EasyMock.replay(input);
 		String path = "aluno.turma.nome";
-		String msg = "Erro quando os atributos n„o s„o nulos";
+		String msg = "Erro quando os atributos n√£o s√£o nulos";
 		Object[] expected = new Object[]{aluno, aluno.getTurma(), "turmaA"};
 		getValuesTestProcedure(path, msg, expected);
 	}
@@ -78,7 +78,7 @@ public class InputHunterTest {
 		EasyMock.expect(input.getValue("aluno")).andReturn(aluno);
 		EasyMock.replay(input);
 		String path = "aluno.turma.nome.turma";
-		String msg = "Erro quando os atributos n„o s„o nulos";
+		String msg = "Erro quando os atributos n√£o s√£o nulos";
 		Object[] expected = new Object[]{aluno, aluno.getTurma(), "turmaA", null};
 		getValuesTestProcedure(path, msg, expected);
 	}

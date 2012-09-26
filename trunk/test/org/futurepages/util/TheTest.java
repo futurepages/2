@@ -131,28 +131,28 @@ public class TheTest {
     @Test
     public void testeExplodeToArray_StringVazia_SeparadorVazio() {
         String[] tokens = The.explodedToArray("", "");
-        Assert.assertNotNull("O array n„o deveria ser nao nulo.", tokens);
+        Assert.assertNotNull("O array n√£o deveria ser nao nulo.", tokens);
         Assert.assertEquals("O array deveria ter tamanho 0.", 0, tokens.length);
     }
 
     @Test
     public void testeExplodeToArray_StringComTokens_SeparadorExistente() {
         String[] tokens = The.explodedToArray("adadadadada@DADA@7867", "@");
-        Assert.assertNotNull("O array n„o deveria ser nao nulo.", tokens);
+        Assert.assertNotNull("O array n√£o deveria ser nao nulo.", tokens);
         Assert.assertEquals("O array deveria ter tamanho 3.", 3, tokens.length);
     }
 
     @Test
     public void testeExplodeToArray_SeparadorNaoPresente() {
         String[] tokens = The.explodedToArray("QWER1123TYUIO", "@");
-        Assert.assertNotNull("O array n„o deveria ser nao nulo.", tokens);
+        Assert.assertNotNull("O array n√£o deveria ser nao nulo.", tokens);
         Assert.assertEquals("O array deveria ter tamanho 1.", 1, tokens.length);
     }
 
     @Test
     public void testeExplodeToArray_StringComMuitosTokens_SeparadorExistente() {
         String[] tokens = The.explodedToArray("a@a@a@a@a@a@a@a@a@a@a@a@a@a", "@");
-        Assert.assertNotNull("O array n„o deveria ser nao nulo.", tokens);
+        Assert.assertNotNull("O array n√£o deveria ser nao nulo.", tokens);
         Assert.assertEquals("O array deveria ter tamanho 14.", 14, tokens.length);
     }
 	

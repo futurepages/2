@@ -20,7 +20,7 @@ public class ProbabilityUtilTest {
 			}
 			sb.append("/ ");
 		}
-		Assert.assertEquals("CombinaÁ„o n„o esperada.", expResult, sb.toString());
+		Assert.assertEquals("Combina√ß√£o n√£o esperada.", expResult, sb.toString());
 	}
 
 	@Test

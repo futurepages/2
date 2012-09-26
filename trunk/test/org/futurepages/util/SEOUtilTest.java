@@ -19,20 +19,20 @@ public class SEOUtilTest {
 	public void urlFormat_ComEspacos() {
         String strIn = "Ma sorte em jogo";
         String expResult = "ma-sorte-em-jogo";
-        urlFormatTestProcedure("erro quanto a url possui espaços",strIn, expResult);
+        urlFormatTestProcedure("erro quanto a url possui espaÃ§os",strIn, expResult);
 	}
 
 	@Test
     public void urlFormat_ComHifen() {
         String strIn = "(pes-de-moleque)";
         String expResult = "pes_de_moleque";
-        urlFormatTestProcedure("erro quanto a url possui espaços",strIn, expResult);
+        urlFormatTestProcedure("erro quanto a url possui espaÃ§os",strIn, expResult);
     }
 
 	@Test
 	public void urlFormat_caracteresEspeciais() {
-		String strIn = "éá:<>ñ:öåù@";
+		String strIn = "Ã©Ã¡:<>Ã±:Ã¶Ã¥Ã¹@";
 		String expResult = "eanoau_";
-		urlFormatTestProcedure("erro quanto a url possui espaços",strIn, expResult);
+		urlFormatTestProcedure("erro quanto a url possui espaÃ§os",strIn, expResult);
 	}
 }

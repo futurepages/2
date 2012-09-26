@@ -36,14 +36,14 @@ public class HibernateFilterTest_isTransactional {
 	@Parameters
 	public static Collection<Object[]> parameters() {
 		Collection<Object[]> col =  Arrays.asList(new Object[][] {
-				{"Classe Transactional, metodo com as duas anotações.",Transacional.class, 	"biTransacional",	false},
-				{"Classe Transactional, método com "+ "@Transactional", Transacional.class, 	"transacional",		true},
-				{"Classe Transactional, método com @NonTransactional.", Transacional.class, 	"naoTransacional",	false},
-				{"Classe Transactional, método sem anotações.", Transacional.class, 	"metodo",			true},
-				{"Classe Não anotada com @Transactional, método com as duas anotações.", NaoTransacional.class, "biTransacional",	false},
-				{"Classe Não anotada com @Transactional, método com @Transactional.", NaoTransacional.class, "transacional",		true},
-				{"Classe Não anotada com @Transactional, método com @NonTransactional.", NaoTransacional.class, "naoTransacional",	false},
-				{"Classe Não anotada com @Transactional, método sem anotações.", NaoTransacional.class, "metodo",			false}
+				{"Classe Transactional, metodo com as duas anotaÃ§Ãµes.",Transacional.class, 	"biTransacional",	false},
+				{"Classe Transactional, mÃ©todo com "+ "@Transactional", Transacional.class, 	"transacional",		true},
+				{"Classe Transactional, mÃ©todo com @NonTransactional.", Transacional.class, 	"naoTransacional",	false},
+				{"Classe Transactional, mÃ©todo sem anotaÃ§Ãµes.", Transacional.class, 	"metodo",			true},
+				{"Classe NÃ£o anotada com @Transactional, mÃ©todo com as duas anotaÃ§Ãµes.", NaoTransacional.class, "biTransacional",	false},
+				{"Classe NÃ£o anotada com @Transactional, mÃ©todo com @Transactional.", NaoTransacional.class, "transacional",		true},
+				{"Classe NÃ£o anotada com @Transactional, mÃ©todo com @NonTransactional.", NaoTransacional.class, "naoTransacional",	false},
+				{"Classe NÃ£o anotada com @Transactional, mÃ©todo sem anotaÃ§Ãµes.", NaoTransacional.class, "metodo",			false}
 		});
 		return col;
 	}

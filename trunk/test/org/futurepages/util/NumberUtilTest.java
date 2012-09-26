@@ -17,15 +17,15 @@ public class NumberUtilTest {
 		assertEquals("dez", NumberUtil.numeroPorExteso("10"));
 		assertEquals("doze", NumberUtil.numeroPorExteso("12"));
 		assertEquals("dezessete", NumberUtil.numeroPorExteso("17"));
-		assertEquals("trinta e três", NumberUtil.numeroPorExteso("33"));
+		assertEquals("trinta e trÃªs", NumberUtil.numeroPorExteso("33"));
 		assertEquals("cinquenta e cinco", NumberUtil.numeroPorExteso("55"));
 		assertEquals("noventa e nove", NumberUtil.numeroPorExteso("99"));
 		assertEquals("mil e um", NumberUtil.numeroPorExteso("1001"));
 		assertEquals("mil e vinte e um", NumberUtil.numeroPorExteso("1021"));
 		assertEquals("dois mil e noventa e nove", NumberUtil.numeroPorExteso("2099"));
-		assertEquals("mil novecentos e noventa e três", NumberUtil.numeroPorExteso("1993"));
-		assertEquals("um milhão, onze mil novecentos e noventa e três", NumberUtil.numeroPorExteso("1011993"));
-		assertEquals("um milhão e nove", NumberUtil.numeroPorExteso("1000009"));
-		assertEquals("quinze milhões, cento e dezenove mil novecentos e noventa e três", NumberUtil.numeroPorExteso("15119993"));
+		assertEquals("mil novecentos e noventa e trÃªs", NumberUtil.numeroPorExteso("1993"));
+		assertEquals("um milhÃ£o, onze mil novecentos e noventa e trÃªs", NumberUtil.numeroPorExteso("1011993"));
+		assertEquals("um milhÃ£o e nove", NumberUtil.numeroPorExteso("1000009"));
+		assertEquals("quinze milhÃµes, cento e dezenove mil novecentos e noventa e trÃªs", NumberUtil.numeroPorExteso("15119993"));
 	}
 }

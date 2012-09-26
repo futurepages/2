@@ -17,7 +17,7 @@ public class CollectionUtilTest {
 	 * limite == 0
 	 * limite negativo
 	 * orige == 0
-	 * destino j· povoado
+	 * destino j√° povoado
 	 */
 	public void addListToListTestProcedure(List<String> origem,List<List<String>> destino, 
 			int limite, List<List<String>> destinoEsperado,	int retornoEsperado,String msg){
@@ -48,7 +48,7 @@ public class CollectionUtilTest {
 	 */
 	@Test
 	public void testAddListToList_LimiteMenorTamanhoOrigem(){
-		String msg = "Resultado incorreto quando limite È MENOR ao tamanho da lista origem.";
+		String msg = "Resultado incorreto quando limite √© MENOR ao tamanho da lista origem.";
 		
 		List<String> origem = ListFactory.instance.createListOfString(10);
 		
@@ -66,7 +66,7 @@ public class CollectionUtilTest {
 		List<List<String>> destinoEsperado = new ArrayList<List<String>>();
 		destinoEsperado.add(origem);
 		
-		String msg = "Resultado incorreto quando limite È IGUAL ao tamanho da lista origem.";
+		String msg = "Resultado incorreto quando limite √© IGUAL ao tamanho da lista origem.";
 		addListToListTestProcedure(origem, new ArrayList<List<String>>(), 10,  destinoEsperado,0,msg);
 		
 	}
@@ -82,7 +82,7 @@ public class CollectionUtilTest {
 		List<String> origem = ListFactory.instance.createListOfString(10);
 		List<List<String>> destinoEsperado = new ArrayList<List<String>>();
 		destinoEsperado.add(origem);
-		String msg = "Resultado incorreto quando limite È MAIOR ao tamanho da lista origem.";
+		String msg = "Resultado incorreto quando limite √© MAIOR ao tamanho da lista origem.";
 		addListToListTestProcedure(origem,  new ArrayList<List<String>>(), 11,  destinoEsperado,1,msg);
 		
 	}
@@ -94,31 +94,31 @@ public class CollectionUtilTest {
 		List<List<String>> destino = new ArrayList<List<String>>();
 		List<List<String>> destinoEsperado = new ArrayList<List<String>>();
 		
-		String msg = "Resultado incorreto quando a origem È vazia.";
+		String msg = "Resultado incorreto quando a origem √© vazia.";
 		addListToListTestProcedure(origem,  destino, 10,  destinoEsperado,10,msg);
 	}
 	
 	/**
-	 * colecaoEsperada: colecao igual · colecao informada 
+	 * colecaoEsperada: colecao igual √° colecao informada 
 	 */
 	@Test
 	public void testAddListToList_limite0(){
 		List<String> origem = ListFactory.instance.createListOfString(10);
 		List<List<String>> destino = new ArrayList<List<String>>();
 		List<List<String>> destinoEsperado = new ArrayList<List<String>>();
-		String msg = "Resultado incorreto quando o limite È zero.";
+		String msg = "Resultado incorreto quando o limite √© zero.";
 		addListToListTestProcedure(origem,  destino, 0, destinoEsperado,0,msg);
 	}
 	
 	/**
-	 * colecaoEsperada: colecao igual · colecao informada 
+	 * colecaoEsperada: colecao igual √° colecao informada 
 	 */
 	@Test
 	public void testAddListToList_limiteNegativo(){
 		List<String> origem = ListFactory.instance.createListOfString(10);
 		List<List<String>> destino = new ArrayList<List<String>>();
 		List<List<String>> destinoEsperado = new ArrayList<List<String>>();
-		String msg = "Resultado incorreto quando o limite È negativo.";
+		String msg = "Resultado incorreto quando o limite √© negativo.";
 		addListToListTestProcedure(origem,  destino, -1, destinoEsperado,-1,msg);
 	}
 
@@ -137,7 +137,7 @@ public class CollectionUtilTest {
 		destinoEsperado.addAll(destino);
 		destinoEsperado.add(origem);
 		
-		String msg = "Resultado incorreto quando coleÁ„o(destino) passado j· possui elementos.";
+		String msg = "Resultado incorreto quando cole√ß√£o(destino) passado j√° possui elementos.";
 		addListToListTestProcedure(origem, destino, 10,  destinoEsperado,0,msg);
 		
 	}
@@ -150,7 +150,7 @@ public class CollectionUtilTest {
 	 * limite == 0
 	 * limite negativo
 	 * orige == 0
-	 * destino j· povoado
+	 * destino j√° povoado
 	 */
 	public void addElementsToListTestProcedure(List<String> origem, List<String> destino, int limite, 
 			List<String> destinoEsperado,	int retornoEsperado,String msg){
@@ -167,7 +167,7 @@ public class CollectionUtilTest {
 	 */
 	@Test
 	public void testAddElementListToList_LimiteMenorTamanhoOrigem(){
-		String msg = "Resultado incorreto quando limite È MENOR ao tamanho da lista origem.";
+		String msg = "Resultado incorreto quando limite √© MENOR ao tamanho da lista origem.";
 
 		List<String> origem = ListFactory.instance.createListOfString(10);
 		List<String> destinoEsperado = origem.subList(0, 9);
@@ -183,7 +183,7 @@ public class CollectionUtilTest {
 		List<String> destinoEsperado = new ArrayList<String>();
 		destinoEsperado.addAll(origem);
 		
-		String msg = "Resultado incorreto quando limite È IGUAL ao tamanho da lista origem.";
+		String msg = "Resultado incorreto quando limite √© IGUAL ao tamanho da lista origem.";
 		addElementsToListTestProcedure(origem, new ArrayList<String>(), 10,  destinoEsperado,0,msg);
 		
 	}
@@ -199,7 +199,7 @@ public class CollectionUtilTest {
 		List<String> origem = ListFactory.instance.createListOfString(10);
 		List<String> destinoEsperado = new ArrayList<String>();
 		destinoEsperado.addAll(origem);
-		String msg = "Resultado incorreto quando limite È MAIOR ao tamanho da lista origem.";
+		String msg = "Resultado incorreto quando limite √© MAIOR ao tamanho da lista origem.";
 		addElementsToListTestProcedure(origem,  new ArrayList<String>(), 11,  destinoEsperado,1,msg);
 		
 	}
@@ -211,31 +211,31 @@ public class CollectionUtilTest {
 		List<String> destino = new ArrayList<String>();
 		List<String> destinoEsperado = new ArrayList<String>();
 		
-		String msg = "Resultado incorreto quando a origem È vazia.";
+		String msg = "Resultado incorreto quando a origem √© vazia.";
 		addElementsToListTestProcedure(origem,  destino, 10,  destinoEsperado,10,msg);
 	}
 	
 	/**
-	 * colecaoEsperada: colecao igual · colecao informada 
+	 * colecaoEsperada: colecao igual √° colecao informada 
 	 */
 	@Test
 	public void testAddElementToList_limite0(){
 		List<String> origem = ListFactory.instance.createListOfString(10);
 		List<String> destino = new ArrayList<String>();
 		List<String> destinoEsperado = new ArrayList<String>();
-		String msg = "Resultado incorreto quando o limite È zero.";
+		String msg = "Resultado incorreto quando o limite √© zero.";
 		addElementsToListTestProcedure(origem,  destino, 0, destinoEsperado,0,msg);
 	}
 	
 	/**
-	 * colecaoEsperada: colecao igual · colecao informada 
+	 * colecaoEsperada: colecao igual √° colecao informada 
 	 */
 	@Test
 	public void testAddElementToList_limiteNegativo(){
 		List<String> origem = ListFactory.instance.createListOfString(10);
 		List<String> destino = new ArrayList<String>();
 		List<String> destinoEsperado = new ArrayList<String>();
-		String msg = "Resultado incorreto quando o limite È negativo.";
+		String msg = "Resultado incorreto quando o limite √© negativo.";
 		addElementsToListTestProcedure(origem,  destino, -1, destinoEsperado,-1,msg);
 	}
 	
@@ -254,7 +254,7 @@ public class CollectionUtilTest {
 		destinoEsperado.addAll(destino);
 		destinoEsperado.addAll(origem);
 		
-		String msg = "Resultado incorreto quando coleÁ„o(destino) passado j· possui elementos.";
+		String msg = "Resultado incorreto quando cole√ß√£o(destino) passado j√° possui elementos.";
 		addElementsToListTestProcedure(origem, destino, 10,  destinoEsperado,0,msg);
 		
 	}

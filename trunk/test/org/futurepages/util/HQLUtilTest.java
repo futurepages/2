@@ -20,7 +20,7 @@ public class HQLUtilTest {
         String field = "field";
         String[] words = new String[]{"word1","word2","word3"};
         String expResult = "field LIKE '%word1%word2%word3%'";
-        String message = "Erro quando array de tokens È n„o null.";
+        String message = "Erro quando array de tokens √© n√£o null.";
         fieldHasAllWords_testProcedure(message,field, words,expResult);
     }
 
@@ -29,7 +29,7 @@ public class HQLUtilTest {
     	String field = "field";
     	String[] words = new String[0];
     	String expResult = "";
-    	String message = "Erro quando array de tokens est· vazio.";
+    	String message = "Erro quando array de tokens est√° vazio.";
     	fieldHasAllWords_testProcedure(message,field, words,expResult);
     }
 
@@ -37,7 +37,7 @@ public class HQLUtilTest {
     public void testFieldHasAllWords_wordsNull() {
     	String[] words = null;
     	String expResult = "";
-    	String message = "Erro quando array de tokens È null.";
+    	String message = "Erro quando array de tokens √© null.";
     	fieldHasAllWords_testProcedure(message,"field", words,expResult);
     }
     
@@ -58,7 +58,7 @@ public class HQLUtilTest {
         String[] words = new String[0];
         String logicalConect = "AND";
         String expResult = "";
-        fieldHasWords_testProcedure(field, words,logicalConect,expResult , "Erro quando n„o h· elementos.");
+        fieldHasWords_testProcedure(field, words,logicalConect,expResult , "Erro quando n√£o h√° elementos.");
     }
 
     @Test
@@ -67,7 +67,7 @@ public class HQLUtilTest {
         String[] words = new String[]{"a"};
         String logicalConect = "AND";
         String expResult = "field LIKE '%a%'";
-        fieldHasWords_testProcedure(field, words,logicalConect,expResult , "Erro quando h· um elemento.");
+        fieldHasWords_testProcedure(field, words,logicalConect,expResult , "Erro quando h√° um elemento.");
     }
     
     @Test
@@ -76,7 +76,7 @@ public class HQLUtilTest {
         String[] words = new String[]{"a","b","c"};
         String logicalConect = "AND";
         String expResult = "field LIKE '%a%' AND field LIKE '%b%' AND field LIKE '%c%'";
-        fieldHasWords_testProcedure(field, words,logicalConect,expResult , "Erro quando h· v·rios elementos.");
+        fieldHasWords_testProcedure(field, words,logicalConect,expResult , "Erro quando h√° v√°rios elementos.");
     }
     
     @Test 

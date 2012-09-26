@@ -28,7 +28,7 @@ public class DateUtilTest {
     
     private void assertLiteral(String in, String expOut) throws Exception{
         String out = DateUtil.literal(in);
-        assertEquals("Erro no número por extenso com a entrada "+in, expOut, out);
+        assertEquals("Erro no nÃºmero por extenso com a entrada "+in, expOut, out);
     }
     
     @Test

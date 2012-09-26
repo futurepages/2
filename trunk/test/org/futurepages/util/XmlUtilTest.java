@@ -49,7 +49,7 @@ public class XmlUtilTest {
 		NodeList list  = XmlUtil.selectNodeList(getXML(), xPathQuery);
 		Assert.assertNotNull("LISTA NULA!", list);
 		Assert.assertFalse("LISTA VAZIA",list.getLength()==0);
-		System.out.println("XmlUtilTest.test(): Número de Elementos :"+list.getLength());
+		System.out.println("XmlUtilTest.test(): NÃºmero de Elementos :"+list.getLength());
 		Assert.assertTrue("LISTA COM MAIS DE 1 ELE",list.getLength()==2);
 	}
 }
