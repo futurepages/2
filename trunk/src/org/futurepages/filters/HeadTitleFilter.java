@@ -8,8 +8,8 @@ import org.futurepages.core.output.Output;
 
 
 /**
- * Define um texto padr„o para o head-title da p·gina
- * de consequÍncia da action (e suas innerActions)
+ * Define um texto padr√£o para o head-title da p√°gina
+ * de consequ√™ncia da action (e suas innerActions)
  *
  * @author leandro
  */
@@ -17,7 +17,7 @@ public class HeadTitleFilter implements Filter {
 
     public static final String SEPARATOR = " - ";
 
-    private String headTitle;   //chave do input do objeto que sofrer· a injeÁ„o
+    private String headTitle;   //chave do input do objeto que sofrer√° a inje√ß√£o
 
     public HeadTitleFilter(String headTitle) {
         this.headTitle = SEPARATOR+headTitle;

@@ -36,69 +36,69 @@ public class HtmlMapChars {
         simpleTable.put(">"  ,"&gt;");
         simpleTable.put("&"  ,"&amp;");
 
-        //povoando tabela com todos os especiais alfabÈticos.
+        //povoando tabela com todos os especiais alfab√©ticos.
         completeTable.putAll(simpleTable);
-        completeTable.put("¡","&Aacute;");
-        completeTable.put("·","&aacute;");
-        completeTable.put("¬","&Acirc;");
-        completeTable.put("‚","&acirc;");
-        completeTable.put("¿","&Agrave;");
-        completeTable.put("‡","&agrave;");
-        completeTable.put("≈","&Aring;");
-        completeTable.put("Â","&aring;");
-        completeTable.put("√","&Atilde;");
-        completeTable.put("„","&atilde;");
-        completeTable.put("ƒ","&Auml;");
-        completeTable.put("‰","&auml;");
-        completeTable.put("∆","&AElig;");
-        completeTable.put("Ê","&aelig;");
-        completeTable.put("…","&Eacute;");
-        completeTable.put("È","&eacute;");
-        completeTable.put(" ","&Ecirc;");
-        completeTable.put("Í","&ecirc;");
-        completeTable.put("»","&Egrave;");
-        completeTable.put("Ë","&egrave;");
-        completeTable.put("À","&Euml;");
-        completeTable.put("Î","&euml;");
-        completeTable.put("–","&ETH;");
-        completeTable.put("","&eth;");
-        completeTable.put("Õ","&Iacute;");
-        completeTable.put("Ì","&iacute;");
-        completeTable.put("Œ","&Icirc;");
-        completeTable.put("Ó","&icirc;");
-        completeTable.put("Ã","&Igrave;");
-        completeTable.put("Ï","&igrave;");
-        completeTable.put("œ","&Iuml;");
-        completeTable.put("Ô","&iuml;");
-        completeTable.put("”","&Oacute;");
-        completeTable.put("Û","&oacute;");
-        completeTable.put("‘","&Ocirc;");
-        completeTable.put("Ù","&ocirc;");
-        completeTable.put("“","&Ograve;");
-        completeTable.put("Ú","&ograve;");
-        completeTable.put("ÿ","&Oslash;");
-        completeTable.put("¯","&oslash;");
-        completeTable.put("’","&Otilde;");
-        completeTable.put("ı","&otilde;");
-        completeTable.put("÷","&Ouml;");
-        completeTable.put("ˆ","&ouml;");
-        completeTable.put("⁄","&Uacute;");
-        completeTable.put("˙","&uacute;");
-        completeTable.put("€","&Ucirc;");
-        completeTable.put("˚","&ucirc;");
-        completeTable.put("Ÿ","&Ugrave;");
-        completeTable.put("˘","&ugrave;");
-        completeTable.put("‹","&Uuml;");
-        completeTable.put("¸","&uuml;");
-        completeTable.put("«","&Ccedil;");
-        completeTable.put("Á","&ccedil;");
-        completeTable.put("—","&Ntilde;");
-        completeTable.put("Ò","&ntilde;");
+        completeTable.put("√Å","&Aacute;");
+        completeTable.put("√°","&aacute;");
+        completeTable.put("√Ç","&Acirc;");
+        completeTable.put("√¢","&acirc;");
+        completeTable.put("√Ä","&Agrave;");
+        completeTable.put("√†","&agrave;");
+        completeTable.put("√Ö","&Aring;");
+        completeTable.put("√•","&aring;");
+        completeTable.put("√É","&Atilde;");
+        completeTable.put("√£","&atilde;");
+        completeTable.put("√Ñ","&Auml;");
+        completeTable.put("√§","&auml;");
+        completeTable.put("√Ü","&AElig;");
+        completeTable.put("√¶","&aelig;");
+        completeTable.put("√â","&Eacute;");
+        completeTable.put("√©","&eacute;");
+        completeTable.put("√ä","&Ecirc;");
+        completeTable.put("√™","&ecirc;");
+        completeTable.put("√à","&Egrave;");
+        completeTable.put("√®","&egrave;");
+        completeTable.put("√ã","&Euml;");
+        completeTable.put("√´","&euml;");
+        completeTable.put("√ê","&ETH;");
+        completeTable.put("√∞","&eth;");
+        completeTable.put("√ç","&Iacute;");
+        completeTable.put("√≠","&iacute;");
+        completeTable.put("√é","&Icirc;");
+        completeTable.put("√Æ","&icirc;");
+        completeTable.put("√å","&Igrave;");
+        completeTable.put("√¨","&igrave;");
+        completeTable.put("√è","&Iuml;");
+        completeTable.put("√Ø","&iuml;");
+        completeTable.put("√ì","&Oacute;");
+        completeTable.put("√≥","&oacute;");
+        completeTable.put("√î","&Ocirc;");
+        completeTable.put("√¥","&ocirc;");
+        completeTable.put("√í","&Ograve;");
+        completeTable.put("√≤","&ograve;");
+        completeTable.put("√ò","&Oslash;");
+        completeTable.put("√∏","&oslash;");
+        completeTable.put("√ï","&Otilde;");
+        completeTable.put("√µ","&otilde;");
+        completeTable.put("√ñ","&Ouml;");
+        completeTable.put("√∂","&ouml;");
+        completeTable.put("√ö","&Uacute;");
+        completeTable.put("√∫","&uacute;");
+        completeTable.put("√õ","&Ucirc;");
+        completeTable.put("√ª","&ucirc;");
+        completeTable.put("√ô","&Ugrave;");
+        completeTable.put("√π","&ugrave;");
+        completeTable.put("√ú","&Uuml;");
+        completeTable.put("√º","&uuml;");
+        completeTable.put("√á","&Ccedil;");
+        completeTable.put("√ß","&ccedil;");
+        completeTable.put("√ë","&Ntilde;");
+        completeTable.put("√±","&ntilde;");
 
-		completeTable.put("∫","&ordm;");
-		completeTable.put("∞","&deg;");
-		completeTable.put("™","&ordf;");
-		completeTable.put("ß","&sect;");
+		completeTable.put("¬∫","&ordm;");
+		completeTable.put("¬∞","&deg;");
+		completeTable.put("¬™","&ordf;");
+		completeTable.put("¬ß","&sect;");
     }
 
     public static String getSimple(char ch){
@@ -114,11 +114,11 @@ public class HtmlMapChars {
     }
 
     /**
-     * Retorna o valor correspondente de uma String em condificaÁ„o html;
-     * somente para os caracteres mais crÌticos.
-     * Exemplo: entrada: "leandro"  --> saÌda: (&)quot;leandro(&)quot; (sem os parenteses)
+     * Retorna o valor correspondente de uma String em condifica√ß√£o html;
+     * somente para os caracteres mais cr√≠ticos.
+     * Exemplo: entrada: "leandro"  --> sa√≠da: (&)quot;leandro(&)quot; (sem os parenteses)
      * contempla somente os HTML Brakers: aspa dupla, menor que e maior que.
-     * @return a string com os caracteres especiais crÌticos convertidos para a codificaÁ„o HTML
+     * @return a string com os caracteres especiais cr√≠ticos convertidos para a codifica√ß√£o HTML
      */
     public static String htmlSimpleValue(String strIn){
         if(strIn == null) return "&nbsp;";
@@ -137,10 +137,10 @@ public class HtmlMapChars {
     }
 
     /**
-     * Retorna o valor correspondente de uma String em condificaÁ„o html;
-     * Exemplo: entrada: "leandro"  --> saÌda: (&)quot;leandro(&)quot; (sem os parenteses)
-     * contempla HTML Brakers e caracteres alfabÈticos acentuados e especiais.
-     * @return a string com os caracteres especiais convertidos para a codificaÁ„o HTML
+     * Retorna o valor correspondente de uma String em condifica√ß√£o html;
+     * Exemplo: entrada: "leandro"  --> sa√≠da: (&)quot;leandro(&)quot; (sem os parenteses)
+     * contempla HTML Brakers e caracteres alfab√©ticos acentuados e especiais.
+     * @return a string com os caracteres especiais convertidos para a codifica√ß√£o HTML
      */
     public static String htmlValue(String strIn){
         if(strIn == null) return "&nbsp;";
@@ -159,7 +159,7 @@ public class HtmlMapChars {
     }
 
     /**
-     * Converte as quebras de texto e aspas escrito em textarea para os caracteres v·lidos de html.
+     * Converte as quebras de texto e aspas escrito em textarea para os caracteres v√°lidos de html.
      * @param strIn
      */
     public static String textAreaValue(String strIn){

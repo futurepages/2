@@ -164,8 +164,8 @@ public class HQLProvider implements HQLable {
 		return field+DESC;
 	}
 	/**
-	 * Monta conjunÁıes com as expresıes passadas 
-	 * @param clauses : array de expressıes booleanas
+	 * Monta conjun√ß√µes com as expres√µes passadas 
+	 * @param clauses : array de express√µes booleanas
 	 * @return (clauses[0]) AND (clauses[1]) AND ... AND (clauses[length-1]) 
 	 */
 	public static String ands(String... clauses) {

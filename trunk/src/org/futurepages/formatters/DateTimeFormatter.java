@@ -5,9 +5,9 @@ import java.util.Locale;
 import org.futurepages.core.formatter.Formatter;
  
 /**
- * Formatação de data e hora:
+ * FormataÃ§Ã£o de data e hora:
  *  
- * - saída: DD/MM/YYYY HH:MM:SS
+ * - saÃ­da: DD/MM/YYYY HH:MM:SS
  *
  */
  public class DateTimeFormatter implements Formatter {

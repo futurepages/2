@@ -39,7 +39,7 @@ public abstract class ConsequenceCallback implements Runnable {
 	@Override
 	public final void run() {
 		try {
-			Thread.sleep(10000); //para dar o tempo necess·rio para que a aÁ„o seja efetivada no banco de dados.
+			Thread.sleep(10000); //para dar o tempo necess√°rio para que a a√ß√£o seja efetivada no banco de dados.
 			doRun();
 		} catch (Exception ex) {
 			handleException(ex);

@@ -5,20 +5,20 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Classe que possui mÈtodos est·ticos para tratamento de strings no controle
- * da seguranÁa da aplicaÁ„o web
+ * Classe que possui m√©todos est√°ticos para tratamento de strings no controle
+ * da seguran√ßa da aplica√ß√£o web
  *
  */
 public class Security {
     
     /**
-     * Classe com mÈtodos para gest„o de seguranÁa
+     * Classe com m√©todos para gest√£o de seguran√ßa
      */
     public Security() {
     }
     
     /**
-     * Retorna o valor da string de entrada com codificaÁ„o md5
+     * Retorna o valor da string de entrada com codifica√ß√£o md5
      */
     public static String md5(String senha){
         String sen = "";
@@ -31,7 +31,7 @@ public class Security {
         BigInteger hash = new BigInteger(1, md.digest(senha.getBytes()));
         sen = hash.toString(16);
         
-        //correÁ„o da falta de zeros
+        //corre√ß√£o da falta de zeros
         if(sen.length()<32){
             int numZeros = 32 - sen.length();
             StringBuffer zeros = new StringBuffer("");
@@ -59,7 +59,7 @@ public class Security {
     }
     
     /**
-     * InserÁ„o segura, previne injeÁ„o de scripts
+     * Inser√ß√£o segura, previne inje√ß√£o de scripts
      */
 	@Deprecated
     public static String filteredInsert(String in){

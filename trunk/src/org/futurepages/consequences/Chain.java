@@ -143,7 +143,7 @@ public class Chain implements Consequence {
 	}
 
 /**
- * Este mÈtodo deve ser chamado sÛ na instanciaÁ„o. Os valores ficar„o guardados pra
+ * Este m√©todo deve ser chamado s√≥ na instancia√ß√£o. Os valores ficar√£o guardados pra
  * sempre que a action for chamada.
  */
 
@@ -168,7 +168,7 @@ public class Chain implements Consequence {
 		if(parts.length>1){
 			extractInputFromQuery(parts[1]);
 		}
-		this.actionURI = parts[0]; //necess·rio para o extractInputParamsFromURI
+		this.actionURI = parts[0]; //necess√°rio para o extractInputParamsFromURI
 	}
 
 	private void extractInputFromQuery(String queryParams) {
@@ -180,8 +180,8 @@ public class Chain implements Consequence {
 	}
 
 	/**
-	 * deve ser chamado somente quando vai ser feito o registro dos chains, apÛs todos os mÛdulos
-	 * terem sido registrados, pois os mÛdulos precisam ser carregados para verificar se a action È
+	 * deve ser chamado somente quando vai ser feito o registro dos chains, ap√≥s todos os m√≥dulos
+	 * terem sido registrados, pois os m√≥dulos precisam ser carregados para verificar se a action √©
 	 * global.
 	 */
 	public void extractInputParamsFromURI() {
@@ -204,7 +204,7 @@ public class Chain implements Consequence {
 	}
 	
 	private Input chainedInput(HttpServletRequest req) {
-		//o input de acordo com a situaÁ„o
+		//o input de acordo com a situa√ß√£o
 		return new RequestInput(req);
 	}
 

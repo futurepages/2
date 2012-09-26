@@ -14,10 +14,10 @@ import static org.futurepages.util.html.HtmlRegex.*;
  *
  * @author Leandro
  *
- *	<span style="white-space: pre;"> </span> È gerado a cada tab dado dentro de um par·grafo.
- *	utilizar algum tipo de substituiÁ„o por text-indent
+ *	<span style="white-space: pre;"> </span> √© gerado a cada tab dado dentro de um par√°grafo.
+ *	utilizar algum tipo de substitui√ß√£o por text-indent
  *	------------------------------------------------
- *	<cite> e <var> sao mantidos quando list È true
+ *	<cite> e <var> sao mantidos quando list √© true
  *
  */
 public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
@@ -44,7 +44,7 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 	}
 
 	/**
-	 * Se internalAnchors == null , significa que n„o manteremos os links (ser„o eliminados)
+	 * Se internalAnchors == null , significa que n√£o manteremos os links (ser√£o eliminados)
 	 */
 	public void init() {
 
@@ -86,7 +86,7 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 
 		//reduce("img", attrs("src","alt"));
 
-		//‚ncoras
+		//√¢ncoras
 		if (host != null) {
 			reduce("a", attrs("href", "target", "title"));
 		} else {
@@ -111,7 +111,7 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 		if(!styles){
 			htmlContent = replaceInTags(htmlContent, attrPattern("style"), "");
 		}else {
-			//indentaÁ„o de par·grafo.
+			//indenta√ß√£o de par√°grafo.
 			htmlContent = htmlContent.replaceAll("<p><span style=\"white-space: pre;\"> </span>","<p style=\"text-indent: 30px\">");
 		}
 		return htmlContent;
@@ -133,7 +133,7 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 				sb.append(treatedAnchor);
 				end = token.getAfter();
 				sbUrlOuts.append(token.getBefore());
-				sbUrlOuts.append(The.sequence('#', treatedAnchor.length())); //marca as tags a com seus conte˙dos
+				sbUrlOuts.append(The.sequence('#', treatedAnchor.length())); //marca as tags a com seus conte√∫dos
 			}
 			sb.append(end);
 			sbUrlOuts.append(end);

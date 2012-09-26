@@ -5,7 +5,7 @@ import java.util.Locale;
 import org.futurepages.core.formatter.Formatter;
 
 /**
- * Exibe a quantidade de elementos da coleção.
+ * Exibe a quantidade de elementos da coleÃ§Ã£o.
  * .
  */
 public class CollectionSizeFormatter implements Formatter {

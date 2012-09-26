@@ -10,7 +10,7 @@ import org.futurepages.core.formatter.Formatter;
 import org.futurepages.enums.MonthEnum;
 import org.futurepages.util.StringUtils;
 
-//TODO - falta contemplar o "amanh„"
+//TODO - falta contemplar o "amanh√£"
 public class RemainingTimeFormatter implements Formatter<Calendar> {
 
 	@Override
@@ -22,11 +22,11 @@ public class RemainingTimeFormatter implements Formatter<Calendar> {
 	public static String formatValue(Calendar agora, Calendar momentoNoFuturo){
 		try {
 			if(CalendarUtil.isNeighborDays(momentoNoFuturo, agora)){
-					return "amanh„ ‡s "+DateUtil.viewDateTime(momentoNoFuturo, "HH:mm");
+					return "amanh√£ √†s "+DateUtil.viewDateTime(momentoNoFuturo, "HH:mm");
 			}else{
 				int[] time = CalendarUtil.getElapsedTime(momentoNoFuturo, agora);
 				CalendarUtil.getElapsedTimeStatement(time, UnitTimeEnum.HOUR, 24, false);
-				return "hoje ‡s " + DateUtil.viewDateTime(momentoNoFuturo, "HH:mm");
+				return "hoje √†s " + DateUtil.viewDateTime(momentoNoFuturo, "HH:mm");
 			}
 		} catch (CalendarUtil.TooBigDateException e) {
 			int mesAtual = agora.get(Calendar.MONTH)+1;
@@ -34,7 +34,7 @@ public class RemainingTimeFormatter implements Formatter<Calendar> {
 			int diaFuturo = momentoNoFuturo.get(Calendar.DAY_OF_MONTH);
 			int mesFuturo = momentoNoFuturo.get(Calendar.MONTH)+1;
 			int anoFuturo = momentoNoFuturo.get(Calendar.YEAR);
-			String dia = (diaFuturo==1? "1∫": String.valueOf(diaFuturo));
+			String dia = (diaFuturo==1? "1¬∫": String.valueOf(diaFuturo));
 			String mes = MonthEnum.get(mesFuturo);
 			String ano = null;
 			if((anoFuturo>anoAtual) &&

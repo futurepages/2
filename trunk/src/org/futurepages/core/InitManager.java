@@ -48,8 +48,8 @@ import org.futurepages.json.JSONGenericRenderer;
 import org.futurepages.util.Is;
 
 /**
- * ApplicationManager que gerencia a AÁ„o Inicial e os filtros Globais
- * Carrega a Action Inicial da AplicaÁ„o
+ * ApplicationManager que gerencia a A√ß√£o Inicial e os filtros Globais
+ * Carrega a Action Inicial da Aplica√ß√£o
  */
 public class InitManager extends AbstractApplicationManager{
     
@@ -83,19 +83,19 @@ public class InitManager extends AbstractApplicationManager{
 			on(AJAX_SUCCESS, ajax(new JSONGenericRenderer()));
 			on(REDIR_APPEND_OUTPUT, redir(true));
 
-            //AÁ„o Inicial Padr„o
+            //A√ß√£o Inicial Padr√£o
             try {
                 Class initActionClass = Class.forName(Params.get("INIT_ACTION"));
                 action(Params.get("START_PAGE_NAME"), initActionClass).on(SUCCESS, fwd(Params.get("START_CONSEQUENCE")));
             } catch (ClassNotFoundException ex) {
-                System.out.println("[::initManager::] A classe de AÁ„o Inicial da AplicaÁ„o n„o foi encontrada.");
+                System.out.println("[::initManager::] A classe de A√ß√£o Inicial da Aplica√ß√£o n√£o foi encontrada.");
                 DefaultExceptionLogger.getInstance().execute(ex);
             }
     }
     
     @Override
     public void loadLocales(){
-         //Por enquanto o futurepages n„o contempla internacionalizaÁ„o.
+         //Por enquanto o futurepages n√£o contempla internacionaliza√ß√£o.
          LocaleManager.add(new Locale("pt","BR"));
     }
     

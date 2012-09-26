@@ -7,7 +7,7 @@ import java.util.Map;
 import org.futurepages.core.tags.build.ModulesAutomation;
 
 /**
- *  Resposável pela geração de schema após a geração.
+ *  ResposÃ¡vel pela geraÃ§Ã£o de schema apÃ³s a geraÃ§Ã£o.
  *
  * @author leandro
  */

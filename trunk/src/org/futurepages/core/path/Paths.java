@@ -5,16 +5,16 @@ import javax.servlet.http.HttpServletRequest;
 import org.futurepages.util.StringUtils;
 
 /**
- * Retorna os endereços (URL) absolutos da aplicação.
+ * Retorna os endereÃ§os (URL) absolutos da aplicaÃ§Ã£o.
  * 
  * @author leandro
  */
 public class Paths {
     
     /**
-     * @param req Requisição
-     * @param module id do módulo
-     * @return a url completa do módulo
+     * @param req RequisiÃ§Ã£o
+     * @param module id do mÃ³dulo
+     * @return a url completa do mÃ³dulo
      */
     public static String module(HttpServletRequest req,String module) {
         return context(req)+"/"+Params.MODULES_PATH+"/"+((module!=null)?module:"");
@@ -28,32 +28,32 @@ public class Paths {
     }
 
     /**
-     * @param req Requisição
-     * @return a url completa da pasta de recursos da aplicação
+     * @param req RequisiÃ§Ã£o
+     * @return a url completa da pasta de recursos da aplicaÃ§Ã£o
      */
     public static String resource(HttpServletRequest req) {
         return StringUtils.concat(context(req),"/",Params.get("RESOURCE_PATH"));
     }
 
 	/**
-     * @param req Requisição
-     * @return a url completa da pasta de recursos da aplicação
+     * @param req RequisiÃ§Ã£o
+     * @return a url completa da pasta de recursos da aplicaÃ§Ã£o
      */
     public static String resource(HttpServletRequest req, String module) {
         return StringUtils.concat(module(req,module),"/",Params.get("RESOURCE_PATH"));
     }
 
     /**
-     * @param req Requisição
-     * @return a url completa da pasta de temas da aplicação
+     * @param req RequisiÃ§Ã£o
+     * @return a url completa da pasta de temas da aplicaÃ§Ã£o
      */
     public static String theme(HttpServletRequest req){
         return template(req)+"/"+Params.get("THEMES_DIR_NAME")+"/"+Params.get("THEME");
     }
 
     /**
-     * @param req Requisição
-     * @return a url completa da pasta de arquivos do template da aplicação
+     * @param req RequisiÃ§Ã£o
+     * @return a url completa da pasta de arquivos do template da aplicaÃ§Ã£o
      */
     public static String template(HttpServletRequest req){
         return context(req)+"/"+Params.TEMPLATE_PATH;
@@ -61,8 +61,8 @@ public class Paths {
 
     /**
      *
-     * @param req Requisição
-     * @return o endereço do contexto da aplicação, exemplo: /application
+     * @param req RequisiÃ§Ã£o
+     * @return o endereÃ§o do contexto da aplicaÃ§Ã£o, exemplo: /application
      */
     public static String context(HttpServletRequest req){
         return req.getContextPath();
@@ -70,8 +70,8 @@ public class Paths {
 
     /**
      *
-     * @param req Requisição
-     * @return a url completa do host server da aplicação
+     * @param req RequisiÃ§Ã£o
+     * @return a url completa do host server da aplicaÃ§Ã£o
      */
     public static String host(HttpServletRequest req){
         return StringUtils.concat(req.getScheme(),"://",req.getServerName(),(req.getServerPort()!=80 && req.getServerPort()!= 443 ? ":"+req.getServerPort() : "" ));

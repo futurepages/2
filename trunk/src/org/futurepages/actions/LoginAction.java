@@ -16,8 +16,8 @@ public abstract class LoginAction extends AbstractAction implements Authenticati
 	public static int TIMEOUT = 30; // in Minutes
 
 	/**
-	 * Coloca o usu·rio na sess„o, alterando o tempo da sess„o para o tempo
-	 * padr„o definido em {@link TIMEOUT} (tempo em minutos)
+	 * Coloca o usu√°rio na sess√£o, alterando o tempo da sess√£o para o tempo
+	 * padr√£o definido em {@link TIMEOUT} (tempo em minutos)
 	 * @param user a ficar logado
 	 */
 	protected void setUserInSession(DefaultUser user) {
@@ -25,8 +25,8 @@ public abstract class LoginAction extends AbstractAction implements Authenticati
 	}
 
 	/**
-	 * Coloca o usu·rio numa nova sess„o, alterando o tempo da sess„o para o tempo
-	 * padr„o definido em {@link TIMEOUT} (tempo em minutos)
+	 * Coloca o usu√°rio numa nova sess√£o, alterando o tempo da sess√£o para o tempo
+	 * padr√£o definido em {@link TIMEOUT} (tempo em minutos)
 	 * @param user a ficar logado
 	 */
 	protected void setUserInNewSession(DefaultUser user) {
@@ -34,7 +34,7 @@ public abstract class LoginAction extends AbstractAction implements Authenticati
 	}
 
 	/**
-	 * Altera o tempo da sess„o corrente da action
+	 * Altera o tempo da sess√£o corrente da action
 	 * 
 	 * @param timeInMinutes tempo em minutos
 	 */
@@ -42,10 +42,10 @@ public abstract class LoginAction extends AbstractAction implements Authenticati
 		LoginAction.setSessionTimeout(this.getHttpSession(), timeInMinutes);
 	}
 
-	// M…TODOS EST¡TICOS ////////////////////////////////////////
+	// M√âTODOS EST√ÅTICOS ////////////////////////////////////////
 
 	/**
-	 * Coloca o usu·rio na sess„o, alterando o tempo da mesma com o valor padr„o definido
+	 * Coloca o usu√°rio na sess√£o, alterando o tempo da mesma com o valor padr√£o definido
 	 * em {@link TIMEOUT}  (tempo em minutos)
 	 */
 	public static void setUserInSession(HttpSession session, DefaultUser user) {
@@ -53,12 +53,12 @@ public abstract class LoginAction extends AbstractAction implements Authenticati
 	}
 
 	/**
-	 * Coloca-se o usu·rio na sess„o passada como par‚metro ou numa nova sess„o, dependendo-se
-	 * se 'reqToReset' for nula, sen„o cria-se uma nova sess„o associada ao request.
+	 * Coloca-se o usu√°rio na sess√£o passada como par√¢metro ou numa nova sess√£o, dependendo-se
+	 * se 'reqToReset' for nula, sen√£o cria-se uma nova sess√£o associada ao request.
 	 *
-	 * @param session sess„o que receber· o usu·rio (caso n„o v· receber uma nova sess„o)
-	 * @param user usu·rio que ficar· na sess„o
-	 * @param reqToReset requisiÁ„o que receber· uma nova sess„o, caso seja necess·rio (diferente de null)
+	 * @param session sess√£o que receber√° o usu√°rio (caso n√£o v√° receber uma nova sess√£o)
+	 * @param user usu√°rio que ficar√° na sess√£o
+	 * @param reqToReset requisi√ß√£o que receber√° uma nova sess√£o, caso seja necess√°rio (diferente de null)
 	 */
 	private static void setUserSession(HttpSession session, DefaultUser user,HttpServletRequest reqToReset) {
 		if(reqToReset!=null){
@@ -70,7 +70,7 @@ public abstract class LoginAction extends AbstractAction implements Authenticati
 	}
 
 	/**
-	 * Altera o tempo da sess„o em minutos.
+	 * Altera o tempo da sess√£o em minutos.
 	 */
 	public static void setSessionTimeout(HttpSession session, int timeInMinutes) {
 		session.setMaxInactiveInterval(timeInMinutes * 60);

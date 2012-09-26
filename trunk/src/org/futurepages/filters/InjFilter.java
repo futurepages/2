@@ -12,7 +12,7 @@ import org.futurepages.core.control.InvocationChain;
 public class InjFilter implements Filter {
 
     private String keyToInject;   //chave do input a ser injetado
-    private String targetKey;    //chave do input do objeto que sofrer· a injeÁ„o
+    private String targetKey;    //chave do input do objeto que sofrer√° a inje√ß√£o
 
     public InjFilter(String targetKey, String keyToInject) {
         this.targetKey = targetKey;

@@ -26,8 +26,8 @@ import javax.media.jai.JAI;
 import org.apache.commons.lang.NotImplementedException;
 
 /**
- * Utilidades para manipulaÁ„o de JPEG - Utiliza o Leitor da biblioteca JAI
- * Ler arquivos que fogem da especificaÁ„o padr„o do JPEG
+ * Utilidades para manipula√ß√£o de JPEG - Utiliza o Leitor da biblioteca JAI
+ * Ler arquivos que fogem da especifica√ß√£o padr√£o do JPEG
  */
 public class JPEGUtil2 {
 
@@ -82,7 +82,7 @@ public class JPEGUtil2 {
 	 * Redimensiona arquivo (File) e retorna a imagem redimensionada (pathNewFile)
 	 * File: Arquivo de entrada
 	 * width, height: largura e altura da nova imagem
-	 * pathNewFile: endereÁo real completo incluindo o nome do arquivo
+	 * pathNewFile: endere√ßo real completo incluindo o nome do arquivo
 	 */
 	public static void resizeImage(File file, int width, int height, int quality, String pathNewFile) throws MalformedURLException, FileNotFoundException, IOException {
 		BufferedImage image = getBufferedImage(file);
@@ -103,7 +103,7 @@ public class JPEGUtil2 {
 	}
 
 	private static void resize(BufferedImage image, int thumbW, int thumbH, int quality, String pathNewFile, boolean priorWidth, boolean stretchWhenSmaller, int[] subimage) throws FileNotFoundException, IOException {
-		// Calculos necess·rios para manter as propoÁoes da imagem, conhecido como "aspect ratio"
+		// Calculos necess√°rios para manter as propo√ßoes da imagem, conhecido como "aspect ratio"
 
 		if (subimage != null) {
 			image = image.getSubimage(subimage[0], subimage[1], subimage[2], subimage[3]);
@@ -130,8 +130,8 @@ public class JPEGUtil2 {
 		}
 
 		if (thumbW >= imageWidth || thumbH >= imageHeight) {
-			//quando imagem È menor que o resultado final, faz um esticamento para crescer atÈ o tamanho desejado.
-			//quando imagem È menor que o resultado final, faz um resizer pobre
+			//quando imagem √© menor que o resultado final, faz um esticamento para crescer at√© o tamanho desejado.
+			//quando imagem √© menor que o resultado final, faz um resizer pobre
 			if (stretchWhenSmaller) {
 				poorResize(image, null, thumbW, thumbH, quality, pathNewFile);
 			} else {
@@ -163,7 +163,7 @@ public class JPEGUtil2 {
 	 * Redimensiona imagens (criar thubmnails) - prioriza a largura
 	 */
 //    A) se altura diferente da largura (imageWidth <> imageHeight):
-	// 1) se largura original maior ou igual ‡ largura final (imageWidth >= newWidth):
+	// 1) se largura original maior ou igual √† largura final (imageWidth >= newWidth):
 	//1.1) se largura maior que altura (imageWidth > imageHeight):
 	//					#### completa com a cor na altura.
 	//1.2) se altura maior que a largura (imageWidth < imageHeight):
@@ -172,12 +172,12 @@ public class JPEGUtil2 {
 	//2.1) se largura maior que altura (imageWidth > imageHeight):
 	//		            #### completa com a cor na altura para formar.j
 	//2.2) se altura maior que a largura:
-	//		            #### redimensiona (aumenta) para preencher a largura com a cor atÈ form um quadrado ou atÈ que alcanse a largura desejada.
-	//		            #### somente resize padr„o (sem esticar para crescer)
+	//		            #### redimensiona (aumenta) para preencher a largura com a cor at√© form um quadrado ou at√© que alcanse a largura desejada.
+	//		            #### somente resize padr√£o (sem esticar para crescer)
 //    B) se altura diferente de largura (imageWidth == imageHeight)
-	//		            #### somente resize padr„o (sem esticar para crescer)
+	//		            #### somente resize padr√£o (sem esticar para crescer)
 	private static void resizeByWidth(boolean reallyByWidth, Color colorSquare, BufferedImage image, int theDimension, int quality, String pathNewFile, boolean stretchWhenSmaller) throws FileNotFoundException, IOException {
-		// Calculos necess·rios para manter as propoÁoes da imagem, conhecido como "aspect ratio"
+		// Calculos necess√°rios para manter as propo√ßoes da imagem, conhecido como "aspect ratio"
 		int oW = image.getWidth(null);
 		int oH = image.getHeight(null);
 
@@ -207,7 +207,7 @@ public class JPEGUtil2 {
 		if (oW != oH) {
 			if (colorSquare != null) {
 				int pos1 = 0, pos2 = 0, posX = 0, posY = 0, canv1 = 0, canv2 = 0, canvW = 0, canvH = 0;
-				if (oDim1 >= dim1) { //se largura original maior ou igual ‡ largura final (imageWidth >= newWidth):
+				if (oDim1 >= dim1) { //se largura original maior ou igual √† largura final (imageWidth >= newWidth):
 					if (oDim1 > oDim2) { //se largura maior que altura (imageWidth > imageHeight): //	completa com a cor na altura.
 						pos1 = 0;
 						pos2 = ((dim1-dim2)/2);
@@ -219,7 +219,7 @@ public class JPEGUtil2 {
 						canv1 = dim1;
 						canv2 = dim1;
 						int tempDim2  = dim1;
-						dim1 = (dim1*dim1)/dim2; //depois por conta das sobrescritas do valor. necess·rio ficar aqui.
+						dim1 = (dim1*dim1)/dim2; //depois por conta das sobrescritas do valor. necess√°rio ficar aqui.
 						dim2 = tempDim2;
 					}
 				} else { //se a largura original menor que a largura final (oW < oH)
@@ -230,7 +230,7 @@ public class JPEGUtil2 {
 						canv2 = oDim1;
 						dim1 = oDim1;
 						dim2 = oDim2;
-					} else { // oDim2 >= oDim1  -> se altura maior que a largura: redimensiona (aumenta) para preencher a largura com a cor atÈ form um quadrado ou atÈ que alcanse a largura desejada.
+					} else { // oDim2 >= oDim1  -> se altura maior que a largura: redimensiona (aumenta) para preencher a largura com a cor at√© form um quadrado ou at√© que alcanse a largura desejada.
 						int oDim2x = (oDim2>theDimension)? theDimension : oDim2;
 						pos1 = ((oDim2x-oDim1)/2);
 						pos2 = 0;
@@ -302,7 +302,7 @@ public class JPEGUtil2 {
 
 		if(colorSquare!=null){
 			//TODO - posicionar no quadrado branco.
-			throw new NotImplementedException("N„o foi implementado ainda ColorSquare para poorResize");
+			throw new NotImplementedException("N√£o foi implementado ainda ColorSquare para poorResize");
 		}else{
 			graphics2D.drawImage(image, 0, 0, width, height, null);
 		}

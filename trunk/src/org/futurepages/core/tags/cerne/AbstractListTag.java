@@ -20,7 +20,7 @@ import org.futurepages.tags.Out;
 @SuperTag
 public abstract class AbstractListTag<T extends Object> extends AbstractListContext<T> {
 
-	@TagAttribute(required = false)  //@TODO - n„o ficar aqui, deveria estar na tag List
+	@TagAttribute(required = false)  //@TODO - n√£o ficar aqui, deveria estar na tag List
 	private String value;
 
 	@TagAttribute

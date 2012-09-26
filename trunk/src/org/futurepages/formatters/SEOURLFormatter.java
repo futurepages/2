@@ -5,11 +5,11 @@ import org.futurepages.util.SEOUtil;
 import org.futurepages.core.formatter.Formatter;
  
 /**
- * Formatação de texto para SEO URL.
+ * FormataÃ§Ã£o de texto para SEO URL.
  *
- * Exemplo: Maria Mãe de José --> maria-mae-de-jose.html
+ * Exemplo: Maria MÃ£e de JosÃ© --> maria-mae-de-jose.html
  *  
- * - saída: DD/MM/YYYY HH:MM:SS
+ * - saÃ­da: DD/MM/YYYY HH:MM:SS
  *
  */
  public class SEOURLFormatter implements Formatter {

@@ -18,7 +18,7 @@ public class Success extends PrintTag{
 
         String success = (String) action.getSuccess();
 
-        if(success==null){ //ent„o success vem do input
+        if(success==null){ //ent√£o success vem do input
             success = (String) HtmlMapChars.noHtmlTags((String)action.getInput().getValue(Action.SUCCESS));
         }
         return (success!=null)? success : "";

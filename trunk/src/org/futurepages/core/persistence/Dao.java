@@ -294,7 +294,7 @@ public class Dao extends HQLProvider {
 
 	/**
 	 * /////////////////////////////////////////////////
-	 * MÉTODOS TRANSACIONAIS
+	 * MÃ‰TODOS TRANSACIONAIS
 	 * /////////////////////////////////////////////////
 	 */
 	public static void beginTransaction() {

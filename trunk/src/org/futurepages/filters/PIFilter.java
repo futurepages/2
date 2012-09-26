@@ -16,15 +16,15 @@ import org.futurepages.util.The;
 /**
  * PIFilter - Persistent Injection Filter
  * Recupera no banco um objeto do tipo 'classToInject' com o id passado no input com a chave 'keyToInject'
- * em seguida injeta no objeto que est· referenciado no input com a chave 'targetKey'
+ * em seguida injeta no objeto que est√° referenciado no input com a chave 'targetKey'
  * @author leandro
  * Deprecated Classe. Use {@link PersistenceInjectionFilter}
  */
 public class PIFilter implements Filter {
 
 	private Class classToInject;   //classe do objeto a ser injetado
-	private String targetKey;   //chave do input do objeto alvo - que sofrer· a injeÁ„o
-	private String keyToInject;  //chave do input que ser· injetado no alvo
+	private String targetKey;   //chave do input do objeto alvo - que sofrer√° a inje√ß√£o
+	private String keyToInject;  //chave do input que ser√° injetado no alvo
 	private GenericDao dao;
 
 	public PIFilter(String targetKey, Class classToInject) {
@@ -74,9 +74,9 @@ public class PIFilter implements Filter {
 	}
 
 	/**
-	 * Se o alvo È targetKey È n„o nulo ent„o:
-	 * <li> se o objeto j· existe no input, injeta-se o valor encontrato em tal objeto:setField( obj, targetObjetc)
-	 * <li> se o objeto ainda n„o existe no input: input.setValue(targetKey, obj)
+	 * Se o alvo √© targetKey √© n√£o nulo ent√£o:
+	 * <li> se o objeto j√° existe no input, injeta-se o valor encontrato em tal objeto:setField( obj, targetObjetc)
+	 * <li> se o objeto ainda n√£o existe no input: input.setValue(targetKey, obj)
 	 * 	
 	 * @param input
 	 * @param objToInject

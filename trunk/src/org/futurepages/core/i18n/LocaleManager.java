@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.futurepages.core.control.AbstractApplicationManager;
-import org.futurepages.core.exception.DefaultExceptionLogger;
 
 /**
  * @author Sergio Oliveira
@@ -36,10 +35,10 @@ public class LocaleManager {
 	private static Map<Locale, String> dateMasks = new HashMap<Locale, String>();
 	private static Map<Locale, String> timeMasks = new HashMap<Locale, String>();
 	private static boolean masterChanged = false;
-	private static Thread thread = null;
-	private static volatile boolean running;
+//	private static Thread thread = null;
+//	private static volatile boolean running;
 	private static Set<Locale> dirLocales = new HashSet<Locale>();
-	private static long SCAN_TIME = 1000 * 60 * 5;
+//	private static long SCAN_TIME = 1000 * 60 * 5;
 	private static final Map<String, SimpleDateFormat> simpleDateFormatters = new HashMap<String, SimpleDateFormat>();
 
 	static {
@@ -51,131 +50,132 @@ public class LocaleManager {
 	}
 	private static final Map<String, SimpleDateFormat> simpleTimeFormatters = new HashMap<String, SimpleDateFormat>();
 
-// Comentado enquanto n„o È utilizado
+// Comentado enquanto n√£o √© utilizado
 //	static {
 //
 //		startLocaleScan();
 //	}
-	private static void initThread() {
+	
+//	private static void initThread() {
+//
+//		thread = new Thread(new Runnable() {
+//
+//			public void run() {
+//
+//				while (running) {
+//
+//					try {
+//
+//						if (!checkDirs()) {
+//							return;
+//						}
+//
+//					} catch (NullPointerException e) {
+//
+//						return;
+//
+//					} catch (Throwable e) {
+//
+//						if (running) {
+//							DefaultExceptionLogger.getInstance().execute(e);
+//						}
+//					}
+//
+//					try {
+//
+//						if (running) {
+//							Thread.sleep(SCAN_TIME);
+//						}
+//
+//					} catch (Exception e) {
+//						// will be called by stopLocaleScan...
+//					}
+//				}
+//			}
+//		});
+//
+//		thread.setDaemon(true);
+//
+//		thread.start();
+//	}
 
-		thread = new Thread(new Runnable() {
+//	public static void stopLocaleScan() {
+//
+//		running = false;
+//
+//		if (thread != null) {
+//
+//			thread.interrupt();
+//
+//			try {
+//
+//				thread.join();
+//
+//			} catch (Exception e) {
+//				DefaultExceptionLogger.getInstance().execute(e);
+//			}
+//
+//			thread = null;
+//		}
+//
+//	}
 
-			public void run() {
+//	public static void startLocaleScan() {
+//
+//		if (thread != null) {
+//			stopLocaleScan();
+//		}
+//
+//		running = true;
+//
+//		initThread();
+//	}
 
-				while (running) {
+//	private static void addLocales(Set<Locale> set) {
+//
+//		if (set == null || set.isEmpty()) {
+//			return;
+//		}
+//
+//		synchronized (dirLocales) {
+//
+//			dirLocales.addAll(set);
+//		}
+//
+//	}
 
-					try {
-
-						if (!checkDirs()) {
-							return;
-						}
-
-					} catch (NullPointerException e) {
-
-						return;
-
-					} catch (Throwable e) {
-
-						if (running) {
-							DefaultExceptionLogger.getInstance().execute(e);
-						}
-					}
-
-					try {
-
-						if (running) {
-							Thread.sleep(SCAN_TIME);
-						}
-
-					} catch (Exception e) {
-						// will be called by stopLocaleScan...
-					}
-				}
-			}
-		});
-
-		thread.setDaemon(true);
-
-		thread.start();
-	}
-
-	public static void stopLocaleScan() {
-
-		running = false;
-
-		if (thread != null) {
-
-			thread.interrupt();
-
-			try {
-
-				thread.join();
-
-			} catch (Exception e) {
-				DefaultExceptionLogger.getInstance().execute(e);
-			}
-
-			thread = null;
-		}
-
-	}
-
-	public static void startLocaleScan() {
-
-		if (thread != null) {
-			stopLocaleScan();
-		}
-
-		running = true;
-
-		initThread();
-	}
-
-	private static void addLocales(Set<Locale> set) {
-
-		if (set == null || set.isEmpty()) {
-			return;
-		}
-
-		synchronized (dirLocales) {
-
-			dirLocales.addAll(set);
-		}
-
-	}
-
-	private static boolean checkDirs() throws Throwable {
-
-		if (dirLocales == null) {
-			return false;
-		}
-
-		synchronized (dirLocales) {
-
-			dirLocales.clear();
-		}
-
-		String master = getMaster();
-
-		int index = master.lastIndexOf("/");
-
-		if (index > 0) {
-
-			master = master.substring(0, index);
-
-			addLocales(scanLocales(master));
-
-		} else {
-
-			addLocales(scanLocales(""));
-		}
-
-		addLocales(scanLocales(getDir()));
-
-//		addLocales(scanLocales(ListManager.LIST_DIR.replace('\\', '/'))); // ListManager removido, porisso foi comentado.
-
-		return true;
-	}
+//	private static boolean checkDirs() throws Throwable {
+//
+//		if (dirLocales == null) {
+//			return false;
+//		}
+//
+//		synchronized (dirLocales) {
+//
+//			dirLocales.clear();
+//		}
+//
+//		String master = getMaster();
+//
+//		int index = master.lastIndexOf("/");
+//
+//		if (index > 0) {
+//
+//			master = master.substring(0, index);
+//
+//			addLocales(scanLocales(master));
+//
+//		} else {
+//
+//			addLocales(scanLocales(""));
+//		}
+//
+//		addLocales(scanLocales(getDir()));
+//
+////		addLocales(scanLocales(ListManager.LIST_DIR.replace('\\', '/'))); // ListManager removido, porisso foi comentado.
+//
+//		return true;
+//	}
 
 	private static Locale checkLocale(Locale loc) {
 

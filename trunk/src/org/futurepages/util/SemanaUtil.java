@@ -11,11 +11,11 @@ public class SemanaUtil {
     static{
         diasSemana.add("domingo");
         diasSemana.add("segunda-feira");
-        diasSemana.add("terça-feira");
+        diasSemana.add("terÃ§a-feira");
         diasSemana.add("quarta-feira");
         diasSemana.add("quinta-feira");
         diasSemana.add("sexta-feira");
-        diasSemana.add("sábado");
+        diasSemana.add("sÃ¡bado");
     }
     
     public static ArrayList<String> diasSemana() {

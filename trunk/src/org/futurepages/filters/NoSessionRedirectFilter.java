@@ -4,8 +4,8 @@ import org.futurepages.core.filter.Filter;
 import org.futurepages.core.control.InvocationChain;
 
 /**
- * Filtro verifica se um determinado atributo da sess„o existe.
- * Caso n„o exista, ele È redirecionado para um determinado retorno.
+ * Filtro verifica se um determinado atributo da sess√£o existe.
+ * Caso n√£o exista, ele √© redirecionado para um determinado retorno.
  */
 public class NoSessionRedirectFilter implements Filter {
 

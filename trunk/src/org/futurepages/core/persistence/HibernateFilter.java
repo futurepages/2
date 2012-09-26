@@ -57,11 +57,11 @@ public class HibernateFilter implements AfterConsequenceFilter {
 	}
 
 	/**
-	 * Define se a action È transacional ou n„o.
+	 * Define se a action √© transacional ou n√£o.
 	 * @return
-	 * false: se o mÈtodo estiver anotado com {@link NonTransactional}. 
-	 * <br>true: se a Classe ou o mÈtodo estiverem anotados com {@link Transactional} o mÈtoro retornar· true.
-	 * <br>false: se o mÈtodo estiver anotado com {@link Transactional} e {@link NonTransactional} simultaneamente
+	 * false: se o m√©todo estiver anotado com {@link NonTransactional}. 
+	 * <br>true: se a Classe ou o m√©todo estiverem anotados com {@link Transactional} o m√©toro retornar√° true.
+	 * <br>false: se o m√©todo estiver anotado com {@link Transactional} e {@link NonTransactional} simultaneamente
 	 */
 	protected boolean isTransactional(InvocationChain chain) throws ServletException {
 		boolean result = false;

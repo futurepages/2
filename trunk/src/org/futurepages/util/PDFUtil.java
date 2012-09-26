@@ -57,7 +57,7 @@ public class PDFUtil {
 
     /**
      * Extrai o texto de um arquivo pdf em formato String.
-     * @param filePath endereço absoluto ou url do arquivo.
+     * @param filePath endereÃ§o absoluto ou url do arquivo.
      * @return texto limpo do arquivo.
      */
     public static String pdf2Str(String filePath) throws Exception {
@@ -94,7 +94,7 @@ public class PDFUtil {
                 AccessPermission ap = document.getCurrentAccessPermission();
 
                 if (!ap.canExtractContent()) {
-                    throw new IOException("O Arquivo PDF é criptografado. Não é possível extrair o texto.");
+                    throw new IOException("O Arquivo PDF Ã© criptografado. NÃ£o Ã© possÃ­vel extrair o texto.");
                 }
             }
 

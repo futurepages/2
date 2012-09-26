@@ -166,7 +166,7 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
 
 	protected void dependsOf(String ... dependencies){
 		if(directDependencies!=null){
-			throw new RuntimeException("Não utilize mais de uma chamada de 'dependsOf()' dentro do mesmo loadDependencies() do ModuleManager");
+			throw new RuntimeException("NÃ£o utilize mais de uma chamada de 'dependsOf()' dentro do mesmo loadDependencies() do ModuleManager");
 		}
 		directDependencies = dependencies;
 	}

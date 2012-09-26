@@ -4,7 +4,7 @@ import org.futurepages.core.exception.DefaultExceptionLogger;
 
 /**
  * Instalador. Herde essa classe e coloque dentro do pacote install
- * do seu módulo caso queira instalar algo quando o MODE_INSTALL estiver ligado.
+ * do seu mÃ³dulo caso queira instalar algo quando o MODE_INSTALL estiver ligado.
  * 
  * @author leandro
  */

@@ -15,14 +15,15 @@ import org.futurepages.core.context.Context;
 import org.futurepages.core.control.AbstractModuleManager;
 
 /**
- * Classe onde são feitas as inicializações da aplicação.
- * Sao registrados (agregados) todos os ApplicationManagers dos Módulos da Aplicação (ModuleManagers).
+ * Classe onde sÃ£o feitas as inicializaÃ§Ãµes da aplicaÃ§Ã£o.
+ * Sao registrados (agregados) todos os ApplicationManagers dos MÃ³dulos da AplicaÃ§Ã£o (ModuleManagers).
  */
 public class ApplicationManager extends AbstractApplicationManager {
 
 	private final Map<String, AbstractApplicationManager> managers;
 	private Set<String> moduleIDs = new HashSet<String>();
 	private Map<String, LinkedHashSet<String>> moduleDependencies;
+	private Map<String, HashSet<String>> subModules;
 	private boolean initialized = false;
 
 	/**
@@ -38,12 +39,12 @@ public class ApplicationManager extends AbstractApplicationManager {
 	}
 
 	/**
-	 * Registra o InitManager e os ModuleManagers dos demais módulos
+	 * Registra o InitManager e os ModuleManagers dos demais mÃ³dulos
 	 */
 	public void registerManagers() {
 		try {
 			log("Iniciando Registro de Managers");
-			//Lista os módulos na árvore de arquivos
+			//Lista os mÃ³dulos na Ã¡rvore de arquivos
 			File[] modules = (new File(Params.get("MODULES_CLASSES_REAL_PATH"))).listFiles();
 
 			if (modules != null) {
@@ -52,11 +53,11 @@ public class ApplicationManager extends AbstractApplicationManager {
 				}
 			}
 
-			//Registra o Módulo de Inicialização da Aplicação
+			//Registra o MÃ³dulo de InicializaÃ§Ã£o da AplicaÃ§Ã£o
 			Class initManagerClass = Class.forName(Params.get("INIT_MANAGER_CLASS"));
 			register("", initManagerClass);
 
-			// Registra os demais módulos: mapeia, registra os managers e conecta ao banco criando uma sessão.
+			// Registra os demais mÃ³dulos: mapeia, registra os managers e conecta ao banco criando uma sessÃ£o.
 			if (modules != null) {
 				if (Params.get("CONNECT_EXTERNAL_MODULES").equals("false")) {
 					Modules.registerLocalModules(this, modules);
@@ -104,7 +105,7 @@ public class ApplicationManager extends AbstractApplicationManager {
 			}
 			log("Managers Iniciados");
 		} catch (Exception ex) {
-			log("Erro ao registrar os módulos do sistema: " + ex.getMessage());
+			log("Erro ao registrar os mÃ³dulos do sistema: " + ex.getMessage());
 		}
 	}
 
@@ -132,6 +133,24 @@ public class ApplicationManager extends AbstractApplicationManager {
 	public Set<String> getDependenciesOf(String moduleId){
 		return moduleDependencies.get(moduleId);
 	}
+
+	public boolean moduleHasSub(String module, String subModule){
+		return subModules!=null && subModules.get(module)!=null && subModules.get(module).contains(subModule);
+	}
+
+	public void addSubModule(String module, String subModule){
+		if(subModules==null){
+			subModules = new HashMap<String, HashSet<String>>();
+		}
+		HashSet<String> theSubModulesOf = subModules.get(module);
+		if(theSubModulesOf == null){
+			subModules.put(module,new HashSet<String>());
+			theSubModulesOf = subModules.get(module);
+		}
+		theSubModulesOf.add(subModule);
+	}
+
+
 
 	@Override
 	public final void init(Context application) {

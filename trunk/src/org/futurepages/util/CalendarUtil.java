@@ -13,9 +13,9 @@ public class CalendarUtil {
 	private static final long millisecondsDayFactor = 86400000L;
 
 	/**
-	 * Retorna o iÈsimo dia do ano da data informada.
-	 * <br>Se o ano for n„o bisexto(possui um dia a menos no ano),o valor retornado ser· o iÈsimo dia +1 para os dias apÛs 01/03.
-	 * Desta forma, 1∫ de marÁo e os dias atÈ o final do ano ser„o representados pelo mesmo valor em ambos os anos(bisexto e n„o bisexto).
+	 * Retorna o i√©simo dia do ano da data informada.
+	 * <br>Se o ano for n√£o bisexto(possui um dia a menos no ano),o valor retornado ser√° o i√©simo dia +1 para os dias ap√≥s 01/03.
+	 * Desta forma, 1¬∫ de mar√ßo e os dias at√© o final do ano ser√£o representados pelo mesmo valor em ambos os anos(bisexto e n√£o bisexto).
 	 */
 	public static int getOrdinalDayOfYear(Calendar cal) {
 		int nDia = cal.get(Calendar.DAY_OF_YEAR);
@@ -40,7 +40,7 @@ public class CalendarUtil {
 				);
 	}
 
-	/** @return true se o ano do calend·rio informado for um ano bisexto, false caso contr·rio. */
+	/** @return true se o ano do calend√°rio informado for um ano bisexto, false caso contr√°rio. */
 	public static boolean isLeapYear(Calendar cal) {
 		int year = cal.get(Calendar.YEAR);
 		return year % 4 == 0;
@@ -54,9 +54,9 @@ public class CalendarUtil {
 	 * Compara dois Calendar utilizando os campos ano, mes e ano
 	 * @param calendar1
 	 * @param calencdar2
-	 * @return -1 (quando a primeira data È menor que a segunda)
-	 *          1 (quando a primeira data È maior que a segunda)
-	 *          0 (quando os dois s„o iguais)
+	 * @return -1 (quando a primeira data √© menor que a segunda)
+	 *          1 (quando a primeira data √© maior que a segunda)
+	 *          0 (quando os dois s√£o iguais)
 	 */
 	public static int compareCalendarDate(Calendar calendar1, Calendar calencdar2) {
 		Integer ano1 = calendar1.get(Calendar.YEAR);
@@ -77,7 +77,7 @@ public class CalendarUtil {
 	}
 
 	/** 1 day == 86.400.000 miliseconds; //(24 * 60 * 60 * 1000)  */
-	//CUIDADO, E UM ARREDONDAMENTO. SE POSSUIR 1,2 dia CONTAR¡ COMO 1 e 1,6 dia contar· como 2.
+	//CUIDADO, E UM ARREDONDAMENTO. SE POSSUIR 1,2 dia CONTAR√Å COMO 1 e 1,6 dia contar√° como 2.
 	public static int getDifferenceInDays(Calendar start, Calendar end) {
 		int milliseconds = 86400000;
 		return getDifference(start, end, milliseconds);
@@ -146,9 +146,9 @@ public class CalendarUtil {
 	 * Compara dois Calendar utilizando os campos hora, minuto , segundo
 	 * @param calendar1
 	 * @param calencdar2
-	 * @return -1 (quando o segundo tempo È maior que o primeiro)
-	 *          1 (quando o primeiro tempo È maior que o segundo)
-	 *          0 (quando os dois s„o iguais do mesmo horario)
+	 * @return -1 (quando o segundo tempo √© maior que o primeiro)
+	 *          1 (quando o primeiro tempo √© maior que o segundo)
+	 *          0 (quando os dois s√£o iguais do mesmo horario)
 	 */
 	public static int compareCalendarTime(Calendar calendar1, Calendar calencdar2) {
 		Integer hora1 = calendar1.get(Calendar.HOUR_OF_DAY);
@@ -173,7 +173,7 @@ public class CalendarUtil {
 	 * @param calendar1
 	 * @param calencdar2
 	 * @return
-	 *          true (quando os dois s„o iguais do mesmo dia do mes)
+	 *          true (quando os dois s√£o iguais do mesmo dia do mes)
 	 *          false caso contrario
 	 */
 	public static boolean compareCalendarByDayOfMonth(Calendar calendar1, Calendar calencdar2) {
@@ -192,7 +192,7 @@ public class CalendarUtil {
 	 * @param calendar1
 	 * @param calencdar2
 	 * @return
-	 *          true (quando os dois s„o iguais do mesmo mes)
+	 *          true (quando os dois s√£o iguais do mesmo mes)
 	 *          false caso contrario
 	 */
 	public static boolean compareCalendarByMonth(Calendar calendar1, Calendar calencdar2) {
@@ -211,7 +211,7 @@ public class CalendarUtil {
 	 * @param calendar1
 	 * @param calendar2
 	 * @return
-	 *          true (quando os dois s„o iguais do mesmo ano)
+	 *          true (quando os dois s√£o iguais do mesmo ano)
 	 *          false caso contrario
 	 */
 	public static boolean compareCalendarByYear(Calendar calendar1, Calendar calendar2) {
@@ -252,15 +252,15 @@ public class CalendarUtil {
 	/**
 	 * retorna um literal expressando o tempo para um
 	 * determinado intervalo de calendar que possuem o mesmo dia/mes/ano
-	 * caso contrario se n„o forem do mesmo dia e retornado ""
+	 * caso contrario se n√£o forem do mesmo dia e retornado ""
 	 * @param calIni
 	 * @param calFim
-	 * @return perÌodo literal de hor·rios
+	 * @return per√≠odo literal de hor√°rios
 	 */
 	public static String literalRangeOfTimes(Calendar calIni, Calendar calFim) {
 		boolean ehMesmaData = (compareCalendarDate(calIni, calFim) == 0);
 
-		if (ehMesmaData) {//se s„o da mesma data verifica o intervalo de tempo
+		if (ehMesmaData) {//se s√£o da mesma data verifica o intervalo de tempo
 
 
 			if ((hourOfDay(calIni) == 0 && minute(calIni) == 0)
@@ -270,13 +270,13 @@ public class CalendarUtil {
 
 			boolean isTimeInitEqualsTimeFinal = (hourOfDay(calIni) == hourOfDay(calFim) && (minute(calIni) == minute(calFim)));
 
-			//se possuem o mesmo horario de inicio e fim faÁa
+			//se possuem o mesmo horario de inicio e fim fa√ßa
 			if (isTimeInitEqualsTimeFinal) {
-				return "‡s " + showLiteralHourMin(calIni);
+				return "√†s " + showLiteralHourMin(calIni);
 			}
 
 			if ((hourOfDay(calIni) < 1) && minute(calIni) > 0 && (hourOfDay(calFim) == 1) && minute(calFim) > 0) {
-				return "de " + showLiteralHourMin(calIni) + " ‡ " + showLiteralHourMin(calFim);
+				return "de " + showLiteralHourMin(calIni) + " √† " + showLiteralHourMin(calFim);
 			}
 
 			//se possuem somente o horario de inicio
@@ -285,23 +285,23 @@ public class CalendarUtil {
 			}
 
 			if (hourOfDay(calFim) > 1 && (hourOfDay(calFim) != 23 || minute(calFim) != 59) && (hourOfDay(calIni) != 0 || minute(calIni) != 0)) {
-				return "de " + showLiteralHourMin(calIni) + " ‡s " + showLiteralHourMin(calFim);
+				return "de " + showLiteralHourMin(calIni) + " √†s " + showLiteralHourMin(calFim);
 			}
 
 			if ((hourOfDay(calFim) <= 1) && (hourOfDay(calIni) <= 1)) {
-				return "de " + showLiteralHourMin(calIni) + " ‡ " + showLiteralHourMin(calFim);
+				return "de " + showLiteralHourMin(calIni) + " √† " + showLiteralHourMin(calFim);
 			}
 
 			if ((hourOfDay(calFim) != 23 && minute(calFim) != 59) && (hourOfDay(calIni) == 0 || minute(calIni) == 0)) {
-				return "atÈ " + showLiteralHourMin(calFim);
+				return "at√© " + showLiteralHourMin(calFim);
 			}
 
-		}//se nao s„o da mesma data retorna vazio ""
+		}//se nao s√£o da mesma data retorna vazio ""
 		return "";
 	}
 
 	/**
-	 * @return AAhBB onde AA s„o as horas e BB s„o os minutos
+	 * @return AAhBB onde AA s√£o as horas e BB s√£o os minutos
 	 */
 	public static String showLiteralHourMin(Calendar cal) {
 		String mask = null;
@@ -333,7 +333,7 @@ public class CalendarUtil {
 		if ((!isIntervalEqualsYear)) {//o intervalo ocorre em anos diferentes
 			return formatLiteralIntervalCalendarDiffByYear(calIni, calFim);
 
-		} else {//todos os intervalos abaixo est„o no mesmo ano
+		} else {//todos os intervalos abaixo est√£o no mesmo ano
 
 			if (!isIntervalEqualsDay) {//apesar de o intervalo ser do mesmo ano ele engloba dias diferentes
 
@@ -350,7 +350,7 @@ public class CalendarUtil {
 					return diaInicio + " de " + mesInicio + " a " + diaFim + " de " + mesFim + " de " + anoFim;
 				}
 
-			} else { //o intervalo alÈm de estar no mesmo ano tambÈm È do mesmo dia
+			} else { //o intervalo al√©m de estar no mesmo ano tamb√©m √© do mesmo dia
 
 				if (isIntervalEqualsYear && isIntervalEqualsMonth && isYearCurrentResult) {
 					return (diaInicio + " de " + mesInicio + " " + faixaDeTempo).trim();
@@ -431,7 +431,7 @@ public class CalendarUtil {
 
 		int years = getAge(start, end);
 
-		// Soma a mais 1 pelo fato de Calendar.Month comeÁar com 0
+		// Soma a mais 1 pelo fato de Calendar.Month come√ßar com 0
 		int months = ((end.get(Calendar.MONTH) + 1) - (start.get(Calendar.MONTH) + 1));
 
 		if (months <= 0) {
@@ -524,7 +524,7 @@ public class CalendarUtil {
 	}
 
 	/**
-	 * Se s„o dias vizinhos, retorna true
+	 * Se s√£o dias vizinhos, retorna true
 	 */
 	public static boolean isNeighborDays(Calendar cal1, Calendar cal2) {
 		return CalendarUtil.getDifferenceInDays(CalendarUtil.buildDate(cal1), CalendarUtil.buildDate(cal2)) == 1;
@@ -561,21 +561,21 @@ public class CalendarUtil {
 	}
 
 	/**
-	 * Monta uma Express„o do tipo "1h e 3min" para o valor associado ·s duas maiores unidades de tempo entre ano, mes, dia, ano, minuto
+	 * Monta uma Express√£o do tipo "1h e 3min" para o valor associado √°s duas maiores unidades de tempo entre ano, mes, dia, ano, minuto
 	 * presentes no array informado.
-	 * Se o valor da unidade (ano, mes, dias...) mais relevante maior que zero for superior ao valor limite È levantada uma {@link TooBigDateException}
+	 * Se o valor da unidade (ano, mes, dias...) mais relevante maior que zero for superior ao valor limite √© levantada uma {@link TooBigDateException}
 	 *
 	 * 	 0,  1,  2,  3,   4,
 	 *	ano mes dia hora min
 	 * @param time array: [ano,mes,dia,hora,minuto]
 	 *
-	 * @param unitLimit: unidade limite a qual deve ser montada a express„o (X unidade atr·s),
-	 * 	 obs: se a maior unidade > 0 for 'mes' e a unidadeLimite for dia, uma {@link TooBigDateException} ser· lanÁada.
+	 * @param unitLimit: unidade limite a qual deve ser montada a express√£o (X unidade atr√°s),
+	 * 	 obs: se a maior unidade > 0 for 'mes' e a unidadeLimite for dia, uma {@link TooBigDateException} ser√° lan√ßada.
 	 *
 	 * @param limitValue valor limite para a unidadeLimite
-	 *   obs: se a maior unidade > 0 for 'mes' com valor 2 e o valorLimite for 1, uma {@link TooBigDateException} ser· lanÁada.
+	 *   obs: se a maior unidade > 0 for 'mes' com valor 2 e o valorLimite for 1, uma {@link TooBigDateException} ser√° lan√ßada.
 	 *
-	 * @return Express„o do tipo "1 ano 2 meses"
+	 * @return Express√£o do tipo "1 ano 2 meses"
 	 * @throws TooBigDateException
 	 */
 	public static String getElapsedTimeStatement(int[] time, UnitTimeEnum unitLimit, int limitValue, boolean withAbrrs) throws TooBigDateException {

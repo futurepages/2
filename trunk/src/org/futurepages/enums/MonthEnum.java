@@ -7,7 +7,7 @@ public enum MonthEnum implements Serializable {
 
 	JANEIRO  (1,  "janeiro"  ),
 	FEVEREIRO(2,  "fevereiro"),
-	MARCO    (3,  "março"    ),
+	MARCO    (3,  "marÃ§o"    ),
 	ABRIL    (4,  "abril"    ),
 	MAIO     (5,  "maio"     ),
 	JUNHO    (6,  "junho"    ),

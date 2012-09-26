@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.text.NumberFormat;
 
 /**
- * Rotinas úteis para manipulação de valores monetários.
+ * Rotinas Ãºteis para manipulaÃ§Ã£o de valores monetÃ¡rios.
  * @author leandro
  */
 public class MoneyUtil {
@@ -50,8 +50,8 @@ public class MoneyUtil {
 
 
     /**
-     * Recebe um double como entrada e converte para a formataçao padrao de número (NumberFormat) do sistema.
-     * com o número de casas decimais especificadas através do parâmetro 'decimals'
+     * Recebe um double como entrada e converte para a formataÃ§ao padrao de nÃºmero (NumberFormat) do sistema.
+     * com o nÃºmero de casas decimais especificadas atravÃ©s do parÃ¢metro 'decimals'
      *
      */
     public static String moneyFormat(Double value, Integer decimals){

@@ -7,8 +7,8 @@ import org.futurepages.util.FileUtil;
 
 /**
  * Gerador de Schema. Herde esta classe e coloque dentro do pacote schema
- * do seu mÛdulo caso queira executar antes da instalaÁ„o alguma rotina sql.
- * Executado apÛs a geraÁ„o do schema a partir das Entitys que s„o Table
+ * do seu m√≥dulo caso queira executar antes da instala√ß√£o alguma rotina sql.
+ * Executado ap√≥s a gera√ß√£o do schema a partir das Entitys que s√£o Table
  * 
  * @author leandro
  */

@@ -17,7 +17,7 @@ public class CNPJUtil {
 		return sb.toString();
 	}
 	/**
-	 * Remove m·scara
+	 * Remove m√°scara
 	 * @param cnpj
 	 */
 	public static String somenteNumeros(String cnpj) {
@@ -27,7 +27,7 @@ public class CNPJUtil {
 		return cnpj.toString();
 	}
     /**
-     * Valida o CNPJ - Cadastro Nacional de Pessoa JurÌdica
+     * Valida o CNPJ - Cadastro Nacional de Pessoa Jur√≠dica
      * @param str_cnpj
      * @return
      */

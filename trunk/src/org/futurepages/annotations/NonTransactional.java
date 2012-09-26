@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 
 /**
- * Annotation para anotar innerActions n„o transacionais
+ * Annotation para anotar innerActions n√£o transacionais
  * @author Danilo Medeiros
  */
 @Target(ElementType.METHOD)

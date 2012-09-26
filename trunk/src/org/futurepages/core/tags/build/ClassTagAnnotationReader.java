@@ -18,7 +18,7 @@ import org.futurepages.util.The;
  */
 public class ClassTagAnnotationReader {
 	/**
-	 * Lê as informações contidas nas annotations de klass para geração de taglib.
+	 * LÃª as informaÃ§Ãµes contidas nas annotations de klass para geraÃ§Ã£o de taglib.
 	 * @param klass
 	 * @return
 	 */
@@ -33,8 +33,8 @@ public class ClassTagAnnotationReader {
 	}
 
 	/**
-	 * Coleta as informações da tag.
-	 * Não coleta informações sobre seus atributos
+	 * Coleta as informaÃ§Ãµes da tag.
+	 * NÃ£o coleta informaÃ§Ãµes sobre seus atributos
 	 * @param klass
 	 * @return
 	 */
@@ -63,7 +63,7 @@ public class ClassTagAnnotationReader {
 	}
 
 	/**
-	 * Coleta informações sobre os atributos da tag.
+	 * Coleta informaÃ§Ãµes sobre os atributos da tag.
 	 * @param klass
 	 * @return
 	 */
@@ -95,8 +95,8 @@ public class ClassTagAnnotationReader {
 
 
 	/**
-	 * coleta as informações de sobrescrita da tag.
-	 * As informações coletadas sobrescreverão as informações contidas nas super classes;
+	 * coleta as informaÃ§Ãµes de sobrescrita da tag.
+	 * As informaÃ§Ãµes coletadas sobrescreverÃ£o as informaÃ§Ãµes contidas nas super classes;
 	 * @param klass
 	 * @param existentes
 	 */

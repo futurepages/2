@@ -1,8 +1,8 @@
-Quando eu me referencio numa action a um atributo abstract, o mentawai tenta instanciá-lo e por conta disso
+Quando eu me referencio numa action a um atributo abstract, o mentawai tenta instanciÃ¡-lo e por conta disso
 acontece uma exception.
 
 
-Pendências de Implementação para próximas versoes
+PendÃªncias de ImplementaÃ§Ã£o para prÃ³ximas versoes
 
 No hiberPaginator prever o caracter &
 
@@ -10,12 +10,12 @@ No hiberPaginator prever o caracter &
 
 
 [BUGS]
-  - <mtw:isNull> do Mentawai, é preciso sempre chamar o caminho completo do objeto.
+  - <mtw:isNull> do Mentawai, Ã© preciso sempre chamar o caminho completo do objeto.
 
 [TO-DO]
 - Migrar por completo o Dao para Bancos Externos
-- Padronizar o LOG do futurepages / Melhoramento dos logs de aplicação - usando log4j?
-- Contemplar Internacionalização
+- Padronizar o LOG do futurepages / Melhoramento dos logs de aplicaÃ§Ã£o - usando log4j?
+- Contemplar InternacionalizaÃ§Ã£o
 - Contemplar Jasper
 
 - Criar os componentes:
@@ -23,7 +23,7 @@ No hiberPaginator prever o caracter &
 - <mtw:radiokbox/>
 - <mtw:spinButton/>
 - <mtw:treeView/>
-- integração jQuery
+- integraÃ§Ã£o jQuery
 - <mtw:grid> flexiGrid taglib:
 
 ===================== EXEMPLO ===========================

@@ -63,7 +63,7 @@ public class TemplateManager extends AbstractTemplateManager {
 			rule = page.getAttributeValue("rule");
 			path = page.getAttributeValue("path");
 			base = page.getAttributeValue("base");
-			if (rule != null) { // Página com regra
+			if (rule != null) { // PÃ¡gina com regra
 				Page basePage = new Page(rule, base, true);
 				List<Element> blocks = page.getChildren();
 				for (Element block : blocks) {
@@ -72,7 +72,7 @@ public class TemplateManager extends AbstractTemplateManager {
 					basePage.setBlock(id, new Page(value));
 				}
 				this.add(basePage);
-			} else if(path!=null){ // Página única
+			} else if(path!=null){ // PÃ¡gina Ãºnica
 
 				Page pageX = new Page(path, new Page(base));
 				List<Element> blocks = page.getChildren();
@@ -83,7 +83,7 @@ public class TemplateManager extends AbstractTemplateManager {
 				}
 				this.add(pageX);
 			}else{
-				throw new TemplateException("Erro na passagem dos parâmetros do arquivo de template.");
+				throw new TemplateException("Erro na passagem dos parÃ¢metros do arquivo de template.");
 			}
 		}
 	}

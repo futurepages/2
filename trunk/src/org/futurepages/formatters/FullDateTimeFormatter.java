@@ -39,9 +39,9 @@ public class FullDateTimeFormatter implements Formatter<Calendar> {
 				int hora = cal.get(Calendar.HOUR_OF_DAY);
 				int min = cal.get(Calendar.MINUTE);
 				if (hora > 1) {
-					sb.append(" às ");
+					sb.append(" Ã s ");
 				} else {
-					sb.append(" à ");
+					sb.append(" Ã  ");
 				}
 				if (hora == 1) {
 					sb.append("uma");

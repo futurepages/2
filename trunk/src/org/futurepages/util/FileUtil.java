@@ -268,7 +268,7 @@ public class FileUtil {
 		// Move file to new directory
 		boolean success = file.renameTo(new File(dir, file.getName()));
 		if (!success) {
-			throw new Exception("Não foi possível renomear/mover arquivo.");
+			throw new Exception("NÃ£o foi possÃ­vel renomear/mover arquivo.");
 		}
 	}
 

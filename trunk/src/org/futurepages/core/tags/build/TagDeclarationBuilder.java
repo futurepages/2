@@ -1,7 +1,7 @@
 package org.futurepages.core.tags.build;
 
 /**
- *Classe para a montagem de declaração de uma Tag
+ *Classe para a montagem de declaraÃ§Ã£o de uma Tag
  * @author Danilo
  */
 public class TagDeclarationBuilder {
@@ -17,9 +17,9 @@ public class TagDeclarationBuilder {
     private static final String TYPE = "type";
 
     /**
-     * Construção de declaracao de uma tag
+     * ConstruÃ§Ã£o de declaracao de uma tag
      * @param klass classe tag a ser declarada
-     * @return String : declaração da tag
+     * @return String : declaraÃ§Ã£o da tag
      */
 
     public static String build(TagBean tag) {

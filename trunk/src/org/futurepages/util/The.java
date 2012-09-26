@@ -10,7 +10,7 @@ import org.futurepages.util.iterator.string.IterableString;
 import org.futurepages.util.iterator.string.MatchedToken;
 
 /**
- * Esta È "A" Classe
+ * Esta √© "A" Classe
  * @author leandro
  */
 public class The {
@@ -88,12 +88,12 @@ public class The {
     }
 
     /**
-     * Retorna o token localizado numa determinada posiÁ„o dentro de uma string com separadoes
-     * caso n„o encontre, o retorno È null
-     * @param posi È a posiÁ„o que se deseja... a primeira posiÁao È 0
+     * Retorna o token localizado numa determinada posi√ß√£o dentro de uma string com separadoes
+     * caso n√£o encontre, o retorno √© null
+     * @param posi √© a posi√ß√£o que se deseja... a primeira posi√ßao √© 0
      * @param str a string que deseja-se pesquisar o token
      * @param separator o separador dos tokens
-     * @return o token da posiÁao 'posi'. nulo caso n„o exista a posiÁ„o.
+     * @return o token da posi√ßao 'posi'. nulo caso n√£o exista a posi√ß√£o.
      */
     public static String tokenAt(int posi,String str, String separator){
     	StringTokenizer st = new StringTokenizer(str, separator);
@@ -159,7 +159,7 @@ public class The {
     }
 
     /**
-     * Retorna o n˙mero de tokens separados por espaÁo
+     * Retorna o n√∫mero de tokens separados por espa√ßo
      */
     public static int countTokensIn(String str) {
         StringTokenizer st = new StringTokenizer(str, " ");
@@ -167,7 +167,7 @@ public class The {
     }
 
     /**
-     *  Retorna o inteiro 'i' com o n˙mero de zeros 'len'
+     *  Retorna o inteiro 'i' com o n√∫mero de zeros 'len'
      */
     public static String intWithLeftZeros(long i, int len) {
         // converts integer to left-zero padded string, len  chars long.
@@ -219,8 +219,8 @@ public class The {
     }
 
     /**
-     * Retorna a string como o HTMLParser - ou seja: texto com tokens somente entre espaÁo,
-     * retira '\t', '\n', '\r', '\h' e ' ' sequenciais trocando por um ˙nico ' '
+     * Retorna a string como o HTMLParser - ou seja: texto com tokens somente entre espa√ßo,
+     * retira '\t', '\n', '\r', '\h' e ' ' sequenciais trocando por um √∫nico ' '
      */
     public static String stringWithNoSpecials(String str) {
         StringTokenizer st = new StringTokenizer(str);
@@ -232,9 +232,9 @@ public class The {
     }
 
     /**
-     * Retorna o valor correspondente de uma String em condificaÁ„o html;
-     * Exemplo: entrada: "leandro"  --> saÌda: &quot;leandro&quot;
-     * @return a string com os caracteres especiais convertidos para a codificaÁ„o HTML
+     * Retorna o valor correspondente de uma String em condifica√ß√£o html;
+     * Exemplo: entrada: "leandro"  --> sa√≠da: &quot;leandro&quot;
+     * @return a string com os caracteres especiais convertidos para a codifica√ß√£o HTML
      */
     public static String htmlSimpleValue(String strIn){
         return HtmlMapChars.htmlSimpleValue(strIn);
@@ -261,7 +261,7 @@ public class The {
      * Retorna o nome da classe mediante o nome do arquivo como entrada.
      * Ex.: fileName = "ClasseName.class" retorna "ClasseName"
      * @param fileName nome do arquivo
-     * @return no da classe sem a extens„o
+     * @return no da classe sem a extens√£o
      */
     public static String className(String fileName) {
         StringTokenizer st = new StringTokenizer(fileName, ".");
@@ -275,7 +275,7 @@ public class The {
     public static String wordIn(String str){
 
 
-        str = SEOUtil.replaceSpecialAlphas(str);  //CONVERTE ACENTUADOS E «
+        str = SEOUtil.replaceSpecialAlphas(str);  //CONVERTE ACENTUADOS E √á
 
 		 String regexPatternChars = "[\\d|A-Z|a-z]";
 
@@ -284,12 +284,12 @@ public class The {
 
     /**
      * Remove caracteres especiais.
-     * @param str somente alfanumericos puros sem acentuaÁao, ponto, underline e hifen
+     * @param str somente alfanumericos puros sem acentua√ßao, ponto, underline e hifen
      * @return
      */
 	 public static String stringKeyIn(String str){
 
-        str = SEOUtil.replaceSpecialAlphas(str);  //CONVERTE ACENTUADOS E «
+        str = SEOUtil.replaceSpecialAlphas(str);  //CONVERTE ACENTUADOS E √á
 
 		 String regexPatternChars = "[\\d|A-Z|a-z|\\.|\\-|_]";
 

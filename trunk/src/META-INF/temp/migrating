@@ -5,5 +5,5 @@
 - tr_update() -> update()
 - save() -> saveTransaction()
 - update() -> updateTransaction()
-- <mtw:box1> , <mtw:box2> , etc... n„o existem. ( utilizar <fpg:box theme="whiteOne"/> por exemplo  )
+- <mtw:box1> , <mtw:box2> , etc... n√£o existem. ( utilizar <fpg:box theme="whiteOne"/> por exemplo  )
 - paginateList() -> paginationSlice()

@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation para anotar ErrorExceptions que não listam dependências
+ * Annotation para anotar ErrorExceptions que nÃ£o listam dependÃªncias
  *
  * @author Leandro
  */

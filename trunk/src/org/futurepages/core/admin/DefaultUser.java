@@ -3,10 +3,10 @@ package org.futurepages.core.admin;
 import java.util.Collection;
 
 /**
- * Interface de usuário padrão de uma aplicação futurepages.
+ * Interface de usuÃ¡rio padrÃ£o de uma aplicaÃ§Ã£o futurepages.
  *
- * Os usuários de uma aplicação futurepages devem implementá-la para aproveitarem-se
- * dos recursos que o futurepages provê.
+ * Os usuÃ¡rios de uma aplicaÃ§Ã£o futurepages devem implementÃ¡-la para aproveitarem-se
+ * dos recursos que o futurepages provÃª.
  * 
  * @author leandro
  */

@@ -4,22 +4,22 @@ import java.util.List;
 
 public class PaginationSlice<T> {
 
-	/** Total de registros n„o paginados*/
+	/** Total de registros n√£o paginados*/
     private Long totalSize;
     
-    /** Tamanho da p·gina*/
+    /** Tamanho da p√°gina*/
     private Integer pageSize;
     
-    /** n˙mero total de p·ginas*/
+    /** n√∫mero total de p√°ginas*/
     private int totalPages;
     
-    /** n˙mero da p·gina*/
+    /** n√∫mero da p√°gina*/
     private int pageNumber;
 
 	/** o quanto deslocou */
     private int pagesOffset;
     
-    /** lista referente ‡ p·gina*/
+    /** lista referente √† p√°gina*/
     private List<T> list;
 
     public PaginationSlice(Long totalSize, Integer pageSize, int pagesOffset, int numPages, int page,  List<T> list) {

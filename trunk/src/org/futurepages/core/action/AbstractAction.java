@@ -78,10 +78,10 @@ public abstract class AbstractAction implements Pageable, Action {
 	}
 
 	/**
-	 * Valida perante trÍs modos: breakOnFirst =  false | true.
+	 * Valida perante tr√™s modos: breakOnFirst =  false | true.
 	 * 
-	 * @param breakOnFirst true se lanÁa ErrorException na primeira falha, false para retornar todos os erros.
-	 * @return retorna o validador daquele tipo passando o tipo de validaÁ„o
+	 * @param breakOnFirst true se lan√ßa ErrorException na primeira falha, false para retornar todos os erros.
+	 * @return retorna o validador daquele tipo passando o tipo de valida√ß√£o
 	 */
 	public <V extends Validator> V validate(Class<V> t, boolean breakOnFirst){
 		V validator = Validator.validate(t, breakOnFirst);
@@ -110,9 +110,9 @@ public abstract class AbstractAction implements Pageable, Action {
 	}
 
 	/**
-	 * PaginaÁ„o de elementos
+	 * Pagina√ß√£o de elementos
 	 *
-	 * Depreciado por ser uma m· pratica de programaÁ„o (mistura controle e modelo)
+	 * Depreciado por ser uma m√° pratica de programa√ß√£o (mistura controle e modelo)
 	 *
 	 * @deprecated Utilize setOutputPaginationSlice (verificar em site2 e scrummer o uso)
 	 */
@@ -121,8 +121,8 @@ public abstract class AbstractAction implements Pageable, Action {
 	}
 
 	/**
-	 * AtenÁ„o: Este mÈtodo È legado do Futurepages 1 e aparentemente n„o est· funcionando corretamente
-	 * na contagem dos itens para paginaÁ„o.
+	 * Aten√ß√£o: Este m√©todo √© legado do Futurepages 1 e aparentemente n√£o est√° funcionando corretamente
+	 * na contagem dos itens para pagina√ß√£o.
 	 * 
 	 * Utilize Dao.reportPage() or Dao.listReports()
 	 * 
@@ -195,12 +195,12 @@ public abstract class AbstractAction implements Pageable, Action {
 
 	}
 
-	/** @return Pega o numero da p·gina corrente em uso */
+	/** @return Pega o numero da p√°gina corrente em uso */
 	protected int getPageNum() {
 		return getPaginator().getPageNum();
 	}
 
-	/** @return Pega o tamanho do deslocamento dos elementos na p·gina */
+	/** @return Pega o tamanho do deslocamento dos elementos na p√°gina */
 	protected int getOffsetPages(){
 		return getPaginator().getPagesOffset();
 	}
@@ -215,9 +215,9 @@ public abstract class AbstractAction implements Pageable, Action {
 
 	/**
 	 * Pega o objeto que se encontra no input com uma determinada chave String passada
-	 * por par‚metro e coloca-o no output com a mesma chave.
+	 * por par√¢metro e coloca-o no output com a mesma chave.
 	 * 
-	 * @param key nome da chave do input que ir· pro output.
+	 * @param key nome da chave do input que ir√° pro output.
 	 */
 	protected void fwdValue(String key) {
 		output(key, input.getValue(key));
@@ -308,8 +308,8 @@ public abstract class AbstractAction implements Pageable, Action {
 	}
 
 	/**
-	 * Verifica se possui usu·rio logado.
-	 * @return true se est· logado.
+	 * Verifica se possui usu√°rio logado.
+	 * @return true se est√° logado.
 	 */
 	@Override
 	public boolean isLogged() {
@@ -317,10 +317,10 @@ public abstract class AbstractAction implements Pageable, Action {
 	}
 
 	/**
-	 * Retorna o usu·rio logado da sess„o. Por baixo dos panos È session.getAttribute(USER_KEY)
-	 * USER_KEY por padr„o È "user"
+	 * Retorna o usu√°rio logado da sess√£o. Por baixo dos panos √© session.getAttribute(USER_KEY)
+	 * USER_KEY por padr√£o √© "user"
 	 *
-	 * @return O usu·rio logado.
+	 * @return O usu√°rio logado.
 	 */
 	@Override
 	public DefaultUser loggedUser() {

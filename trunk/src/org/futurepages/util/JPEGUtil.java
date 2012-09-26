@@ -19,7 +19,7 @@ import java.awt.RenderingHints;
 import javax.imageio.ImageIO;
 
 /**
- * Utilidades para manipulação de JPEG
+ * Utilidades para manipulaÃ§Ã£o de JPEG
  */
 public class JPEGUtil {
 	
@@ -50,7 +50,7 @@ public class JPEGUtil {
 	 * Redimensiona arquivo (File) e retorna a imagem redimensionada (pathNewFile)
 	 * File: Arquivo de entrada
 	 * width, height: largura e altura da nova imagem
-	 * pathNewFile: endereço real completo incluindo o nome do arquivo
+	 * pathNewFile: endereÃ§o real completo incluindo o nome do arquivo
 	 */
 	public static void resizeImage(File file, int width, int height, int quality, String pathNewFile) throws MalformedURLException, FileNotFoundException, IOException {
 		BufferedImage image = getBufferedImage(file);
@@ -72,7 +72,7 @@ public class JPEGUtil {
 
 
 	private static void resize(BufferedImage image, int width, int height, int quality, String pathNewFile, boolean priorWidth, int[] subimage) throws FileNotFoundException, IOException {
-		// Calculos necessários para manter as propoçoes da imagem, conhecido como "aspect ratio"
+		// Calculos necessÃ¡rios para manter as propoÃ§oes da imagem, conhecido como "aspect ratio"
 
 		if(subimage!=null){
 			image = image.getSubimage(subimage[0], subimage[1], subimage[2], subimage[3]);
@@ -99,7 +99,7 @@ public class JPEGUtil {
 		}
 
 		if (width >= imageWidth || height >= imageHeight) {
-			//quando imagem é menor que o resultado final, faz um resizer pobre
+			//quando imagem Ã© menor que o resultado final, faz um resizer pobre
 			poorResize(image, width, height, quality, pathNewFile);
 		} else {
 			image = GraphicsUtilities.createThumbnail(image, width, height);
@@ -133,7 +133,7 @@ public class JPEGUtil {
 	 * Redimensiona imagens (criar thubmnails) - prioriza a largura
 	 */
 	private static void resizeByWidth(boolean reallyByWidth, BufferedImage image, int theDimension, int quality, String pathNewFile, boolean poorWhenSmaller) throws FileNotFoundException, IOException {
-		// Calculos necessários para manter as propoçoes da imagem, conhecido como "aspect ratio"
+		// Calculos necessÃ¡rios para manter as propoÃ§oes da imagem, conhecido como "aspect ratio"
 		int imageWidth = image.getWidth(null);
 		int imageHeight = image.getHeight(null);
 
@@ -152,7 +152,7 @@ public class JPEGUtil {
 		}
 
 		if (width >= imageWidth || height >= imageHeight) {
-			//quando imagem é menor que o resultado final, faz um resizer pobre
+			//quando imagem Ã© menor que o resultado final, faz um resizer pobre
 			if(poorWhenSmaller){
 				poorResize(image, width, height, quality, pathNewFile);
 			}else{

@@ -6,7 +6,7 @@ import org.futurepages.util.iterator.string.IterableString;
 import org.futurepages.util.iterator.string.MatchedToken;
 
 /**
- * AplicaÁ„o de filtro em strings originalmente HTML
+ * Aplica√ß√£o de filtro em strings originalmente HTML
  *
  * @author Leandro
  */
@@ -20,14 +20,14 @@ public class HtmlStripper {
 		this.strippedHtml = htmlToStrip;
 	}
 
-	//somente o texto sem as tags html È coletado
+	//somente o texto sem as tags html √© coletado
 	public String poorText() {
 		return strippedHtml.replaceAll(HtmlRegex.tagsPattern(true), "");
 	}
 
 	/**
 	 *
-	 * @return somente par·grafos <p></p>, negrito <strong>, it·lico <em>, sublinhado <span style="text-decoration:underline"> e nada mais.
+	 * @return somente par√°grafos <p></p>, negrito <strong>, it√°lico <em>, sublinhado <span style="text-decoration:underline"> e nada mais.
 	 */
 	public String plainText() {
 		return richText(false, false, false, false, false);

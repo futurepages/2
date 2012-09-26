@@ -9,7 +9,7 @@ import org.futurepages.exceptions.ErrorException;
 public class InvalidDateError extends ErrorException {
 
     public InvalidDateError(){
-        super("A data espeficificada È inv·lida");
+        super("A data espeficificada √© inv√°lida");
     }
 
     public InvalidDateError(String msg){

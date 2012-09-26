@@ -9,7 +9,7 @@ import org.futurepages.enums.AsynchronousActionType;
 
 
 /**
- * Annotation para anotar innerActions que s„o Asincronas
+ * Annotation para anotar innerActions que s√£o Asincronas
  * @author Danilo
  */
 @Target({ElementType.METHOD,ElementType.TYPE})

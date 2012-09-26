@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 import static org.futurepages.util.StringUtils.concat;
 
 /**
- * Gerador de Regex Patterns para capturar padrões de tags
+ * Gerador de Regex Patterns para capturar padrÃµes de tags
  * @author leandro
  */
 public class HtmlRegex {
@@ -13,7 +13,7 @@ public class HtmlRegex {
 	private static Pattern COMPILED_TAGS_WITH_CONTENT_PATTERN;
 	private static Pattern COMPILED_URL_PATTERN;
 	/**
-	 * Casa padrão da tag com seu conteúdo
+	 * Casa padrÃ£o da tag com seu conteÃºdo
 	 * @param tagName
 	 *  xml  ==> <xml>.*</xml>
 	 * @return
@@ -39,7 +39,7 @@ public class HtmlRegex {
 		return "(?s)<!--.*?-->";
 	}
 
-	//atributos inválidos, ex.: class=exampleClass
+	//atributos invÃ¡lidos, ex.: class=exampleClass
 	public static String invalidAttrPattern() {
 		return " [\\w]+=[\\w]+\\b";
 	}
@@ -83,10 +83,10 @@ public class HtmlRegex {
 	}
 
 	/**
-	 * Cria padrão regex que casa com as tags passadas como parâmetro (has=true) ou
-	 * todas as tags exceto as passadas por parâmetro  (has=false)
-	 * @param has com ou sem as tags passadas como parâmetro
-	 * @param tagNames são os nomes das tags a serem casadas
+	 * Cria padrÃ£o regex que casa com as tags passadas como parÃ¢metro (has=true) ou
+	 * todas as tags exceto as passadas por parÃ¢metro  (has=false)
+	 * @param has com ou sem as tags passadas como parÃ¢metro
+	 * @param tagNames sÃ£o os nomes das tags a serem casadas
 	 * @return regex pattern para as tags
 	 */
 	// has = true  para "em","p" =>   </?(em\b|p\b).*?>

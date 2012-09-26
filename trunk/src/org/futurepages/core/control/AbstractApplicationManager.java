@@ -20,8 +20,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.futurepages.consequences.AjaxConsequence;
+import org.futurepages.core.ApplicationManager;
 import org.futurepages.core.action.Manipulable;
 import org.futurepages.core.ajax.AjaxRenderer;
+import org.futurepages.core.config.Params;
 import org.futurepages.filters.InjectionFilter;
 import org.futurepages.filters.OutjectionFilter;
 
@@ -114,7 +116,7 @@ public abstract class AbstractApplicationManager  implements Manipulable{
         globalConsequences.clear();
     }
 
-    void service(Context appContext, HttpServletRequest req, HttpServletResponse res) {
+    public void service(Context appContext, HttpServletRequest req, HttpServletResponse res) {
 
     }
 
@@ -139,6 +141,12 @@ public abstract class AbstractApplicationManager  implements Manipulable{
             }
             map.put(innerAction, ac);
         }
+		if(Params.get("PRETTY_URL").equals("true")){
+			String[] parts = ac.getName().split("/");
+			if(parts.length > 2){
+				Controller.getInstance().getAppManager().addSubModule(parts[0],parts[1]);
+			}
+		}
         return ac;
 	}
 
@@ -444,7 +452,7 @@ public abstract class AbstractApplicationManager  implements Manipulable{
     /*
      * This is useful for filter destroying in the Controller.
      */
-    Set<Filter> getAllFilters() {
+    public Set<Filter> getAllFilters() {
         Set<Filter> filters = new HashSet<Filter>();
         filters.addAll(globalFilters);
         filters.addAll(globalFiltersLast);
@@ -560,8 +568,8 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 	}
 
 	/**
-	 * Necess·rio ser chamado apÛs o registro de todas as ActionConfig's, pois se fossem registradas
-	 * durante o loadingActions, algumas AC's n„o existiriam ainda no mapa.
+	 * Necess√°rio ser chamado ap√≥s o registro de todas as ActionConfig's, pois se fossem registradas
+	 * durante o loadingActions, algumas AC's n√£o existiriam ainda no mapa.
 	 */
 	protected void registerChains(){
 		for(Chain chain : chains){

@@ -11,13 +11,13 @@ import org.futurepages.util.DateUtil;
 /**
  * Captura dois campos a partir de uma chave "x" , x_date e x_time,
  * onde por exemplo, x_date = '30/12/2012' e x_time = '12:50'
- * o filtro injetar· em x um Calendar, um Date ou uma String ˙nica
- * contendo a seguinte informaÁ„o de data/hora: '2012-12-30 12:50:00'
+ * o filtro injetar√° em x um Calendar, um Date ou uma String √∫nica
+ * contendo a seguinte informa√ß√£o de data/hora: '2012-12-30 12:50:00'
  *
- * O tipo, se ser· Calendar, Date ou String pode ser passado por par‚metro, mas
- * o padr„o È Calendar.
+ * O tipo, se ser√° Calendar, Date ou String pode ser passado por par√¢metro, mas
+ * o padr√£o √© Calendar.
  *
- * O input ficar· com null caso n„o seja convertido corretamente.
+ * O input ficar√° com null caso n√£o seja convertido corretamente.
  * 
  * @author leandro
  */

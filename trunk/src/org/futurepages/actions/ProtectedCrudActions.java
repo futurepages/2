@@ -1,7 +1,7 @@
 package org.futurepages.actions;
 
 /**
- * Action que necessita de autenticação para ser acessada.
+ * Action que necessita de autenticaÃ§Ã£o para ser acessada.
  * @author leandro
  */
 public abstract class ProtectedCrudActions extends CrudActions {

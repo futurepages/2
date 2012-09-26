@@ -38,7 +38,7 @@ public class IncludeModuleFunctions extends PrintTag{
 			}
 			if (!Is.empty(moduleId)) {
 				if (Params.get("USE_MODULE_DEPENDENCY").equals("true")) {
-					java.util.Set<String> dependencies = ((ApplicationManager) Controller.getInstance().getAppManager()).getDependenciesOf(moduleId);
+					java.util.Set<String> dependencies = Controller.getInstance().getAppManager().getDependenciesOf(moduleId);
 					for (String dependency : dependencies) {
 						if (!autoImporting || !autoImportModule.equals(dependency)) {
 							sb.append(scriptFunctionsTag(dependency));

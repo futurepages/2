@@ -1,13 +1,13 @@
 package org.futurepages.util;
 
 /**
- * Rotinas ˙teis de manipulaÁ„o de datas String
+ * Rotinas √∫teis de manipula√ß√£o de datas String
  */
 public class TimeUtil {
 
 	/**
-	 * Valida o tempo em hh:mm verificando se È uma hora v·lida ou se È um minuto v·lido
-	 * caso n„o seja retorna false
+	 * Valida o tempo em hh:mm verificando se √© uma hora v√°lida ou se √© um minuto v√°lido
+	 * caso n√£o seja retorna false
 	 */
 	public static boolean timeIsValid(String horario) {
 

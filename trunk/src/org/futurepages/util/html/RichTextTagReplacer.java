@@ -27,16 +27,16 @@ public class RichTextTagReplacer extends HtmlTagReplacer {
 	}
 
 	/**
-	 * Ao construir-se o replacer, ser„o adicionados ao mapa as tags a serem
-	 * tratadas de acordo com os par‚metros.
+	 * Ao construir-se o replacer, ser√£o adicionados ao mapa as tags a serem
+	 * tratadas de acordo com os par√¢metros.
 	 *
 	 * Formas de tratar as tags:
-	 * 1) KEEP    - MantÈm toda a estrutura da tag, modificando somente o
-	 *				identificador passado como par‚metro.
+	 * 1) KEEP    - Mant√©m toda a estrutura da tag, modificando somente o
+	 *				identificador passado como par√¢metro.
 	 *    -> ex.: in = <a href="#">  keep("a","b")  ==>  <b href="#">
 	 * 2) REDUCE  - reduz a estrutura de atributos da tag
 	 *     -> ex.: in = <a href="#">  reduce("a","b")  ==>  <b>
-	 * 3) REPLACE - substitui toda a tag pelo conte˙do passado por par‚metro
+	 * 3) REPLACE - substitui toda a tag pelo conte√∫do passado por par√¢metro
 	 *     -> ex.: in = <a href="#">  replace("a","b")  ==>  b
 	 *
 	 */
@@ -57,7 +57,7 @@ public class RichTextTagReplacer extends HtmlTagReplacer {
 			keep("kbd" , "em");
 			keep("dfn" , "em");
 
-			keep("u", "span " + STYLE_UNDERLINE, "span"); //@TODO question·vel!! Poderia terminar acontecendo de um span ficar com dois styles n„o?
+			keep("u", "span " + STYLE_UNDERLINE, "span"); //@TODO question√°vel!! Poderia terminar acontecendo de um span ficar com dois styles n√£o?
 			keep("address", "em");
 			keep("b", "strong");
 			keep("big", "strong");
@@ -185,7 +185,7 @@ public class RichTextTagReplacer extends HtmlTagReplacer {
 	/**
 	 *
 	 * @param tag tanto de abertura como de fechamento, com os limitadores <>
-	 * @return retorna a tag convertida de acordo com os par‚metros passados.
+	 * @return retorna a tag convertida de acordo com os par√¢metros passados.
 	 */
 	@Override
 	public String treated(String tag) {

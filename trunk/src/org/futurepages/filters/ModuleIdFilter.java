@@ -7,9 +7,9 @@ import org.futurepages.core.control.InvocationChain;
 
 /**
  * Use este filtro de forma global para gerar no output key = 'actionModuleId'
- * simula qual seria o real módulo daquela consequencia.
+ * simula qual seria o real mÃ³dulo daquela consequencia.
  * 
- * o módulo da action
+ * o mÃ³dulo da action
  * @author leandro
  */
 public class ModuleIdFilter implements Filter {

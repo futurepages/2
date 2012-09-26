@@ -150,7 +150,7 @@ public class HtmlEmail extends MultiPartEmail {
         }
         setTextMsg(msg);
         setHtmlMsg(StringUtils.concat("<html><body>",msg,"</body></html>"));
-			// Antes tinha essa tag <PRE>. Não sei por que que tinha isto.
+			// Antes tinha essa tag <PRE>. NÃ£o sei por que que tinha isto.
             //new StringBuffer().append("<html><body><pre>").append(msg).append("</pre></body></html>").toString());
 
         return this;

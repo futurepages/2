@@ -6,7 +6,7 @@ import java.util.Calendar;
 public enum UnitTimeEnum implements Serializable {
 
 	YEAR  ("ano"    , "anos"    , "ano",            Calendar.YEAR         ,0),
-	MONTH ("mês"    , "meses"   , "mês",   "mes",	Calendar.MONTH        ,1),
+	MONTH ("mÃªs"    , "meses"   , "mÃªs",   "mes",	Calendar.MONTH        ,1),
 	DAY   ("dia"    , "dias"    , "d",              Calendar.DATE         ,2),
 	HOUR  ("hora"   , "horas"   , "h",              Calendar.HOUR_OF_DAY  ,3),
 	MINUTE("minuto" , "minutos" , "min",            Calendar.MINUTE       ,4),

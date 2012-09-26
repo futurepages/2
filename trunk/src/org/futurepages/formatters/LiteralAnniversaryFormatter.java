@@ -18,7 +18,7 @@ public class LiteralAnniversaryFormatter implements Formatter {
     	if(value!= null){
     		Calendar cal = (Calendar) value;
 			int dia = cal.get(Calendar.DAY_OF_MONTH);
-    		retornoFormater = StringUtils.concat(dia,(dia==1?"บ de ":" de "),MonthEnum.get(cal));
+    		retornoFormater = StringUtils.concat(dia,(dia==1?"ยบ de ":" de "),MonthEnum.get(cal));
     	}
 		return retornoFormater;
     }

@@ -7,11 +7,11 @@ public enum DayOfWeek implements Serializable{
 	
 	SUNDAY(Calendar.SUNDAY,   	 "Domingo"       , "Domingo"),
 	MONDAY(Calendar.MONDAY,   	 "Segunda-feira" , "Segunda"),
-	TUESDAY(Calendar.TUESDAY, 	 "Terça-feira"   , "Terça"),
+	TUESDAY(Calendar.TUESDAY, 	 "TerÃ§a-feira"   , "TerÃ§a"),
 	WEDNESDAY(Calendar.WEDNESDAY,"Quarta-feira"  , "Quarta"),
 	THURSDAY(Calendar.THURSDAY,  "Quinta-feira"  , "Quinta"),
 	FRIDAY(Calendar.FRIDAY,		 "Sexta-feira"   , "Sexta"),
-	SATURDAY(Calendar.SATURDAY,  "Sábado"        , "Sábado");
+	SATURDAY(Calendar.SATURDAY,  "SÃ¡bado"        , "SÃ¡bado");
 	
 
 	private int key;

@@ -68,7 +68,7 @@ public abstract class ModulesAutomation {
 					modulesClasses.put(module.getName(), classes);
 				}
 				else{
-					throw new NotModuleException(module.getAbsolutePath()+" n„o pode ficar dentro da pasta de mÛdulos");
+					throw new NotModuleException(module.getAbsolutePath()+" n√£o pode ficar dentro da pasta de m√≥dulos");
 				}
 			}
 		}
