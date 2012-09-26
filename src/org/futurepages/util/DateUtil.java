@@ -12,7 +12,7 @@ import org.futurepages.enums.DateFormatEnum;
 import org.futurepages.enums.MonthEnum;
 
 /**
- * Rotinas úteis de manipulação de datas String
+ * Rotinas Ãºteis de manipulaÃ§Ã£o de datas String
  */
 public class DateUtil {
 
@@ -21,11 +21,11 @@ public class DateUtil {
 	}
 
 	/**
-	 * Converte datas no formato DD/MM/AAAA para o formato por extenso em língua portuguesa.
+	 * Converte datas no formato DD/MM/AAAA para o formato por extenso em lÃ­ngua portuguesa.
 	 * Obs.: converte somente datas entre os anos de  1500 a 2099
 	 *
 	 * @param date - a data de entrada no formato DD/MM/AAAA
-	 * @return - a data por extenso em caracteres todos mnúsculos.
+	 * @return - a data por extenso em caracteres todos mnÃºsculos.
 	 * @throws java.lang.Exception
 	 */
 	public static String literal(String date) throws Exception {
@@ -37,11 +37,11 @@ public class DateUtil {
 	}
 
 	/**
-	 * Converte datas no formato DD/MM/AAAA para o formato por extenso em língua portuguesa.
+	 * Converte datas no formato DD/MM/AAAA para o formato por extenso em lÃ­ngua portuguesa.
 	 * Obs.: converte somente datas entre os anos de  1500 a 2099
 	 *
 	 * @param date - a data de entrada no formato DD/MM/AAAA
-	 * @return - a data por extenso em caracteres todos mínusculos.
+	 * @return - a data por extenso em caracteres todos mÃ­nusculos.
 	 * @throws java.lang.Exception
 	 */
 	public static String literal(Date date) {
@@ -59,7 +59,7 @@ public class DateUtil {
 	}
 
 	/**
-	 * Retorna o inteiro correspondente ao mês atual.
+	 * Retorna o inteiro correspondente ao mÃªs atual.
 	 */
 	public static int getActualMonth() {
 		return (new GregorianCalendar()).get(Calendar.MONTH) + 1;
@@ -118,9 +118,9 @@ public class DateUtil {
 
 		try {
 			int dia = Integer.parseInt(value.substring(8, 10));
-			return dia + ((dia == 1) ? "º" : "") + " de " + MonthEnum.get(Integer.parseInt(value.substring(5, 7))) + " de " + value.substring(0, 4);
+			return dia + ((dia == 1) ? "Âº" : "") + " de " + MonthEnum.get(Integer.parseInt(value.substring(5, 7))) + " de " + value.substring(0, 4);
 		} catch (Exception e) {
-			return "<Erro de Conversão>"; //TODO: fazer exception
+			return "<Erro de ConversÃ£o>"; //TODO: fazer exception
 		}
 	}
 
@@ -128,7 +128,7 @@ public class DateUtil {
 		try {
 			return in.substring(0, 2) + " de " + MonthEnum.get(Integer.parseInt(in.substring(3, 5))) + " de " + in.substring(6, 10);
 		} catch (Exception e) {
-			return "<Erro na conversão da data>";
+			return "<Erro na conversÃ£o da data>";
 		}
 	}
 
@@ -136,7 +136,7 @@ public class DateUtil {
 		try {
 			return getActualDay() + " de " + MonthEnum.get(getActualMonth()) + " de " + getActualYear();
 		} catch (Exception e) {
-			return "<Erro na conversão da data>";
+			return "<Erro na conversÃ£o da data>";
 		}
 	}
 
@@ -146,7 +146,7 @@ public class DateUtil {
 
 	/**
 	 * Formato da entrada: DD/MM/YYYY
-	 * Formato da saída: YYYY-MM-DD
+	 * Formato da saÃ­da: YYYY-MM-DD
 	 */
 	public static String dbDate(String in) {
 		String dia, mes, ano, data;
@@ -164,7 +164,7 @@ public class DateUtil {
 
 	/**
 	 * Formato da entrada: DD/MM/YYYY
-	 * Formato da saída: YYYY-MM-DD
+	 * Formato da saÃ­da: YYYY-MM-DD
 	 */
 	public static String dbDate(Calendar calendar) {
 		String bdDate = "";
@@ -177,7 +177,7 @@ public class DateUtil {
 
 	/**
 	 * Formato da entrada: Date DD/MM/YYYY HH:mm:ss
-	 * Formato da saída: YYYY-MM-DD HH:mm
+	 * Formato da saÃ­da: YYYY-MM-DD HH:mm
 	 */
 	public static String dbDateTime(Date date) {
 		String bdDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", LocaleManager.getDefaultLocale()).format(date).toString();
@@ -186,7 +186,7 @@ public class DateUtil {
 
 	/**
 	 * Formato da entrada: YYYY-MM-DD
-	 * Formato da saída: DD/MM/YYYY
+	 * Formato da saÃ­da: DD/MM/YYYY
 	 */
 	public static String viewDate(Object in) {
 		try {
@@ -212,7 +212,7 @@ public class DateUtil {
 
     /**
 	 * Formato da entrada: YYYY-MM-DD
-	 * Formato da saída: DD/MM/YYYY
+	 * Formato da saÃ­da: DD/MM/YYYY
 	 */
 	public static String viewDateTime(Object in, String mask) {
 		if (in instanceof String) {
@@ -234,7 +234,7 @@ public class DateUtil {
 
 	/**
 	 * Formato da entrada: YYYY-MM-DD
-	 * Formato da saída: DD/MM/YYYY
+	 * Formato da saÃ­da: DD/MM/YYYY
 	 */
 	public static String viewDateTime(Object in) {
 		return viewDateTime(in, "dd/MM/yyyy - HH:mm");
@@ -278,7 +278,7 @@ public class DateUtil {
 	}
 
 	/**
-	 * A data de entrada do formato AAAA-MM-DD é retornada no seguinte formato: AAMMDD
+	 * A data de entrada do formato AAAA-MM-DD Ã© retornada no seguinte formato: AAMMDD
 	 */
 	public static String rawDateIn6(String in) {
 		String dia, mes, ano, data;
@@ -408,7 +408,7 @@ public class DateUtil {
 	}
 
 	/**
-	 * Formata a data com a máscara informada.
+	 * Formata a data com a mÃ¡scara informada.
 	 * @param date
 	 * @param mask
 	 */

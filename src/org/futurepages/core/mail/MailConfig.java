@@ -5,7 +5,7 @@ import org.futurepages.util.ReflectionUtil;
 import org.futurepages.emails.Email;
 
 /**
- * ConfiguraÁ„o dos valores padr„o dos par‚metros de ConfiguraÁ„o do Email.
+ * Configura√ß√£o dos valores padr√£o dos par√¢metros de Configura√ß√£o do Email.
  * 
  * @author leandro
  */
@@ -31,7 +31,7 @@ public class MailConfig {
             Email.setDefaultCharset(EMAIL_CHARSET);
         }
         catch(Exception ex){
-            throw new Exception("Erro ao configurar serviÁo de email. ("+ex.getMessage()+")");
+            throw new Exception("Erro ao configurar servi√ßo de email. ("+ex.getMessage()+")");
         }
     }
 }

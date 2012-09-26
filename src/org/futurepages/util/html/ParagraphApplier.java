@@ -4,8 +4,8 @@ import org.futurepages.util.Is;
 import org.futurepages.util.iterator.string.IterableString;
 import org.futurepages.util.iterator.string.MatchedToken;
 /**
- * @deprecated descoberto que est· furado tanto requisitos, tanto propÛsito, tanto resultados. Testes falhando.
- * Favor n„o usar esta classe para seu bem.
+ * @deprecated descoberto que est√° furado tanto requisitos, tanto prop√≥sito, tanto resultados. Testes falhando.
+ * Favor n√£o usar esta classe para seu bem.
  * 
  * Encapsula uma string em blocos <p></p> e torna consistente os grupos <p>*</p> existentes 
  * @author Danilo Medeiros
@@ -17,8 +17,8 @@ public class ParagraphApplier {
 	private static final String cP = "</p>";
 
 	/**
-	 * Corrige os <p> existentes em rawContent: fecha os abertos e abre os n„o abertos
-	 * (todo conte˙do encontrado na raÌz dever· estar contido dentro de tags <p>, exceto aquelas tags <ul .. > , <ol> ... ).
+	 * Corrige os <p> existentes em rawContent: fecha os abertos e abre os n√£o abertos
+	 * (todo conte√∫do encontrado na ra√≠z dever√° estar contido dentro de tags <p>, exceto aquelas tags <ul .. > , <ol> ... ).
 	 * Retorna uma string contida em tags <p>
 	 * 	 * @param rawContent
 	 * @return rawContent com tags <p> consistentes e encapsulando todo o conteudo 'rawContent'
@@ -29,11 +29,11 @@ public class ParagraphApplier {
 		MatchedToken ultimo;
 		boolean ultimoJaUsado= false;
 
-		if(iter.hasNext()){ // quando È <p>... ou ....</p>
+		if(iter.hasNext()){ // quando √© <p>... ou ....</p>
 			ultimo = iter.next();
 			ultimoJaUsado = appendBefore(sb, ultimo);
 			ultimoJaUsado = appendAfter(sb, ultimo);
-		}else{ //quando n„o tem tags p.
+		}else{ //quando n√£o tem tags p.
 			return oP+rawContent+cP;
 		}
 

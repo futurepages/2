@@ -9,7 +9,7 @@ import org.futurepages.exceptions.ErrorException;
 public class InvalidMailError extends ErrorException {
 
     public InvalidMailError(){
-        super("O e-mail digitado È inv·lido");
+        super("O e-mail digitado √© inv√°lido");
     }
 
     public InvalidMailError(String msg){

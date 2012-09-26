@@ -4,7 +4,6 @@ import javax.servlet.jsp.JspException;
 
 import org.futurepages.annotations.Tag;
 import org.futurepages.annotations.TagAttribute;
-import org.futurepages.core.ApplicationManager;
 import org.futurepages.core.config.Params;
 import org.futurepages.core.control.Controller;
 import org.futurepages.core.path.Paths;
@@ -37,7 +36,7 @@ public class ImportModuleLayout extends PrintTag {
 			}
 			if (!Is.empty(moduleId)) {
 				if (Params.get("USE_MODULE_DEPENDENCY").equals("true")) {
-					java.util.Set<String> dependencies = ((ApplicationManager) Controller.getInstance().getAppManager()).getDependenciesOf(moduleId);
+					java.util.Set<String> dependencies = Controller.getInstance().getAppManager().getDependenciesOf(moduleId);
 					for (String dependency : dependencies) {
 						if (!autoImporting || !autoImportModule.equals(dependency)) {
 							sb.append(cssLayoutTag(dependency));

@@ -1,7 +1,7 @@
 package org.futurepages.actions;
 
 /**
- * Actions com suporte a CRUD que n„o requer autenticaÁ„o por parte do usu·rio.
+ * Actions com suporte a CRUD que n√£o requer autentica√ß√£o por parte do usu√°rio.
  */
 public abstract class FreeCrudActions extends CrudActions {
 

@@ -17,7 +17,7 @@ public abstract class CPFUtil {
 	}
 
 	/**
-	 * Remove m·scara
+	 * Remove m√°scara
 	 * @param cpf
 	 */
 	public static String somenteNumeros(String cpf) {
@@ -27,7 +27,7 @@ public abstract class CPFUtil {
 	}
 
 	/**
-	 * Calcula o dÌgito verificador a partir do n˙mero de entrada
+	 * Calcula o d√≠gito verificador a partir do n√∫mero de entrada
 	 */
 	private static String calcDigVerif(String num) {
 		Integer primDig, segDig;
@@ -59,7 +59,7 @@ public abstract class CPFUtil {
 	}
 
 	/**
-	 * Gera um CPF aleatÛrio
+	 * Gera um CPF aleat√≥rio
 	 */
 	public static String geraCPF() {
 		StringBuffer iniciais = new StringBuffer("");
@@ -77,7 +77,7 @@ public abstract class CPFUtil {
 
 	/**
 	 * Gera um CPF a partir de um inteiro
-	 * ex.: 1 , retornaria 000000001DF onde DF È o dÌgito verificador gerado.
+	 * ex.: 1 , retornaria 000000001DF onde DF √© o d√≠gito verificador gerado.
 	 */
 	public static String geraCPF(long value) {
 		StringBuffer iniciais = new StringBuffer("");
@@ -91,8 +91,8 @@ public abstract class CPFUtil {
 
 	/**
 	 *
-	 * @param cpf entrada com os dÌgitos do CPF, somente caracteres numÈricos
-	 * @return verdadeiro se o CPF È v·lido
+	 * @param cpf entrada com os d√≠gitos do CPF, somente caracteres num√©ricos
+	 * @return verdadeiro se o CPF √© v√°lido
 	 */
 	public static boolean validaCPF(String cpf) {
 		if (cpf == null) {

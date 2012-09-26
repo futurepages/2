@@ -45,10 +45,10 @@ public abstract class HtmlTagReplacer {
 	 * com o valor do atributo 'replacement'
 	 *
 	 * @param str texto html a ser varrido
-	 * @param regex padr„o para substituiÁ„o
+	 * @param regex padr√£o para substitui√ß√£o
 	 * @param replacement novo valor
 	 *
-	 * @return texto substituÌdo
+	 * @return texto substitu√≠do
 	 */
 	public static String replaceInTags(String str, String regex, String replacement){
 
@@ -69,12 +69,12 @@ public abstract class HtmlTagReplacer {
 
 	/**
 	 * retira lixo do html:
-	 * 1) remove coment·rios
+	 * 1) remove coment√°rios
 	 * 2) remove tag xml gerada pelo word
 	 * 3) remove html script (javascript por exemplo)
 	 * 4) remove tags vazias
 	 * 5  troca aspas simples por aspas duplas dentro das tags
-	 * 6) remove atributos inv·lidos
+	 * 6) remove atributos inv√°lidos
 	 */
 	public static String noTrashText(String htmlContent) {
 		String commentPattern   = commentPattern();
@@ -83,27 +83,27 @@ public abstract class HtmlTagReplacer {
 		String scriptPattern    = tagAndContentPattern("script");
 
 
-		htmlContent =htmlContent.replaceAll(commentPattern   ,  ""); //remove coment·rios
+		htmlContent =htmlContent.replaceAll(commentPattern   ,  ""); //remove coment√°rios
 		htmlContent =htmlContent.replaceAll(xmlPattern       ,  ""); //remove tag xml gerada pelo word
 		htmlContent =htmlContent.replaceAll(headPattern      ,  ""); //remove tag xml gerada pelo word
 		htmlContent =htmlContent.replaceAll(scriptPattern    ,  ""); //remove html script (javascript por exemplo)
 
-		//Comentado - decidiu-se n„o tirar tags vazias
+		//Comentado - decidiu-se n√£o tirar tags vazias
 		//String emptyTagsPattern = emptyTagsPattern();
 		//htmlContent =htmlContent.replaceAll(emptyTagsPattern ,  ""); //remove tags vazias
 
 		htmlContent = replaceInTags(htmlContent, "'" , "\"");                 //aspas simples por aspas duplas
-		htmlContent = replaceInTags(htmlContent, invalidAttrPattern()  ,  "");//atributos inv·lidos
+		htmlContent = replaceInTags(htmlContent, invalidAttrPattern()  ,  "");//atributos inv√°lidos
 
 		return htmlContent;
 	}
 
 	/**
-	 * 0) Retira-se o lixo utilizando-se do mÈtodo noTrashText
-	 * 1) Retira-se as tags [style] com seu conte˙do
+	 * 0) Retira-se o lixo utilizando-se do m√©todo noTrashText
+	 * 1) Retira-se as tags [style] com seu conte√∫do
 	 * 2) Retira os atributos "style" e "class" das tags com duas ressalvas:
-	 *  - [span style="font-weight:bold"] È substituÌdo e [strong]
-	 *  - [span style="text-decoration:underline"] È substituÌdo por [u]
+	 *  - [span style="font-weight:bold"] √© substitu√≠do e [strong]
+	 *  - [span style="text-decoration:underline"] √© substitu√≠do por [u]
 	 * @return texto sem estilo, exceto estilos com bold e underline
 	 */
 	public static String noStylesText(String htmlContent) {
@@ -126,8 +126,8 @@ public abstract class HtmlTagReplacer {
 	}
 
 	/**
-	 * Exemplo 1: entrada <a href="#"> , a saÌda ser·: {'a', 'href="#"' , '>'}
-	 * Exemplo 2: entrada </a> , a saÌda ser·: {'a', '' , '>'}
+	 * Exemplo 1: entrada <a href="#"> , a sa√≠da ser√°: {'a', 'href="#"' , '>'}
+	 * Exemplo 2: entrada </a> , a sa√≠da ser√°: {'a', '' , '>'}
 	 */
 	protected String[] tagParts(String tag, boolean closing) {
 		int start = (closing) ? 2 : 1;

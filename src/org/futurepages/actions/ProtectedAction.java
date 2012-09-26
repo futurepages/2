@@ -4,11 +4,11 @@ import org.futurepages.core.action.AbstractAction;
 import org.futurepages.core.admin.RedirectAfterLogin;
 
 /**
- * Action que necessita de autenticaÁ„o para ser acessada.
+ * Action que necessita de autentica√ß√£o para ser acessada.
  *
- * Quando o RedirectFilter est· ligado, por padr„o o mÈtodo execute redireciona
- * e as innerActions n„o. Isso atÈ que se sobrescreva o mÈtodo shouldRedirect
- * dizendo quais inner ser„o redirecionadas.
+ * Quando o RedirectFilter est√° ligado, por padr√£o o m√©todo execute redireciona
+ * e as innerActions n√£o. Isso at√© que se sobrescreva o m√©todo shouldRedirect
+ * dizendo quais inner ser√£o redirecionadas.
  * 
  * @author leandro
  */

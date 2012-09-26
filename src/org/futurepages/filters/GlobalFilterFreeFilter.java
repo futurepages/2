@@ -6,7 +6,7 @@ import org.futurepages.core.control.InvocationChain;
 /*
  * Marca quais innerActions devem ser livres dos filtros globais.
  *
- * Se nenuma innerAction È especificada, ent„o toda a action È livre dos filtros globais.
+ * Se nenuma innerAction √© especificada, ent√£o toda a action √© livre dos filtros globais.
  */
 public class GlobalFilterFreeFilter implements Filter {
    

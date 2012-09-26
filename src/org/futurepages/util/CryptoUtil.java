@@ -18,13 +18,13 @@ import org.futurepages.core.exception.DefaultExceptionLogger;
  */
 public class CryptoUtil {
 
-	private static final String DES_INTERNAL_KEY = "cryp:gpf"; //n„o alterar!!
+	private static final String DES_INTERNAL_KEY = "cryp:gpf"; //n√£o alterar!!
 
     public static String md5FromUB64(String password){
 		 BigInteger hash = new BigInteger(1, ub64decode(password));
 		 password = hash.toString(16);
 
-        //correÁ„o da falta de zeros
+        //corre√ß√£o da falta de zeros
         if(password.length()<32){
             int numZeros = 32 - password.length();
             StringBuffer zeros = new StringBuffer("");

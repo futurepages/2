@@ -16,7 +16,7 @@ import org.futurepages.core.template.TemplateServlet;
 public class Block extends PrintTag {
 
 	@TagAttribute(required = true, name="id")
-	private String idX; //@TODO - Excluir após contemplar herança de atributos
+	private String idX; //@TODO - Excluir apÃ³s contemplar heranÃ§a de atributos
 	
 	@Override
 	public String getStringToPrint() throws JspException {

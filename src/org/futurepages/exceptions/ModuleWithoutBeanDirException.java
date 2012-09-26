@@ -3,6 +3,6 @@ package org.futurepages.exceptions;
 public class ModuleWithoutBeanDirException extends Exception {
 
 	public ModuleWithoutBeanDirException(String moduleName) {
-		super("MÛdulo '"+moduleName+"' n„o possui diretÛrio de beans");
+		super("M√≥dulo '"+moduleName+"' n√£o possui diret√≥rio de beans");
 	}
 }

@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import org.futurepages.core.config.Params;
 import org.futurepages.core.exception.DefaultExceptionLogger;
 
 /**
@@ -16,11 +17,12 @@ import org.futurepages.core.exception.DefaultExceptionLogger;
 public class CSSMinifier {
 
 	public void execute(List<File> jsFiles) {
+		int pathInit = Params.get("WEB_REAL_PATH").length()-1;
 		for (File f : jsFiles) {
 			FileInputStream fis = null;
 			InputStreamReader inReader = null;
 			try {
-				System.out.println("COMPACTANDO " + f.getAbsolutePath() + "...");
+				System.out.println("[ CSS-Min ... ] "+f.getAbsolutePath().substring(pathInit));
 				fis = new FileInputStream(f);
 				inReader = new InputStreamReader(fis);
 				CssCompressor compressor = new CssCompressor(inReader);
@@ -29,9 +31,9 @@ public class CSSMinifier {
 				fileWriter.close();
 				fis.close();
 				inReader.close();
-				System.out.println("COMPACTADO: " + f.getAbsolutePath() + "!");
+				System.out.println("[ CSS-Min OK! ]");
 			} catch (Exception ex) {
-				System.out.println("ERROR AO COMPACTAR ARQUIVO CSS");
+				System.out.println("[# CSS-ERROR #]");
 				DefaultExceptionLogger.getInstance().execute(ex);
 				try {
 					fis.close();

@@ -10,7 +10,7 @@ import org.futurepages.core.filter.Filter;
 import org.futurepages.core.control.InvocationChain;
 
 /**
- * Injeta uma coleÁ„o de objetos persistentes
+ * Injeta uma cole√ß√£o de objetos persistentes
  * Similar ao {@link PIFilter}, para uma lista
  * @author diogenes
  */
@@ -18,7 +18,7 @@ public class PLIFilter extends HQLProvider implements Filter {
 
     private Class classToInject;   //classe dos objetos a serem injetados
     private String keyToInject;  //chave do input a ser injetado
-    private String targetKey;   //chave do input do objeto que sofrer· a injeÁ„o
+    private String targetKey;   //chave do input do objeto que sofrer√° a inje√ß√£o
 
     public PLIFilter(String targetKey, String keyToInject, Class classToInject) {
         this.targetKey = targetKey;

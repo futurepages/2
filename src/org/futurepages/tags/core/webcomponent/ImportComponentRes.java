@@ -66,7 +66,7 @@ public final class ImportComponentRes extends SimpleTagSupport {
 				}
 			}
 			if (myContainer.isBodyEvaluated()) {
-				throw new JspException("Componente "+uniqueKey()+" em container j· avaliado e n„o nulo");
+				throw new JspException("Componente "+uniqueKey()+" em container j√° avaliado e n√£o nulo");
 			}
 			getJspContext().getOut().print(buffer);
 			addToContainer();
@@ -77,7 +77,7 @@ public final class ImportComponentRes extends SimpleTagSupport {
 			//if primeira vez dentro da ajax request -
 			 if(asyncResources.get()==null){
 				asyncResources.set(new HashSet());
-				boolean cameFromClient = addComponentsPreLoaded(req,res, asyncResources.get());//adiciona no mapa os componentes que j· foram requisitados na p·gina, enviando a mensagem atravÈs do cookie
+				boolean cameFromClient = addComponentsPreLoaded(req,res, asyncResources.get());//adiciona no mapa os componentes que j√° foram requisitados na p√°gina, enviando a mensagem atrav√©s do cookie
 				asyncResStoredInClient.set(cameFromClient);
 			 }
 			 if(!asyncResources.get().contains(this.uniqueKey())){ //primeira vez do componente dentro do contexto request
@@ -98,7 +98,7 @@ public final class ImportComponentRes extends SimpleTagSupport {
 					getJspBody().invoke(evalResult);
 					getJspContext().getOut().print(evalResult.getBuffer());
 				}
-				asyncResources.get().add(this.uniqueKey()); //adiciona para n„o executar mais para este componente
+				asyncResources.get().add(this.uniqueKey()); //adiciona para n√£o executar mais para este componente
 			 }
 		}
 	}

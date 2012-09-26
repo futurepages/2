@@ -8,7 +8,7 @@ import org.futurepages.exceptions.EmptyCollectionException;
 
 public class CollectionUtil {
 
-	//TODO FIX ME n„o estou funcionando :(
+	//TODO FIX ME n√£o estou funcionando :(
 	@Deprecated
 	public static <T> T[] toArray(Collection<T> colecao) {
 		T[] array = (T[]) colecao.toArray();
@@ -45,7 +45,7 @@ public class CollectionUtil {
 	 * 
 	 * @param <T> tipo do elemento
 	 * @param origem lista origem dos elementos
-	 * @param destino lista onde ser„o adiconados os elementos
+	 * @param destino lista onde ser√£o adiconados os elementos
 	 * @param limite quantidade maxima de elementos que podem ser copiados de origem para destino
 	 * @return
 	 */

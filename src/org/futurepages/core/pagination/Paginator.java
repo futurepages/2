@@ -10,7 +10,7 @@ import org.futurepages.exceptions.InputException;
 import org.futurepages.util.Is;
 
 /**
- * OperaÁıes de action para provimento de paginaÁ„o.
+ * Opera√ß√µes de action para provimento de pagina√ß√£o.
  * @author Danilo
  */
 public class Paginator implements Pageable {
@@ -27,9 +27,9 @@ public class Paginator implements Pageable {
 	}
 
 	/**
-	 * PaginaÁ„o de elementos
+	 * Pagina√ß√£o de elementos
 	 *
-	 * Depreciado por ser uma m· pratica de programaÁ„o (mistura controle e modelo)
+	 * Depreciado por ser uma m√° pratica de programa√ß√£o (mistura controle e modelo)
 	 *
 	 * @deprecated Utilize setOutputPaginationSlice (verificar em site2 e scrummer o uso)
 	 */
@@ -42,9 +42,9 @@ public class Paginator implements Pageable {
 		return list;
 	}
 	/**
-	 * PaginaÁ„o de elementos de um report
+	 * Pagina√ß√£o de elementos de um report
 	 *
-	 * Depreciado por ser uma m· pratica de programaÁ„o (mistura controle e modelo)
+	 * Depreciado por ser uma m√° pratica de programa√ß√£o (mistura controle e modelo)
 	 *
 	 * @deprecated Utilize setOutputPaginationSlice (verificar em site2 e scrummer o uso)
 	 */
@@ -71,7 +71,7 @@ public class Paginator implements Pageable {
 	}
 
 	/**
-	 * @return Pega o numero da p·gina corrente em uso
+	 * @return Pega o numero da p√°gina corrente em uso
 	 */
 	public int getPageNum() {
 		int pageNum = 1;
@@ -82,8 +82,8 @@ public class Paginator implements Pageable {
 	}
 
 	/**
-	 * Extrai o tamanho da p·gina definido no input.
-	 * Se nenhum tamanho for definido, o valor retornado ser· o 
+	 * Extrai o tamanho da p√°gina definido no input.
+	 * Se nenhum tamanho for definido, o valor retornado ser√° o 
 	 * @param defaultPageSize
 	 * @return
 	 */
@@ -101,8 +101,8 @@ public class Paginator implements Pageable {
 	}
 
 	/*
-	 * Primeiro par‚metro È o default e È o mÌnimo tambÈm.
-	 * O segundo par‚metro È o m·ximo permitido.
+	 * Primeiro par√¢metro √© o default e √© o m√≠nimo tamb√©m.
+	 * O segundo par√¢metro √© o m√°ximo permitido.
 	 */
 	public int getPageSize(int defaultPageSize, int maxPageSize) {
 		int pageSize;
@@ -132,8 +132,8 @@ public class Paginator implements Pageable {
 	}
 
 	/**
-	 * Offset È a quantidade de elementos que as p·ginas que est„o sendo exibidas assincronamente
-	 * mudou desde a ˙ltima vez que a p·gina foi carregada.
+	 * Offset √© a quantidade de elementos que as p√°ginas que est√£o sendo exibidas assincronamente
+	 * mudou desde a √∫ltima vez que a p√°gina foi carregada.
 	 * @return
 	 */
 	public int getPagesOffset() {

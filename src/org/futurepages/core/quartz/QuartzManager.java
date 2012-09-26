@@ -11,8 +11,8 @@ import org.quartz.SchedulerFactory;
 import org.quartz.impl.StdSchedulerFactory;
 
 /**
- * Quartz é a biblioteca utilizada pelo futurepages para realizar agendamentos
- * de execuções automáticas realizadas pelo sistema.
+ * Quartz Ã© a biblioteca utilizada pelo futurepages para realizar agendamentos
+ * de execuÃ§Ãµes automÃ¡ticas realizadas pelo sistema.
  *
  * QuartzManager gerencia os squedulers do Quartz.
  *

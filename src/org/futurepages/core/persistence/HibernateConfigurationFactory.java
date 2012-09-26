@@ -24,7 +24,7 @@ import org.futurepages.util.EncodingUtil;
 import org.futurepages.util.Is;
 
 /**
- * Classe de instanciaÁ„o das ConfiguraÁıes Hibernate; 
+ * Classe de instancia√ß√£o das Configura√ß√µes Hibernate; 
  * @author Danilo Medeiros
  */
 public class HibernateConfigurationFactory {
@@ -56,7 +56,7 @@ public class HibernateConfigurationFactory {
 	}
 
 	/**
-	 * Retorna o mapa das configuraÁıes de cada schema do 'hibernate' na aplicaÁ„o
+	 * Retorna o mapa das configura√ß√µes de cada schema do 'hibernate' na aplica√ß√£o
 	 */
 	public Map<String, Configurations> getApplicationConfigurations() throws ConfigFileNotFoundException, UnsupportedEncodingException, FileNotFoundException, IOException {
 
@@ -74,11 +74,11 @@ public class HibernateConfigurationFactory {
 	private void mapModule(File module, Map<String, Schema> schemasMap) throws FileNotFoundException, IOException {
 		Properties properties = new Properties();
 
-		String schemaId = getSchemaId(module, properties, schemasMap); //properties È preenchido e devolve schemaId
+		String schemaId = getSchemaId(module, properties, schemasMap); //properties √© preenchido e devolve schemaId
 
 		if (schemaId != null) { //modulo interno ou externo com CONNECT_EXTERNAL_MODULES=true
 			if (schemasMap.get(schemaId) == null) {
-				//sÛ vale os properties do primeiro mÛdulo do schema externo. Os properties dos demais
+				//s√≥ vale os properties do primeiro m√≥dulo do schema externo. Os properties dos demais
 				//servem somente para verificar o schemaId (que foi feito anteriormente em getSchemaId()
 				schemasMap.put(schemaId, new Schema());
 				schemasMap.get(schemaId).properties = properties;
@@ -96,7 +96,7 @@ public class HibernateConfigurationFactory {
 					}
 				}
 			} catch (ModuleWithoutBeanDirException ex) {
-				//MÛdulo n„o possui o diretÛrio de beans
+				//M√≥dulo n√£o possui o diret√≥rio de beans
 				//System.out.println(ex.getMessage());
 			}
 		}
@@ -118,7 +118,7 @@ public class HibernateConfigurationFactory {
 
 	/**
 	 * Devolve o schemaId registrado na propriedade "hibernate.schemaId" e devolve o Properties.
-	 * Se "hibernate.schemaId" n„o for definido, devolve o moduleId.
+	 * Se "hibernate.schemaId" n√£o for definido, devolve o moduleId.
 	 */
 	private String getSchemaId(File module, Properties properties, Map<String, Schema> schemasMap) throws FileNotFoundException, IOException {
 		boolean defaultModule = !Modules.hasOwnSchema(module);
@@ -140,7 +140,7 @@ public class HibernateConfigurationFactory {
 			properties.load(inputStream);
 			String schemaId = properties.getProperty("hibernate.schemaId");
 			if (Is.empty(schemaId)) {
-				return module.getName(); //se n„o foi definido, seu schemaId ser· o nome do mÛdulo.
+				return module.getName(); //se n√£o foi definido, seu schemaId ser√° o nome do m√≥dulo.
 			}
 			return schemaId;
 		}

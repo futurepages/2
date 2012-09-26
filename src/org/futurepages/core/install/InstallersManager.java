@@ -13,10 +13,10 @@ import org.futurepages.util.FileUtil;
 import org.futurepages.util.The;
 
 /**
- * Classe respons·vel pela automatizaÁ„o da instalaÁ„o dos mÛdulos.
- * Executa de forma reflexiva os 'Installers' de cada mÛdulo.
+ * Classe respons√°vel pela automatiza√ß√£o da instala√ß√£o dos m√≥dulos.
+ * Executa de forma reflexiva os 'Installers' de cada m√≥dulo.
  *
- * Os instaladores est„o presente na raiz do pacote  install sob o seguinte nome
+ * Os instaladores est√£o presente na raiz do pacote  install sob o seguinte nome
  * de classe: DataBaseInstaller
  *
  * @author leandro
@@ -44,7 +44,7 @@ public class InstallersManager extends ModulesAutomation {
 
 	/**
 	 *
-	 * @param modules s„o as pastas de mÛdulos que ser„o varridas para instalaÁ„o.
+	 * @param modules s√£o as pastas de m√≥dulos que ser√£o varridas para instala√ß√£o.
 	 *
 	 * @throws Exception
 	 */
@@ -54,15 +54,15 @@ public class InstallersManager extends ModulesAutomation {
 
 	/**
 	 *
-	 * InstalaÁ„o do banco de dados.
+	 * Instala√ß√£o do banco de dados.
 	 *
 	 * 1) Instala os Recursos (se houver: install.Resources)
-	 * 2) Instala dentro de uma mesma transaÁ„o:
-	 * 3)	- Instala os mÛdulos em ordem alfabÈtica
-	 * 4)	- Dependendo do modo de instalaÁ„o...
-	 *			- Instala os dados de exemplos da aplicaÁ„o (se existir: install.Examples e (INSTALL_MODE = "examples" ou "on")
-	 *			- Instala os dados de produÁ„o  da aplicaÁ„o (se existir: install.Production e INSTALL_MODE = "production")
-	 *			- Se estiver no modo "modules" n„o ser· instalado
+	 * 2) Instala dentro de uma mesma transa√ß√£o:
+	 * 3)	- Instala os m√≥dulos em ordem alfab√©tica
+	 * 4)	- Dependendo do modo de instala√ß√£o...
+	 *			- Instala os dados de exemplos da aplica√ß√£o (se existir: install.Examples e (INSTALL_MODE = "examples" ou "on")
+	 *			- Instala os dados de produ√ß√£o  da aplica√ß√£o (se existir: install.Production e INSTALL_MODE = "production")
+	 *			- Se estiver no modo "modules" n√£o ser√° instalado
 	 * @param modules
 	 * @throws Exception
 	 * @throws java.lang.Exception

@@ -16,7 +16,7 @@ import org.futurepages.util.FileUtil;
 import org.futurepages.util.The;
 
 /**
- * Classe para a construção da declaração de taglib.
+ * Classe para a construÃ§Ã£o da declaraÃ§Ã£o de taglib.
  * @author Danilo
  */
 public class TagLibBuilder extends ModulesAutomation{
@@ -38,7 +38,7 @@ public class TagLibBuilder extends ModulesAutomation{
 	
 
 	/**
-	 * Construção da definição geral da declaração do arquivo taglib.tld
+	 * ConstruÃ§Ã£o da definiÃ§Ã£o geral da declaraÃ§Ã£o do arquivo taglib.tld
 	 * @throws java.lang.Exception
 	 */
 	public void build() throws Exception {
@@ -88,8 +88,8 @@ public class TagLibBuilder extends ModulesAutomation{
 	}
 
 	/**
-	 * Construçao das declarações das tags criadas na aplicação
-	 * @return String das declarações das tags criadas na aplicação
+	 * ConstruÃ§ao das declaraÃ§Ãµes das tags criadas na aplicaÃ§Ã£o
+	 * @return String das declaraÃ§Ãµes das tags criadas na aplicaÃ§Ã£o
 	 * @throws java.lang.ClassNotFoundException
 	 */
 	private String buildTagLibsContentFromModules() throws ClassNotFoundException, NotModuleException {

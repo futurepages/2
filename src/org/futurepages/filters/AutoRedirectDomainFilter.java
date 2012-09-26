@@ -8,9 +8,9 @@ import org.futurepages.core.filter.Filter;
 import org.futurepages.util.Is;
 
 /**
- * Filtro respons·vel pela modificaÁ„o do domÌnio da url para um domÌnio padronizado. Isto È ˙til para
- * SEO. Os indexadores de busca n„o penalizar„o o sistema por conta de urls redundantes e ainda ajudar·
- * na comunicaÁ„o do sistema com outros atravÈs de callback urls padronizadas.
+ * Filtro respons√°vel pela modifica√ß√£o do dom√≠nio da url para um dom√≠nio padronizado. Isto √© √∫til para
+ * SEO. Os indexadores de busca n√£o penalizar√£o o sistema por conta de urls redundantes e ainda ajudar√°
+ * na comunica√ß√£o do sistema com outros atrav√©s de callback urls padronizadas.
  * 
  * @author leandro
  */
@@ -31,7 +31,7 @@ public class AutoRedirectDomainFilter implements Filter {
 //		System.out.println(mainProtocol);
 //		System.out.println(mainDomain);
 		if(!Is.validStringKey(this.mainDomain)){
-			throw new RuntimeException("Erro ao inicializar o filtro AutoRedirectDomainFilter. Especifique um domÌnio v·lido em app-params.xml[param=AUTO_REDIRECT_DOMAIN]");
+			throw new RuntimeException("Erro ao inicializar o filtro AutoRedirectDomainFilter. Especifique um dom√≠nio v√°lido em app-params.xml[param=AUTO_REDIRECT_DOMAIN]");
 		}
 	}
 

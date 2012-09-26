@@ -21,9 +21,9 @@ import org.futurepages.util.The;
 import org.quartz.SchedulerException;
 
 /**
- * … nesta classe onde o futurepages age sobre a aplicaÁ„o,
- * gerando o necess·rio antes do deploy da aplicaÁ„o
- * e desalocando o que for necess·rio no undeploy da mesma.
+ * √â nesta classe onde o futurepages age sobre a aplica√ß√£o,
+ * gerando o necess√°rio antes do deploy da aplica√ß√£o
+ * e desalocando o que for necess√°rio no undeploy da mesma.
  *
  * @author leandro
  */
@@ -41,19 +41,23 @@ public class ApplicationListener implements ServletContextListener {
 			log("Inicializando " + servletContext.getServletContextName() + "...");
 			String realPath = servletContext.getRealPath("/");
 
-			log("Inicializando Par‚metros...");
+			log("Inicializando Par√¢metros...");
 			Params.initialize(realPath, contextName);
-			log("Par‚metros OK");
+			log("Par√¢metros OK");
 
-			log("Carregando mÛdulos...");
+			System.setProperty("file.encoding",   Params.get("PAGE_ENCODING"));
+			System.setProperty("sun.jnu.encoding",Params.get("PAGE_ENCODING"));
+			log("File Encoding: "+System.getProperty("file.encoding"));
+
+			log("Carregando m√≥dulos...");
 			File[] modules = (new File(Params.get("MODULES_CLASSES_REAL_PATH"))).listFiles();
-			log("MÛdulos OK");
+			log("M√≥dulos OK");
 
 			if (HibernateManager.isRunning()) {
 				log("Hibernate OK");
 
-				// Atualiza/gera esquema do banco como solicitado no arquivo de configuraÁ„o.
-				// somente se N√O estiver em DEPLOY_MODE=production (tentar· gerar e instalar banco de dados.
+				// Atualiza/gera esquema do banco como solicitado no arquivo de configura√ß√£o.
+				// somente se N√ÉO estiver em DEPLOY_MODE=production (tentar√° gerar e instalar banco de dados.
 				log("Deploy Mode: "+Params.get("DEPLOY_MODE"));
 				if (!Params.get("DEPLOY_MODE").equals("production")) {
 					if (Params.get("SCHEMA_GENERATION_TYPE").startsWith("update")) {
@@ -72,7 +76,7 @@ public class ApplicationListener implements ServletContextListener {
 						log("SCHEMA EXPORT - End");
 					}
 
-					//Se o modo de instalaÁ„o estiver ligado, ser„o feitas as instalaÁıes de cada mÛdulo.
+					//Se o modo de instala√ß√£o estiver ligado, ser√£o feitas as instala√ß√µes de cada m√≥dulo.
 					String installMode = Params.get("INSTALL_MODE");
 					if (!installMode.equals("off") && !installMode.equals("none") && !Is.empty(installMode)) {
 						log("Install Mode: " + installMode);
@@ -80,13 +84,13 @@ public class ApplicationListener implements ServletContextListener {
 						log("Install - End");
 					}
 				}else{
-					//Micro-migraÁ„o. Instancia a classe - onde espera-se que estejam as execuÁıes de migraÁ„o.
+					//Micro-migra√ß√£o. Instancia a classe - onde espera-se que estejam as execu√ß√µes de migra√ß√£o.
 					if(!Is.empty(Params.get("MIGRATION_CLASSPATH"))){
 						try{
-							log("Inicializando MigraÁ„o em: "+Params.get("MIGRATION_CLASSPATH"));
+							log("Inicializando Migra√ß√£o em: "+Params.get("MIGRATION_CLASSPATH"));
 							Class.forName(Params.get("MIGRATION_CLASSPATH")).newInstance();
 						}catch(Exception ex){
-							log("Erro de MigraÁ„o... "+ex.getMessage());
+							log("Erro de Migra√ß√£o... "+ex.getMessage());
 						}
 					}
 				}
@@ -105,16 +109,16 @@ public class ApplicationListener implements ServletContextListener {
 				log("Quartz Inicializado.");
 			}
 
-			//Inicializa os par‚metros de configuraÁ„o de Email se solicitado.
+			//Inicializa os par√¢metros de configura√ß√£o de Email se solicitado.
 			if (Params.get("EMAIL_ACTIVE").equals("true")) {
 				log("Configurando Email...: ");
 				MailConfig.initialize();
 				log("Config Email OK");
 			}
 
-			//Por padr„o gera o arquivo taglib.tld com as tags dos mÛdulos da aplicaÁ„o
+			//Por padr√£o gera o arquivo taglib.tld com as tags dos m√≥dulos da aplica√ß√£o
 			if (Params.get("GENERATE_TAGLIB").equals("true")) {
-				log("Iniciando criaÁ„o da Taglib.");
+				log("Iniciando cria√ß√£o da Taglib.");
 				(new TagLibBuilder(modules)).build();
 				log("Taglib criada com sucesso.");
 			}
@@ -153,11 +157,11 @@ public class ApplicationListener implements ServletContextListener {
 		if (HibernateManager.isRunning()) {
 			HibernateManager.shutdown();
 		}
-		log("AplicaÁ„o parada: " + evt.getServletContext().getServletContextName());
+		log("Aplica√ß√£o parada: " + evt.getServletContext().getServletContextName());
 	}
 
 	/**
-	 * Mensagem de log padr„o do listener.
+	 * Mensagem de log padr√£o do listener.
 	 * @param logText
 	 */
 	private void log(String logText) {

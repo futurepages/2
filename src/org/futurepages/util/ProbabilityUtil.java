@@ -11,10 +11,10 @@ import java.util.List;
 public class ProbabilityUtil {
 
 	/**
-	 * Gera combinações para os elemtos informados.
+	 * Gera combinaÃ§Ãµes para os elemtos informados.
 	 * @param elements elementos a serem combinados
 	 * @param groupSize tamanho do agrupapemto
-	 * @return {@link List} com as conbinações geradas.
+	 * @return {@link List} com as conbinaÃ§Ãµes geradas.
 	 */
 	public static List<String[]> listCombinations(String[] elements, int groupSize){
 		List<String[]> result = new ArrayList<String[]>();

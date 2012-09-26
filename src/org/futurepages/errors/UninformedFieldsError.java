@@ -9,7 +9,7 @@ import org.futurepages.exceptions.ErrorException;
 public class UninformedFieldsError extends ErrorException {
 
     public UninformedFieldsError(){
-        super("Preencha todos os campos obrigatórios");
+        super("Preencha todos os campos obrigatÃ³rios");
     }
 
     public UninformedFieldsError(String msg){

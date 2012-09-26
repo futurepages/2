@@ -87,7 +87,7 @@ public class EncodingUtil {
 		if (strIn != null) {
 			try {
 				String decodedUrl = URLDecoder.decode(strIn, "UTF-8");
-				return decodedUrl.replaceAll("&frasl;", "/"); //bug - tomcat n„o reconhece barra.
+				return decodedUrl.replaceAll("&frasl;", "/"); //bug - tomcat n√£o reconhece barra.
 			} catch (Exception ex) {
 				DefaultExceptionLogger.getInstance().execute(ex);
 			}
@@ -128,20 +128,20 @@ public class EncodingUtil {
 		return null;
 	}
 
-	//MigraÁ„o de projeto de ISO para UTF-8
+	//Migra√ß√£o de projeto de ISO para UTF-8
 	public static void main(String[] args) throws URISyntaxException, Exception {
-		String path = "C:\\Users\\leandro\\Documents\\Workspaces\\netbeans\\placitum";
-		String pathWEB = path + "\\web";
+		String path = "E:\\Users\\leandro\\Documents\\Workspaces\\netbeans\\futurepages2";
+//		String pathWEB = path + "\\web";
 		String pathSRC = path + "\\src";
 		String pathTEST = path + "\\test";
 
-		migratingISOtoUTF8(pathWEB, ".*\\.htm");
-		migratingISOtoUTF8(pathWEB, ".*\\.html");
-		migratingISOtoUTF8(pathWEB, ".*\\.js");
-		migratingISOtoUTF8(pathWEB, ".*\\.css");
-		migratingISOtoUTF8(pathWEB, ".*\\.txt");
-		migratingISOtoUTF8(pathWEB, ".*\\.xml");
-		migratingISOtoUTF8(pathWEB, "[^\\.]*");
+//		migratingISOtoUTF8(pathWEB, ".*\\.htm");
+//		migratingISOtoUTF8(pathWEB, ".*\\.html");
+//		migratingISOtoUTF8(pathWEB, ".*\\.js");
+//		migratingISOtoUTF8(pathWEB, ".*\\.css");
+//		migratingISOtoUTF8(pathWEB, ".*\\.txt");
+//		migratingISOtoUTF8(pathWEB, ".*\\.xml");
+//		migratingISOtoUTF8(pathWEB, "[^\\.]*");
 
 
 		migratingISOtoUTF8(pathSRC, ".*\\.txt");
@@ -152,6 +152,11 @@ public class EncodingUtil {
 		migratingISOtoUTF8(pathSRC, "[^\\.]*");
 		
 		migratingISOtoUTF8(pathTEST, ".*\\.java");
+		migratingISOtoUTF8(pathTEST, ".*\\.txt");
+		migratingISOtoUTF8(pathTEST, ".*\\.properties");
+		migratingISOtoUTF8(pathTEST, ".*\\.htm");
+		migratingISOtoUTF8(pathTEST, ".*\\.html");
+		migratingISOtoUTF8(pathTEST, "[^\\.]*");
 	}
 
 	public static void migratingISOtoUTF8(String path, String patternRegex) throws IOException {

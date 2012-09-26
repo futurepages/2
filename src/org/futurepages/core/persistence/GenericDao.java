@@ -451,7 +451,7 @@ public class GenericDao extends HQLProvider {
 
     /**
      * /////////////////////////////////////////////////
-     * MÉTODOS TRANSACIONAIS
+     * MÃ‰TODOS TRANSACIONAIS
      * /////////////////////////////////////////////////
      */
     public void beginTransaction() {

@@ -5,7 +5,7 @@ import org.futurepages.core.tags.ConditionalTag;
 
 /**
  *
- * N√O EST¡ SENDO CHAMADO NO ARQUIVO TLD
+ * N√ÉO EST√Å SENDO CHAMADO NO ARQUIVO TLD
  *
  * @author Sergio Oliveira
  */

@@ -4,9 +4,9 @@ import org.futurepages.core.filter.Filter;
 import org.futurepages.core.control.InvocationChain;
 
 /**
- * Marca quais innerActions devem ser redirecionadas após o login.
+ * Marca quais innerActions devem ser redirecionadas apÃ³s o login.
  *
- * Se nenhuma innerAction for definida, toda a action é redirecionada.
+ * Se nenhuma innerAction for definida, toda a action Ã© redirecionada.
  *
  * Deve ser usado numa action especifica.
  * 

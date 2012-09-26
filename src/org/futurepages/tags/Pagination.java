@@ -52,14 +52,14 @@ public class Pagination extends PrintTag implements Pageable {
 	private static final String NEXT_PAGE = "nextpage";
 	private static final String PREVIOUS_PAGE = "previouspage";
 	private static final String IMAGE_FORMAT = "gif";
-	//N„o È atributo da tag
+	//N√£o √© atributo da tag
 	private String symbol = "?";
 	private Boolean isPrettyUrl = new Boolean(Params.get("PRETTY_URL"));
 
 	@Override
 	public String getStringToPrint() throws JspException {
 		Integer totalPages = (Integer) action.getOutput().getValue(_TOTAL_PAGES);
-		//Se possui mais de uma p·gina.
+		//Se possui mais de uma p√°gina.
 		if (totalPages != null) {
 			String pagesLinks = allPaginationLinks(totalPages);
 			if (totalPages > 1) {
@@ -69,7 +69,7 @@ public class Pagination extends PrintTag implements Pageable {
 					return concat(descriptor, pagesLinks, getBodyContent().getString(), descriptor, pagesLinks);
 				}
 			}
-			//Se n„o possui mais de uma p·gina.
+			//Se n√£o possui mais de uma p√°gina.
 		} else if (justTop) {
 			return descriptor + getBodyContent().getString();
 		}
@@ -132,13 +132,13 @@ public class Pagination extends PrintTag implements Pageable {
 		this.descriptor = descriptor;
 	}
 
-	// M…TODOS PRIVADOS //////////////////////////////////////////////////////////////////////
+	// M√âTODOS PRIVADOS //////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////
 	private String pageNumLinks(int pageNum, int totalPages) {
 		StringBuffer sb = new StringBuffer();
 
 		if (!withoutNumbers) {
-			//Resultado com atÈ 20 p·ginas.
+			//Resultado com at√© 20 p√°ginas.
 			if (totalPages <= maxShowing) {
 				for (int i = 1; i <= totalPages; i++) {
 					if (pageNum != i) {
@@ -148,7 +148,7 @@ public class Pagination extends PrintTag implements Pageable {
 					}
 				}
 			} else {
-				//Resultado com mais de 20 p·ginas.
+				//Resultado com mais de 20 p√°ginas.
 				if (pageNum > 6) {
 					for (int i = 1; i <= 3; i++) {
 						sb.append(pageLink(i));
@@ -198,7 +198,7 @@ public class Pagination extends PrintTag implements Pageable {
 	}
 
 	/**
-	 * Verifica se a p·gina È a primeira para habilitar/desabilitar o bot„o (<)
+	 * Verifica se a p√°gina √© a primeira para habilitar/desabilitar o bot√£o (<)
 	 */
 	private String previousPageLink(int pageNum) {
 		//enabled
@@ -215,7 +215,7 @@ public class Pagination extends PrintTag implements Pageable {
 	}
 
 	/**
-	 * Verifica se È a ˙ltima p·gina para habilitar/desabilitar o bot„o (>)
+	 * Verifica se √© a √∫ltima p√°gina para habilitar/desabilitar o bot√£o (>)
 	 */
 	private String nextPageLink(int pageNum, int totalPages) {
 		//disabled

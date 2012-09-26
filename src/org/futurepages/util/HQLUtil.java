@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 /**
  * HQL - Hibernate Query Language:
- * Utilidades para manipulaÁ„o de queries HQL
+ * Utilidades para manipula√ß√£o de queries HQL
  * 
  * @author leandro
  */
@@ -145,12 +145,12 @@ public class HQLUtil {
 	}
 
 	/**
-	 * Implementa uma busca inteligente parecida com o padr„o google.
+	 * Implementa uma busca inteligente parecida com o padr√£o google.
 	 * 
 	 *<ui>
-	 * <li>- Busca sentenÁas que estiverem entre aspas.
+	 * <li>- Busca senten√ßas que estiverem entre aspas.
 	 * <li>- Desconsidera palavras precedidas do sinal MENOS (-)
-	 * <li>- Desconsidera palavras com atÈ dois caracteres.
+	 * <li>- Desconsidera palavras com at√© dois caracteres.
 	 *</ui>
 	 *
 	 * Exemplo com field = "campo" e o seguinte value:
@@ -163,7 +163,7 @@ public class HQLUtil {
 	 *   AND campo NOT LIKE '%caramba%'
 	 *   AND (campo like '% oi %' OR campo LIKE '% oi>%' OR ...) -- ISTO SOMENTE SE findSmaller == true
 	 *
-	 *  SE bringAll = false --> se a busca ficar vazia, ele n„o retorna nada.
+	 *  SE bringAll = false --> se a busca ficar vazia, ele n√£o retorna nada.
 	 */
 	public static String matches(String field, String value, boolean bringAll, boolean findSmaller) {
 		value = escLike(value);

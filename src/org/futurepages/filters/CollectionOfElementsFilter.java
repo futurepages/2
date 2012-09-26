@@ -61,9 +61,9 @@ public class CollectionOfElementsFilter implements Filter {
 	}
 
 	/**
-	 * Se o alvo È targetKey È n„o nulo ent„o:
-	 * <li> se o objeto j· existe no input, injeta-se o valor encontrato em tal objeto:setField( obj, targetObjetc)
-	 * <li> se o objeto ainda n„o existe no input: input.setValue(targetKey, obj)
+	 * Se o alvo √© targetKey √© n√£o nulo ent√£o:
+	 * <li> se o objeto j√° existe no input, injeta-se o valor encontrato em tal objeto:setField( obj, targetObjetc)
+	 * <li> se o objeto ainda n√£o existe no input: input.setValue(targetKey, obj)
 	 * 	
 	 * @param input
 	 * @param objectValue

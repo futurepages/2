@@ -20,7 +20,7 @@ import com.sun.org.apache.xerces.internal.parsers.DOMParser;
 import com.sun.org.apache.xpath.internal.XPathAPI;
 import org.futurepages.core.exception.DefaultExceptionLogger;
 /**
- * Classe útil para manipulação XML
+ * Classe Ãºtil para manipulaÃ§Ã£o XML
  * @author Danilo
  *
  */

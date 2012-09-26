@@ -16,7 +16,7 @@ public class NumberUtil {
 		unidades.put("0", "zero");
 		unidades.put("1", "um");
 		unidades.put("2", "dois");
-		unidades.put("3", "trÍs");
+		unidades.put("3", "tr√™s");
 		unidades.put("4", "quatro");
 		unidades.put("5", "cinco");
 		unidades.put("6", "seis");
@@ -79,13 +79,13 @@ public class NumberUtil {
 	 * Converte milhares com 4 caracteres para o formato por extenso.
 	 * Obs.: converte somente de 1500 a 2099
 	 *
-	 * @param number - o n˙mero a ser convertido
-	 * @return - o n˙mero por extenso
+	 * @param number - o n√∫mero a ser convertido
+	 * @return - o n√∫mero por extenso
 	 * @throws java.lang.Exception
 	 */
 	public static String milharPorExtenso(String number) throws Exception {
 		if (number.length() != 4) {
-			throw new Exception(number + " n„o È um milhar v·lido.");
+			throw new Exception(number + " n√£o √© um milhar v√°lido.");
 		}
 		String fstPart = number.substring(0, 2);
 		String sndPart = number.substring(2, 4);
@@ -97,7 +97,7 @@ public class NumberUtil {
 	}
 
 	/**
-	 * Converte um n˙mero com dois caracteres no seu formato por extenso
+	 * Converte um n√∫mero com dois caracteres no seu formato por extenso
 	 *
 	 * @param number
 	 * @return
@@ -105,7 +105,7 @@ public class NumberUtil {
 	 */
 	public static String dezenaPorExtenso(String number) throws Exception {
 		if (number.length() != 2) {
-			throw new Exception(number + " n„o È uma dezena v·lida.");
+			throw new Exception(number + " n√£o √© uma dezena v√°lida.");
 		}
 		String fstPart = number.substring(0, 1);
 		String sndPart = number.substring(1, 2);
@@ -126,7 +126,7 @@ public class NumberUtil {
 
 	public static String partePorExtenso(String number) throws Exception {
 		if (number.length() != 3) {
-			throw new Exception(number + " n„o È uma centena v·lida.");
+			throw new Exception(number + " n√£o √© uma centena v√°lida.");
 		}
 		String fstPart = number.substring(0, 1);
 		String sndPart = number.substring(1, 3);
@@ -149,13 +149,13 @@ public class NumberUtil {
 			if (grupo.equals("1")) {
 				return "mil";
 			} else if (!grupo.equals("0")) {
-				return number + " " + (String) nomeUnidade.get(grupo) + "„o";
+				return number + " " + (String) nomeUnidade.get(grupo) + "√£o";
 			}
 		} else if (!grupo.equals("0")) {
 			if (grupo.equals("1")) {
 				return number + " mil";
 			} else {
-				return number + " " + (String) nomeUnidade.get(grupo) + "ıes";
+				return number + " " + (String) nomeUnidade.get(grupo) + "√µes";
 			}
 		}
 		return number;

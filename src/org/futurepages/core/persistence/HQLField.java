@@ -69,7 +69,7 @@ public class HQLField implements HQLable {
 
 	
 	/**
-	 * Cuidado: sÛ È dado supor para aquelas enums anotadas com @Enumerated(EnumType.STRING)
+	 * Cuidado: s√≥ √© dado supor para aquelas enums anotadas com @Enumerated(EnumType.STRING)
 	 * @param enumeration
 	 * @return true if equals
 	 */
@@ -116,7 +116,7 @@ public class HQLField implements HQLable {
 		return fieldName + " = " + value;
 	}
 
-	//Este foge do padr„o dos demais. Portanto, n„o modific·-lo para padronizar, para n„o causar transtorno em sistemas legados.
+	//Este foge do padr√£o dos demais. Portanto, n√£o modific√°-lo para padronizar, para n√£o causar transtorno em sistemas legados.
 	public String equalsTo(Boolean value) {
         if (value == null) {
             return isNull();
@@ -340,8 +340,8 @@ public class HQLField implements HQLable {
     }
 
     /*
-     * Separa a String em um array de Strings usando espaÁos
-     * ou tabulaÁıes como ponto de "quebra". Em seguida monta
+     * Separa a String em um array de Strings usando espa√ßos
+     * ou tabula√ß√µes como ponto de "quebra". Em seguida monta
      * a parte da HQL usando este array de Strings.
      */
     public String hasAnyOfWords(String tokens) {

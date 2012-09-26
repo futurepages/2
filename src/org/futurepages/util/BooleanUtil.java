@@ -14,7 +14,7 @@ public class BooleanUtil {
 			return true; 
 		}
 		if(value.equals("FALSE") || value.equals("NOT") || value.equals("NO") ||
-				value.equals("N√O")){
+				value.equals("N√ÉO")){
 			return true; 
 		}
 		throw null;

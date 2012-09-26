@@ -64,7 +64,7 @@ public abstract class CrudActions extends AbstractAction implements RedirectAfte
     }
 
     /**
-    *  A exibiÁ„o do bean È desprotegido.
+    *  A exibi√ß√£o do bean √© desprotegido.
     *  @param innerAction
     */
 	@Override
@@ -91,7 +91,7 @@ public abstract class CrudActions extends AbstractAction implements RedirectAfte
     }
 
     /**
-     * Os innerActions n„o redirecionam, somente o execute()
+     * Os innerActions n√£o redirecionam, somente o execute()
      */
 	@Override
     public boolean shouldRedirect(String inner) {

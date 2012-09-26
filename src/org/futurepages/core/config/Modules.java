@@ -6,17 +6,17 @@ import org.futurepages.core.control.AbstractApplicationManager;
 import org.futurepages.util.StringUtils;
 
 /**
- * Registrar os Módulos da aplicação
+ * Registrar os MÃ³dulos da aplicaÃ§Ã£o
  */
 public class Modules {
     /**
-     * Registra o Gerenciador dos Módulos (ModuleManager) não comentado
+     * Registra o Gerenciador dos MÃ³dulos (ModuleManager) nÃ£o comentado
      */
     public static void registerModule(ApplicationManager manager, File module) throws Exception {
         if (module.isDirectory()) {
             String moduleName = Params.MODULES_PACK + "." + module.getName() + ".ModuleManager";
             File moduleManagerFile = new File(Params.get("MODULES_CLASSES_REAL_PATH") + "/" + module.getName() + "/ModuleManager.class");
-            //Registra o Manager do Módulo, caso ele exista.
+            //Registra o Manager do MÃ³dulo, caso ele exista.
             if (moduleManagerFile.exists()) {
                 Class<? extends AbstractApplicationManager> moduleAppManager = (Class<? extends AbstractApplicationManager>) Class.forName(moduleName);
                 manager.register(module.getName(), moduleAppManager);
@@ -25,8 +25,8 @@ public class Modules {
     }
 
     /**
-     * Registra os Gerenciadores de todos os Módulos (ModuleManager)
-     * não comentados da aplicação
+     * Registra os Gerenciadores de todos os MÃ³dulos (ModuleManager)
+     * nÃ£o comentados da aplicaÃ§Ã£o
      */
     public static void registerAllModules(ApplicationManager manager, File[] modules) throws Exception {
         for (File module : modules) {
@@ -35,7 +35,7 @@ public class Modules {
     }
 
     /**
-     * Registra somente os Gerenciadores dos Módulos (ModuleManager)
+     * Registra somente os Gerenciadores dos MÃ³dulos (ModuleManager)
      * que acessam somente a base de dados local
      */
     public static void registerLocalModules(ApplicationManager manager, File[] modules) throws Exception {

@@ -11,11 +11,11 @@ import org.futurepages.util.Is;
 import org.futurepages.util.StringUtils;
 
 /**
- * Tag para exibiciÁ„o de links tipo 
- * Anteriores | PrÛximos
+ * Tag para exibici√ß√£o de links tipo 
+ * Anteriores | Pr√≥ximos
  *
- * Faz se necess·rio o valor {@link Pageable}_HAS_PREVIOUS_PAGE e {@link Pageable}_HAS_NEXT_PAGE; 
- * 	Quando nulos ou n„o informados, os respectivos links n„o s„o construÌdos
+ * Faz se necess√°rio o valor {@link Pageable}_HAS_PREVIOUS_PAGE e {@link Pageable}_HAS_NEXT_PAGE; 
+ * 	Quando nulos ou n√£o informados, os respectivos links n√£o s√£o constru√≠dos
  * 
  * @author Danilo
  */
@@ -26,7 +26,7 @@ public class AdjacentPage extends PrintTag implements Pageable {
     private String type;
     
     @TagAttribute(required = true)
-	private String href;//N„o pode ser vazio!
+	private String href;//N√£o pode ser vazio!
 	
     @TagAttribute(rtexprvalue = false)
     private String title;

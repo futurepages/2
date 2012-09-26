@@ -4,10 +4,10 @@ import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
 /**
- * SessionListener registra os sessionListeners dos módulos.
+ * SessionListener registra os sessionListeners dos mÃ³dulos.
  *
- * Um sessionListener é o resposável por executar atividades na criação
- * e destruição da sessão.
+ * Um sessionListener Ã© o resposÃ¡vel por executar atividades na criaÃ§Ã£o
+ * e destruiÃ§Ã£o da sessÃ£o.
  * 
  * @author leandro
  */

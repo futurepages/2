@@ -392,10 +392,10 @@ public final class ReflectionUtil {
 
 	/**
 	 * Um objeto 'child' recebe todos os valores herdados de seu pai 'parent'.
-	 * Os campos n„o herdados continuam com o valor nulo.
+	 * Os campos n√£o herdados continuam com o valor nulo.
 	 *
-	 * @param fromObj È o pai de onde os campos ser„o herdados.
-	 * @param toObj È quem herdar· os campos.
+	 * @param fromObj √© o pai de onde os campos ser√£o herdados.
+	 * @param toObj √© quem herdar√° os campos.
 	 */
 	public static void setWithSuperFields(Object parent, Object child) {
 		Class clss = child.getClass();

@@ -93,7 +93,7 @@ public final class WebContainer extends SimpleTagSupport {
 
 		headBufferBegin.append(StringUtils.concat("<html",id,xmlns,lang,dir,"><head>"));
 		
-		getJspBody().invoke(evalResult); //invoca o conteúdo dentro do container
+		getJspBody().invoke(evalResult); //invoca o conteÃºdo dentro do container
 
 		for (ImportComponentRes component : getComponents().values()) {
 			if (!component.isNoCSS() && !component.isPseudo()) {
@@ -115,7 +115,7 @@ public final class WebContainer extends SimpleTagSupport {
 			try {
 				((PageContext) getJspContext()).include(headFile, false);
 			} catch (ServletException ex) {
-				throw new JspException("Impossível incluir arquivo HEAD '" + headFile + "'. Motivo: " + ex.getMessage());
+				throw new JspException("ImpossÃ­vel incluir arquivo HEAD '" + headFile + "'. Motivo: " + ex.getMessage());
 			}
 		}
 		getJspContext().getOut().print(headBufferEnd);

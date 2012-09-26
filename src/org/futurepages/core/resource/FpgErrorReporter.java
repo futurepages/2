@@ -11,11 +11,11 @@ import org.mozilla.javascript.EvaluatorException;
 public class FpgErrorReporter implements ErrorReporter {
 
 	public void warning(String string, String string1, int i, String string2, int i1) {
-		log("[warning]  "+string+" - "+string1 + " - "+i+" - "+string2+" - "+i1);
+		log("[WARNING]  "+string+" - "+string1 + " - "+i+" - "+string2+" - "+i1);
 	}
 
 	public void error(String string, String string1, int i, String string2, int i1) {
-		log("[error]  "+string+" - "+string1 + " - "+i+" - "+string2+" - "+i1);
+		log("[ERROR]  "+string+" - "+string1 + " - "+i+" - "+string2+" - "+i1);
 	}
 
 	public EvaluatorException runtimeError(String string, String string1, int i, String string2, int i1) {
@@ -23,7 +23,6 @@ public class FpgErrorReporter implements ErrorReporter {
 	}
 
 	private void log(String msg){
-		System.out.println("<JS-MINIFIER> "+msg);
+		System.out.println("[ JS-Min ... ] "+msg);
 	}
-
 }

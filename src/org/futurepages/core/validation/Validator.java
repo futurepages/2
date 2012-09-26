@@ -10,7 +10,7 @@ import org.futurepages.exceptions.ErrorException;
 
 public abstract class Validator {
 
-	/** mapa de validações (chave, mensagem)*/
+	/** mapa de validaÃ§Ãµes (chave, mensagem)*/
 	protected LinkedHashMap<String, String> validationMap;
 
 	/** validadores chamados por esse validador.*/

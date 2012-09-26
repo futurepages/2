@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.futurepages.actions.DynAction;
+import org.futurepages.core.ApplicationManager;
 import org.futurepages.core.callback.ConsequenceCallback;
 
 import org.futurepages.core.consequence.ConsequenceProvider;
@@ -39,6 +40,7 @@ import org.futurepages.core.input.PrettyURLRequestInput;
 import org.futurepages.exceptions.FilterException;
 import org.futurepages.filters.ConsequenceCallbackFilter;
 import org.futurepages.tags.core.webcomponent.ImportComponentRes;
+import org.futurepages.util.The;
 
 /**
  * The central controller. The actions are intercepted and
@@ -53,10 +55,9 @@ import org.futurepages.tags.core.webcomponent.ImportComponentRes;
 public class Controller extends HttpServlet {
 
 	private char innerActionSeparator = '.';
-	private final String EXTENSION = AbstractApplicationManager.EXTENSION;
 	private Set<String> moduleIDs;
 	private String startPage = null;
-	private AbstractApplicationManager appManager = null;
+	private ApplicationManager appManager = null;
 	private static String appMgrClassname = null;
 	private static ServletContext application = null;
 	protected static ApplicationContext appContext = null;
@@ -109,7 +110,7 @@ public class Controller extends HttpServlet {
 		}
 
 		try {
-			appManager = (AbstractApplicationManager) klass.newInstance();
+			appManager = (ApplicationManager) klass.newInstance();
 
 			AbstractApplicationManager.setApplication(appContext);
 
@@ -152,7 +153,8 @@ public class Controller extends HttpServlet {
 		chainTL.remove();
 
 		super.destroy();
-		LocaleManager.stopLocaleScan();
+		//comentado - nÃ£o se sabe para que servia no menta.
+		//LocaleManager.stopLocaleScan();
 	}
 
 	/**
@@ -180,19 +182,27 @@ public class Controller extends HttpServlet {
 			throw new ServletException("The Application manager is not loaded");
 		}
 		String charset = Params.get("PAGE_ENCODING");
-		if(charset.equals("UTF-8")){
+		if (charset.equals("UTF-8")) {
 			req.setCharacterEncoding(charset);
 		}
 		res.setCharacterEncoding(charset);
 
 		appManager.service(appContext, req, res);
 
-		String prettyActionUri = (withPrettyURL ? getActionPlusInnerAction(req) : null);
-		String actionName = getActionName(req, prettyActionUri);
-		String innerAction = getInnerActionName(req, prettyActionUri);
+		String actionName = null;
+		String innerAction = null;
+		if(withPrettyURL){
+			String[] prettyUrlParts = getActionUrlParts(req);
+			actionName = prettyUrlParts[0];
+			innerAction = prettyUrlParts[1];
+		}else{
+			 actionName = getObsoleteActionName(req);
+			 innerAction = getObsoleteInnerActionName(req);
+		}
+
 
 		// Para exibir a url requisitada que chegou ao Controller.
-//		System.out.println(">> "+req.getRequestURL().append((req.getQueryString()!=null?"?"+req.getQueryString():""))); //for DEBUG-MODE
+		System.out.println(">> "+req.getRequestURL().append((req.getQueryString()!=null?"?"+req.getQueryString():""))); //for DEBUG-MODE
 
 		ActionConfig ac = null;
 
@@ -255,25 +265,25 @@ public class Controller extends HttpServlet {
 					} catch (Exception e) {
 						throw new ServletException("Exception while executing the AfterConsequence filters: " + e.getMessage(), e);
 					}
-					if(f instanceof ConsequenceCallbackFilter){
-						if(callbackFilters == null){
+					if (f instanceof ConsequenceCallbackFilter) {
+						if (callbackFilters == null) {
 							callbackFilters = new ArrayList<ConsequenceCallbackFilter>();
 						}
-						callbackFilters.add((ConsequenceCallbackFilter)f);
+						callbackFilters.add((ConsequenceCallbackFilter) f);
 					}
 				}
 			}
-			if(actionExecuted && conseqExecuted && callbackFilters!=null){
-				for(ConsequenceCallbackFilter f : callbackFilters){
+			if (actionExecuted && conseqExecuted && callbackFilters != null) {
+				for (ConsequenceCallbackFilter f : callbackFilters) {
 					try {
 						ConsequenceCallback cc = f.getCallbackClass().newInstance();
 						cc.setActionData(action.getCallback());
 						cc.setActionReturn(returnedResult.toString());
-						cc.setCaller(ac.getName()+"-"+innerAction);
+						cc.setCaller(ac.getName() + "-" + innerAction);
 						Thread thread = new Thread(cc);
 						thread.start();
 					} catch (Exception ex) {
-						throw new ServletException("Exception while invoking Consequence Callbacks. "+ex.getMessage());
+						throw new ServletException("Exception while invoking Consequence Callbacks. " + ex.getMessage());
 					}
 				}
 			}
@@ -304,7 +314,7 @@ public class Controller extends HttpServlet {
 	public Consequence invokeAction(ActionConfig ac, Action action, String innerAction, List<Object> filters, StringBuilder returnedResult) throws Exception {
 
 		InvocationChain chain = createInvocationChain(ac, action, innerAction);
-		if (chainTL.get() == null) { //no caso do ChainConsequence, o chain mantido é o da action original.
+		if (chainTL.get() == null) { //no caso do ChainConsequence, o chain mantido Ã© o da action original.
 			chainTL.set(chain); //setado para gerenciar o log das exceptions
 		}
 
@@ -421,69 +431,79 @@ public class Controller extends HttpServlet {
 	}
 
 	//Only for prettyURLs
-	private String getActionPlusInnerAction(HttpServletRequest req) {
+	//[0] module+subAction+Action
+	//[1] innerAction
+	private String[] getActionUrlParts(HttpServletRequest req) {
 
 		String context = req.getContextPath();
 
 		String uri = req.getRequestURI().toString();
 
+		return getActionUrlParts(context, uri);
+	}
+
+	/**
+	 * @see another overloaded method javadoc
+	 * @param context
+	 * @param uri
+	 * @return
+	 */
+	protected String[] getActionUrlParts(String context, String uri) {
+
+		// remove the context from the uri, if present
 		if (context.length() > 0 && uri.indexOf(context) == 0) {
-			uri = uri.substring(context.length()); // remove the context from the uri, if present
+			uri = uri.substring(context.length());
 		}
 
+		// cut the first '/'
 		if (uri.startsWith("/") && uri.length() > 1) {
-			uri = uri.substring(1); // cut the first '/'
+			uri = uri.substring(1);
 		}
 
+		// cut the last '/'
 		if (uri.endsWith("/") && uri.length() > 1) {
-			uri = uri.substring(0, uri.length() - 1);  // cut the last '/'
+			uri = uri.substring(0, uri.length() - 1);
 		}
 
-		String[] s = uri.split("/");
+		String[] rawParts = uri.split("/");
 
-		if (isModule(s[0])) {
-			if (s.length == 1) {
-				if (s[0].equals(startPage)) {
-					return s[0];
-				} else if (!s[0].equals(EXTENSION)) {
-					return s[0] + "/" + startPage;
+
+		if (isModule(rawParts[0])) {
+			if (rawParts.length == 1) {
+				if (rawParts[0].equals(startPage)) {
+					return new String[]{rawParts[0], null};
+				} else {
+					return new String[]{The.concat(rawParts[0] , "/" , startPage), null};
 				}
-			} else if (s.length >= 2) {
-				//para prever URLs dos módulos
-				if (!s[0].equals(EXTENSION)) {
-					return s[0] + "/" + s[1];
+			} else if (rawParts.length >= 2) {
+				String module = rawParts[0];
+				String actionName = null;
+				String innerName = null;
+				if(this.getAppManager().moduleHasSub(module, rawParts[1])){
+					if(rawParts.length!=2){
+						int index = rawParts[2].indexOf(innerActionSeparator);
+						String actionPart = (index > 0 ? rawParts[2].substring(0, index) : rawParts[2]);
+						actionName =  The.concat(module , "/" , rawParts[1] , "/" , actionPart);
+						innerName = (index > 0 && index + 1 < rawParts[2].length() ? rawParts[2].substring(index + 1) : null);
+					}else{
+						actionName =  The.concat(module , "/" , rawParts[1] , "/" , startPage);
+						innerName = null;
+					}
+				}else {
+					int index = rawParts[1].indexOf(innerActionSeparator);
+					String actionPart = (index > 0 ? rawParts[1].substring(0, index) : rawParts[1]);
+					actionName =  The.concat(module , "/" , actionPart);
+					innerName = (index > 0 && index + 1 < rawParts[1].length() ? rawParts[1].substring(index + 1) : null);
 				}
-				return s[1];
+				return new String[]{actionName, innerName};
 			}
 		} else {
-			return s[0];
+			int index = rawParts[0].indexOf(innerActionSeparator);
+			String actionName = (index > 0 ? rawParts[0].substring(0, index) : rawParts[0]);
+			String innerName = (index > 0 && index + 1 < rawParts[0].length() ? rawParts[0].substring(index + 1) : null);
+			return new String[]{actionName, innerName};
 		}
 
-		return null;
-	}
-
-	protected String getActionName(HttpServletRequest req, String s) {
-		if (!withPrettyURL) {
-			return getObsoleteActionName(req);
-		}
-
-		// separate the inner action from action...
-		int index = s.indexOf(innerActionSeparator);
-		if (index > 0) {
-			return s.substring(0, index);
-		}
-		return s;
-	}
-
-	protected String getInnerActionName(HttpServletRequest req, String s) {
-		if (!withPrettyURL) { //s == null
-			return getObsoleteInnerActionName(req);
-		}
-		// separate the inner action from action...
-		int index = s.indexOf(innerActionSeparator);
-		if (index > 0 && index + 1 < s.length()) {
-			return s.substring(index + 1);
-		}
 		return null;
 	}
 
@@ -583,7 +603,7 @@ public class Controller extends HttpServlet {
 		return moduleIDs.contains(pattern);
 	}
 
-	public AbstractApplicationManager getAppManager() {
-		return appManager;
+	public ApplicationManager getAppManager() {
+		return (ApplicationManager) appManager;
 	}
 }

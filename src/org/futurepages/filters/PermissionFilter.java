@@ -10,9 +10,9 @@ import org.futurepages.core.admin.DefaultUser;
 
 /**
  * Usado individualmente por action, para proteger uma action
- * de acordo com a role e/ou o tipo do usu·rio logado.
+ * de acordo com a role e/ou o tipo do usu√°rio logado.
  * 
- * Verifica se o su·rio logado È do tipo e/ou se tem o role passados como par‚metros.
+ * Verifica se o su√°rio logado √© do tipo e/ou se tem o role passados como par√¢metros.
  * 
  * @author leandro
  */

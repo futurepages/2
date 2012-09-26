@@ -21,10 +21,10 @@ public class ElapsedTimeFormatter implements Formatter<Calendar> {
 	public static String formatValue(Calendar agora, Calendar momentoNoPassado){
 		try {
 			if(CalendarUtil.isNeighborDays(momentoNoPassado, agora) && CalendarUtil.getDifferenceInDays(momentoNoPassado, agora)>0){
-					return "ontem às "+DateUtil.viewDateTime(momentoNoPassado, "HH:mm");
+					return "ontem Ã s "+DateUtil.viewDateTime(momentoNoPassado, "HH:mm");
 			}else{
 				int[] time = CalendarUtil.getElapsedTime(momentoNoPassado, agora);
-				return "há ± " + CalendarUtil.getElapsedTimeStatement(time, UnitTimeEnum.HOUR, 24, false);
+				return "hÃ¡ Â± " + CalendarUtil.getElapsedTimeStatement(time, UnitTimeEnum.HOUR, 24, false);
 			}
 		} catch (CalendarUtil.TooBigDateException e) {
 			int mesAtual = agora.get(Calendar.MONTH)+1;
@@ -32,7 +32,7 @@ public class ElapsedTimeFormatter implements Formatter<Calendar> {
 			int diaPassado = momentoNoPassado.get(Calendar.DAY_OF_MONTH);
 			int mesPassado = momentoNoPassado.get(Calendar.MONTH)+1;
 			int anoPassado = momentoNoPassado.get(Calendar.YEAR);
-			String dia = (diaPassado==1? "1º": String.valueOf(diaPassado));
+			String dia = (diaPassado==1? "1Âº": String.valueOf(diaPassado));
 			String mes = MonthEnum.get(mesPassado);
 			String ano = null;
 			if((anoPassado==anoAtual) ||

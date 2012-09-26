@@ -13,7 +13,7 @@ import org.futurepages.core.tags.build.ContentTypeEnum;
 import org.futurepages.util.FileUtil;
 
 /**
- * Inclui o corpo html retornado por uma requisição http a uma url.
+ * Inclui o corpo html retornado por uma requisiÃ§Ã£o http a uma url.
  * @author leandro
  */
 @Tag(bodyContent = ContentTypeEnum.EMPTY)

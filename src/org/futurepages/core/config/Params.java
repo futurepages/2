@@ -14,7 +14,7 @@ import org.futurepages.util.FileUtil;
 import org.futurepages.util.XmlUtil;
 
 /**
- * Par‚metros da aplicaÁ„o Futurepages
+ * Par√¢metros da aplica√ß√£o Futurepages
  * 
  * @author leandro
  */
@@ -35,11 +35,11 @@ public class Params {
 	}
 
 	/**
-	 * Inicializa os par‚metros padrıes da aplicaÁ„o,
+	 * Inicializa os par√¢metros padr√µes da aplica√ß√£o,
 	 * seta os especificados no arquivo app-params.xml
-	 * e compıe os demais par‚metros dependentes de outros.
+	 * e comp√µe os demais par√¢metros dependentes de outros.
 	 * 
-	 * @param applicationRealPath - endereÁo real da aplicaÁ„o
+	 * @param applicationRealPath - endere√ßo real da aplica√ß√£o
 	 * @param contextName - nome do contexto
 	 * @throws java.lang.Exception
 	 */
@@ -54,7 +54,7 @@ public class Params {
 	}
 
 	/**
-	 * Par‚metros Padrıes
+	 * Par√¢metros Padr√µes
 	 */
 	private static void defaultParams(String applicationRealPath, String contextName) {
 		paramsMap.put("CONTEXT_NAME", contextName);
@@ -62,7 +62,7 @@ public class Params {
 		paramsMap.put("WEBINF_PATH", get("WEB_REAL_PATH") + "WEB-INF");
 		paramsMap.put("CLASSES_PATH", get("WEBINF_PATH") + "/classes/");
 
-		//sÛ quando for dar suporte a mais de um banco de dados
+		//s√≥ quando for dar suporte a mais de um banco de dados
 		paramsMap.put("CONNECT_EXTERNAL_MODULES", "false");
 		paramsMap.put("DATABASE_DIR_NAME", "database");
 		paramsMap.put("DEPLOY_MODE" , "none");
@@ -93,7 +93,7 @@ public class Params {
 
 	private static String pathParamsFile = null;
 	/**
-	 * LÍ os par‚metros do arquivo xml
+	 * L√™ os par√¢metros do arquivo xml
 	 */
 	private static void parseXML() {
 		pathParamsFile = paramsMap.get("CLASSES_PATH")+CONFIGURATION_DIR_NAME+"/"+PARAMS_FILE_NAME;
@@ -107,15 +107,15 @@ public class Params {
 				paramsMap.put(name, value);
 			}
 		} catch (IOException e) {
-			throw new ConfigFileNotFoundException("Arquivo de par‚metros da aplicaÁ„o n„o encontrado: "+pathParamsFile);
+			throw new ConfigFileNotFoundException("Arquivo de par√¢metros da aplica√ß√£o n√£o encontrado: "+pathParamsFile);
 		} catch (JDOMException e) {
-			throw new BadFormedConfigFileException("Arquivo de par‚metros da aplicaÁ„o mal formado: "+pathParamsFile);
+			throw new BadFormedConfigFileException("Arquivo de par√¢metros da aplica√ß√£o mal formado: "+pathParamsFile);
 		}
 
 	}
 
 	/**
-	 * Constroi os Par‚metros Compostos 
+	 * Constroi os Par√¢metros Compostos 
 	 */
 	private static void compositeParams() {
 		paramsMap.put("CLASSES_REAL_PATH", get("WEBINF_PATH") + "/classes");
@@ -149,8 +149,8 @@ public class Params {
 	}
 
 	/**
-	 * Remove os par‚metros de geraÁ„o de banco e de compactaÁ„o de recursos para que
-	 * n„o sejam executados sempre que a aplicaÁ„o for restartada.
+	 * Remove os par√¢metros de gera√ß√£o de banco e de compacta√ß√£o de recursos para que
+	 * n√£o sejam executados sempre que a aplica√ß√£o for restartada.
 	 * @throws Exception
 	 */
 	public static void removeFileAutomations() throws Exception {

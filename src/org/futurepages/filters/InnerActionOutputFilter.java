@@ -6,7 +6,7 @@ import org.futurepages.core.control.InvocationChain;
 
 /**
  * Define o output com a chave "outKey". Este filtro retorna para o output
- * a string que denota a innerAction na chave passada como par‚metro no construtor.
+ * a string que denota a innerAction na chave passada como par√¢metro no construtor.
  * @author leandro
  */
 public class InnerActionOutputFilter implements Filter {

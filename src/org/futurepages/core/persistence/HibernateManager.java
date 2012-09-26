@@ -27,7 +27,7 @@ public class HibernateManager {
 	private static Map<String, ThreadLocal<Session>> sessionsTL     = new HashMap<String, ThreadLocal<Session>>();
 
 	/**
-	 * InicializaÁ„o Est·tica da Conex„o do Hibernate com o(s) Banco(s) de Dados.
+	 * Inicializa√ß√£o Est√°tica da Conex√£o do Hibernate com o(s) Banco(s) de Dados.
 	 */
 	static {
 		try {
@@ -45,12 +45,12 @@ public class HibernateManager {
 				running = true;
 			}
 		} catch (ConfigFileNotFoundException e) {
-			log("Arquivo de ConfiguraÁıes do hibernate n„o encontrado: " + e.getMessage());
+			log("Arquivo de Configura√ß√µes do hibernate n√£o encontrado: " + e.getMessage());
 		} catch (UnsupportedEncodingException e) {
-			log("N„o foi possÌvel carregar as configuraÁıes hibernate: " + e.getMessage());
+			log("N√£o foi poss√≠vel carregar as configura√ß√µes hibernate: " + e.getMessage());
 			System.out.println(e.getMessage());
 		} catch (Exception ex) {
-			log("Erro Inesperado na inicializaÁ„o do Hibernate: " + ex.getMessage());
+			log("Erro Inesperado na inicializa√ß√£o do Hibernate: " + ex.getMessage());
 			DefaultExceptionLogger.getInstance().execute(ex);
 		}
 	}
@@ -124,7 +124,7 @@ public class HibernateManager {
 			}
 			
 			for (SessionFactory sf : factories.values()) {
-				if (sf != null && !sf.isClosed()) { //se a fabrica de sessao n„o estiver fechada fecha ela
+				if (sf != null && !sf.isClosed()) { //se a fabrica de sessao n√£o estiver fechada fecha ela
 					sf.close();
 				}
 			}
@@ -134,7 +134,7 @@ public class HibernateManager {
 
 			log("sessions killed.");
 		} catch (Exception ex) {
-			log("N„o foi possÌvel matar hibernate-sessions:");
+			log("N√£o foi poss√≠vel matar hibernate-sessions:");
 			DefaultExceptionLogger.getInstance().execute(ex);
 		}
 

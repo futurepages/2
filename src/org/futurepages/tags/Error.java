@@ -17,7 +17,7 @@ public class Error extends PrintTag {
             return HtmlMapChars.htmlValue(req.getParameter(Action.ERROR));
         } else {
 			String error = action.getError();
-			if(error == null){ //ent„o error vem do input
+			if(error == null){ //ent√£o error vem do input
 				error = HtmlMapChars.noHtmlTags((String)action.getInput().getValue(Action.ERROR));
 			}
         return (error!=null)? error : "";

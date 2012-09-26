@@ -75,7 +75,7 @@ class ClassFileParser<K extends Object> extends FileParser<Class<K>> {
 					return (Class<K>) klass;
 				}
 			} catch (ClassNotFoundException e) {
-				System.out.println("Não foi possível carregar a classe em " + classFile.getAbsolutePath() + "\n class:" + className);
+				System.out.println("NÃ£o foi possÃ­vel carregar a classe em " + classFile.getAbsolutePath() + "\n class:" + className);
 				DefaultExceptionLogger.getInstance().execute(e);
 			}
 		}
