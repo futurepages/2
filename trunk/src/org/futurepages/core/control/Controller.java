@@ -202,7 +202,7 @@ public class Controller extends HttpServlet {
 
 
 		// Para exibir a url requisitada que chegou ao Controller.
-		System.out.println(">> "+req.getRequestURL().append((req.getQueryString()!=null?"?"+req.getQueryString():""))); //for DEBUG-MODE
+//		System.out.println(">> "+req.getRequestURL().append((req.getQueryString()!=null?"?"+req.getQueryString():""))); //for DEBUG-MODE
 
 		ActionConfig ac = null;
 
