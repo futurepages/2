@@ -8,7 +8,7 @@
 	<param name="SCHEMA_GENERATION_TYPE"   value="export"/>
     <param name="INSTALL_MODE"             value="on"/>
 	
-	<param name="GLOBAL_HEAD_TITLE"        value="o futurepages hehh!"/>
+	<param name="GLOBAL_HEAD_TITLE"        value="Futurepages - The Framework"/>
 
 
 	<param name="UPLOADS_REAL_PATH"        value="D:/Servers/wamp/www/placitum_uploads"/>
@@ -16,13 +16,14 @@
 	<param name="APP_HOST"       	   	   value="http://localhost:8080/"/>
 	
     <param name="EMAIL_ACTIVE"             value="true"/>
-	<param name="EMAIL_USER_NAME"          value="placitum@futurepages.org"/>
-	<param name="EMAIL_USER_PASSWORD"      value="placitum321!@#mail"/>
+	<param name="EMAIL_USER_NAME"          value="noreply@futurepages.org"/>
+	<param name="EMAIL_USER_PASSWORD"      value="fpg321!@#mail"/>
 	<param name="EMAIL_HOST_NAME"          value="smtp.futurepages.org"/>
 	<param name="EMAIL_DEFAULT_PORT"       value="25"/>
 	<param name="EMAIL_SSL_CONNECTION"     value="false"/>
-	<param name="EMAIL_FROM"               value="placitum@futurepages.org"/>
-	<param name="EMAIL_FROM_NAME"          value="placiTum - Onde os Profissionais de direito se encontram!"/>
-	<param name="EMAIL_CHARSET"            value="ISO_8859_1"/>
+	<param name="EMAIL_FROM"               value="Futurepages App"/>
+	<param name="EMAIL_FROM_NAME"          value="Aplicação de Exemplo para o Futurepages!"/>
+	<param name="EMAIL_CHARSET"            value="UTF_8"/>
+	<!--<param name="EMAIL_CHARSET"            value="ISO_8859_1"/>-->
 	
 </app-params-configuration>
