@@ -2,7 +2,6 @@ package org.futurepages.util;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
 import org.futurepages.enums.DayOfWeek;
 import org.futurepages.enums.MonthEnum;
 import org.futurepages.enums.UnitTimeEnum;
@@ -12,6 +11,13 @@ public class CalendarUtil {
 
 	private static final long millisecondsDayFactor = 86400000L;
 
+	/*
+	 * A shortcut to "Calendar.getInstance()".
+	 */
+	private static Calendar now() {
+		return Calendar.getInstance();
+	}
+	
 	/**
 	 * Retorna o iésimo dia do ano da data informada.
 	 * <br>Se o ano for não bisexto(possui um dia a menos no ano),o valor retornado será o iésimo dia +1 para os dias após 01/03.
@@ -641,5 +647,14 @@ public class CalendarUtil {
 
 	public static String getMonthAbbr(Calendar cal) {
 		return MonthEnum.values()[cal.get(Calendar.MONTH)].getAbbr();
+	}
+	
+	public static boolean isToday(Calendar cal) {
+		Calendar today = now();
+		boolean isSameYear = today.get(Calendar.YEAR) == cal.get(Calendar.YEAR);
+		boolean isSameMonth = today.get(Calendar.MONTH) == cal.get(Calendar.MONTH);
+		boolean isSameDay = today.get(Calendar.DAY_OF_MONTH) == cal.get(Calendar.DAY_OF_MONTH);		
+
+		return (isSameYear && isSameMonth && isSameDay);
 	}
 }
