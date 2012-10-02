@@ -650,10 +650,13 @@ public class CalendarUtil {
 	}
 	
 	public static boolean isToday(Calendar cal) {
-		Calendar today = now();
-		boolean isSameYear = today.get(Calendar.YEAR) == cal.get(Calendar.YEAR);
-		boolean isSameMonth = today.get(Calendar.MONTH) == cal.get(Calendar.MONTH);
-		boolean isSameDay = today.get(Calendar.DAY_OF_MONTH) == cal.get(Calendar.DAY_OF_MONTH);		
+		return isSameDay(cal, now());
+	}
+	
+	public static boolean isSameDay(Calendar day1, Calendar day2) {
+		boolean isSameYear = day1.get(Calendar.YEAR) == day2.get(Calendar.YEAR);
+		boolean isSameMonth = day1.get(Calendar.MONTH) == day2.get(Calendar.MONTH);
+		boolean isSameDay = day1.get(Calendar.DAY_OF_MONTH) == day2.get(Calendar.DAY_OF_MONTH);		
 
 		return (isSameYear && isSameMonth && isSameDay);
 	}
