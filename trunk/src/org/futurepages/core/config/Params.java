@@ -71,6 +71,7 @@ public class Params {
     	paramsMap.put("EMAIL_ACTIVE", "false");
 		paramsMap.put("EMAIL_DEFAULT_PORT", "25");
 		paramsMap.put("EMAIL_SSL_CONNECTION", "false");
+		paramsMap.put("EMAIL_CHARSET", "ISO_8859_1");
 		paramsMap.put("EXCEPTION_FILE_PATH",     "/exceptions/exception.jsp");
 		paramsMap.put("GENERATE_TAGLIB",  "true");
 		paramsMap.put("GLOBAL_HEAD_TITLE","");
