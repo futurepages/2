@@ -131,27 +131,27 @@ public class EncodingUtil {
 	//Migração de projeto de ISO para UTF-8
 	public static void main(String[] args) throws URISyntaxException, Exception {
 		String path = "E:\\Users\\leandro\\Documents\\Workspaces\\netbeans\\intranet";
-		String pathWEB = path + "\\web";
+//		String pathWEB = path + "\\web";
 		String pathSRC = path + "\\src";
 //		String pathTEST = path + "\\test";
 
-		migratingISOtoUTF8(pathWEB, ".*\\.sql");
-		migratingISOtoUTF8(pathWEB, ".*\\.htm");
-		migratingISOtoUTF8(pathWEB, ".*\\.html");
-		migratingISOtoUTF8(pathWEB, ".*\\.js");
-		migratingISOtoUTF8(pathWEB, ".*\\.css");
-		migratingISOtoUTF8(pathWEB, ".*\\.txt");
-		migratingISOtoUTF8(pathWEB, ".*\\.xml");
-		migratingISOtoUTF8(pathWEB, "[^\\.]*");
+//		migratingISOtoUTF8(pathWEB, ".*\\.sql");
+//		migratingISOtoUTF8(pathWEB, ".*\\.htm");
+//		migratingISOtoUTF8(pathWEB, ".*\\.html");
+//		migratingISOtoUTF8(pathWEB, ".*\\.js");
+//		migratingISOtoUTF8(pathWEB, ".*\\.css");
+//		migratingISOtoUTF8(pathWEB, ".*\\.txt");
+//		migratingISOtoUTF8(pathWEB, ".*\\.xml");
+//		migratingISOtoUTF8(pathWEB, "[^\\.]*");
 
 
-		migratingISOtoUTF8(pathSRC, ".*\\.sql");
-		migratingISOtoUTF8(pathSRC, ".*\\.txt");
-		migratingISOtoUTF8(pathSRC, ".*\\.properties");
-		migratingISOtoUTF8(pathSRC, ".*\\.java");
-		migratingISOtoUTF8(pathSRC, ".*\\.htm");
-		migratingISOtoUTF8(pathSRC, ".*\\.html");
-		migratingISOtoUTF8(pathSRC, "[^\\.]*");
+//		migratingISOtoUTF8(pathSRC, ".*\\.sql");
+//		migratingISOtoUTF8(pathSRC, ".*\\.txt");
+//		migratingISOtoUTF8(pathSRC, ".*\\.properties");
+		migratingISOtoUTF8(pathSRC, "SelecionadoDao.java");
+//		migratingISOtoUTF8(pathSRC, ".*\\.htm");
+//		migratingISOtoUTF8(pathSRC, ".*\\.html");
+//		migratingISOtoUTF8(pathSRC, "[^\\.]*");
 		
 //		migratingISOtoUTF8(pathTEST, ".*\\.java");
 //		migratingISOtoUTF8(pathTEST, ".*\\.txt");
