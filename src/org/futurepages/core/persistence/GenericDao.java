@@ -65,7 +65,7 @@ public class GenericDao extends HQLProvider {
 
     public Query query(String hqlQuery) {
 //		System.out.println("HQL: "+hqlQuery); //para depurar HQls, descomente. // for DEBUG-MODE.
-		Query query = session().createQuery(hqlQuery).setCacheable(true);
+		Query query = session().createQuery(hqlQuery);//.setCacheable(true);
         return query;
     }
 
