@@ -59,7 +59,16 @@ public class FileUtil {
 		char[] buffer = new char[(int) file.length()];
 		fr.read(buffer);
 		fr.close();
-		return new String(buffer);
+		return buildString(buffer);
+	}
+
+	//MÉTODO SOB OBSERVAÇÃO!!
+	public static String buildString(char[] buffer){
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0 ; i < buffer.length && buffer[i]!='\0' ; i++){
+			sb.append(buffer[i]);
+		}
+		return sb.toString();
 	}
 
     public static byte[] getBytesFromUrl(String url, StringBuilder sbContentType, Long maxAllowed)  throws IOException {
