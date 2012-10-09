@@ -59,6 +59,7 @@ public class FileUtil {
 		char[] buffer = new char[(int) file.length()];
 		fr.read(buffer);
 		fr.close();
+		//antes era new String(buffer); //como tivemos problema com uff-8, que criou-se caracteres \0, trocamos.
 		return buildString(buffer);
 	}
 
