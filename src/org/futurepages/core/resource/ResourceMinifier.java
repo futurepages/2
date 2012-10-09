@@ -2,6 +2,7 @@
 package org.futurepages.core.resource;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import org.futurepages.core.config.Params;
 import org.futurepages.util.FileUtil;
@@ -19,12 +20,21 @@ public class ResourceMinifier {
 
 		if(js){
 			List<File> jsFiles = FileUtil.listFilesFromDirectory(webDir, true,".*\\.js");
-			(new JavaScriptMinifier()).execute(jsFiles);
+			try {
+				(new JavaScriptMinifier()).execute(jsFiles);
+			} catch (IOException ex) {
+				System.out.println("[ Erro ao Compactar Javascript ... ]");
+				ex.printStackTrace();
+			}
 		}
 		if(css){
 			List<File> cssFiles = FileUtil.listFilesFromDirectory(webDir, true,".*\\.css");
-			(new CSSMinifier()).execute(cssFiles);
+			try {
+				(new CSSMinifier()).execute(cssFiles);
+			} catch (IOException ex) {
+				System.out.println("[ Erro ao Compactar CSS ... ]");
+				ex.printStackTrace();
+			}
 		}
-
 	}
 }
