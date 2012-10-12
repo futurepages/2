@@ -660,4 +660,12 @@ public class CalendarUtil {
 
 		return (isSameYear && isSameMonth && isSameDay);
 	}
+	
+	public static boolean isAnniversaryToday(Calendar birthday) {
+		Calendar now = now();
+		boolean isSameMonth = now.get(Calendar.MONTH) == birthday.get(Calendar.MONTH);
+		boolean isSameDay = now.get(Calendar.DAY_OF_MONTH) == birthday.get(Calendar.DAY_OF_MONTH);
+		
+		return isSameMonth && isSameDay;
+	}
 }
