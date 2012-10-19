@@ -282,6 +282,14 @@ public class The {
 		return wordInRegex(str, regexPatternChars); //retira caracteres especiais diversos.
     }
 
+    public static String wordWithSpecialsIn(String wIn){
+        String[] specials = new String[]{":",";",",",".","!","?","(",")","\\","/",
+                                         "\"","'","%","#","{","}","[","]","º","ª",
+                                         "<",">","´","`"};
+
+       return wordWithoutSpecials(specials, wIn," ").trim();
+    }
+
     /**
      * Remove caracteres especiais.
      * @param str somente alfanumericos puros sem acentuaçao, ponto, underline e hifen
@@ -384,6 +392,7 @@ public class The {
 		return sb.toString();
 	}
 
+	//ajuda: regex que traz letras (com e sem acentos) e números [A-Za-zá-üÁ-Ü0-9]
 	public static String wordInRegex(String str, String regexPatternChars) {
 		Pattern tagsPattern  = Pattern.compile(regexPatternChars);
 		IterableString iter = new IterableString(tagsPattern, str);
