@@ -279,7 +279,7 @@ public class The {
 
 		 String regexPatternChars = "[\\d|A-Z|a-z]";
 
-		return wordInRegex(str, regexPatternChars);
+		return wordInRegex(str, regexPatternChars); //retira caracteres especiais diversos.
     }
 
     /**
@@ -384,7 +384,7 @@ public class The {
 		return sb.toString();
 	}
 
-	private static String wordInRegex(String str, String regexPatternChars) {
+	public static String wordInRegex(String str, String regexPatternChars) {
 		Pattern tagsPattern  = Pattern.compile(regexPatternChars);
 		IterableString iter = new IterableString(tagsPattern, str);
 		StringBuilder sb     = new StringBuilder();
