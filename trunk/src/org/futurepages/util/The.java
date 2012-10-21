@@ -287,7 +287,14 @@ public class The {
                                          "\"","'","%","#","{","}","[","]","º","ª",
                                          "<",">","´","`"};
 
-       return wordWithoutSpecials(specials, wIn," ").trim();
+       String strOut = wordWithoutSpecials(specials, wIn," ").trim();
+	   if(strOut.startsWith("-")){
+			strOut = strOut.substring(1);
+	   }
+	   if(strOut.endsWith("-")){
+			strOut = strOut.substring(0, strOut.length()-1);
+	   }
+	   return strOut;
     }
 
     /**
