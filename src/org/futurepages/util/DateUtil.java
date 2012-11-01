@@ -1,5 +1,6 @@
 package org.futurepages.util;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -228,6 +229,8 @@ public class DateUtil {
 			return new SimpleDateFormat(mask, LocaleManager.getDefaultLocale()).format(((GregorianCalendar) in).getTime()).toString();
 		} else if (in instanceof Long) {
 			return new SimpleDateFormat(mask, LocaleManager.getDefaultLocale()).format(new Date((Long) in)).toString();
+		} else if (in instanceof Number) {
+			return TimeUtil.timeFrom(((Number) in).doubleValue()); //somente tempo, considera sinal
 		}
 		return null;
 	}
