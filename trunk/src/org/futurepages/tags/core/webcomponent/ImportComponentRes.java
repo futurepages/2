@@ -182,7 +182,7 @@ public final class ImportComponentRes extends SimpleTagSupport {
 
 	private String importJS(HttpServletRequest req, boolean async){
 		return  concat("<script type=\"text/javascript\" src=\"" , resPath(req) , "/" , key , "/" , version , "/" , key , ".js"+Params.get("RELEASE_QUERY")+"\"></script>"
-					  ,(async?"<script type=\"text/javascript\">addComponentRes('"+this.uniqueKey()+"')</script>":"")
+					  ,(async?"<script type=\"text/javascript\">addComponentRes('"+this.uniqueKey()+"');</script>":"")
 				);
 	}
 
