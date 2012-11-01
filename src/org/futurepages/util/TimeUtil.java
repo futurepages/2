@@ -37,4 +37,9 @@ public class TimeUtil {
 		}
 		return true;
 	}
+
+
+	public static String timeFrom(double dbTime){
+		return "";
+	}
 }
