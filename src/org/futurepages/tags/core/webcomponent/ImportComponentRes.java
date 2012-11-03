@@ -26,6 +26,7 @@ public final class ImportComponentRes extends SimpleTagSupport {
 	public static final ThreadLocal<HashSet> asyncResources = new ThreadLocal();
 	public static final ThreadLocal<Boolean> asyncResStoredInClient = new ThreadLocal();
 
+	//chamado sempre antes da execução de uma DynAction (por conta do compartilhamento de Threads do Tomcat
 	public static void destroyAsyncResources() {
 		asyncResources.remove();
 		asyncResStoredInClient.remove();
@@ -57,6 +58,11 @@ public final class ImportComponentRes extends SimpleTagSupport {
 	@Override
 	public void doTag() throws JspException, IOException {
 		getMyContainer();
+
+//		System.out.print("<#"+Thread.currentThread().getId()+"#> "); // for DEBUG-MODE
+//		System.out.print(myContainer == null ? "{AJAX} " : ""); // for DEBUG-MODE
+//		System.out.println(uniqueKey()); // for DEBUG-MODE
+		
 		if (myContainer != null) {
 			StringBuffer buffer = new StringBuffer();
 			if (getJspBody() != null) {
@@ -70,8 +76,13 @@ public final class ImportComponentRes extends SimpleTagSupport {
 				throw new JspException("Componente "+uniqueKey()+" em container já avaliado e não nulo");
 			}
 			getJspContext().getOut().print(buffer);
+//			System.out.println("---> addToContainer()"); // for DEBUG-MODE
 			addToContainer();
-		} else { //container = null (ajax request)
+		}		
+		else
+		{ //container = null (ajax request)
+//			System.out.println(" ---> "+asyncResources.get()); // for DEBUG-MODE
+			
 			HttpServletRequest req = (HttpServletRequest) ((PageContext) getJspContext()).getRequest();
 			HttpServletResponse res = (HttpServletResponse) ((PageContext) getJspContext()).getResponse();
 
@@ -86,7 +97,10 @@ public final class ImportComponentRes extends SimpleTagSupport {
 					String jsResStr = null;
 					if(asyncResStoredInClient.get()){
 						jsResStr = importJS(req, true);
-					}else {
+					}else { //significa que não usou dynAction() no cliente, que envia o cookie.
+
+//						System.out.println("---> needResourceJS() -- não utilizou dynAction no cliente."); // for DEBUG-MODE
+
 						String hasModule = !Is.empty(moduleId) ? concat(",'", moduleId, "'") : "";
 						jsResStr = (concat("<script type=\"text/javascript\">needResourceJS('", this.getKey(), "','", this.getVersion(), "'", hasModule, ");</script>"));
 					}
@@ -100,6 +114,7 @@ public final class ImportComponentRes extends SimpleTagSupport {
 					getJspBody().invoke(evalResult);
 					getJspContext().getOut().print(evalResult.getBuffer());
 				}
+//				System.out.println("---> addToAsyncResources()"); // for DEBUG-MODE
 				asyncResources.get().add(this.uniqueKey()); //adiciona para não executar mais para este componente
 			 }
 		}
@@ -181,6 +196,7 @@ public final class ImportComponentRes extends SimpleTagSupport {
 	}
 
 	private String importJS(HttpServletRequest req, boolean async){
+//		System.out.println("[importJS"+(async?" {async}":"")+"] {"+key+">"+version+"}"); // for DEBUG-MODE
 		return  concat("<script type=\"text/javascript\" src=\"" , resPath(req) , "/" , key , "/" , version , "/" , key , ".js"+Params.get("RELEASE_QUERY")+"\"></script>"
 					  ,(async?"<script type=\"text/javascript\">addComponentRes('"+this.uniqueKey()+"');</script>":"")
 				);
