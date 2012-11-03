@@ -10,9 +10,11 @@ import java.util.Set;
 import javax.servlet.ServletException;
 
 import org.futurepages.core.action.Action;
+import org.futurepages.core.action.AsynchronousManager;
 import org.futurepages.core.filter.Filter;
 import org.futurepages.core.input.Input;
 import org.futurepages.filters.MethodParamFilter;
+import org.futurepages.tags.core.webcomponent.ImportComponentRes;
 import org.futurepages.util.InjectionUtils;
 
 /**
@@ -98,6 +100,11 @@ public class InvocationChain {
 		Method metodo = getMethod();
 		if(metodo != null){
 			Object[] paramValues = getParametersValues(metodo);
+
+			if(AsynchronousManager.isDynAction(this)) {
+				ImportComponentRes.destroyAsyncResources();
+			}
+			
 			Object valorRetornado = metodo.invoke(action, paramValues);
 
 			String result;
