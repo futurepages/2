@@ -45,7 +45,7 @@ public class TimeUtil {
 		Double horasDouble = Math.floor(Math.abs(dbTime));
 		Double minutosDouble = (Math.abs(dbTime) - horasDouble) * 60 ;
 	   return The.concat(
-						(dbTime>0?"-":""),
+						(dbTime<0?"-":""),
 						The.intWithLeftZeros(horasDouble.intValue(),2),
 						":",
 						The.intWithLeftZeros(minutosDouble.intValue(),2)
