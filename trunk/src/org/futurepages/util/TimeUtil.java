@@ -39,8 +39,16 @@ public class TimeUtil {
 	}
 
 	//entrada 30.5 --> saída: "30:30"
+	//entrada 1.1 --> saída: "01:06"
 	//entrada -20.25 --> saída: "-20:15"
 	public static String timeFrom(double dbTime){
-		return "";
+		Double horasDouble = (dbTime > 0) ? (Math.floor(dbTime)) : (Math.floor(dbTime*(-1)));
+		Double minutosDouble = (dbTime > 0) ? (dbTime - horasDouble) * 60 : ((dbTime*(-1)) - horasDouble) * 60;
+	   return The.concat(
+						(dbTime>0?"-":""),
+						The.intWithLeftZeros(horasDouble.intValue(),2),
+						":",
+						The.intWithLeftZeros(minutosDouble.intValue(),2)
+			  );
 	}
 }
