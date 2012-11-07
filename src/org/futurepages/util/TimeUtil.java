@@ -42,7 +42,7 @@ public class TimeUtil {
 	//entrada 1.1 --> saída: "01:06"
 	//entrada -20.25 --> saída: "-20:15"
 	public static String timeFrom(double dbTime){
-		Double horasDouble = Math.abs(Math.floor(dbTime));
+		Double horasDouble = Math.floor(Math.abs(dbTime));
 		Double minutosDouble = (Math.abs(dbTime) - horasDouble) * 60 ;
 	   return The.concat(
 						(dbTime>0?"-":""),
