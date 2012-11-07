@@ -38,7 +38,8 @@ public class TimeUtil {
 		return true;
 	}
 
-
+	//entrada 30.5 --> saída: "30:30"
+	//entrada -20.25 --> saída: "-20:15"
 	public static String timeFrom(double dbTime){
 		return "";
 	}
