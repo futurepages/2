@@ -1,9 +1,12 @@
 package org.futurepages.core.config;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.futurepages.core.exception.DefaultExceptionLogger;
 
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -11,6 +14,7 @@ import org.jdom.JDOMException;
 import org.futurepages.exceptions.BadFormedConfigFileException;
 import org.futurepages.exceptions.ConfigFileNotFoundException;
 import org.futurepages.util.FileUtil;
+import org.futurepages.util.The;
 import org.futurepages.util.XmlUtil;
 
 /**
@@ -20,7 +24,7 @@ import org.futurepages.util.XmlUtil;
  */
 public class Params {
 
-	private static HashMap<String, String> paramsMap = new HashMap<String, String>();
+	private static HashMap<String, String> paramsMap;
 
     public static final  String PARAMS_FILE_NAME       = "app-params.xml";
 	public static final  String MODULES_PATH           = "modules";
@@ -30,65 +34,98 @@ public class Params {
 	public static final  String TEMPLATE_PATH          = "template";
 	public static final  String BASE_HIBERNATE_PROPERTIES_FILE = "hibernate.properties";
 
-	public static String get(String name) {
-		return paramsMap.get(name);
+	/**
+	 * Inicializa os parâmetros padrões da aplicação (sem recursos web),
+	 * seta os especificados no arquivo app-params.xml
+	 */
+	static{
+		paramsMap = new HashMap<String, String>();
+		try {
+			System.out.println(">> Params [static]...");
+			defineMainParams();
+			parseXML();
+			System.out.println(">> Params [static] OK");
+		} catch (UnsupportedEncodingException ex) {
+			System.out.println(">> Params [static] Crashed!");
+			DefaultExceptionLogger.getInstance().execute(ex);
+		}
 	}
 
-	/**
-	 * Inicializa os parâmetros padrões da aplicação,
-	 * seta os especificados no arquivo app-params.xml
-	 * e compõe os demais parâmetros dependentes de outros.
-	 * 
-	 * @param applicationRealPath - endereço real da aplicação
-	 * @param contextName - nome do contexto
-	 * @throws java.lang.Exception
-	 */
-	public static void initialize(String applicationRealPath, String contextName){
-		defaultParams(applicationRealPath, contextName);
+	public static void initialize(String contextName) throws UnsupportedEncodingException {
+		paramsMap = new HashMap<String, String>();
+		String classesPath = defineMainParams();
+		webDefaultParams(classesPath, contextName);
 		parseXML();
-		compositeParams();
+		compositeWebParams();
+	}
+	
+	public static String get(String name) {
+		return paramsMap.get(name);
 	}
 
 	public static Map<String, String> getParamsMap(){
 		return  paramsMap;
 	}
 
-	/**
-	 * Parâmetros Padrões
-	 */
-	private static void defaultParams(String applicationRealPath, String contextName) {
-		paramsMap.put("CONTEXT_NAME", contextName);
-		paramsMap.put("WEB_REAL_PATH", applicationRealPath);
-		paramsMap.put("WEBINF_PATH", get("WEB_REAL_PATH") + "WEB-INF");
-		paramsMap.put("CLASSES_PATH", get("WEBINF_PATH") + "/classes/");
+	private static String defineMainParams() throws UnsupportedEncodingException {
 
-		//só quando for dar suporte a mais de um banco de dados
-		paramsMap.put("CONNECT_EXTERNAL_MODULES", "false");
+		//super-core params
+		String classesPath = (new File(FileUtil.classesPath(Params.class))).getAbsolutePath()+"/";
+		paramsMap.put("CLASSES_PATH", classesPath);
+
+		paramsMap.put("CLASSES_REAL_PATH", classesPath.substring(0, classesPath.length()-1)); //sem a última barra, mantido por conta de legados.
+		paramsMap.put("MODULES_CLASSES_REAL_PATH", get("CLASSES_REAL_PATH") + "/" + Params.MODULES_PATH);
+
+		//stand-alone params
+		paramsMap.put("CONNECT_EXTERNAL_MODULES", "false"); //só quando for dar suporte a mais de um banco de dados
 		paramsMap.put("DATABASE_DIR_NAME", "database");
 		paramsMap.put("DEPLOY_MODE" , "none");
 		paramsMap.put("DEV_MODE" , "off");
-		paramsMap.put("DYN_EXCEPTION_FILE_PATH", "/exceptions/dyn/exception.jsp");
     	paramsMap.put("EMAIL_ACTIVE", "false");
 		paramsMap.put("EMAIL_DEFAULT_PORT", "25");
 		paramsMap.put("EMAIL_SSL_CONNECTION", "false");
+		paramsMap.put("INSTALL_MODE", "off");
+		paramsMap.put("PAGE_ENCODING", "ISO-8859-1");
+		paramsMap.put("RELEASE", "");
+		paramsMap.put("MIGRATION_CLASSPATH", "");
+		paramsMap.put("SCHEMA_GENERATION_TYPE", "none");
+		paramsMap.put("QUARTZ_MODE", "off");
+
+
+		return classesPath;
+	}
+
+	/**
+	 * Parâmetros Padrões (WEB Application)
+	 */
+	private static void webDefaultParams(String classesPath, String contextName) {
+		//entrada: "C:/path/completo/tal/projectName/webQualquerCoisa/WEB-INF/classes/"
+		String applicationRealPath = (new File(classesPath.substring(0, classesPath.length()-16))).getAbsolutePath()+"/"; //16 = "WEB-INF/classes/".length
+
+		contextName = (contextName != null ? contextName : "");
+
+		paramsMap.put("WEB_REAL_PATH", applicationRealPath);
+		paramsMap.put("WEBINF_PATH", get("WEB_REAL_PATH") + "WEB-INF");
+		paramsMap.put("MODULES_WEB_REAL_PATH", get("WEB_REAL_PATH") + Params.MODULES_PATH);
+		paramsMap.put("CONTEXT_NAME", contextName);
+
+		paramsMap.put("DYN_EXCEPTION_FILE_PATH", "/exceptions/dyn/exception.jsp");
 		paramsMap.put("EMAIL_CHARSET", "ISO_8859_1");
-		paramsMap.put("EXCEPTION_FILE_PATH",     "/exceptions/exception.jsp");
+		paramsMap.put("EXCEPTION_FILE_PATH",  "/exceptions/exception.jsp");
 		paramsMap.put("GENERATE_TAGLIB",  "true");
 		paramsMap.put("GLOBAL_HEAD_TITLE","");
 		paramsMap.put("INIT_ACTION", "init.Index");
 		paramsMap.put("INIT_MANAGER_CLASS", "org.futurepages.core.InitManager");
-		paramsMap.put("INSTALL_MODE", "off");
-		paramsMap.put("PAGE_ENCODING", "ISO-8859-1");
 		paramsMap.put("PRETTY_URL", "false");
-		paramsMap.put("MIGRATION_CLASSPATH", "");
 		paramsMap.put("MINIFY_RESOURCE_MODE", "none"); //none, css, js, both
-		paramsMap.put("QUARTZ_MODE", "off");
-		paramsMap.put("RELEASE", "");
-		paramsMap.put("SCHEMA_GENERATION_TYPE", "none");
 		paramsMap.put("START_PAGE_NAME", "Index");
         paramsMap.put("THEME", "default");
         paramsMap.put("THEMES_DIR_NAME", "themes");
-        paramsMap.put("USE_MODULE_DEPENDENCY", "false");
+        paramsMap.put("USE_MODULE_DEPENDENCY", "false"); //control (via ModuleManager)
+
+		for(String key : paramsMap.keySet()){
+			System.out.println(key+":"+paramsMap.get(key));
+		}
 	}
 
 
@@ -97,7 +134,7 @@ public class Params {
 	 * Lê os parâmetros do arquivo xml
 	 */
 	private static void parseXML() {
-		pathParamsFile = paramsMap.get("CLASSES_PATH")+CONFIGURATION_DIR_NAME+"/"+PARAMS_FILE_NAME;
+		pathParamsFile = The.concat(paramsMap.get("CLASSES_PATH"), CONFIGURATION_DIR_NAME , "/", PARAMS_FILE_NAME);
 		Element appParams;
 		try {
 			appParams = XmlUtil.getRootElement(pathParamsFile);
@@ -118,10 +155,7 @@ public class Params {
 	/**
 	 * Constroi os Parâmetros Compostos 
 	 */
-	private static void compositeParams() {
-		paramsMap.put("CLASSES_REAL_PATH", get("WEBINF_PATH") + "/classes");
-		paramsMap.put("MODULES_CLASSES_REAL_PATH", get("CLASSES_REAL_PATH") + "/" + Params.MODULES_PATH);
-		paramsMap.put("MODULES_WEB_REAL_PATH", get("WEB_REAL_PATH") + "/" + Params.MODULES_PATH);
+	private static void compositeWebParams() {
 
 		if (get("START_INDEX") == null) {
             paramsMap.put("START_INDEX", get("START_PAGE_NAME") + ".fpg");
