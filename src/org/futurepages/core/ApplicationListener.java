@@ -35,14 +35,13 @@ public class ApplicationListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent evt) {
 		try {
 			ServletContext servletContext = evt.getServletContext();
-			String name = The.tokenAt(1, servletContext.getResource("/").getPath(), "/");
-			contextName = (name != null ? name : "ROOT");
+			String context = The.tokenAt(1, servletContext.getResource("/").getPath(), "/");
+			contextName = (context != null ? context : "ROOT");
 
 			log("Inicializando " + servletContext.getServletContextName() + "...");
-			String realPath = servletContext.getRealPath("/");
 
 			log("Inicializando Parâmetros...");
-			Params.initialize(realPath, contextName);
+			Params.initialize(context);
 			log("Parâmetros OK");
 
 			System.setProperty("file.encoding",   Params.get("PAGE_ENCODING"));

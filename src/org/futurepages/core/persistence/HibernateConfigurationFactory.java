@@ -99,6 +99,8 @@ public class HibernateConfigurationFactory {
 				//Módulo não possui o diretório de beans
 				//System.out.println(ex.getMessage());
 			}
+		} else {
+			System.out.println("[ATENÇÃO] Conexão do Módulo Externo Desligado: '"+module.getName()+"'");
 		}
 	}
 
@@ -138,11 +140,14 @@ public class HibernateConfigurationFactory {
 			InputStream inputStream;
 			inputStream = new FileInputStream(filePath);
 			properties.load(inputStream);
-			String schemaId = properties.getProperty("hibernate.schemaId");
-			if (Is.empty(schemaId)) {
-				return module.getName(); //se não foi definido, seu schemaId será o nome do módulo.
+			String disabled = properties.getProperty("hibernate.disabled");
+			if(!disabled.equals("true")){
+				String schemaId = properties.getProperty("hibernate.schemaId");
+				if (Is.empty(schemaId)) {
+					return module.getName(); //se não foi definido, seu schemaId será o nome do módulo.
+				}
+				return schemaId;
 			}
-			return schemaId;
 		}
 		return null;
 	}
