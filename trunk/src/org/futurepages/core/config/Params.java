@@ -123,9 +123,10 @@ public class Params {
         paramsMap.put("THEMES_DIR_NAME", "themes");
         paramsMap.put("USE_MODULE_DEPENDENCY", "false"); //control (via ModuleManager)
 
-		for(String key : paramsMap.keySet()){
-			System.out.println(key+":"+paramsMap.get(key));
-		}
+//for DEBUG-MODE
+//		for(String key : paramsMap.keySet()){
+//			System.out.println(key+":"+paramsMap.get(key));
+//		}
 	}
 
 
