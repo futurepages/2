@@ -22,7 +22,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.futurepages.actions.DynAction;
 import org.futurepages.core.ApplicationManager;
 import org.futurepages.core.callback.ConsequenceCallback;
 
@@ -39,7 +38,6 @@ import org.futurepages.core.input.PrettyGlobalURLRequestInput;
 import org.futurepages.core.input.PrettyURLRequestInput;
 import org.futurepages.exceptions.FilterException;
 import org.futurepages.filters.ConsequenceCallbackFilter;
-import org.futurepages.tags.core.webcomponent.ImportComponentRes;
 import org.futurepages.util.The;
 
 /**
