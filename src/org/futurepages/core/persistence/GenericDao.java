@@ -133,8 +133,8 @@ public class GenericDao extends HQLProvider {
         return updateField(entity, field, field + "-1", whereClause);
     }
 
-	public void delete(Class entity, String whereClause) {
-        String hql = concat(DELETE, from(entity),  where(whereClause));
+	public void delete(Class entity, String alias, String whereClause) {
+        String hql = concat(DELETE, from(entity), alias,  where(whereClause));
         query(hql).executeUpdate();
     }
 
