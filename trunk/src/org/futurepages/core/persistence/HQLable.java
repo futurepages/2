@@ -23,6 +23,7 @@ public interface HQLable {
     public static final String LIKE  = " LIKE ";
     public static final String OR  = " OR ";
     public static final String EQUALS  = " = ";
+	public static final String DELETE  = " DELETE ";
 	public static final String DIFFERENT  = " != ";
     public static final String GREATER  = " > ";
     public static final String GREATER_EQUALS  = " >= ";
