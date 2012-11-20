@@ -82,7 +82,7 @@ public class HQLProvider implements HQLable {
 
 	public static String from(Class entityClass) {
 		if (entityClass != null) {
-			return " FROM " + entityClass.getName();
+			return concat(" FROM ", entityClass.getName(), " ");
 		} else {
 			return "";
 		}
