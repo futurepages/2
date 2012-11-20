@@ -85,8 +85,8 @@ public class Dao extends HQLProvider {
 		return getInstance().getMaxField(field, entity, where);
 	}
 
-	public static void delete(Class entity, String whereClause) {
-        getInstance().delete(entity,whereClause);
+	public static void delete(Class entity, String alias, String whereClause) {
+        getInstance().delete(entity, alias, whereClause);
     }
 
 	public static long getNextLong(String field, Class entity) {
