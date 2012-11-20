@@ -117,11 +117,6 @@ public class GenericDao extends HQLProvider {
         return query(select(field) + from(entity) + where(whereClause)).uniqueResult();
     }
 
-	public void delete(Class entity, String whereClause) {
-        String hql = concat("delete ", from(entity),  where(whereClause));
-        query(hql).executeUpdate();
-    }
-
     public Object incrementField(Class entity, String field, String whereClause, Integer quantidade) {
         return updateField(entity, field, field + "+(" + quantidade + ")", whereClause);
     }
@@ -136,6 +131,11 @@ public class GenericDao extends HQLProvider {
 
     public Object decrementField(Class entity, String field, String whereClause) {
         return updateField(entity, field, field + "-1", whereClause);
+    }
+
+	public void delete(Class entity, String whereClause) {
+        String hql = concat(DELETE, from(entity),  where(whereClause));
+        query(hql).executeUpdate();
     }
 
     public long getNextLongId(Class entity) {
