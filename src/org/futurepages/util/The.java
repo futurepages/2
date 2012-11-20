@@ -420,6 +420,7 @@ public class The {
 
 		str = str.replace("http://", "[#######]");
 		str = str.replace("https://", "[#######]");
+		str = str.replace("ftp://", "[#######]");
 		str = str.replace("www.", "[%#%#%#%]");
 
 		int len = str.length();
