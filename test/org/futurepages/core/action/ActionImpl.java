@@ -49,6 +49,14 @@ public class ActionImpl implements Action{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	public String redir(String url) {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public String redir(String url, boolean keepOutput) {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
 	@AsynchronousAction(AsynchronousActionType.DYN)
 	public class ClasseDynAnotada extends ActionImpl{}
 	
