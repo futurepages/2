@@ -175,11 +175,13 @@ public abstract class AbstractAction implements Pageable, Action {
 		return error(ex.getMessage());
 	}
 
-	protected String redir(String url) {
+	@Override
+	public String redir(String url) {
 			return redir(url,false);
 	}
 
-	protected String redir(String url, boolean keepOutput) {
+	@Override
+	public String redir(String url, boolean keepOutput) {
 		if(AsynchronousManager.isAjaxAction(chain)){
 			outputAjax(Paths.context(getRequest())+url);
 			return AJAX_REDIR;

@@ -89,6 +89,10 @@ public interface Action extends Manipulable {
 
 	public boolean hasNoCache();
 
+	public String redir(String url);
+
+	public String redir(String url, boolean keepOutput);
+
 	public Map<String, String> getMessages();
 
 	public void setMessages(Map<String, String> messages);
