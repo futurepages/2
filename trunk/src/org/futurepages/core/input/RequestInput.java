@@ -41,7 +41,7 @@ public class RequestInput extends AbstractInput implements Map<String, Object> {
 	 * @param req The request
 	 */
 	public RequestInput(HttpServletRequest req) {
-		Map<String, Object> mapReq = req.getParameterMap();
+		Map<String, ? extends Object> mapReq = req.getParameterMap();
 
 		// map is ready-only !!!
 		// that's why the clone...
@@ -60,7 +60,7 @@ public class RequestInput extends AbstractInput implements Map<String, Object> {
 	 * Input parameters are not read-only and can be modified with the setValue
 	 * method.
 	 */
-	private Map<String, Object> clone(Map<String, Object> map) {
+	private Map<String, Object> clone(Map<String, ? extends Object> map) {
 		Map<String, Object> clone = new HashMap<String, Object>();
 		Iterator<String> iter = map.keySet().iterator();
 		while (iter.hasNext()) {
