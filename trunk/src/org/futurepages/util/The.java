@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 import org.apache.commons.lang.math.RandomUtils;
+import org.futurepages.util.html.HtmlRegex;
 import org.futurepages.util.iterator.string.IterableString;
 import org.futurepages.util.iterator.string.MatchedToken;
 
@@ -412,16 +413,39 @@ public class The {
 		return sb.toString();
 	}
 
+	/**
+	 * Devolve um plain-text ou um html-text embaralhado com textos randômicos, preservando
+	 * existência de URLs (no entanto substituídas) e de tags HTML.
+	 * @param str
+	 * @return
+	 */
+	public static String undercoverMsg(String str) {
+
+		str = str.replaceAll("http://", "<HTTP/>");
+		str = str.replaceAll("https://", "<HTTP/>");
+		str = str.replaceAll("ftp://", "<HTTP/>");
+		str = str.replaceAll("www.", "<WWW_DOT/>");
+
+		IterableString iter = new IterableString(HtmlRegex.getCompiledTagsPattern(), str);
+
+		StringBuilder sb = new StringBuilder();
+		String end = randomTextOf(str);
+		for (MatchedToken token : iter) {
+			sb.append(randomTextOf(token.getBefore()));
+			sb.append(token.getMatched());
+			end = randomTextOf(token.getAfter());
+		}
+		sb.append(end);
+
+		return sb.toString().replaceAll("<HTTP/>", "http://").replaceAll("<WWW_DOT/>", "www.");
+	}
+
+
 	//A-Z : 65 a 90
 	//a-z : 97 a 122
-	public static String undercoverMsg(String str) {
+	public static String randomTextOf(String str) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("");
-
-		str = str.replace("http://", "[#######]");
-		str = str.replace("https://", "[#######]");
-		str = str.replace("ftp://", "[#######]");
-		str = str.replace("www.", "[%#%#%#%]");
 
 		int len = str.length();
 		for (int i = 0; i < len; i++) {
@@ -441,7 +465,6 @@ public class The {
 				sb.append(ch);
 			}
 		}
-
-		return sb.toString().replace("[#######]", "http://").replace("[%#%#%#%]", "www.");
+		return sb.toString();
 	}
 }
