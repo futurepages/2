@@ -141,7 +141,7 @@ public class HibernateConfigurationFactory {
 			inputStream = new FileInputStream(filePath);
 			properties.load(inputStream);
 			String disabled = properties.getProperty("hibernate.disabled");
-			if(!disabled.equals("true")){
+			if(disabled == null || !disabled.equals("true")){
 				String schemaId = properties.getProperty("hibernate.schemaId");
 				if (Is.empty(schemaId)) {
 					return module.getName(); //se não foi definido, seu schemaId será o nome do módulo.
