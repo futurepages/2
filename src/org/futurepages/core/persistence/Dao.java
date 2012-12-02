@@ -425,6 +425,10 @@ public class Dao extends HQLProvider {
 		getInstance().executeSQL(sql);
 	}
 
+	public static Object getSQL(String sql) {
+		return getInstance().getSQL(sql);
+	}
+
 	public static void executeSQLs(String... sqls) {
 		getInstance().executeSQLs(false,sqls);
 	}
