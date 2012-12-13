@@ -660,6 +660,14 @@ public class CalendarUtil {
 
 		return (isSameYear && isSameMonth && isSameDay);
 	}
+
+	public static boolean isInFuture(Calendar cal){
+		return cal.after(Calendar.getInstance());
+	}
+
+	public static boolean isInPast(Calendar cal){
+		return cal.before(Calendar.getInstance());
+	}
 	
 	public static boolean isAnniversaryToday(Calendar birthday) {
 		Calendar now = now();
