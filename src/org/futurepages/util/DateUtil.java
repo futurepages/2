@@ -1,6 +1,5 @@
 package org.futurepages.util;
 
-import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -103,7 +102,17 @@ public class DateUtil {
 				return null;
 			}
 	}
-
+	
+	public static Calendar viewShortDateToCalendar(String in) {
+			try {
+				DateFormat df =  DateFormat.getDateInstance(DateFormat.SHORT, LocaleManager.getDefaultLocale());
+				df.setLenient(false);
+				df.parse(in);
+				return new GregorianCalendar(Integer.parseInt(in.substring(6)), Integer.parseInt(in.substring(3, 5)) - 1, Integer.parseInt(in.substring(0, 2)));
+			} catch(Exception ex){
+				return null;
+			}
+	}
 	
 	public static String literalDateFromDB(Object in) {
 		String value = "";
