@@ -29,7 +29,7 @@ public class LocaleManager {
 	private static final String SEP = File.separator;
 	private static String master = DEFAULT_DIR + SEP + "master"; // i18n/master
 	private static boolean useMasterForEverything = false;
-	public static Locale DEFAULT_LOCALE = new Locale("en", "US");
+	public static Locale DEFAULT_LOCALE = new Locale("pt", "BR");
 	private static String defaultDateMask = "MM/dd/yyyy";
 	private static String defaultTimeMask = "HH:mm";
 	private static Map<Locale, String> dateMasks = new HashMap<Locale, String>();
