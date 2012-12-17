@@ -51,6 +51,7 @@ public class LocaleManager {
 	private static final Map<String, SimpleDateFormat> simpleTimeFormatters = new HashMap<String, SimpleDateFormat>();
 
 // Comentado enquanto não é utilizado
+// Na verdade não se sabe ao certo para que servia.
 //	static {
 //
 //		startLocaleScan();
