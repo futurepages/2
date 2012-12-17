@@ -94,21 +94,12 @@ public class DateUtil {
 
 	public static Calendar viewDateToCalendar(String in) {
 			try {
-				DateFormat df =  new SimpleDateFormat("dd/MM/yyyy", LocaleManager.getDefaultLocale());
-				df.setLenient(false);
-				df.parse(in);
-				return new GregorianCalendar(Integer.parseInt(in.substring(6)), Integer.parseInt(in.substring(3, 5)) - 1, Integer.parseInt(in.substring(0, 2)));
-			} catch(Exception ex){
-				return null;
-			}
-	}
-	
-	public static Calendar viewShortDateToCalendar(String in) {
-			try {
 				DateFormat df =  DateFormat.getDateInstance(DateFormat.SHORT, LocaleManager.getDefaultLocale());
 				df.setLenient(false);
-				df.parse(in);
-				return new GregorianCalendar(Integer.parseInt(in.substring(6)), Integer.parseInt(in.substring(3, 5)) - 1, Integer.parseInt(in.substring(0, 2)));
+				Date date = df.parse(in);
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(date);
+				return cal;
 			} catch(Exception ex){
 				return null;
 			}
