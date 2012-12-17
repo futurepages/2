@@ -249,8 +249,8 @@ public class InjectionUtils {
 			DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, loc); // change
 			df.setLenient(false);
 			try {
-				if(value.length()<4){
-					value = "";
+				if(value.length()<10){
+					value = null;
 				}
 				Date date = df.parse(value);
 				Calendar calendar = Calendar.getInstance();
@@ -262,8 +262,8 @@ public class InjectionUtils {
 		} else if (className.equals("java.util.Date") && loc != null && LocaleManager.getDateMask(loc) != null) {
 			SimpleDateFormat sdf = new SimpleDateFormat(LocaleManager.getDateMask(loc));
 			try {
-				if(value.length()<4){
-					value = "";
+				if(value.length()<10){
+					value = null;
 				}
 				newValue = sdf.parse(value);
 			} catch (Exception e) {
@@ -273,7 +273,7 @@ public class InjectionUtils {
 			DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, loc); // change
 			df.setLenient(false);
 			try {
-				if(value.length()<4){
+				if(value.length()<10){
 					value = "";
 				}
 				newValue = df.parse(value);
