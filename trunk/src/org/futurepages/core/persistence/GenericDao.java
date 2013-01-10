@@ -64,7 +64,7 @@ public class GenericDao extends HQLProvider {
 	}
 
     public Query query(String hqlQuery) {
-//		System.out.println("HQL: "+hqlQuery); //para depurar HQls, descomente. // for DEBUG-MODE.
+		System.out.println("HQL: "+hqlQuery); //para depurar HQls, descomente. // for DEBUG-MODE.
 		Query query = session().createQuery(hqlQuery);//.setCacheable(true);
         return query;
     }
@@ -134,7 +134,7 @@ public class GenericDao extends HQLProvider {
     }
 
 	public void delete(Class entity, String alias, String whereClause) {
-        String hql = concat(DELETE, from(entity), alias,  where(whereClause));
+        String hql = concat(DELETE, from(entity), as(alias),  where(whereClause));
         query(hql).executeUpdate();
     }
 
