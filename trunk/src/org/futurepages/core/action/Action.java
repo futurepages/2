@@ -35,6 +35,10 @@ public interface Action extends Manipulable {
 
 	public boolean isLogged();
 
+	public boolean isGet();
+
+	public boolean isPost();
+
 	public void setInput(Input input);
 
 	public void setOutput(Output output);
