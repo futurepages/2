@@ -57,6 +57,14 @@ public class ActionImpl implements Action{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	public boolean isGet() {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public boolean isPost() {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
 	@AsynchronousAction(AsynchronousActionType.DYN)
 	public class ClasseDynAnotada extends ActionImpl{}
 	
