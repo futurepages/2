@@ -427,8 +427,16 @@ public abstract class AbstractAction implements Pageable, Action {
 		session.setAttribute("noCache", true);
 	}
 
+	@Override
+	public boolean isGet() {
+		String method = getRequest().getMethod();
+		boolean isPost = method != null && method.equalsIgnoreCase("get");
+		return isPost;
+	}
+
+	@Override
 	public boolean isPost() {
-		String method = input.getProperty("method");
+		String method = getRequest().getMethod();
 		boolean isPost = method != null && method.equalsIgnoreCase("post");
 		return isPost;
 	}
