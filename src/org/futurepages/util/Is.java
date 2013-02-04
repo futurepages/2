@@ -66,6 +66,10 @@ public class Is {
             return false;
         }
     }
+	
+    public static boolean validURLOrScript(String urlStr) {		
+		return (urlStr != null && urlStr.startsWith("javascript:")) || validURL(urlStr);		
+    }
 
     /**
      * Testa se todos os caracteres de uma String "str" são iguais ao caracter "testStr"
