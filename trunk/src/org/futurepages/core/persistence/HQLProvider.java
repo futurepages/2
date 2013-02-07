@@ -11,6 +11,34 @@ public class HQLProvider implements HQLable {
 	public static HQLField field(String fieldName){
 		return new HQLField(fieldName);
 	}
+	
+	/*
+	 * Como este método é sobrecarregado, sempre que for chamado
+	 * com um só parâmetro, o método chamado será o
+	 * "HQLField field(String fieldName)"
+	 */
+	public static HQLField field(String ...fieldPath) {
+		if (fieldPath.length > 0) {
+			StringBuilder sb = new StringBuilder();
+			String separator = "";
+			
+			if (!Is.empty(fieldPath[0])) {
+				sb.append(fieldPath[0]);
+				separator = ".";
+			}
+
+			for (int i = 1; i < fieldPath.length; i++) {
+				if (!Is.empty(fieldPath[i])) {
+					sb.append(separator).append(fieldPath[i]);
+					separator = ".";
+				}
+			}
+			
+			return new HQLField(sb.toString());
+		}
+		
+		return null;
+	}
 
 	public static String distinct(String selectClause) {
 		if (!Is.empty(selectClause)) {
