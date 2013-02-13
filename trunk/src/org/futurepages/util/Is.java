@@ -68,7 +68,7 @@ public class Is {
     }
 	
     public static boolean validURLOrScript(String urlStr) {		
-		return (urlStr != null && urlStr.startsWith("javascript:")) || validURL(urlStr);		
+		return urlStr != null && (urlStr.startsWith("javascript:") || validURL(urlStr));
     }
 
     /**
