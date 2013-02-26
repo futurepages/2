@@ -130,9 +130,9 @@ public class EncodingUtil {
 
 	//Migração de projeto de ISO para UTF-8
 	public static void main(String[] args) throws URISyntaxException, Exception {
-		String path = "E:\\Users\\leandro\\Documents\\Workspaces\\netbeans\\intranet";
-//		String pathWEB = path + "\\web";
-		String pathSRC = path + "\\src";
+		String path = "E:\\Users\\leandro\\Documents\\Workspaces\\netbeans\\placitum";
+		String pathWEB = path + "\\web\\exceptions";
+//		String pathSRC = path + "\\src";
 //		String pathTEST = path + "\\test";
 
 //		migratingISOtoUTF8(pathWEB, ".*\\.sql");
@@ -148,7 +148,7 @@ public class EncodingUtil {
 //		migratingISOtoUTF8(pathSRC, ".*\\.sql");
 //		migratingISOtoUTF8(pathSRC, ".*\\.txt");
 //		migratingISOtoUTF8(pathSRC, ".*\\.properties");
-		migratingISOtoUTF8(pathSRC, "SelecionadoDao.java");
+//		migratingISOtoUTF8(pathSRC, "SelecionadoDao.java");
 //		migratingISOtoUTF8(pathSRC, ".*\\.htm");
 //		migratingISOtoUTF8(pathSRC, ".*\\.html");
 //		migratingISOtoUTF8(pathSRC, "[^\\.]*");
@@ -169,6 +169,19 @@ public class EncodingUtil {
 			if (!file.isDirectory()&&!file.getAbsolutePath().contains("\\.svn\\")) {
 				File tempFile = File.createTempFile("88591", ".tmp");
 				EncodingUtil.transform(file, "ISO-8859-1", tempFile, "UTF-8");
+				FileUtil.copy(tempFile.getAbsolutePath(), file.getAbsolutePath());
+				System.out.println(file.getAbsolutePath());
+			}
+		}
+	}
+	public static void migratingUTF8toISO(String path, String patternRegex) throws IOException {
+		System.out.println("");
+		System.out.println("================== " + patternRegex + " =========================");
+		List<File> files = FileUtil.listFilesFromDirectory(new File(path), true, patternRegex);
+		for (File file : files) {
+			if (!file.isDirectory()&&!file.getAbsolutePath().contains("\\.svn\\")) {
+				File tempFile = File.createTempFile("UTF8", ".tmp");
+				EncodingUtil.transform(file, "UTF-8", tempFile, "ISO-8859-1");
 				FileUtil.copy(tempFile.getAbsolutePath(), file.getAbsolutePath());
 				System.out.println(file.getAbsolutePath());
 			}
