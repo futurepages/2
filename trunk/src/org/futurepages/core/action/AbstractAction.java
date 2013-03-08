@@ -562,7 +562,7 @@ public abstract class AbstractAction implements Pageable, Action {
 		return input.getProperty("contextPath");
 	}
 
-	protected InvocationChain getChain(){
+	public InvocationChain getChain(){
 		return this.chain;
 	}
 
