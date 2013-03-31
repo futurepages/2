@@ -1,5 +1,6 @@
 package org.futurepages.core.control;
 
+import java.io.UnsupportedEncodingException;
 import org.futurepages.core.consequence.Consequence;
 import org.futurepages.core.context.CookieContext;
 import org.futurepages.core.context.ApplicationContext;
@@ -92,6 +93,14 @@ public class Controller extends HttpServlet {
 
 	}
 
+	public static void fixEncoding(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+		String charset = Params.get("PAGE_ENCODING");
+		if (charset.equals("UTF-8")) {
+			request.setCharacterEncoding(charset);
+		}
+		response.setCharacterEncoding(charset);
+	}
+
 	/**
 	 * Creates the AplicationManager and starts it.
 	 *
@@ -179,11 +188,7 @@ public class Controller extends HttpServlet {
 		if (appManager == null) {
 			throw new ServletException("The Application manager is not loaded");
 		}
-		String charset = Params.get("PAGE_ENCODING");
-		if (charset.equals("UTF-8")) {
-			req.setCharacterEncoding(charset);
-		}
-		res.setCharacterEncoding(charset);
+		fixEncoding(req, res);
 
 		appManager.service(appContext, req, res);
 
