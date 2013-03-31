@@ -7,7 +7,18 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.futurepages.actions.NullAction;
+import org.futurepages.consequences.Forward;
+import org.futurepages.core.action.Action;
+import org.futurepages.core.context.ApplicationContext;
+import org.futurepages.core.context.CookieContext;
+import org.futurepages.core.context.MapContext;
+import org.futurepages.core.context.SessionContext;
+import org.futurepages.core.control.Controller;
 import org.futurepages.core.exception.DefaultExceptionLogger;
+import org.futurepages.core.i18n.LocaleManager;
+import org.futurepages.core.input.PrettyURLRequestInput;
+import org.futurepages.core.output.ResponseOutput;
 
 /**
  * Classe abstrata base para TemplateServlets. Possui uma implementacao padrao,
@@ -77,7 +88,25 @@ public abstract class TemplateServlet extends HttpServlet {
 
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
 		try {
-			processTemplate(extractPagePath(request), createTemplateManager(), request, response, getServletContext());
+			String path = extractPagePath(request);
+
+			if(!path.startsWith("/init/") && request.getAttribute(Forward.ACTION_REQUEST)==null){
+				throw new TemplateException("Page can't be retrieved when action is null.");
+			}else if(request.getAttribute(Forward.ACTION_REQUEST)==null){
+				Controller.fixEncoding(request,response);
+				
+				//Creating Null Action - without breaking.
+				Action action = new NullAction();
+				action.setInput(new PrettyURLRequestInput(request));
+				action.setOutput(new ResponseOutput(response));
+				action.setSession(new SessionContext(request, response));
+				action.setApplication(new ApplicationContext(this.getServletContext()));
+				action.setCookies(new CookieContext(request, response));
+				action.setLocale(LocaleManager.getLocale(request));
+				action.setCallback(new MapContext());
+				request.setAttribute(Forward.ACTION_REQUEST, action);
+			}
+			processTemplate(path, createTemplateManager(), request, response, getServletContext());
 		} catch (Exception ex) {
 			DefaultExceptionLogger.getInstance().execute(ex, null, true);
 		}
