@@ -299,10 +299,14 @@ public abstract class AbstractAction implements Pageable, Action {
 
 	@Override
 	public String getIpsFromClient() {
-		String ipClientReal = getRequest().getHeader("x-forwarded-for");
+		return getIpsFromRequest(this.getRequest());
+	}
+
+	public static String getIpsFromRequest(HttpServletRequest req){
+		String ipClientReal = req.getHeader("x-forwarded-for");
 		String ipResult;
 		if (ipClientReal == null) {
-			ipResult = getRequest().getRemoteAddr();
+			ipResult = req.getRemoteAddr();
 		} else {
 			ipResult = ipClientReal;
 		}
@@ -548,6 +552,14 @@ public abstract class AbstractAction implements Pageable, Action {
 
 	public static boolean isLogged(Context session) {
 		return session.hasAttribute(USER_KEY);
+	}
+
+	public static boolean isLogged(HttpServletRequest req) {
+		return req.getSession().getAttribute(USER_KEY)!=null ;
+	}
+
+	public static DefaultUser loggedUser(HttpServletRequest req) {
+		return (DefaultUser) req.getSession().getAttribute(USER_KEY);
 	}
 
 	public static DefaultUser loggedUser(Context session) {

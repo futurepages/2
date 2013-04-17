@@ -88,7 +88,7 @@ public class Controller extends HttpServlet {
 			this.configureServlet(conf);
 			initApplicationManager();
 		} catch (Exception ex) {
-			DefaultExceptionLogger.getInstance().execute(ex, null, true);
+			DefaultExceptionLogger.getInstance().execute(ex, null, null, true);
 		}
 
 	}
@@ -178,7 +178,7 @@ public class Controller extends HttpServlet {
 		try {
 			doService(req, res);
 		} catch (Exception ex) {
-			DefaultExceptionLogger.getInstance().execute(ex, chainTL.get(), true);
+			DefaultExceptionLogger.getInstance().execute(ex, getChain(), req, true);
 		} finally {
 			chainTL.remove();
 		}
@@ -440,6 +440,10 @@ public class Controller extends HttpServlet {
 		String uri = req.getRequestURI().toString();
 
 		return getActionUrlParts(context, uri);
+	}
+
+	public InvocationChain getChain(){
+		return this.chainTL.get();
 	}
 
 	/**
