@@ -51,7 +51,7 @@ public class ExceptionFilter  implements Filter {
 				throw ((ServletException)cause);  //Erro 500.
 			}
 			//Exceptions causadas por erros inesperados
-			return DefaultExceptionLogger.getInstance().execute(cause, chain , false);
+			return DefaultExceptionLogger.getInstance().execute(cause, chain, chain.getAction().getRequest() , false);
 		}
 	}
 }

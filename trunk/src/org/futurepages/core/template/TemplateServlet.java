@@ -47,7 +47,7 @@ public abstract class TemplateServlet extends HttpServlet {
 		try{
 			templateManager = createTemplateManager();
 		}catch(Exception ex){
-			DefaultExceptionLogger.getInstance().execute(ex, null, true);
+			DefaultExceptionLogger.getInstance().execute(ex, null, null, true);
 		}
 	}
 
@@ -108,7 +108,7 @@ public abstract class TemplateServlet extends HttpServlet {
 			}
 			processTemplate(path, createTemplateManager(), request, response, getServletContext());
 		} catch (Exception ex) {
-			DefaultExceptionLogger.getInstance().execute(ex, null, true);
+			DefaultExceptionLogger.getInstance().execute(ex, null, request, true);
 		}
 	}
 
