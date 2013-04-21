@@ -2,6 +2,7 @@ package org.futurepages.formatters;
 
 import org.futurepages.util.html.HtmlMapChars;
 import java.util.Locale;
+import org.futurepages.core.config.Params;
 import org.futurepages.core.formatter.Formatter;
 import org.futurepages.util.StringUtils;
 import org.futurepages.util.html.HtmlRegex;
@@ -28,7 +29,9 @@ import org.futurepages.util.iterator.string.MatchedToken;
 			String url = token.getMatched();
 			sb.append("<a href=\"")
 			  .append(url.startsWith("www.")?"http://"+url:url)
-			  .append("\" target=\"_blank\" title=\"").append(url).append("\">")
+			  .append(url.startsWith(Params.get("APP_HOST"))?"\"":"\" target=\"_blank\"")
+			  .append(" title=\"")
+			  .append(url).append("\">")
 			  .append(shortUrl(url))
 			  .append("</a>");
 			end = token.getAfter();
