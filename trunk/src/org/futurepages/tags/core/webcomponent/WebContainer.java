@@ -2,7 +2,6 @@ package org.futurepages.tags.core.webcomponent;
 
 import java.io.IOException;
 import java.io.StringWriter;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.servlet.ServletException;
@@ -11,7 +10,6 @@ import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
-
 import org.futurepages.annotations.Tag;
 import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.tags.build.ContentTypeEnum;
@@ -36,6 +34,12 @@ public final class WebContainer extends SimpleTagSupport {
 
 	@TagAttribute
 	private String headFile = null;
+	
+	@TagAttribute(required = false)
+	private String bodyClass = null;
+
+	@TagAttribute(required = false)
+	private String htmlClass = null;
 
 	private boolean bodyEvaluated = false;
 
@@ -91,7 +95,15 @@ public final class WebContainer extends SimpleTagSupport {
 		StringBuffer headBufferEnd = new StringBuffer();
 		StringBuffer footerBuffer = new StringBuffer();
 
-		headBufferBegin.append(StringUtils.concat("<html",id,xmlns,lang,dir,"><head>"));
+		// COMO ERA ANTES
+		//headBufferBegin.append(StringUtils.concat("<html",id,xmlns,lang,dir,"><head>"));
+		// INICIO ALTERACAO
+		headBufferBegin.append(StringUtils.concat("<html",id,xmlns,lang,dir));
+		if (htmlClass != null && htmlClass.length() > 0) {
+			headBufferBegin.append(StringUtils.concat(" class=\"", htmlClass, "\""));
+		}
+		headBufferBegin.append(" ><head>");
+		// FIM ALTERACAO
 		
 		getJspBody().invoke(evalResult); //invoca o conteúdo dentro do container
 
@@ -107,7 +119,17 @@ public final class WebContainer extends SimpleTagSupport {
 				}
 			}
 		}
-		headBufferEnd.append("</head><body>");
+
+		// COMO ERA ANTES
+//		headBufferEnd.append("</head><body>");
+		// INICIO ALTERACAO
+		headBufferEnd.append("</head><body ");
+		if (bodyClass != null && bodyClass.length() > 0) {
+			headBufferEnd.append(StringUtils.concat("class=\"", bodyClass, "\" "));
+		}
+		headBufferEnd.append(" >");
+		// FIM ALTERACAO
+		
 		footerBuffer.append("</body></html>");
 
 		getJspContext().getOut().print(headBufferBegin);
@@ -144,6 +166,14 @@ public final class WebContainer extends SimpleTagSupport {
 
 	public void setXmlns(String xmlns) {
 		this.xmlns = " xmlns=\""+ xmlns+"\"";
+	}
+
+	public void setBodyClass(String bodyClass) {
+		this.bodyClass = bodyClass;
+	}
+
+	public void setHtmlClass(String htmlClass) {
+		this.htmlClass = htmlClass;
 	}
 
 	static WebContainer get() {
