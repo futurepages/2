@@ -29,7 +29,7 @@ import org.futurepages.core.validation.Validator;
 import org.futurepages.exceptions.ErrorException;
 import org.futurepages.filters.HeadTitleFilter;
 import org.futurepages.filters.ModuleIdFilter;
-import org.futurepages.util.StringUtils;
+import org.futurepages.util.Is;
 import org.futurepages.util.The;
 import org.futurepages.util.html.HtmlMapChars;
 
@@ -234,10 +234,19 @@ public abstract class AbstractAction implements Pageable, Action {
 	}
 	
     public void headTitleAppend(String headTitle) {
+		String previousValue = (String)output.getValue(HEAD_TITLE);
 		if(HeadTitleFilter.isPretty()){
-			output(HEAD_TITLE, The.concat(headTitle , HeadTitleFilter.SEPARATOR ,(String)output.getValue(HEAD_TITLE) ));
+			if(!Is.empty(previousValue)){
+				output(HEAD_TITLE, The.concat(headTitle , HeadTitleFilter.SEPARATOR ,previousValue ));
+			}else{
+				headTitle(headTitle);
+			}
 		}else{
-			output(HEAD_TITLE, The.concat((String)output.getValue(HEAD_TITLE) , HeadTitleFilter.SEPARATOR , headTitle));
+			if(!Is.empty(previousValue)){
+				output(HEAD_TITLE, The.concat(previousValue , HeadTitleFilter.SEPARATOR , headTitle));
+			}else{
+				headTitle(headTitle);
+			}
 		}
     }
 
