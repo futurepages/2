@@ -65,6 +65,14 @@ public class ActionImpl implements Action{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	public void headTitle(String headTitle) {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	public void headTitleAppend(String headTitle) {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
 	@AsynchronousAction(AsynchronousActionType.DYN)
 	public class ClasseDynAnotada extends ActionImpl{}
 	
