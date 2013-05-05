@@ -229,21 +229,21 @@ public abstract class AbstractAction implements Pageable, Action {
 		((SessionContext) session).getSession().setMaxInactiveInterval(minutes * 60);
 	}
 
-	protected void headTitle(String headTitle) {
+	public void headTitle(String headTitle) {
 		output(HEAD_TITLE, headTitle);
 	}
-
+	
     public void headTitleAppend(String headTitle) {
-        output(HEAD_TITLE, StringUtils.concat((String)output.getValue(HEAD_TITLE) , HeadTitleFilter.SEPARATOR , headTitle));
+		if(HeadTitleFilter.isPretty()){
+			output(HEAD_TITLE, The.concat(headTitle , HeadTitleFilter.SEPARATOR ,(String)output.getValue(HEAD_TITLE) ));
+		}else{
+			output(HEAD_TITLE, The.concat((String)output.getValue(HEAD_TITLE) , HeadTitleFilter.SEPARATOR , headTitle));
+		}
     }
 
 	public void setModuleId(String moduleId){
 		ModuleIdFilter.setModuleId(this, moduleId);
 	}
-
-	public void headTitleAppendToRoot(String headTitle) {
-        output(HEAD_TITLE, StringUtils.concat(HeadTitleFilter.SEPARATOR , headTitle));
-    }
 
 	protected void outputAjax(Object object) {
 		output(AjaxConsequence.KEY, object);

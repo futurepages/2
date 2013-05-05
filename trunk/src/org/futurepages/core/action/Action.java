@@ -102,4 +102,8 @@ public interface Action extends Manipulable {
 	public void setMessages(Map<String, String> messages);
 
 	public void setChain(InvocationChain chain);
+
+	public void headTitle(String headTitle);
+	
+    public void headTitleAppend(String headTitle);
 }
