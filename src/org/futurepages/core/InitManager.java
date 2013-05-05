@@ -67,7 +67,10 @@ public class InitManager extends AbstractApplicationManager{
 			}
             
             if(Params.get("GLOBAL_HEAD_TITLE")!=null){
-                filter(new HeadTitleFilter(Params.get("GLOBAL_HEAD_TITLE")));
+				if(!Is.empty(Params.get("PRETTY_HEAD_TITLE"))){
+					HeadTitleFilter.itsPretty(Params.get("PRETTY_HEAD_TITLE"));
+				}
+				filter(new HeadTitleFilter());
             }
 
             filter(new FileUploadFilter());

@@ -117,6 +117,7 @@ public class Params {
 		paramsMap.put("INIT_ACTION", "init.Index");
 		paramsMap.put("INIT_MANAGER_CLASS", "org.futurepages.core.InitManager");
 		paramsMap.put("PRETTY_URL", "false");
+		paramsMap.put("PRETTY_HEAD_TITLE", "");
 		paramsMap.put("MINIFY_RESOURCE_MODE", "none"); //none, css, js, both
 		paramsMap.put("START_PAGE_NAME", "Index");
         paramsMap.put("THEME", "default");

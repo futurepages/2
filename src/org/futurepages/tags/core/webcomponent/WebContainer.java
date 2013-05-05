@@ -13,6 +13,8 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 import org.futurepages.annotations.Tag;
 import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.tags.build.ContentTypeEnum;
+import org.futurepages.filters.HeadTitleFilter;
+import org.futurepages.util.Is;
 import org.futurepages.util.StringUtils;
 
 @Tag(bodyContent = ContentTypeEnum.SCRIPTLESS)
@@ -34,6 +36,9 @@ public final class WebContainer extends SimpleTagSupport {
 
 	@TagAttribute
 	private String headFile = null;
+
+	@TagAttribute
+	private String headTitle = null;
 	
 	@TagAttribute(required = false)
 	private String bodyClass = null;
@@ -95,16 +100,20 @@ public final class WebContainer extends SimpleTagSupport {
 		StringBuffer headBufferEnd = new StringBuffer();
 		StringBuffer footerBuffer = new StringBuffer();
 
-		// COMO ERA ANTES
-		//headBufferBegin.append(StringUtils.concat("<html",id,xmlns,lang,dir,"><head>"));
-		// INICIO ALTERACAO
 		headBufferBegin.append(StringUtils.concat("<html",id,xmlns,lang,dir));
 		if (htmlClass != null && htmlClass.length() > 0) {
 			headBufferBegin.append(StringUtils.concat(" class=\"", htmlClass, "\""));
 		}
 		headBufferBegin.append(" ><head>");
-		// FIM ALTERACAO
-		
+
+		if (HeadTitleFilter.isPretty()) {
+			if (!Is.empty(this.headTitle)) {
+				headBufferBegin.append("<title>").append(headTitle).append(" | ").append(HeadTitleFilter.getPrettyTitle()).append("</title>");
+			} else {
+				headBufferBegin.append("<title>").append(HeadTitleFilter.getPrettyTitle()).append(HeadTitleFilter.SEPARATOR).append(HeadTitleFilter.getGlobalTitle()).append("</title>");
+			}
+		}
+
 		getJspBody().invoke(evalResult); //invoca o conteúdo dentro do container
 
 		for (ImportComponentRes component : getComponents().values()) {
@@ -120,15 +129,11 @@ public final class WebContainer extends SimpleTagSupport {
 			}
 		}
 
-		// COMO ERA ANTES
-//		headBufferEnd.append("</head><body>");
-		// INICIO ALTERACAO
 		headBufferEnd.append("</head><body ");
 		if (bodyClass != null && bodyClass.length() > 0) {
 			headBufferEnd.append(StringUtils.concat("class=\"", bodyClass, "\" "));
 		}
 		headBufferEnd.append(" >");
-		// FIM ALTERACAO
 		
 		footerBuffer.append("</body></html>");
 
@@ -150,6 +155,10 @@ public final class WebContainer extends SimpleTagSupport {
 
 	public void setHeadFile(String headFile) {
 		this.headFile = headFile;
+	}
+
+	public void setHeadTitle(String headTitle) {
+		this.headTitle = headTitle;
 	}
 
 	public void setDir(String dir) {
