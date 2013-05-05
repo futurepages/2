@@ -122,6 +122,7 @@ public final class ImportComponentRes extends SimpleTagSupport {
 
 	private WebContainer getMyContainer() {
 		if (myContainer == null) {
+//			System.out.println("new myContainer for "+this.getKey()+" in #"+Thread.currentThread().getId()); // for DEBUG-MODE
 			myContainer = WebContainer.get();
 		}
 		return myContainer;
