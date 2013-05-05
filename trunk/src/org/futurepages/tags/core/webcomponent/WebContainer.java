@@ -48,6 +48,8 @@ public final class WebContainer extends SimpleTagSupport {
 
 	private boolean bodyEvaluated = false;
 
+	private StringBuilder headSB = null;
+
 	private Map<String, ImportComponentRes> components;
 
 
@@ -115,6 +117,17 @@ public final class WebContainer extends SimpleTagSupport {
 		}
 
 		getJspBody().invoke(evalResult); //invoca o conteúdo dentro do container
+
+		//Head Content
+		if(headSB!=null){
+			headBufferBegin
+//					.append("\n<!-- [BEGIN] Dynamic Head Content  -->") //for DEBUG-MODE
+					.append(headSB.toString())
+//					.append("\n<!-- [END] Head Content  -->\n") //for DEBUG-MODE
+			;
+		}
+
+		//Components' Resources
 
 		for (ImportComponentRes component : getComponents().values()) {
 			if (!component.isNoCSS() && !component.isPseudo()) {
@@ -187,5 +200,16 @@ public final class WebContainer extends SimpleTagSupport {
 
 	static WebContainer get() {
 		return threadLocal.get();
+	}
+
+	void addHeadContent(String headContent) {
+		getHeadSB().append("\n").append(headContent);
+	}
+
+	public StringBuilder getHeadSB() {
+		if(headSB==null){
+			headSB = new StringBuilder();
+		}
+		return headSB;
 	}
 }
