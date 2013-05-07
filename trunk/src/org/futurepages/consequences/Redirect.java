@@ -95,6 +95,9 @@ public class Redirect implements Consequence {
 			if (appendOutput && output != null) {
 				appendOutputToURL(urlToRedir, output, querySeparator);
 			}
+			if (!Is.empty(uri.getFragment())) {
+				urlToRedir.append("#").append(uri.getFragment());
+			}
 			res.sendRedirect(urlToRedir.toString());
 		} catch (Exception e) {
 			throw new ConsequenceException(e);
