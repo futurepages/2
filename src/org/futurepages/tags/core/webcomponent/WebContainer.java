@@ -38,6 +38,9 @@ public final class WebContainer extends SimpleTagSupport {
 	private String headFile = null;
 
 	@TagAttribute
+	private String htmlAttrs = "";
+
+	@TagAttribute
 	private String headTitle = null;
 	
 	@TagAttribute(required = false)
@@ -102,11 +105,11 @@ public final class WebContainer extends SimpleTagSupport {
 		StringBuffer headBufferEnd = new StringBuffer();
 		StringBuffer footerBuffer = new StringBuffer();
 
-		headBufferBegin.append(StringUtils.concat("<html",id,xmlns,lang,dir));
+		headBufferBegin.append(StringUtils.concat("<html",id,xmlns,lang,dir," ",htmlAttrs," "));
 		if (htmlClass != null && htmlClass.length() > 0) {
-			headBufferBegin.append(StringUtils.concat(" class=\"", htmlClass, "\""));
+			headBufferBegin.append(StringUtils.concat(" class=\"", htmlClass, "\" "));
 		}
-		headBufferBegin.append(" ><head>");
+		headBufferBegin.append("><head>");
 
 		if (HeadTitleFilter.isPretty()) {
 			if (!Is.empty(this.headTitle)) {
@@ -188,6 +191,10 @@ public final class WebContainer extends SimpleTagSupport {
 
 	public void setXmlns(String xmlns) {
 		this.xmlns = " xmlns=\""+ xmlns+"\"";
+	}
+
+	public void setHtmlAttrs(String htmlAttrs) {
+		this.htmlAttrs = htmlAttrs;
 	}
 
 	public void setBodyClass(String bodyClass) {
