@@ -86,11 +86,13 @@ public class DefaultExceptionLogger implements ExceptionLogger, Manipulable{
 			}
 			System.out.println();
 
-			System.out.print(">[cookies]  ("+req.getCookies().length+") ");
-			for(Cookie cookie : req.getCookies()){
-				System.out.print(The.concat(cookie.getName(), ": '",EncodingUtil.decodeUrl(cookie.getValue()),"'; "));
+			if (req.getCookies() != null) {
+				System.out.print(">[cookies]  (" + req.getCookies().length + ") ");
+				for (Cookie cookie : req.getCookies()) {
+					System.out.print(The.concat(cookie.getName(), ": '", EncodingUtil.decodeUrl(cookie.getValue()), "'; "));
+				}
+				System.out.println();
 			}
-			System.out.println();
 		}
 
 		log("\n",exceptionId," <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n");
