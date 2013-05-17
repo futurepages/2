@@ -30,6 +30,10 @@ import org.apache.commons.lang.NotImplementedException;
  * Ler arquivos que fogem da especificação padrão do JPEG
  */
 public class JPEGUtil2 {
+	
+	static {
+		System.setProperty("com.sun.media.jai.disableMediaLib", "true");
+	}
 
 	public static BufferedImage getBufferedImage(File file) throws IOException {
 		SeekableStream seekableStream = new FileSeekableStream(file);
