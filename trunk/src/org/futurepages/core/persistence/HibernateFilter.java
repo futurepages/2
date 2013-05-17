@@ -33,7 +33,6 @@ public class HibernateFilter implements AfterConsequenceFilter {
 		} catch (Throwable throwable) {
 			return ExceptionFilter.treatedException(chain, throwable);
 		} finally {
-
 			if (Dao.isTransactionActive()) {
 				if (hasError) {
 					Dao.rollBackTransaction();
