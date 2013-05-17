@@ -35,14 +35,14 @@ public class JPEGUtil2 {
 		SeekableStream seekableStream = new FileSeekableStream(file);
 		ParameterBlock pb = new ParameterBlock();
 		pb.add(seekableStream);
-		return JAI.create("jpeg", pb).getAsBufferedImage();
+		return JAI.create("stream", pb).getAsBufferedImage();
 	}
 
 	public static BufferedImage getBufferedImage(byte[] bytes) throws IOException {
 		SeekableStream seekableStream = new ByteArraySeekableStream(bytes);
 		ParameterBlock pb = new ParameterBlock();
 		pb.add(seekableStream);
-		return JAI.create("jpeg", pb).getAsBufferedImage();
+		return JAI.create("stream", pb).getAsBufferedImage();
 	}
 
 	/**
