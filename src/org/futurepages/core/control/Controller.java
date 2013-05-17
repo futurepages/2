@@ -273,7 +273,10 @@ public class Controller extends HttpServlet {
 					}
 				}
 			}
-			if (actionExecuted && conseqExecuted && callbackFilters != null) {
+			if(actionExecuted && conseqExecuted && callbackFilters != null 
+				// e não ocorreu exception no meio do caminho...
+			   && !(returnedFromAction!=null && (returnedFromAction.equals(Action.EXCEPTION) ||  returnedFromAction.equals(Action.DYN_EXCEPTION)) )
+			) {
 				for (ConsequenceCallbackFilter f : callbackFilters) {
 					try {
 						ConsequenceCallback cc = f.getCallbackClass().newInstance();
