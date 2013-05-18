@@ -17,9 +17,11 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import com.sun.media.jai.codec.ByteArraySeekableStream;
 import com.sun.media.jai.codec.FileSeekableStream;
 import com.sun.media.jai.codec.SeekableStream;
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Transparency;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.renderable.ParameterBlock;
 import javax.media.jai.JAI;
@@ -30,8 +32,9 @@ import org.apache.commons.lang.NotImplementedException;
  * Ler arquivos que fogem da especificação padrão do JPEG
  */
 public class JPEGUtil2 {
-	
+
 	static {
+		//necessário para que nunca se busque bibliotecas nativas do SO.
 		System.setProperty("com.sun.media.jai.disableMediaLib", "true");
 	}
 
@@ -39,14 +42,33 @@ public class JPEGUtil2 {
 		SeekableStream seekableStream = new FileSeekableStream(file);
 		ParameterBlock pb = new ParameterBlock();
 		pb.add(seekableStream);
-		return JAI.create("stream", pb).getAsBufferedImage();
+		return bufferedImgWithNoAlpha(JAI.create("stream", pb).getAsBufferedImage());
+	}
+
+	/*
+	 * if the image is not opaque, we return the image with
+	 * a white background under the image.
+	 *
+	 */
+	public static BufferedImage bufferedImgWithNoAlpha(BufferedImage image) {
+		if (image.getTransparency() != Transparency.OPAQUE) {
+			BufferedImage outputImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
+			Graphics2D graphics2D = outputImage.createGraphics();
+			graphics2D.setBackground(Color.WHITE);
+			graphics2D.setComposite(AlphaComposite.SrcOver);
+			graphics2D.fill(new Rectangle2D.Double(0, 0, image.getWidth(), image.getHeight()));
+			graphics2D.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), null);
+			image.getGraphics().dispose();
+			image = outputImage;
+		}
+		return image;
 	}
 
 	public static BufferedImage getBufferedImage(byte[] bytes) throws IOException {
 		SeekableStream seekableStream = new ByteArraySeekableStream(bytes);
 		ParameterBlock pb = new ParameterBlock();
 		pb.add(seekableStream);
-		return JAI.create("stream", pb).getAsBufferedImage();
+		return bufferedImgWithNoAlpha(JAI.create("stream", pb).getAsBufferedImage());
 	}
 
 	/**
@@ -69,13 +91,13 @@ public class JPEGUtil2 {
 		image.flush();
 		return image.getHeight(null);
 	}
-	
+
 	public static int[] getWidthAndHeight(File file) throws MalformedURLException {
 		Image image = new ImageIcon(file.toURI().toURL()).getImage();
 		image.flush();
 		int [] wh = new int[2];
 
-		
+
 		wh[0] = image.getWidth(null);
 		wh[1] = image.getHeight(null);
 
@@ -268,6 +290,7 @@ public class JPEGUtil2 {
 				graphics2D.fill(new Rectangle2D.Double(0, 0, canvW, canvH));
 				graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 				graphics2D.drawImage(image, posX, posY, thumbW, thumbH, null);
+				image.getGraphics().dispose();
 				image = thumbImage;
 			} else { //colorSquare == null
 				if(stretchWhenSmaller && (thumbW > oW || thumbH > oH)){
@@ -309,26 +332,28 @@ public class JPEGUtil2 {
 			throw new NotImplementedException("Não foi implementado ainda ColorSquare para poorResize");
 		}else{
 			graphics2D.drawImage(image, 0, 0, width, height, null);
+			image.getGraphics().dispose();
 		}
 
 		createJPEG(thumbImage, quality, pathNewFile);
+		graphics2D.dispose();
 	}
 
 	private static void createJPEG(BufferedImage image, int quality, String pathNewFile) throws FileNotFoundException, IOException {
-			FileOutputStream fos = new FileOutputStream(pathNewFile);
-			BufferedOutputStream out = new BufferedOutputStream(fos);
+		FileOutputStream fos = new FileOutputStream(pathNewFile);
+		BufferedOutputStream out = new BufferedOutputStream(fos);
 
-			JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-			JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(image);
-			quality = Math.max(0, Math.min(quality, 100));
-			param.setQuality((float) quality / 100.0f, false);
-			encoder.setJPEGEncodeParam(param);
-			encoder.encode(image);
+		JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
+		JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(image);
+		quality = Math.max(0, Math.min(quality, 100));
+		param.setQuality((float) quality / 100.0f, false);
+		encoder.setJPEGEncodeParam(param);
+		encoder.encode(image);
 
-			image.flush();
-			out.flush();
-			fos.flush();
-			fos.close();
-			out.close();
+		image.flush();
+		out.flush();
+		fos.flush();
+		fos.close();
+		out.close();
 	}
 }
