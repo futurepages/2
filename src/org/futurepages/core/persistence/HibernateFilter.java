@@ -27,7 +27,9 @@ public class HibernateFilter implements AfterConsequenceFilter {
 				Dao.beginTransaction();
 			}
 			String result = chain.invoke();
-			hasError = false;
+			if(!result.equals(ERROR) ||  !result.equals(AJAX_ERROR)){
+				hasError = false;
+			}
 			return result;
 			
 		} catch (Throwable throwable) {
