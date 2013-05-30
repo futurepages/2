@@ -2,7 +2,7 @@ package org.futurepages.core.path;
 
 import org.futurepages.core.config.Params;
 import javax.servlet.http.HttpServletRequest;
-import org.futurepages.util.StringUtils;
+import org.futurepages.util.The;
 
 /**
  * Retorna os endereços (URL) absolutos da aplicação.
@@ -10,21 +10,69 @@ import org.futurepages.util.StringUtils;
  * @author leandro
  */
 public class Paths {
-    
+
+	private static Paths INSTANCE = null;
+
+    public String getModule(HttpServletRequest req,String module) {
+        return getContext(req)+"/"+Params.MODULES_PATH+"/"+((module!=null)?module:"");
+    }
+
+    public String getModuleAction(HttpServletRequest req, String moduleId) {
+        if(Params.get("PRETTY_URL").equals("true")){
+            return getContext(req)+"/"+moduleId;
+        }
+        return getModule(req,moduleId);
+    }
+
+    public String getResource(HttpServletRequest req) {
+        return The.concat(context(req),"/",Params.get("RESOURCE_PATH"));
+    }
+
+    public String getResource(HttpServletRequest req, String module) {
+        return The.concat(module(req,module),"/",Params.get("RESOURCE_PATH"));
+    }
+
+    public String getTheme(HttpServletRequest req){
+        return getTemplate(req)+"/"+Params.get("THEMES_DIR_NAME")+"/"+Params.get("THEME");
+    }
+
+    public String getTemplate(HttpServletRequest req){
+        return getContext(req)+"/"+Params.TEMPLATE_PATH;
+    }
+
+    public String getContext(HttpServletRequest req){
+        return req.getContextPath();
+    }
+
+    public String getHost(HttpServletRequest req){
+        return The.concat(req.getScheme(),"://",req.getServerName(),(req.getServerPort()!=80 && req.getServerPort()!= 443 ? ":"+req.getServerPort() : "" ));
+    }
+
+	public String getTemplate(HttpServletRequest req, String module) {
+		return (module==null? getTemplate(req) : getModule(req, module)+"/"+Params.TEMPLATE_PATH);
+	}
+
+	
+	//#### ESCOPO ESTÁTICO ########################################################################
+	public static void initialize(boolean autoRedirectOn) {
+		if(autoRedirectOn){
+			INSTANCE = new StaticPaths();
+		}else{
+			INSTANCE = new Paths();
+		}
+	}
+
     /**
      * @param req Requisição
      * @param module id do módulo
      * @return a url completa do módulo
      */
     public static String module(HttpServletRequest req,String module) {
-        return context(req)+"/"+Params.MODULES_PATH+"/"+((module!=null)?module:"");
+        return INSTANCE.getModule(req, module);
     }
 
     public static String moduleAction(HttpServletRequest req, String moduleId) {
-        if(Params.get("PRETTY_URL").equals("true")){
-            return context(req)+"/"+moduleId;
-        }
-        return module(req,moduleId);
+       return INSTANCE.getModuleAction(req, moduleId);
     }
 
     /**
@@ -32,7 +80,7 @@ public class Paths {
      * @return a url completa da pasta de recursos da aplicação
      */
     public static String resource(HttpServletRequest req) {
-        return StringUtils.concat(context(req),"/",Params.get("RESOURCE_PATH"));
+        return INSTANCE.getResource(req);
     }
 
 	/**
@@ -40,7 +88,7 @@ public class Paths {
      * @return a url completa da pasta de recursos da aplicação
      */
     public static String resource(HttpServletRequest req, String module) {
-        return StringUtils.concat(module(req,module),"/",Params.get("RESOURCE_PATH"));
+        return INSTANCE.getResource(req,module);
     }
 
     /**
@@ -48,7 +96,7 @@ public class Paths {
      * @return a url completa da pasta de temas da aplicação
      */
     public static String theme(HttpServletRequest req){
-        return template(req)+"/"+Params.get("THEMES_DIR_NAME")+"/"+Params.get("THEME");
+        return INSTANCE.getTheme(req);
     }
 
     /**
@@ -56,7 +104,7 @@ public class Paths {
      * @return a url completa da pasta de arquivos do template da aplicação
      */
     public static String template(HttpServletRequest req){
-        return context(req)+"/"+Params.TEMPLATE_PATH;
+        return INSTANCE.getTemplate(req);
     }
 
     /**
@@ -65,7 +113,7 @@ public class Paths {
      * @return o endereço do contexto da aplicação, exemplo: /application
      */
     public static String context(HttpServletRequest req){
-        return req.getContextPath();
+        return INSTANCE.getContext(req);
     }
 
     /**
@@ -74,10 +122,10 @@ public class Paths {
      * @return a url completa do host server da aplicação
      */
     public static String host(HttpServletRequest req){
-        return StringUtils.concat(req.getScheme(),"://",req.getServerName(),(req.getServerPort()!=80 && req.getServerPort()!= 443 ? ":"+req.getServerPort() : "" ));
+        return INSTANCE.getHost(req);
     }
 
 	public static String template(HttpServletRequest req, String module) {
-		return (module==null? Paths.template(req) : Paths.module(req, module)+"/"+Params.TEMPLATE_PATH);
+		return INSTANCE.getTemplate(req, module);
 	}
 }
