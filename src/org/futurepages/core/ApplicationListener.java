@@ -124,10 +124,13 @@ public class ApplicationListener implements ServletContextListener {
 			}
 
 			if(!Is.empty(Params.get("AUTO_REDIRECT_DOMAIN"))){
-				log("Auto Redirect Domain ON. Inicializando 'Paths'...");
-				Paths.initialize(true);
+				log("Auto Redirect Domain ON. Inicializando 'Static Paths'...");
+				Paths.initialize(context);
 			}else{
-				Paths.initialize(false);
+				if(Params.get("DEPLOY_MODE").equals("production")){
+					log("Auto Redirect Domain OFF. Prefira usar o parâmetro AUTO_REDIRECT_DOMAIN para melhorar a performance da aplicação.");
+				}
+				Paths.initialize();
 			}
 
 			//Compacta recursos web

@@ -14,16 +14,19 @@ public class Paths {
 	private static Paths INSTANCE = null;
 
 	
-	public static void initialize(boolean autoRedirectOn) {
-		if(autoRedirectOn){
-			INSTANCE = new StaticPaths();
+	public static void initialize() {
+		initialize(null);
+	}
+
+	public static void initialize(String staticContext) {
+		if(staticContext != null){
+			INSTANCE = new StaticPaths(staticContext);
 		}else{
 			INSTANCE = new Paths();
 		}
 	}
 
 	//#### ESCOPO DINÂMICO ########################################################################
-
 
     public String getModule(HttpServletRequest req,String module) {
         return getContext(req)+"/"+Params.MODULES_PATH+"/"+((module!=null)?module:"");
@@ -66,6 +69,7 @@ public class Paths {
 
 	
 	//#### ESCOPO ESTÁTICO ########################################################################
+	//#### ATENÇÃO: AO ALTERAR QUALQUER LÓGICA DESTES MÉTODOS, DEVERÁ ALTERAR TAMBÉM EM StaticPaths
 	
    /**
      * @param req Requisição
