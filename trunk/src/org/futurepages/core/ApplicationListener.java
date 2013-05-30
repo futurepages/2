@@ -10,6 +10,7 @@ import org.futurepages.core.config.Params;
 import org.futurepages.core.exception.DefaultExceptionLogger;
 import org.futurepages.core.install.InstallersManager;
 import org.futurepages.core.mail.MailConfig;
+import org.futurepages.core.path.Paths;
 import org.futurepages.core.persistence.HibernateManager;
 import org.futurepages.core.persistence.SchemaGeneration;
 import org.futurepages.core.quartz.QuartzManager;
@@ -120,6 +121,13 @@ public class ApplicationListener implements ServletContextListener {
 				log("Iniciando criação da Taglib.");
 				(new TagLibBuilder(modules)).build();
 				log("Taglib criada com sucesso.");
+			}
+
+			if(!Is.empty(Params.get("AUTO_REDIRECT_DOMAIN"))){
+				log("Auto Redirect Domain ON. Inicializando 'Paths'...");
+				Paths.initialize(true);
+			}else{
+				Paths.initialize(false);
 			}
 
 			//Compacta recursos web
