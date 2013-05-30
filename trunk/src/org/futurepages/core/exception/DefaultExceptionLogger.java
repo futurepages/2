@@ -2,10 +2,10 @@ package org.futurepages.core.exception;
 
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.Locale;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import org.futurepages.actions.LoginAction;
 import org.futurepages.core.action.AbstractAction;
 import org.futurepages.core.action.AsynchronousManager;
 import org.futurepages.core.action.Manipulable;
@@ -13,7 +13,6 @@ import org.futurepages.core.control.Controller;
 import org.futurepages.core.control.InvocationChain;
 import org.futurepages.exceptions.FuturepagesServletException;
 import org.futurepages.exceptions.ServletErrorException;
-import org.futurepages.json.JSONGenericRenderer;
 import org.futurepages.util.DateUtil;
 import org.futurepages.util.EncodingUtil;
 import org.futurepages.util.StringUtils;
@@ -62,12 +61,16 @@ public class DefaultExceptionLogger implements ExceptionLogger, Manipulable{
 			log(">[method ]  ", req.getMethod());
 
 			System.out.print(">[request]  ");
-			for(Object key : req.getParameterMap().keySet()){
-				System.out.print(The.concat(key.toString(), ": ",
-											The.implodedArray(req.getParameterValues(key.toString()),",","'"),
-											";"
-											)
-								 );
+			if(chain!= null && !(chain.getAction() instanceof LoginAction)){
+				for(Object key : req.getParameterMap().keySet()){
+					System.out.print(The.concat(key.toString(), ": ",
+												The.implodedArray(req.getParameterValues(key.toString()),",","'"),
+												";"
+												)
+									 );
+				}
+			}else{
+				System.out.println("<< hidden because it's a login action >>");
 			}
 			System.out.println();
 
