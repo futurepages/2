@@ -13,6 +13,18 @@ public class Paths {
 
 	private static Paths INSTANCE = null;
 
+	
+	public static void initialize(boolean autoRedirectOn) {
+		if(autoRedirectOn){
+			INSTANCE = new StaticPaths();
+		}else{
+			INSTANCE = new Paths();
+		}
+	}
+
+	//#### ESCOPO DINÂMICO ########################################################################
+
+
     public String getModule(HttpServletRequest req,String module) {
         return getContext(req)+"/"+Params.MODULES_PATH+"/"+((module!=null)?module:"");
     }
@@ -25,11 +37,11 @@ public class Paths {
     }
 
     public String getResource(HttpServletRequest req) {
-        return The.concat(context(req),"/",Params.get("RESOURCE_PATH"));
+        return The.concat(getContext(req),"/",Params.get("RESOURCE_PATH"));
     }
 
     public String getResource(HttpServletRequest req, String module) {
-        return The.concat(module(req,module),"/",Params.get("RESOURCE_PATH"));
+        return The.concat(getModule(req,module),"/",Params.get("RESOURCE_PATH"));
     }
 
     public String getTheme(HttpServletRequest req){
@@ -54,15 +66,8 @@ public class Paths {
 
 	
 	//#### ESCOPO ESTÁTICO ########################################################################
-	public static void initialize(boolean autoRedirectOn) {
-		if(autoRedirectOn){
-			INSTANCE = new StaticPaths();
-		}else{
-			INSTANCE = new Paths();
-		}
-	}
-
-    /**
+	
+   /**
      * @param req Requisição
      * @param module id do módulo
      * @return a url completa do módulo
