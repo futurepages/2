@@ -7,4 +7,7 @@ package org.futurepages.core.path;
  */
 public class StaticPaths extends Paths {
 
+	public StaticPaths() {
+
+	}
 }
