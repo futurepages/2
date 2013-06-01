@@ -34,6 +34,9 @@ public class Params {
 	public static final  String TEMPLATE_PATH          = "template";
 	public static final  String BASE_HIBERNATE_PROPERTIES_FILE = "hibernate.properties";
 
+	//cached params:
+	private static boolean devMode = false;
+
 	/**
 	 * Inicializa os parâmetros padrões da aplicação (sem recursos web),
 	 * seta os especificados no arquivo app-params.xml
@@ -57,6 +60,12 @@ public class Params {
 		webDefaultParams(classesPath, contextName);
 		parseXML();
 		compositeWebParams();
+		cachedParams();
+	}
+
+
+	private static void cachedParams() {
+		devMode = Params.get("DEV_MODE").equals("on");
 	}
 	
 	public static String get(String name) {
@@ -178,7 +187,7 @@ public class Params {
 	}
 
 	public static boolean devMode(){
-		return Params.get("DEV_MODE").equals("on");
+		return devMode;
 	}
 
 	private static String regexParam(String key){
