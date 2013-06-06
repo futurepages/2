@@ -78,4 +78,53 @@ public class StringUtils {
 		return strIn;
 	}
 
+	//corrige um nome que possa estar em maiusculo para ficar no formato: Fulano da Silva dos Anzois
+	public static String corrigeNomeCompleto(String nome) {
+		nome = nome.replaceAll("'", "’"); //ao migrar para UTF8, mudar a crase por aspa própria.
+		nome = nome.replaceAll("`", "’"); //ao migrar para UTF8, mudar a crase por aspa própria.
+		nome = nome.replaceAll("\"", "");
+
+
+		String[] nomes = nome.split("[ |\\t]+");
+		StringBuilder sb = new StringBuilder();
+
+
+		for (String palavra : nomes) {
+			palavra = palavra.toLowerCase().trim();
+
+
+			if (palavra.length() == 3 && (palavra.equals("dos") || palavra.equals("das"))) {
+				sb.append(palavra);
+
+
+			} else if (palavra.length() <= 2
+					&& (palavra.equals("de")
+					|| palavra.equals("da")
+					|| palavra.equals("do")
+					|| palavra.equals("e"))) {
+				sb.append(palavra);
+
+
+			} else if (palavra.length() == 2 && (palavra.equals("ii"))) {
+				sb.append(palavra.toUpperCase());
+
+
+			} else {
+				if (palavra.length() == 1) {
+					sb.append(palavra.toUpperCase());
+
+
+				} else {
+					sb.append(The.capitalizedWord(palavra));
+
+
+				}
+			}
+			sb.append(" ");
+
+
+		}
+		return sb.toString().trim();
+
+	}
 }
