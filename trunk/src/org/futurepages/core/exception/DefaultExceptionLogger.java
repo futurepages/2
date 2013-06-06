@@ -36,7 +36,7 @@ public class DefaultExceptionLogger implements ExceptionLogger, Manipulable{
 	public String execute(Throwable throwable, String errorType, HttpServletRequest req) {
 		String numeroProtocolo = System.currentTimeMillis()+"-"+Thread.currentThread().getId();
 
-		InvocationChain chain = Controller.getInstance().getChain();
+		InvocationChain chain = Controller.getInstance()!=null ? Controller.getInstance().getChain() : null;
 		String exceptionId =  StringUtils.concat("[",errorType.toUpperCase(),"] ",numeroProtocolo);
         log(exceptionId , "  ("  , DateUtil.viewDateTime(new Date()) , ") >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 		if(chain!=null){
