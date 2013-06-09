@@ -114,7 +114,9 @@ public class GraphicsUtilities {
         try {
             g2.drawImage(img, 0, 0, null);
         } finally {
-            g2.dispose();
+			if(g2 !=null){
+				g2.dispose();
+			}
         }
 
         return buff;
@@ -185,8 +187,13 @@ public class GraphicsUtilities {
      */
     public static BufferedImage createCompatibleImage(BufferedImage image,
                                                       int width, int height) {
-        return isHeadless() ?
-                new BufferedImage(width, height, image.getType()) :
+
+		//IT'S A HACK TO CORRECT A POSSIBLE LINUX BUG.
+		int imageType = image.getType();
+		if(imageType == 0) imageType = 5;
+
+		return isHeadless() ?
+                new BufferedImage(width, height, imageType) :
                 getGraphicsConfiguration().createCompatibleImage(width, height,
                                                    image.getTransparency());
     }
@@ -321,7 +328,9 @@ public class GraphicsUtilities {
         try {
             g.drawImage(image, 0, 0, null);
         } finally {
-            g.dispose();
+			if(g !=null){
+				g.dispose();
+			}
         }
 
         return compatibleImage;
@@ -389,7 +398,9 @@ public class GraphicsUtilities {
                     RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             g2.drawImage(image, 0, 0, temp.getWidth(), temp.getHeight(), null);
         } finally {
-            g2.dispose();
+			if(g2 !=null){
+				g2.dispose();
+			}
         }
 
         return temp;
@@ -437,7 +448,9 @@ public class GraphicsUtilities {
                     RenderingHints.VALUE_INTERPOLATION_BILINEAR);
             g2.drawImage(image, 0, 0, temp.getWidth(), temp.getHeight(), null);
         } finally {
-            g2.dispose();
+			if(g2 !=null){
+				g2.dispose();
+			}
         }
 
         return temp;
@@ -535,7 +548,9 @@ public class GraphicsUtilities {
                 thumb = temp;
             } while (newSize != (isWidthGreater ? width : height));
         } finally {
-            g2.dispose();
+			if(g2 !=null){
+				g2.dispose();
+			}
         }
 
         if (width != thumb.getWidth() || height != thumb.getHeight()) {
@@ -547,7 +562,9 @@ public class GraphicsUtilities {
                                     RenderingHints.VALUE_INTERPOLATION_BILINEAR);
                 g2.drawImage(thumb, 0, 0, width, height, 0, 0, width, height, null);
             } finally {
-                g2.dispose();
+				if(g2 !=null){
+					g2.dispose();
+				}
             }
             
             thumb = temp;
@@ -637,7 +654,9 @@ public class GraphicsUtilities {
                 thumb = temp;
             } while (width != newWidth || height != newHeight);
         } finally {
-            g2.dispose();
+			if(g2 !=null){
+				g2.dispose();
+			}
         }
 
         if (width != thumb.getWidth() || height != thumb.getHeight()) {
@@ -649,7 +668,9 @@ public class GraphicsUtilities {
                                     RenderingHints.VALUE_INTERPOLATION_BILINEAR);
                 g2.drawImage(thumb, 0, 0, width, height, 0, 0, width, height, null);
             } finally {
-                g2.dispose();
+				if(g2 !=null){
+					g2.dispose();
+				}
             }
             
             thumb = temp;
