@@ -36,6 +36,7 @@ public class Params {
 
 	//cached params:
 	private static boolean devMode = false;
+	private static boolean connectExternalModules = false;
 
 	/**
 	 * Inicializa os parâmetros padrões da aplicação (sem recursos web),
@@ -66,6 +67,7 @@ public class Params {
 
 	private static void cachedParams() {
 		devMode = Params.get("DEV_MODE").equals("on");
+		connectExternalModules = Params.get("CONNECT_EXTERNAL_MODULES").equals("true");
 	}
 	
 	public static String get(String name) {
@@ -188,6 +190,10 @@ public class Params {
 
 	public static boolean devMode(){
 		return devMode;
+	}
+
+	public static boolean connectExternalModules(){
+		return connectExternalModules;
 	}
 
 	private static String regexParam(String key){
