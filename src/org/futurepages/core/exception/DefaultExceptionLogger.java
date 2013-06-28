@@ -61,16 +61,26 @@ public class DefaultExceptionLogger implements ExceptionLogger, Manipulable{
 			log(">[method ]  ", req.getMethod());
 
 			System.out.print(">[request]  ");
-			if(chain!= null && !(chain.getAction() instanceof LoginAction)){
+			if(chain!= null){
+				 if(!(chain.getAction() instanceof LoginAction)){
+					for(Object key : req.getParameterMap().keySet()){
+						System.out.print(The.concat(key.toString(), ": ",
+													The.implodedArray(req.getParameterValues(key.toString()),",","'"),
+													";"
+											)
+										);
+					}
+				}else{ //é  LoginAction:
+					System.out.println("<< hidden because it's a login action >>");
+				 }
+			}else { //chain == null
 				for(Object key : req.getParameterMap().keySet()){
 					System.out.print(The.concat(key.toString(), ": ",
 												The.implodedArray(req.getParameterValues(key.toString()),",","'"),
 												";"
-												)
-									 );
+										)
+									);
 				}
-			}else{
-				System.out.println("<< hidden because it's a login action >>");
 			}
 			System.out.println();
 
