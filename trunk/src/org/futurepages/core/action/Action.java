@@ -38,11 +38,13 @@ public interface Action extends Manipulable {
 	public boolean isGet();
 
 	public boolean isPost();
+	
+	public String accessDenied();
 
 	public void setInput(Input input);
 
 	public void setOutput(Output output);
-
+	
 	public void output(String key, Object object);
 
 	public void setSession(Context context);
