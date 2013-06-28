@@ -73,6 +73,11 @@ public class ActionImpl implements Action{
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
+	public String accessDenied() {
+		throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+	}
+
 	@AsynchronousAction(AsynchronousActionType.DYN)
 	public class ClasseDynAnotada extends ActionImpl{}
 	
