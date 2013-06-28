@@ -10,6 +10,7 @@ import org.futurepages.core.tags.build.ContentTypeEnum;
 @Tag(bodyContent = ContentTypeEnum.EMPTY)
 public class ContextPath extends PrintTag{
     
+	@Override
     public String getStringToPrint() throws JspException {
 		return Paths.context(req);
     }    
