@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import org.futurepages.consequences.AjaxConsequence;
 import org.futurepages.consequences.StringConsequence;
+import org.futurepages.core.admin.Authentication;
 import org.futurepages.core.admin.DefaultUser;
 import org.futurepages.core.context.Context;
 import org.futurepages.core.context.SessionContext;
@@ -269,6 +270,11 @@ public abstract class AbstractAction implements Pageable, Action {
 	}
 
 	protected void listDependencies() {
+	}
+	
+	@Override
+	public String accessDenied(){
+		return Authentication.accessDenied(this.getChain());
 	}
 
 	@Override
