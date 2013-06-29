@@ -29,8 +29,8 @@ public class DefaultExceptionLogger implements ExceptionLogger, Manipulable{
 
 	private DefaultExceptionLogger() {}
 
-	public void execute(Throwable throwable) {
-		execute(throwable, ExceptionLogType.SILENT_EXCEPTION.name(),null);
+	public String execute(Throwable throwable) {
+		return execute(throwable, ExceptionLogType.SILENT_EXCEPTION.name(),null);
 	}
 
 	public String execute(Throwable throwable, String errorType, HttpServletRequest req) {
