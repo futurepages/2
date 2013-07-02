@@ -5,7 +5,7 @@ import java.util.Enumeration;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import org.futurepages.actions.LoginAction;
+import org.futurepages.actions.HiddenRequestAction;
 import org.futurepages.core.action.AbstractAction;
 import org.futurepages.core.action.AsynchronousManager;
 import org.futurepages.core.action.Manipulable;
@@ -62,7 +62,7 @@ public class DefaultExceptionLogger implements ExceptionLogger, Manipulable{
 
 			System.out.print(">[request]  ");
 			if(chain!= null){
-				 if(!(chain.getAction() instanceof LoginAction)){
+				 if(!(HiddenRequestAction.class.isAssignableFrom(chain.getAction().getClass()))){
 					for(Object key : req.getParameterMap().keySet()){
 						System.out.print(The.concat(key.toString(), ": ",
 													The.implodedArray(req.getParameterValues(key.toString()),",","'"),
@@ -70,8 +70,8 @@ public class DefaultExceptionLogger implements ExceptionLogger, Manipulable{
 											)
 										);
 					}
-				}else{ //é  LoginAction:
-					System.out.println("<< hidden because it's a login action >>");
+				}else{ //é  LoginAction ou similar que não pode exibir alguma senha no request.
+					System.out.println("<< hidden because it's a Hidden Request Action (maybe some kind of login) >>");
 				 }
 			}else { //chain == null
 				for(Object key : req.getParameterMap().keySet()){
