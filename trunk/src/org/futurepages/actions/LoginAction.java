@@ -11,7 +11,7 @@ import org.futurepages.core.admin.AuthenticationFree;
 import org.futurepages.core.admin.DefaultUser;
 import org.futurepages.core.context.Context;
 
-public abstract class LoginAction extends AbstractAction implements AuthenticationFree  {
+public abstract class LoginAction extends AbstractAction implements AuthenticationFree, HiddenRequestAction  {
 
 	public static int TIMEOUT = 30; // in Minutes
 
