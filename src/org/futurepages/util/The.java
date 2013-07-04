@@ -356,6 +356,10 @@ public class The {
 		return wIn;
 	}
 
+	public static String truncated(String in, int size){
+		return StringUtils.truncated(in, size);
+	}
+
 	public static String javascriptText(Object value) {
 		String valor = "";
 		if (String.class.isAssignableFrom(value.getClass())) {

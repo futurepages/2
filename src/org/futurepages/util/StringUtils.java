@@ -48,6 +48,13 @@ public class StringUtils {
 		return s == null || s.length() == 0;
 	}
 
+	public static String truncated(String in, int size){
+		if(in.length()<=size){
+			return in;
+		}	else{
+			return in.substring(0, size);
+		}
+	}
 
 	public static String replace(String strIn, Map<Character, String> dirt) {
 		if(Is.empty(strIn)) return "";
