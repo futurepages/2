@@ -49,7 +49,7 @@ public class StringUtils {
 	}
 
 	public static String truncated(String in, int size){
-		if(in.length()<=size){
+		if(in == null || in.length()<=size){
 			return in;
 		}	else{
 			return in.substring(0, size);
