@@ -8,7 +8,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 import org.apache.commons.lang.StringUtils;
-import org.futurepages.core.exception.DefaultExceptionLogger;
 
 /**
  * Class Helper for reflection operations.
@@ -98,7 +97,7 @@ public final class ReflectionUtil {
 						method.invoke(object, new Object[]{value});
 						return;
 					} catch (Exception e) {
-						DefaultExceptionLogger.getInstance().execute(e);
+						throw new RuntimeException(e);
 					}
 				}
 			}
@@ -139,9 +138,8 @@ public final class ReflectionUtil {
 			method.invoke(object, new Object[]{});
 			return true;
 		} catch (Exception e) {
-			DefaultExceptionLogger.getInstance().execute(e);
+			throw new RuntimeException(e);
 		}
-		return false;
 	}
 
 	public static void invokeVoidMethod(Object object, String methodName, Object... value) throws Exception {
@@ -255,7 +253,7 @@ public final class ReflectionUtil {
 				return method.invoke(object, value);
 			}
 		} catch (Exception e) {
-			DefaultExceptionLogger.getInstance().execute(e);
+			throw new RuntimeException(e);
 		}
 		return null;
 	}
@@ -315,9 +313,8 @@ public final class ReflectionUtil {
 			return klass.getMethod(methodName).getReturnType();
 
 		} catch (Exception e) {
-			DefaultExceptionLogger.getInstance().execute(e);
+			throw new RuntimeException(e);
 		}
-		return null;
 	}
 
 	public static Object toPrimitive(Class primitive, String value) throws Exception {
@@ -385,7 +382,7 @@ public final class ReflectionUtil {
 			fieldValue = field.get(null);
 
 		} catch (Exception e) {
-			DefaultExceptionLogger.getInstance().execute(e);
+			throw new RuntimeException(e);
 		}
 		return fieldValue;
 	}
@@ -405,11 +402,21 @@ public final class ReflectionUtil {
 			for (Field field : fields) {
 				try {
 					field.setAccessible(true);
-					field.set(child, ReflectionUtil.getField(parent, field.getName()));
+					field.set(child,field.get(parent));
 				} catch (Exception ex) {
-					DefaultExceptionLogger.getInstance().execute(ex);
+					throw new RuntimeException(ex);
 				}
 			}
+		}
+	}
+
+	public static <T extends Object> T clone(T fromObj){
+		try {
+			T newObj = (T) fromObj.getClass().newInstance();
+			cloneFields(fromObj, newObj);
+			return newObj;
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
 		}
 	}
 
@@ -425,9 +432,9 @@ public final class ReflectionUtil {
 			for (Field field : fields) {
 				try {
 					field.setAccessible(true);
-					field.set(toObj, ReflectionUtil.getField(fromObj, field.getName()));
+					field.set(toObj, field.get(fromObj));
 				} catch (Exception ex) {
-					DefaultExceptionLogger.getInstance().execute(ex);
+					throw new RuntimeException(ex);
 				}
 			}
 			clss = clss.getSuperclass();

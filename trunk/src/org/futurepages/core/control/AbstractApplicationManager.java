@@ -20,12 +20,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.futurepages.consequences.AjaxConsequence;
-import org.futurepages.core.ApplicationManager;
 import org.futurepages.core.action.Manipulable;
 import org.futurepages.core.ajax.AjaxRenderer;
 import org.futurepages.core.config.Params;
 import org.futurepages.filters.InjectionFilter;
 import org.futurepages.filters.OutjectionFilter;
+import org.futurepages.util.The;
 
 /**
  * The central abstract base manager which controls actions, filters, locales and data lists.
@@ -132,7 +132,7 @@ public abstract class AbstractApplicationManager  implements Manipulable{
         if (ac.getName() == null) throw new IllegalStateException("Cannot add an action config without a name!");
         String innerAction = ac.getNamedInnerAction();
         if (innerAction == null) {
-		    actions.put(ac.getName(), ac);
+				actions.put(ac.getName(), ac);
         } else {
             Map<String, ActionConfig> map = innerActions.get(ac.getName());
             if (map == null) {
@@ -532,18 +532,10 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 
     }
 
-    public ActionConfig action(String name, Class<? extends Object> klass, String innerAction) {
-        return addActionConfig(new ActionConfig(name, klass, innerAction));
-    }
-
     public ActionConfig globalAction(String name, Class<? extends Object> klass) {
 		ActionConfig ac = (new ActionConfig(name, klass));
 		ac.setGlobal(true);
         return addActionConfig(ac);
-    }
-
-    public ActionConfig action(Class<? extends Object> klass, String innerAction) {
-        return addActionConfig(new ActionConfig(klass, innerAction));
     }
 
 	/**
@@ -569,7 +561,7 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 
 	/**
 	 * Necessário ser chamado após o registro de todas as ActionConfig's, pois se fossem registradas
-	 * durante o loadingActions, algumas AC's não existiriam ainda no mapa.
+	 * durante o loadActions, algumas AC's não existiriam ainda no mapa.
 	 */
 	protected void registerChains(){
 		for(Chain chain : chains){
@@ -586,5 +578,46 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 
 	public Set<String> moduleIds(){
 		return new HashSet<String>();
+	}
+
+	/**
+	 * Used only by the framework. Don't use it in the ModuleManagers.
+	 */
+	protected void afterLoadManagers() {
+		Map<String, ActionConfig> actionsAux = actions;
+		actions = new HashMap<String, ActionConfig>();
+		for (ActionConfig ac : actionsAux.values()) {
+			if (!ac.getName().contains(",")) {
+				actions.put(ac.getName(), ac);
+			} else {
+				String[] acNames = ac.getName().split(",");
+				for (String acName : acNames) {
+					ActionConfig newAc = The.cloneOf(ac);
+					newAc.setName(acName);
+					actions.put(newAc.getName(), newAc);
+				}
+			}
+		}
+		if (innerActions.size() > 0) {
+			Map<String, Map<String, ActionConfig>> innerActionsAux = innerActions;
+			innerActions = new HashMap<String, Map<String, ActionConfig>>();
+			for (String actionName : innerActionsAux.keySet()) {
+				Map<String, ActionConfig> actionInnerMap = innerActionsAux.get(actionName);
+				if (!actionName.contains(",")) {
+					innerActions.put(actionName, actionInnerMap);
+				} else {
+					String[] acNames = actionName.split(",");
+					for (String acName : acNames) {
+						Map<String, ActionConfig> newActionInnerMap = new HashMap<String, ActionConfig>();
+						for (String innerKey : actionInnerMap.keySet()) {
+							ActionConfig newAc = The.cloneOf(actionInnerMap.get(innerKey));
+							newAc.setName(acName);
+							newActionInnerMap.put(innerKey, newAc);
+						}
+						innerActions.put(acName, newActionInnerMap);
+					}
+				}
+			}
+		}
 	}
 }
