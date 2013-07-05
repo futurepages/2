@@ -10,6 +10,7 @@ import org.futurepages.actions.DynAction;
 import org.futurepages.json.JSONGenericRenderer;
 import org.futurepages.consequences.Chain;
 import org.futurepages.util.StringUtils;
+import org.futurepages.util.The;
 
 public abstract class AbstractModuleManager extends AbstractApplicationManager {
 
@@ -50,7 +51,7 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
 
     @Override
     public ActionConfig action(String act, Class<? extends Object> actionClass) {
-        return super.action(webPath + act, actionClass);
+        return super.action(withPath(act), actionClass);
     }
 
 	@Override
@@ -65,18 +66,19 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
     }
     
 	public ActionConfig ajaxAction(String act, Class<? extends AjaxAction> actionClass) {
-        return super.action(webPath + act, actionClass)
+        return super.action(withPath(act), actionClass)
 				.on(SUCCESS, ajax(new JSONGenericRenderer()))
 				.on(ERROR, ajax(new JSONGenericRenderer()))
 		;
     }
 
 	public ActionConfig ajaxAction(Class<? extends AjaxAction> actionClass) {
-        return super.action(webPath + actionClass.getSimpleName() , actionClass)
+        return super.action(withPath(actionClass.getSimpleName()) , actionClass)
 						.on(SUCCESS, ajax(new JSONGenericRenderer()))
 						.on(ERROR, ajax(new JSONGenericRenderer()))
 		;
     }
+
 
 	/**
 	 *
@@ -91,7 +93,7 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
     }
 	
     protected Consequence fwIn(String page) {
-        return (new Forward(prettyCorrect(page,false) + webPath + page));
+        return (new Forward(withPath(null, page , false)));
     }
 
 
@@ -106,19 +108,19 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
     }
 
     protected Consequence rdIn(String page) {
-        return (new Redirect(prettyCorrect(page,false) + webPath + page));
+        return (new Redirect(withPath(null, page, false)));
     }
 
     protected Consequence rdIn(String page, boolean redirectParams) {
-        return (new Redirect(prettyCorrect(page,false) + webPath + page, redirectParams));
+        return (new Redirect(withPath(null, page, false), redirectParams));
     }
 
     protected Consequence redir(String moduleId, String page){
-        return (new Redirect(prettyCorrect(page,true) + moduleId + "/"+page));
+        return (new Redirect(withPath(moduleId, page, true)));
     }
 
     protected Consequence redir(String moduleId, String page, boolean redirectParams){
-        return (new Redirect(prettyCorrect(page,true) + moduleId + "/"+page, redirectParams));
+        return (new Redirect(withPath(moduleId, page, true), redirectParams));
     }
 
     protected Consequence chain(String actionName) {
@@ -143,17 +145,6 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
 	
     public static String moduleId(Class klass){
            return ModuleUtil.moduleId(klass);
-    }
-
-    private String prettyCorrect(String page, boolean putModulePath) {
-        if(withPrettyURL){
-            if(page.contains(".")){ //.page , .jsp
-                return Params.MODULES_PATH+"/";
-            }
-        }else if(putModulePath){
-                return Params.MODULES_PATH+"/";
-		}
-        return "";
     }
 
 	public char getInnerActionSeparator() {
@@ -185,6 +176,39 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
 
 	public boolean isIntegrationModule() {
 		return this.integrationModule;
+	}
+
+
+    private String prettyCorrect(String page, boolean putModulePath) {
+        if(withPrettyURL){
+            if(page.contains(".")){ //.page , .jsp
+                return Params.MODULES_PATH+"/";
+            }
+        }else if(putModulePath){
+                return Params.MODULES_PATH+"/";
+		}
+        return "";
+    }
+
+	private String withPath(String actionPath){
+		return withPath(null,actionPath,false);
+	}
+
+	private String withPath(String moduleId, String actionPath, Boolean prettyCorrect){
+		if(actionPath.contains(",")){
+			String[] actions = actionPath.split(",");
+			String[] actionsWithPath = new String[actions.length];
+			int i = 0;
+			for (String action : actions) {
+				actionsWithPath[i] = The.concat((prettyCorrect!=null? prettyCorrect(action, prettyCorrect.booleanValue()):""),(moduleId!=null?moduleId+"/":""),webPath,action);
+				i++;
+			}
+			String actionWithPath = The.implodedArray(actionsWithPath, ",", null);
+			System.out.println(actionWithPath);
+			return actionWithPath;
+		}else{
+			return The.concat((prettyCorrect!=null? prettyCorrect(actionPath, prettyCorrect.booleanValue()):""),(moduleId!=null?moduleId:""),webPath,actionPath);
+		}
 	}
 
 }

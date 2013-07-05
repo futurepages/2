@@ -171,6 +171,7 @@ public class ApplicationManager extends AbstractApplicationManager {
 		for (AbstractApplicationManager manager : this.managers.values()) {
 			manager.loadActions();
 		}
+		super.afterLoadManagers();
 	}
 
 	public LinkedHashSet<String> loadDependencies(AbstractModuleManager mm) {

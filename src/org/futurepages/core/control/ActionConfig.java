@@ -32,6 +32,9 @@ public class ActionConfig {
 	private String namedInnerAction = null;
 	private boolean global = false;
 
+	public ActionConfig() {
+	}
+
 	/**
 	 * Creates an ActionConfig for the given action implementation.
 	 * This action config will use the name of the action to derive its name.
@@ -520,6 +523,10 @@ public class ActionConfig {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**

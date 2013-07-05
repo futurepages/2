@@ -24,6 +24,11 @@ public class The {
 		return false;
 	}
 
+	public static <T extends Object> T cloneOf(T fromObj){
+		return ReflectionUtil.clone(fromObj);
+	}
+
+
 	public static String implodedArray(String[] array, String delim, String quote) {
 		if (quote == null) {
 			quote = "";
