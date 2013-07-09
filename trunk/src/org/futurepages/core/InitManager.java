@@ -41,6 +41,7 @@ import org.futurepages.formatters.LiteralDateTimeFormatter;
 import org.futurepages.formatters.MonthFormatter;
 import org.futurepages.formatters.PoorTextFormatter;
 import org.futurepages.formatters.RemainingTimeFormatter;
+import org.futurepages.formatters.SimpleElapsedTimeFormatter;
 import org.futurepages.formatters.SmartTextFormatter;
 import org.futurepages.formatters.TimeFormatter;
 import org.futurepages.formatters.UrlFormatter;
@@ -127,6 +128,7 @@ public class InitManager extends AbstractApplicationManager{
         FormatterManager.addFormatter("poorText"		   , new PoorTextFormatter());
         FormatterManager.addFormatter("remainingTime"	   , new RemainingTimeFormatter());
         FormatterManager.addFormatter("seoURL"	     	   , new SEOURLFormatter());
+        FormatterManager.addFormatter("simpleElapsedTime"  , new SimpleElapsedTimeFormatter());
         FormatterManager.addFormatter("smartText"		   , new SmartTextFormatter());
         FormatterManager.addFormatter("textarea"		   , new TextAreaFormatter());
         FormatterManager.addFormatter("time"			   , new TimeFormatter());
