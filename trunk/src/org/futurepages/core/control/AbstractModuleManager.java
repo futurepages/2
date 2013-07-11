@@ -200,14 +200,15 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
 			String[] actionsWithPath = new String[actions.length];
 			int i = 0;
 			for (String action : actions) {
-				actionsWithPath[i] = The.concat((prettyCorrect!=null? prettyCorrect(action, prettyCorrect.booleanValue()):""),(moduleId!=null?moduleId+"/":""),webPath,action);
+				actionsWithPath[i] = The.concat((prettyCorrect!=null? prettyCorrect(action, prettyCorrect.booleanValue()):""),(moduleId!=null?moduleId+"/":webPath+"/"),actionPath);
 				i++;
 			}
 			String actionWithPath = The.implodedArray(actionsWithPath, ",", null);
 			System.out.println(actionWithPath);
 			return actionWithPath;
 		}else{
-			return The.concat((prettyCorrect!=null? prettyCorrect(actionPath, prettyCorrect.booleanValue()):""),(moduleId!=null?moduleId:""),webPath,actionPath);
+			return The.concat((prettyCorrect!=null? prettyCorrect(actionPath, prettyCorrect.booleanValue()):""),(moduleId!=null?moduleId+"/":webPath+"/"),actionPath);
+
 		}
 	}
 
