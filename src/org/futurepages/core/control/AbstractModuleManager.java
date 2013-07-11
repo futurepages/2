@@ -31,6 +31,17 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
         webPathIt();
     }
 
+	/**
+	 *  Para realizar testes (retire o abstract da classe)
+	 */
+//	public AbstractModuleManager(String moduleId, boolean withPrettyURL, char innerActionSeparator) {
+//		this.moduleId = moduleId;
+//		this.withPrettyURL = withPrettyURL;
+//		this.innerActionSeparator = innerActionSeparator;
+//        webPathIt();
+//	}
+
+
     protected void webPathIt() {
         if(withPrettyURL){
             this.webPath =  moduleId + "/";
@@ -98,13 +109,7 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
 
 
     protected Consequence fwd(String moduleId, String page){
-        String path = Params.MODULES_PATH+"/";
-        if(withPrettyURL){
-            if(!page.contains(".")){ //.page , .jsp
-                path = "";
-            }
-        }
-        return (new Forward(path +  moduleId + "/"+page));
+        return (new Forward(withPath(moduleId, page, true)));
     }
 
     protected Consequence rdIn(String page) {
@@ -194,22 +199,47 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
 		return withPath(null,actionPath,false);
 	}
 
+	/**
+	 *
+	 * @param moduleId
+	 * @param actionPath
+	 * @param prettyCorrect
+	 * @return
+	 */
 	private String withPath(String moduleId, String actionPath, Boolean prettyCorrect){
 		if(actionPath.contains(",")){
 			String[] actions = actionPath.split(",");
 			String[] actionsWithPath = new String[actions.length];
 			int i = 0;
 			for (String action : actions) {
-				actionsWithPath[i] = The.concat((prettyCorrect!=null? prettyCorrect(action, prettyCorrect.booleanValue()):""),(moduleId!=null?moduleId+"/":webPath+"/"),actionPath);
+				actionsWithPath[i] = The.concat((prettyCorrect!=null? prettyCorrect(action, prettyCorrect.booleanValue()):""),
+												(moduleId!=null?moduleId+"/":webPath),
+												 action
+									);
+
 				i++;
 			}
 			String actionWithPath = The.implodedArray(actionsWithPath, ",", null);
-			System.out.println(actionWithPath);
 			return actionWithPath;
 		}else{
-			return The.concat((prettyCorrect!=null? prettyCorrect(actionPath, prettyCorrect.booleanValue()):""),(moduleId!=null?moduleId+"/":webPath+"/"),actionPath);
-
+			return The.concat(
+								(prettyCorrect!=null? prettyCorrect(actionPath, prettyCorrect.booleanValue()):""),
+								(moduleId!=null?moduleId+"/":webPath),
+								actionPath
+					);
 		}
 	}
+
+//remove abstract modifier from class signature to test...
+//	public static void main(String[] args) {
+//		AbstractModuleManager mm = new AbstractModuleManager("global", true, '-');
+//		System.out.println(mm.redir("admin","Action")); //NAO!!!
+//		System.out.println(mm.rdIn("Action,Axxx")); //OK
+//		System.out.println(mm.redir("system","Action,XX")); //NAO!!
+//		System.out.println(mm.redir("Action.jsp"));
+//		System.out.println(mm.rdIn("Action-execute.page"));
+//		System.out.println(mm.fwIn("Action-execute.page"));
+//		System.out.println(mm.fwd("global","Action-execute.page"));
+//	}
 
 }
