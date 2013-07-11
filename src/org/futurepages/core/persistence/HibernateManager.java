@@ -82,21 +82,15 @@ public class HibernateManager {
 	static Session getSession(String schemaId) {
 		Session session = getSessionTL(schemaId).get();
 
-		if (session != null) {
-			if (session.isOpen()) {
+		if (session != null && session.isOpen()) {
 				return session;
+		}else{
+			if(session==null || !session.isOpen()) {
+				session = getSessionFactory(schemaId).openSession();
+				HibernateManager.getSessionTL(schemaId).set(session);
 			}
-		}
-
-		if(session==null || !session.isOpen()) {
-			session = getSessionFactory(schemaId).openSession();
-			HibernateManager.getSessionTL(schemaId).set(session);
 			return session;
 		}
-
-		if(!session.isOpen()){
-		}
-		return session;
 	}
 
 	static void setSessionFactory(String schemaId, SessionFactory sessionFactory) {
