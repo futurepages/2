@@ -62,7 +62,8 @@ public class AutoRedirectDomainFilter implements Filter {
 	private String changeDomain(HttpServletRequest request){
 		StringBuffer newUrl = new StringBuffer();
 		newUrl.append(request.getScheme()).append("://").append(this.mainDomain);
-		newUrl.append(request.getLocalPort()!=80 && request.getLocalPort()!=443 ? ":"+request.getLocalPort() : "" );
+		//nao descomentar, erroneamente estava encaminhando a porta para a nova url, acontece que a porta deve vim no parametro da url nova.
+		//newUrl.append(request.getLocalPort()!=80 && request.getLocalPort()!=443 ? ":"+request.getLocalPort() : "" );
 		newUrl.append(request.getRequestURI());
 		if(request.getQueryString()!=null){
 			newUrl.append("?").append(request.getQueryString());
@@ -73,7 +74,8 @@ public class AutoRedirectDomainFilter implements Filter {
 	private String changeDomainAndProtocol(HttpServletRequest request){
 		StringBuffer newUrl = new StringBuffer();
 		newUrl.append(this.mainProtocol).append("://").append(this.mainDomain);
-		newUrl.append(request.getLocalPort()!=80 && request.getLocalPort()!=443 ? ":"+request.getLocalPort() : "" );
+		//nao descomentar, erroneamente estava encaminhando a porta para a nova url, acontece que a porta deve vim no parametro da url nova.
+		//newUrl.append(request.getLocalPort()!=80 && request.getLocalPort()!=443 ? ":"+request.getLocalPort() : "" );
 		newUrl.append(request.getRequestURI());
 		if(request.getQueryString()!=null){
 			newUrl.append("?").append(request.getQueryString());
