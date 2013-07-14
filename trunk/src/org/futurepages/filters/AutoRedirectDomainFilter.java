@@ -6,6 +6,7 @@ import org.futurepages.core.action.Action;
 import org.futurepages.core.control.InvocationChain;
 import org.futurepages.core.filter.Filter;
 import org.futurepages.util.Is;
+import org.futurepages.util.NumberUtil;
 
 /**
  * Filtro responsável pela modificação do domínio da url para um domínio padronizado. Isto é útil para
@@ -30,7 +31,8 @@ public class AutoRedirectDomainFilter implements Filter {
 		}
 //		System.out.println(mainProtocol);
 //		System.out.println(mainDomain);
-		if(!Is.validStringKey(this.mainDomain)){
+		String[] domainParts = this.mainDomain.split("\\:");
+		if(!Is.validStringKey(domainParts[0],3,100,true) || this.mainDomain.endsWith(":") || (domainParts.length==2 && NumberUtil.strToLong(domainParts[1])==null) ){
 			throw new RuntimeException("Erro ao inicializar o filtro AutoRedirectDomainFilter. Especifique um domínio válido em app-params.xml[param=AUTO_REDIRECT_DOMAIN]");
 		}
 	}
@@ -39,12 +41,12 @@ public class AutoRedirectDomainFilter implements Filter {
 	public String filter(InvocationChain chain) throws Exception {
 		HttpServletRequest req = chain.getAction().getRequest();
 		if(mainProtocol==null){
-			if(!req.getHeader("Host").split("\\:")[0].equals(mainDomain)){
+			if(!req.getHeader("Host").equals(mainDomain)){
 				chain.getAction().getOutput().setValue(Action.REDIR_URL, changeDomain(chain.getAction().getRequest()));
 				return REDIR;
 			}
 		}else{
-			if(!req.getHeader("Host").split("\\:")[0].equals(mainDomain)
+			if(!req.getHeader("Host").equals(mainDomain)
 		    || !req.getScheme().equals(mainProtocol)
 			  ) {
 				chain.getAction().getOutput().setValue(Action.REDIR_URL, changeDomainAndProtocol(chain.getAction().getRequest()));
