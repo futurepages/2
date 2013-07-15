@@ -208,12 +208,14 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 		StringBuilder sb = new StringBuilder();
 		if (matcher.find()) {
 			String parteAbertura = matcher.group(1);
-			String conteudo = matcher.group(3).trim();
+			String mg3 = matcher.group(3);
+			String conteudo = mg3.trim();
+			String espacoExtra = (!mg3.equals(conteudo)? " ":"");
 			String parteFechar = matcher.group(4);
 
 			IterableString iter = new IterableString(Pattern.compile(HtmlRegex.attrsPattern()), parteAbertura);
 
-			sb.append("<a ");
+			sb.append(espacoExtra).append("<a ");
 			for (MatchedToken tokenOpen : iter) {
 				String[] group = tokenOpen.getMatched().split("\\s*=",2);
 				String attr = group[0].trim();
@@ -241,7 +243,7 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 					sb.append(tokenOpen.getMatched());
 				}
 			}
-			sb.append(">").append(conteudo).append(parteFechar);
+			sb.append(">").append(conteudo).append(parteFechar).append(espacoExtra);
 
 			return sb.toString();
 		}
