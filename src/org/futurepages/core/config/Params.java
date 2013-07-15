@@ -186,6 +186,13 @@ public class Params {
 		} else {
 			paramsMap.put("RELEASE_QUERY", "");
 		}
+		String autoRedirectDomain = get("AUTO_REDIRECT_DOMAIN");
+		if(!devMode && autoRedirectDomain!=null 
+				&&  (!autoRedirectDomain.startsWith("http://") && !autoRedirectDomain.startsWith("https://"))){
+			paramsMap.put("HTTPS_PATH", "https://"+autoRedirectDomain);
+		}else{
+			paramsMap.put("HTTPS_PATH", "");
+		}
 	}
 
 	public static boolean devMode(){
