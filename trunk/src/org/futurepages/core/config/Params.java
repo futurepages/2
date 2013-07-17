@@ -60,8 +60,8 @@ public class Params {
 		String classesPath = defineMainParams();
 		webDefaultParams(classesPath, contextName);
 		parseXML();
-		compositeWebParams();
 		cachedParams();
+		compositeWebParams();
 	}
 
 
