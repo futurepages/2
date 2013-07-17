@@ -83,6 +83,7 @@ public class Chain implements Consequence {
 		newAction.setMessages(originalAction.getMessages());
 		newAction.setLocale(originalAction.getLocale());
 		newAction.setCookies(originalAction.getCookies());
+		newAction.setCallback(originalAction.getCallback());
 
 		Consequence c = null;
 
