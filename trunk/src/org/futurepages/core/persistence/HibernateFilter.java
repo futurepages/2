@@ -32,7 +32,7 @@ public class HibernateFilter implements AfterConsequenceFilter {
 				beginMultiTransaction();
 			}
 			String result = chain.invoke();
-			if(!result.equals(ERROR) ||  !result.equals(AJAX_ERROR)){
+			if(!result.equals(ERROR) &&  !result.equals(AJAX_ERROR)){
 				hasError = false;
 			}
 			return result;
