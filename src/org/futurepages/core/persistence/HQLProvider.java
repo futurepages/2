@@ -56,6 +56,14 @@ public class HQLProvider implements HQLable {
 		}
 	}
 
+	public static String not(String notClause) {
+		if (!Is.empty(notClause)) {
+			return concat(" NOT (" , notClause,") ");
+		} else {
+			return "";
+		}
+	}
+
 	public static String updateSetting(Class entityClass) {
 		return concat(" UPDATE " , entityClass.getName() , " SET ");
 	}
