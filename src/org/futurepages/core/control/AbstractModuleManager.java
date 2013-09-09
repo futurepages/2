@@ -102,6 +102,14 @@ public abstract class AbstractModuleManager extends AbstractApplicationManager {
 				.on(ERROR,fwIn("dyn/"+actionClass.getSimpleName().substring(3)+".jsp"))
 		;
     }
+
+	public ActionConfig dynAction(String submodule, Class<? extends DynAction> actionClass) {
+        return action(submodule+"/"+actionClass.getSimpleName(),actionClass)
+				.on(SUCCESS,fwIn("dyn/"+submodule+"/"+actionClass.getSimpleName().substring(3)+".jsp"))
+				.on(ERROR,fwIn("dyn/"+submodule+"/"+actionClass.getSimpleName().substring(3)+".jsp"))
+		;
+    }
+
 	
     protected Consequence fwIn(String page) {
         return (new Forward(withPath(null, page , false)));
