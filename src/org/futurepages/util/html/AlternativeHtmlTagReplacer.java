@@ -37,6 +37,7 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 		this.host=host;
 	}
 
+	//caso nao queira textAlign: ficará styles = true e textAlign = false.
 	public AlternativeHtmlTagReplacer(String host, boolean styles, boolean textAlign) {
 		this.styles = styles;
 		this.host=host;
