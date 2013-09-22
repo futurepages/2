@@ -491,17 +491,4 @@ public class The {
 		return sb.toString();
 	}
 	
-	public static String removeCharOccurrences(String str, char c) {
-		if (str != null) {
-			String r = "";
-			for (int i = 0; i < str.length(); i++) {
-				if (str.charAt(i) != c) {
-					r += str.charAt(i);
-				}
-			}
-			return r;
-		}
-		return null;
-	}
-
 }
