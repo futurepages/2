@@ -116,6 +116,7 @@ public class InitManager extends AbstractApplicationManager{
         FormatterManager.addFormatter("float"        	   , new FloatFormatter());
         FormatterManager.addFormatter("fullDate"		   , new FullDateTimeFormatter(false));
         FormatterManager.addFormatter("fullDateTime"	   , new FullDateTimeFormatter(true));		
+        FormatterManager.addFormatter("fullDateLiteral"	   , new FullDateTimeFormatter(false,true));
         FormatterManager.addFormatter("html"        	   , new HTMLFormatter());
         FormatterManager.addFormatter("javascript"         , new JavascriptFormatter());
         FormatterManager.addFormatter("literalDate" 	   , new LiteralDateFormatter());
