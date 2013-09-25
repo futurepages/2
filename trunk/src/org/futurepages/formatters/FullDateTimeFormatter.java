@@ -13,9 +13,15 @@ import org.futurepages.util.NumberUtil;
 public class FullDateTimeFormatter implements Formatter<Calendar> {
 
 	private boolean dateAndTime = true;
+	private boolean extense = false;
 
-	public FullDateTimeFormatter(boolean onlyDate) {
-		this.dateAndTime = onlyDate;
+	public FullDateTimeFormatter(boolean dateAndTime) {
+		this.dateAndTime = dateAndTime;
+	}
+
+	public FullDateTimeFormatter(boolean dateAndTime, boolean extense) {
+		this.dateAndTime = dateAndTime;
+		this.extense = extense;
 	}
 
 	public String format(Calendar cal, Locale loc) {
@@ -28,10 +34,23 @@ public class FullDateTimeFormatter implements Formatter<Calendar> {
 			int dia = cal.get(Calendar.DAY_OF_MONTH);
 			if(dia==1){
 				sb.append("primeiro");
+				if(extense){
+					sb.append(" dia");
+				}
 			}else{
 				sb.append(NumberUtil.numeroPorExteso(dia));
+				if(extense){
+					sb.append(" dias");
+				}
 			}
-			sb.append(" de ").append(MonthEnum.get(cal)).append("  de ");
+			if(extense){
+				sb.append(" do mês");
+			}
+			sb.append(" de ").append(MonthEnum.get(cal));
+			if(extense){
+				sb.append(" do ano");
+			}
+			sb.append(" de ");
 			sb.append(NumberUtil.numeroPorExteso(cal.get(Calendar.YEAR)));
 
 
