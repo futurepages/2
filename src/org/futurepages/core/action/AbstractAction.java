@@ -37,6 +37,7 @@ import org.futurepages.util.html.HtmlMapChars;
 /**
  * Action Base
  */
+
 public abstract class AbstractAction implements Pageable, Action {
 
 	protected static final String USER_KEY = "user";
@@ -47,6 +48,7 @@ public abstract class AbstractAction implements Pageable, Action {
 	protected Context application;
 	protected Context cookies;
 	protected Context callback;
+	protected Dispatcher dispatcher;
 	protected Locale loc;
 	private Map<String, String> messages;
 	protected boolean listingDependencies;
@@ -61,6 +63,8 @@ public abstract class AbstractAction implements Pageable, Action {
 		messages.put(ERROR, null);
 		messages.put(WARNING, null);
 		listingDependencies = false;
+
+		dispatcher = new Dispatcher();
 	}
 
 	public String putMessage(String key, String message) {
@@ -599,4 +603,47 @@ public abstract class AbstractAction implements Pageable, Action {
 			this.chain = chain;
 		}
 	}
+
+	protected class Dispatcher {
+
+		private String hash;
+
+		Map<String, String> messages;
+		Output output;
+
+		public Dispatcher(){
+		}
+
+		public void load(){
+			load("dispatcherHash");
+		}
+
+		public void load(String hashKey){
+			String sessionKey = input.getStringValue(hashKey);
+			Dispatcher dispatcher = (Dispatcher) session.getAttribute(sessionKey);
+			if(dispatcher!=null){
+				this.output = dispatcher.output;
+				this.messages = dispatcher.messages;
+				session.removeAttribute(sessionKey);
+				dispatcher = null;
+				
+				setOutput(this.output);
+				setMessages(this.messages);
+			}
+		}
+
+		public String hash(){
+			if(hash == null){
+				hash = The.concat("dispatcher_",getChain().getActionName(),
+								"_",String.valueOf(Thread.currentThread().getId()),
+								"_",String.valueOf(System.currentTimeMillis())
+					);
+				this.output = getOutput();
+				this.messages = getMessages();
+				session.setAttribute(hash, this);
+			}
+			return hash;
+		}
+	}
+
 }
