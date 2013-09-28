@@ -616,20 +616,33 @@ public abstract class AbstractAction implements Pageable, Action {
 		}
 
 		public void load(){
-			load("dispatcherHash");
+			load(true);
+		}
+
+		public void load(boolean loadAndRemove){
+			load("dispatcherHash",loadAndRemove);
 		}
 
 		public void load(String hashKey){
+			load(hashKey,true);
+		}
+
+
+		public void load(String hashKey, boolean loadAndRemove){
 			String sessionKey = input.getStringValue(hashKey);
 			Dispatcher dispatcher = (Dispatcher) session.getAttribute(sessionKey);
 			if(dispatcher!=null){
 				this.output = dispatcher.output;
 				this.messages = dispatcher.messages;
-				session.removeAttribute(sessionKey);
+				if(loadAndRemove){
+					session.removeAttribute(sessionKey);
+				}
 				dispatcher = null;
 				
 				setOutput(this.output);
 				setMessages(this.messages);
+			}else{
+				throw new DispatcherNotPresentException();
 			}
 		}
 
@@ -646,5 +659,7 @@ public abstract class AbstractAction implements Pageable, Action {
 			return hash;
 		}
 	}
+
+	protected class DispatcherNotPresentException extends RuntimeException {}
 
 }
