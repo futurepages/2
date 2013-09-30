@@ -30,8 +30,8 @@ import org.futurepages.core.validation.Validator;
 import org.futurepages.exceptions.ErrorException;
 import org.futurepages.filters.HeadTitleFilter;
 import org.futurepages.filters.ModuleIdFilter;
-import org.futurepages.util.CryptoUtil;
 import org.futurepages.util.Is;
+import org.futurepages.util.Security;
 import org.futurepages.util.The;
 import org.futurepages.util.html.HtmlMapChars;
 
@@ -648,7 +648,7 @@ public abstract class AbstractAction implements Pageable, Action {
 
 		public String hash(){
 			if(hash == null){
-				hash = The.concat(CryptoUtil.md5UB64("dispatcher_"+getChain().getActionName()).substring(0,4),
+				hash = The.concat(Security.md5("dispatcher_"+getChain().getActionName()).substring(0,4),
 								"_",String.valueOf(Thread.currentThread().getId()),
 								"_",String.valueOf(System.currentTimeMillis())
 					);
