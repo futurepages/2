@@ -648,9 +648,9 @@ public abstract class AbstractAction implements Pageable, Action {
 
 		public String hash(){
 			if(hash == null){
-				hash = The.concat(Security.md5(getChain().getActionName()).substring(0,4),
-								"_",String.valueOf(Thread.currentThread().getId()),
-								"_",String.valueOf(System.currentTimeMillis())
+				hash = The.concat(Security.md5(getChain().getActionName()).substring(0,6),
+								",",String.valueOf(Thread.currentThread().getId()),
+								",",String.valueOf(System.currentTimeMillis())
 					);
 				this.output = getOutput();
 				this.messages = getMessages();
