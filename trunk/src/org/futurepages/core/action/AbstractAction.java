@@ -630,12 +630,12 @@ public abstract class AbstractAction implements Pageable, Action {
 
 		public void load(String hashKey, boolean loadAndRemove){
 			String sessionKey = input.getStringValue(hashKey);
-			Dispatcher dispatcher = (Dispatcher) session.getAttribute(sessionKey);
+			Dispatcher dispatcher = (Dispatcher) session.getAttribute("dispatcher_"+sessionKey);
 			if(dispatcher!=null){
 				this.output = dispatcher.output;
 				this.messages = dispatcher.messages;
 				if(loadAndRemove){
-					session.removeAttribute(sessionKey);
+					session.removeAttribute("dispatcher_"+sessionKey);
 				}
 				dispatcher = null;
 				
@@ -648,13 +648,13 @@ public abstract class AbstractAction implements Pageable, Action {
 
 		public String hash(){
 			if(hash == null){
-				hash = The.concat(Security.md5("dispatcher_"+getChain().getActionName()).substring(0,4),
+				hash = The.concat(Security.md5(getChain().getActionName()).substring(0,4),
 								"_",String.valueOf(Thread.currentThread().getId()),
 								"_",String.valueOf(System.currentTimeMillis())
 					);
 				this.output = getOutput();
 				this.messages = getMessages();
-				session.setAttribute(hash, this);
+				session.setAttribute("dispatcher_"+hash, this);
 			}
 			return hash;
 		}
