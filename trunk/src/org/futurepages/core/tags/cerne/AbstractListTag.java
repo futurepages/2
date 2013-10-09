@@ -3,6 +3,7 @@ package org.futurepages.core.tags.cerne;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -62,6 +63,8 @@ public abstract class AbstractListTag<T extends Object> extends AbstractListCont
 
 					if (orderBy != null) {
 						return (List<T>) ListSorter.sort((List<Object>) (List<T>) object, orderBy, desc);
+					}else if(desc){
+						Collections.reverse((List<T>)object);
 					}
 
 					return (List<T>) object;
@@ -103,6 +106,8 @@ public abstract class AbstractListTag<T extends Object> extends AbstractListCont
 
 					if (orderBy != null) {
 						return (List<T>) ListSorter.sort((List<Object>) list,orderBy, desc);
+					}else if(desc){
+						Collections.reverse(list);
 					}
 
 					return list;
@@ -140,6 +145,8 @@ public abstract class AbstractListTag<T extends Object> extends AbstractListCont
 
 			if (orderBy != null) {
 				return (List<T>) ListSorter.sort((List<Object>) (List<T>) obj, orderBy, desc);
+			}else if(desc){
+				Collections.reverse((List<T>)obj);
 			}
 
 			return (List<T>) obj;
@@ -181,6 +188,8 @@ public abstract class AbstractListTag<T extends Object> extends AbstractListCont
 
 			if (orderBy != null) {
 				return (List<T>) ListSorter.sort((List<Object>) list,orderBy, desc);
+			}else if(desc){
+				Collections.reverse(list);
 			}
 
 			return list;
