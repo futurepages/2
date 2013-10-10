@@ -26,6 +26,24 @@ public class HtmlStripper {
 	}
 
 	/**
+	 * 	@return Texto sem tags mas mantendo-se espaços,
+		 quebras de linhas e sem combinações especiais de caracteres html.
+	 */
+	public String text() {
+		if(strippedHtml!=null){
+			strippedHtml = strippedHtml.replaceAll("<br */?>", "\n");
+			strippedHtml = HtmlMapChars.removeHtmlSpecials((new HtmlStripper(strippedHtml)).poorText())
+					.replaceAll("\\s+\\n","\n\n")
+					.replaceAll("\\n[^\\n\\S]\\s*","\n")
+					.replaceAll("\n\n+","\n\n").trim()
+			;
+		}else{
+			strippedHtml = "";
+		}
+		return strippedHtml;
+	}
+
+	/**
 	 *
 	 * @return somente parágrafos <p></p>, negrito <strong>, itálico <em>, sublinhado <span style="text-decoration:underline"> e nada mais.
 	 */
