@@ -17,8 +17,11 @@ import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
+import org.futurepages.core.config.Params;
 
 import org.futurepages.util.StringUtils;
+import org.futurepages.util.The;
+import org.futurepages.util.html.HtmlStripper;
 
 // Revision: 191951
 
@@ -148,12 +151,9 @@ public class HtmlEmail extends MultiPartEmail {
         if (StringUtils.isEmpty(msg)) {
             throw new EmailException("Invalid message supplied");
         }
-        setTextMsg(msg);
-        setHtmlMsg(StringUtils.concat("<html><body>",msg,"</body></html>"));
-			// Antes tinha essa tag <PRE>. Não sei por que que tinha isto.
-            //new StringBuffer().append("<html><body><pre>").append(msg).append("</pre></body></html>").toString());
-
-        return this;
+		setTextMsg(new HtmlStripper(msg).text());
+        setHtmlMsg(The.concat("<html><body>",msg,"</body></html>"));
+		return this;
     }
 
     /**
@@ -211,20 +211,43 @@ public class HtmlEmail extends MultiPartEmail {
      *
      * @exception EmailException if there was an error.
      */
+	@Override
     public void send() throws EmailException {
-        try {
-            // if the email has attachments then the base type is mixed,
-            // otherwise it should be related
-            if (this.isBoolHasAttachments()) {
-                this.buildAttachments();
-            } else {
-                this.buildNoAttachments();
-            }
+		if (Params.get("EMAIL_ACTIVE").equals("true")) {
+			try {
+				// if the email has attachments then the base type is mixed,
+				// otherwise it should be related
+				if (this.isBoolHasAttachments()) {
+					this.buildAttachments();
+				} else {
+					this.buildNoAttachments();
+				}
 
-        } catch (MessagingException me) {
-            throw new EmailException(me);
-        }
-        super.send();
+			} catch (MessagingException me) {
+				throw new EmailException(me);
+			}
+			super.send();
+		} else {
+			System.out.println("### EMAIL_ACTIVE = FALSE #########################################");
+			System.out.println("... email not sent, see its content below.........................");
+			for(InternetAddress ia : this.toList){
+				System.out.print("TO: <"+ia.getAddress()+"> ");
+			}
+			for(InternetAddress ia : this.ccList){
+				System.out.print("CC: <"+ia.getAddress()+"> ");
+			}
+			for(InternetAddress ia : this.bccList){
+				System.out.print("BCC: <"+ia.getAddress()+"> ");
+			}
+			System.out.println();
+			System.out.println("Subject: "+this.subject);
+			System.out.println();
+			System.out.println("<HTML MSG>---------------------------------------------------------");
+			System.out.println(this.html);
+			System.out.println("<TEXT MSG>---------------------------------------------------------");
+			System.out.println(this.text);
+			System.out.println("##################################################################");
+		}
     }
 
     /**
