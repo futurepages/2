@@ -11,6 +11,7 @@ public class HtmlMapChars {
     private static final HashMap<String, String> simpleTable    = new HashMap<String, String>();
     private static final HashMap<String, String> completeTable  = new HashMap<String, String>();
     private static final HashMap<Character, String> textareaTable  = new HashMap<Character, String>();
+    private static final HashMap<String,String> reverseCompleteTable  = new HashMap<String,String>();
 
     static
     {
@@ -99,6 +100,23 @@ public class HtmlMapChars {
 		completeTable.put("°","&deg;");
 		completeTable.put("ª","&ordf;");
 		completeTable.put("§","&sect;");
+		completeTable.put("©","&copy;");
+		completeTable.put("®","&reg;");
+		completeTable.put("™","&trade;");
+		completeTable.put("€","&euro;");
+		completeTable.put("£","&pound;");
+
+		completeTable.put("“","&ldquo;");
+		completeTable.put("”","&rdquo;");
+		completeTable.put("′","&prime;");
+		completeTable.put("‘","&lsquo;");
+		completeTable.put("’","&rsquo;");
+		completeTable.put("″","&Prime;");
+
+		reverseCompleteTable.put("&nbsp;","	");
+		for(String str : completeTable.keySet()){
+			reverseCompleteTable.put(completeTable.get(str), str);
+		}
     }
 
     public static String getSimple(char ch){
@@ -111,6 +129,13 @@ public class HtmlMapChars {
 
     public static String getTextArea(char ch){
         return textareaTable.get(ch);
+    }
+
+	public static String removeHtmlSpecials(String str){
+		for(String simbol : reverseCompleteTable.keySet()){
+			str = str.replaceAll(simbol, reverseCompleteTable.get(simbol));
+		}
+		return str;
     }
 
     /**
