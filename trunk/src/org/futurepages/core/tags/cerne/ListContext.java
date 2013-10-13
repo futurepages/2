@@ -10,5 +10,6 @@ import javax.servlet.jsp.JspException;
 public interface ListContext<T extends Object> {
     
     public List<T> getList() throws JspException;
-    
+
+	public String getVar();
 }

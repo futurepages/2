@@ -73,6 +73,8 @@ public abstract class AbstractListTag<T extends Object> extends AbstractListCont
 
 					if (orderBy != null) {
 						return (List<T>) ListSorter.sort((List<Object>) Arrays.asList((T[]) object), orderBy, desc);
+					}else if(desc){
+						Collections.reverse((List<Object>) Arrays.asList((T[]) object));
 					}
 
 					return Arrays.asList((T[]) object);
@@ -89,6 +91,8 @@ public abstract class AbstractListTag<T extends Object> extends AbstractListCont
 
 					if (orderBy != null) {
 						return (List<T>) ListSorter.sort((List<Object>) list,orderBy,desc);
+					}else if(desc){
+						Collections.reverse(list);
 					}
 
 					return list;
@@ -121,6 +125,8 @@ public abstract class AbstractListTag<T extends Object> extends AbstractListCont
 
 					if (orderBy != null) {
 						return (List<T>) ListSorter.sort((List<Object>) list,orderBy, desc);
+					}else if(desc){
+						Collections.reverse(list);
 					}
 
 					return list;
@@ -155,6 +161,8 @@ public abstract class AbstractListTag<T extends Object> extends AbstractListCont
 
 			if (orderBy != null) {
 				return (List<T>) ListSorter.sort((List<Object>) Arrays.asList((T[]) obj), orderBy, desc);
+			}else if(desc){
+				Collections.reverse((List<Object>) Arrays.asList((T[]) obj));
 			}
 
 			return Arrays.asList((T[]) obj);
@@ -171,6 +179,8 @@ public abstract class AbstractListTag<T extends Object> extends AbstractListCont
 
 			if (orderBy != null) {
 				return (List<T>) ListSorter.sort((List<Object>) list,orderBy, desc);
+			}else if(desc){
+				Collections.reverse(list);
 			}
 
 			return list;
@@ -201,6 +211,8 @@ public abstract class AbstractListTag<T extends Object> extends AbstractListCont
 
 				if (orderBy != null) {
 					return (List<T>) ListSorter.sort((List<Object>) list,orderBy, desc);
+				}else if(desc){
+					Collections.reverse(list);
 				}
 				return list;
 			}else{
@@ -210,6 +222,8 @@ public abstract class AbstractListTag<T extends Object> extends AbstractListCont
 
 				if (orderBy != null) {
 					return (List<T>) ListSorter.sort((List<Object>) list,orderBy, desc);
+				}else if(desc){
+					Collections.reverse(list);
 				}
 
 				return list;

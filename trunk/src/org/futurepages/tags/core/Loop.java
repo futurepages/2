@@ -63,7 +63,8 @@ public class Loop extends LoopTag implements Context {
         Tag parent = findAncestorWithClass(this, ListContext.class);
         if (parent != null) {
             ListContext ctx = (ListContext) parent;
-            this.list = ctx.getList();
+            this.list = (List) pageContext.getAttribute(ctx.getVar(), PageContext.PAGE_SCOPE);
+//			this.list = ctx.getList(); //antigamente era assim, mas desta forma, o getList() estava sempre sendo chamado duas vezes.
         } else {
             throw new JspException("Loop not enclosed by a ListContext !!!");
         }
