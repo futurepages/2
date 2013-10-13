@@ -42,7 +42,7 @@ public abstract class AbstractListContext<T extends Object> extends BodyTagSuppo
         this.var = var;
     }
 
-    private String getVar() {
+    public String getVar() {
         if (var == null)
             return getName();
         return var;

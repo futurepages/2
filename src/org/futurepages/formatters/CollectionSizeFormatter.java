@@ -11,7 +11,9 @@ import org.futurepages.core.formatter.Formatter;
 public class CollectionSizeFormatter implements Formatter {
     
     public String format(Object value, Locale loc) {
-		
+		if(value instanceof Object[]){
+			return String.valueOf(((Object[])value).length);
+		}
         return String.valueOf(((Collection) value).size());
     }
 }
