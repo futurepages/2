@@ -645,7 +645,7 @@ public class GenericDao extends HQLProvider {
 			if (trimmedSql.length() == 0
 					|| trimmedSql.startsWith("--")
 					|| trimmedSql.startsWith("//")
-					|| trimmedSql.startsWith("/*")) {
+					|| (trimmedSql.startsWith("/*") && !trimmedSql.startsWith("/*!") )) {
 				continue;
 			} else {
 				int posComment = trimmedSql.indexOf("--");
