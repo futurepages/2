@@ -21,9 +21,13 @@ public abstract class CPFUtil {
 	 * @param cpf
 	 */
 	public static String somenteNumeros(String cpf) {
-		cpf = cpf.replace(".", "").toString();
-		cpf = cpf.replace("-", "").toString();
-		return cpf.toString();
+		if(cpf!=null){
+			cpf = cpf.replace(".", "").toString();
+			cpf = cpf.replace("-", "").toString();
+			return cpf.toString();
+		}else{
+			return null;
+		}
 	}
 
 	/**
