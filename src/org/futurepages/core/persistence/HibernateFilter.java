@@ -44,10 +44,15 @@ public class HibernateFilter implements AfterConsequenceFilter {
 				if (hasError) {
 					rollbackTransaction(isMultiTransactional);
 				} else {
-					if (isTransactional) {
-						Dao.commitTransaction();
-					}else if(isMultiTransactional){
-						commitTransaction();
+					try{
+						if (isTransactional) {
+							Dao.commitTransaction();
+						}else if(isMultiTransactional){
+							commitTransaction();
+						}
+					}catch(Exception ex){
+						rollbackTransaction(isMultiTransactional);
+						return ExceptionFilter.treatedException(chain, ex);
 					}
 				}
 			}
