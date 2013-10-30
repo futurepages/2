@@ -92,7 +92,7 @@ public class TesteRelampago2 {
 	//Need jxl.jar
 	public static void main(String[] args) throws IOException, BiffException {
 
-		InputStream is = new FileInputStream("e:/associados.xls");
+		InputStream is = new FileInputStream("e:/amatras_e_tjpi.xls");
 		WorkbookSettings ws = new WorkbookSettings();
 		ws.setLocale(new Locale("pt", "BR"));
 		ws.setEncoding("ISO-8859-1");
@@ -128,10 +128,6 @@ public class TesteRelampago2 {
 
 					} catch (Exception ex) {
 						ex.printStackTrace();
-
-
-
-
 					}
 					try {
 						email2 = planilha.getCell(2, i).getContents().replaceAll("\n", " ").replaceAll("'", " ");
@@ -178,21 +174,77 @@ public class TesteRelampago2 {
 		output.close();
 		pw.close();
 
-		//SELECT 0, COUNT(1) FROM contatos_brutos WHERE emails = ''
+//		SELECT
+//		c.nome, CAST(email AS CHAR(255)), CAST(obs AS CHAR(255) ) AS 'observações', l.nome AS 'Lista Origem'
+//		FROM contato c
+//		INNER JOIN lista_original l ON c.lista_id = l.id
+//		ORDER BY c.nome, c.email, c.lista_id;
+
+
+//		SELECT c.id, c.nome, CAST(emails AS CHAR(255)) AS emails, CAST(obs AS CHAR(255) ) AS 'observações', l.nome AS 'Lista Origem'
+//		FROM contatos_originais c
+//		INNER JOIN lista_bruta l ON c.lista_id = l.id
+//		ORDER BY l.id, c.nome, c.emails;
+
+
+	}
+
+	public static void main2(String[] args) throws IOException, BiffException {
+
+		InputStream is = new FileInputStream("e:/associados.xls");
+		WorkbookSettings ws = new WorkbookSettings();
+		ws.setLocale(new Locale("pt", "BR"));
+		ws.setEncoding("ISO-8859-1");
+		Workbook workbook = Workbook.getWorkbook(is, ws);
+		FileOutputStream output = new FileOutputStream("E:/magistrados.sql");
+		PrintWriter pw = new PrintWriter(output);
+
+		for (Sheet planilha : workbook.getSheets()) {
+//			planilha.getRows();Column(0);
+//			planilha.getColumn(1);
+			if (!planilha.getName().startsWith("#")) {
+//				pw.println("\n-- "+planilha.getName());
+				for (int i = 1; i < planilha.getRows(); i++) { //planilha.getRows()
+					String nome = "";
+					String email1 = "";
+					String email2 = "";
+					String obs = "";
+					String listaId = "null";
+
+
+					if (nome.equals("") && email1.equals("") && email2.equals("")) {
+					} else //					if(listaId.equals("15"))
+					{
+//					pw.println(The.concat(
+						System.out.println(The.concat(
+								"INSERT INTO contatos_originais (nome,emails,obs,lista_id) VALUES ",
+								"('", nome, "','", email1.trim(), ";", email2.trim(), "','", obs.trim(), "',", listaId, ");"));
+						output.flush();
+						pw.flush();
+
+
+					}
+				}
+			}
+		}
+		output.close();
+		pw.close();
+
+		//SELECT 0, COUNT(1) FROM contatos_originais WHERE emails = ''
 		//UNION
-		//SELECT 1, COUNT(1) FROM contatos_brutos WHERE emails NOT LIKE '%;%' AND emails <>''
+		//SELECT 1, COUNT(1) FROM contatos_originais WHERE emails NOT LIKE '%;%' AND emails <>''
 		//UNION
-		//SELECT 2, COUNT(1) FROM contatos_brutos WHERE emails LIKE '%;%' AND emails NOT LIKE '%;%;%'
+		//SELECT 2, COUNT(1) FROM contatos_originais WHERE emails LIKE '%;%' AND emails NOT LIKE '%;%;%'
 		//UNION
-		//SELECT 3, COUNT(1) FROM contatos_brutos WHERE emails LIKE '%;%;%' AND emails NOT LIKE '%;%;%;%'
+		//SELECT 3, COUNT(1) FROM contatos_originais WHERE emails LIKE '%;%;%' AND emails NOT LIKE '%;%;%;%'
 		//UNION
-		//SELECT 4, COUNT(1) FROM contatos_brutos WHERE emails LIKE '%;%;%;%' AND emails NOT LIKE '%;%;%;%;%'
+		//SELECT 4, COUNT(1) FROM contatos_originais WHERE emails LIKE '%;%;%;%' AND emails NOT LIKE '%;%;%;%;%'
 		//UNION
-		//SELECT 5, COUNT(1) FROM contatos_brutos WHERE emails LIKE '%;%;%;%;%' AND emails NOT LIKE '%;%;%;%;%;%'
+		//SELECT 5, COUNT(1) FROM contatos_originais WHERE emails LIKE '%;%;%;%;%' AND emails NOT LIKE '%;%;%;%;%;%'
 		//;
 		//
 		//SELECT c.id, c.nome, CAST(emails AS CHAR(255)) AS emails, CAST(obs AS CHAR(255) ) AS 'observações', l.nome AS 'Lista Origem'
-		//FROM contatos_brutos c
+		//FROM contatos_originais c
 		//INNER JOIN lista_bruta l ON c.lista_id = l.id
 		//ORDER BY l.id, c.nome, c.emails;
 
