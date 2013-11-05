@@ -10,6 +10,7 @@ import org.futurepages.core.action.Action;
 import org.futurepages.core.config.Params;
 import org.futurepages.core.consequence.Consequence;
 import org.futurepages.core.control.InvocationChain;
+import org.futurepages.core.exception.DefaultExceptionLogger;
 import org.futurepages.core.filter.AfterConsequenceFilter;
 import org.futurepages.filters.ExceptionFilter;
 
@@ -139,15 +140,24 @@ public class HibernateFilter implements AfterConsequenceFilter {
 	private void rollbackTransaction(boolean multiTransactional) {
 		if (Params.connectExternalModules() && multiTransactional) {
 			for (String keySession : HibernateManager.getConfigurationsMap().keySet()) {
-				Dao.getInstance(keySession).rollBackTransaction();
+				try{
+					Dao.getInstance(keySession).rollBackTransaction();
+				}catch(Exception ex){
+					DefaultExceptionLogger.getInstance().execute(ex);
+				}
 			}
 		}else{
 			Dao.rollBackTransaction();
 		}
 	}
 
+	// Commit em todos os bancos externos e no interno. se um deles não funcionar o commit,
+	// nenhum fará, quebrará o método para que seja feito o rollback.
 	private void commitTransaction() {
 		if (Params.connectExternalModules()) {
+			for (String keySession : HibernateManager.getConfigurationsMap().keySet()) {
+				Dao.getInstance(keySession).flush();
+			}
 			for (String keySession : HibernateManager.getConfigurationsMap().keySet()) {
 				Dao.getInstance(keySession).commitTransaction();
 			}
