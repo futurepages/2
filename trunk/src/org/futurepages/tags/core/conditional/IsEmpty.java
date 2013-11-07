@@ -33,7 +33,7 @@ public class IsEmpty extends ConditionalTag {
         if (parent != null && test == null) {
         	
 			ListContext tag = (ListContext) parent;
-            List<Object> list = tag.getList();
+            List<Object> list = (List<Object>) pageContext.getAttribute(tag.getVar());
 			return list == null || list.size() == 0;
 			
 		} else {
