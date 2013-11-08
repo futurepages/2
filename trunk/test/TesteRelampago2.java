@@ -25,6 +25,7 @@ public class TesteRelampago2 {
 	//  Database credentials
 	static final String USER = "root";
 	static final String PASS = "";
+	
 
 	//need mysql-jdbc-driver.jar
 	public static void jdbcUpdate(String[] args) {
