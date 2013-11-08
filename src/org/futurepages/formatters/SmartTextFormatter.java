@@ -12,7 +12,7 @@ import org.futurepages.util.iterator.string.MatchedToken;
 /**
  * Formata o texto escrito em textaerea em texto com quebras de linhas de html.
  */
- public class SmartTextFormatter implements Formatter {
+ public class SmartTextFormatter extends Formatter {
 
 	private static final int MAX_CHARS = 28;
 

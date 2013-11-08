@@ -10,7 +10,7 @@ import org.futurepages.util.NumberUtil;
 /**
  * Formata a data no formato DD/MM/YYYY
  */
-public class FullDateTimeFormatter implements Formatter<Calendar> {
+public class FullDateTimeFormatter extends Formatter<Calendar> {
 
 	private boolean dateAndTime = true;
 	private boolean extense = false;

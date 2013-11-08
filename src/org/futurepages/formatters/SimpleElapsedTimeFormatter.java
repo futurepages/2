@@ -8,7 +8,7 @@ import org.futurepages.util.CalendarUtil;
 import org.futurepages.util.DateUtil;
 import org.futurepages.core.formatter.Formatter;
 
-public class SimpleElapsedTimeFormatter implements Formatter {
+public class SimpleElapsedTimeFormatter extends Formatter {
 
 	@Override
 	public String format(Object dateOrCalendar, Locale loc) {

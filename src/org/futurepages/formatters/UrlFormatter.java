@@ -4,7 +4,7 @@ import java.util.Locale;
 import org.futurepages.core.formatter.Formatter;
 import org.futurepages.util.StringUtils;
 
-public class UrlFormatter implements Formatter {
+public class UrlFormatter extends Formatter {
 
 	private boolean contains(String src, String compare) {
 		if (src.length() > compare.length()) {

@@ -12,7 +12,7 @@ import org.futurepages.util.html.HtmlStripper;
  *
  * @author diogenes
  */
-public class PoorTextFormatter implements Formatter {
+public class PoorTextFormatter extends Formatter {
 
     @Override
     public String format(Object value, Locale loc) {

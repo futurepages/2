@@ -10,7 +10,7 @@ import org.futurepages.util.DateUtil;
  *
  * @author leandro
  */
-public class AnniversaryAbbrFormatter  implements Formatter {
+public class AnniversaryAbbrFormatter  extends Formatter {
 
     public String format(Object value, Locale loc) {
 		Calendar cal = (Calendar) value;

@@ -7,7 +7,7 @@ import org.futurepages.enums.MonthEnum;
 /**
  * Formata a data no formato DD/MM/YYYY
  */
- public class MonthFormatter implements Formatter<Integer> {
+ public class MonthFormatter extends Formatter<Integer> {
  	
 	@Override
  	public String format(Integer value, Locale loc) {

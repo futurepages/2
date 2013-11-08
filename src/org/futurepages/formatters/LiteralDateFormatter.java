@@ -7,7 +7,7 @@ import org.futurepages.core.formatter.Formatter;
 /**
  * Formata a data no formato DD/MM/YYYY
  */
- public class LiteralDateFormatter implements Formatter {
+ public class LiteralDateFormatter extends Formatter {
  	
  	public String format(Object value, Locale loc) {
             return DateUtil.literalDateFromDB(value);

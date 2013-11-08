@@ -1,5 +1,7 @@
 package org.futurepages.tags;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.servlet.jsp.JspException;
 
 import org.futurepages.annotations.Tag;
@@ -8,6 +10,7 @@ import org.futurepages.core.tags.PrintTag;
 import org.futurepages.core.tags.build.ContentTypeEnum;
 import org.futurepages.core.formatter.Formatter;
 import org.futurepages.core.formatter.FormatterManager;
+import org.futurepages.util.Is;
 
 /**
  * @author Leandro
@@ -17,7 +20,6 @@ public class ValueFormatter extends PrintTag {
 
 	@TagAttribute(required = true)
 	private Object object;
-	
 	@TagAttribute
 	private String formatter;
 
@@ -25,15 +27,32 @@ public class ValueFormatter extends PrintTag {
 	public String getStringToPrint() throws JspException {
 		if (formatter != null) {
 
+			String param = extractParam(formatter);
+			if (!Is.empty(param)) {
+				formatter = formatter.substring(0, formatter.indexOf(param) - 1);
+			}
 			Formatter f = FormatterManager.getFormatter(formatter);
 			if (f == null) {
 				throw new JspException("Cannot find formatter: " + formatter);
 			}
+
+			if (!Is.empty(param)) {
+				return f.format(object, action.getLocale(), param);
+			}
+
 			return f.format(object, action.getLocale());
+		} else {
+			return (object != null) ? object.toString() : "";
 		}
-		else{
-			return (object!=null)? object.toString() : "";
+	}
+
+	public String extractParam(String nameFormatter) {
+		Pattern pattern = Pattern.compile("\\[(.*?)\\]");
+		Matcher matcher = pattern.matcher(nameFormatter);
+		if (matcher.find()) {
+			return matcher.group(1);
 		}
+		return null;
 	}
 
 	public void setObject(Object object) {

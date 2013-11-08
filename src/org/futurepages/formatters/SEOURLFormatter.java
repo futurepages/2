@@ -12,7 +12,7 @@ import org.futurepages.core.formatter.Formatter;
  * - saída: DD/MM/YYYY HH:MM:SS
  *
  */
- public class SEOURLFormatter implements Formatter {
+ public class SEOURLFormatter extends Formatter {
  	
  	public String format(Object value, Locale loc) {
             return SEOUtil.urlFormat(((String) value).trim());
