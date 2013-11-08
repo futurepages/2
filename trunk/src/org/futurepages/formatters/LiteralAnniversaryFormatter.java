@@ -10,7 +10,7 @@ import org.futurepages.util.StringUtils;
  *
  * @author leandro
  */
-public class LiteralAnniversaryFormatter implements Formatter {
+public class LiteralAnniversaryFormatter extends Formatter {
 
 	@Override
     public String format(Object value, Locale loc) {

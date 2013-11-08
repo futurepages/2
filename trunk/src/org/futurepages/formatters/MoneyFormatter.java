@@ -8,7 +8,7 @@ import org.futurepages.core.formatter.Formatter;
 /**
  * Formata o double em formato de dinheiro local.
  */
-public class MoneyFormatter implements Formatter {
+public class MoneyFormatter extends Formatter {
 
 	@Override
 	public String format(Object value, Locale loc) {

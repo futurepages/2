@@ -11,7 +11,7 @@ import org.futurepages.enums.MonthEnum;
 import org.futurepages.util.StringUtils;
 
 //TODO - falta contemplar o "amanhã"
-public class RemainingTimeFormatter implements Formatter<Calendar> {
+public class RemainingTimeFormatter extends Formatter<Calendar> {
 
 	@Override
 	public String format(Calendar momentoNoPassado, Locale loc) {

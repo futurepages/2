@@ -10,7 +10,7 @@ import org.futurepages.core.formatter.Formatter;
  * - saída: DD/MM/YYYY HH:MM:SS
  *
  */
- public class DateTimeFormatter implements Formatter {
+ public class DateTimeFormatter extends Formatter {
  	
  	public String format(Object value, Locale loc) {
 			return DateUtil.viewDateTime(value);

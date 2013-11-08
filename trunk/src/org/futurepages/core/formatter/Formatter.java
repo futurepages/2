@@ -9,7 +9,7 @@ import java.util.Locale;
  *
  * @author Sergio Oliveira
  */
-public interface Formatter<T> {
+public abstract class Formatter<T> {
     
     /**
      * Formats an output object from this action.
@@ -18,7 +18,11 @@ public interface Formatter<T> {
      * @param loc The locale to use (if needed)
      * @return The value formatted to a String
      */
-    public String format(T value, Locale loc);
+    public abstract String format(T value, Locale loc);
+	
+    public String format(T value, Locale loc, String param){
+		return null;
+	}
 	
 }
 	
