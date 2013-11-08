@@ -248,7 +248,7 @@ public class HQLField implements HQLable {
         return compareTo(GREATER_EQUALS, field);
     }
 
-
+    
 
     public String lowerThen(String value) {
         return concat(fieldName , LOWER , "'" , escQuoteAndSlashes(value) , "'");
