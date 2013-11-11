@@ -7,7 +7,7 @@ import org.futurepages.util.FileUtil;
 /**
  * Formata a data no formato DD/MM/YYYY
  */
- public class ExtensionFileNameFormatter extends Formatter<String> {
+ public class ExtensionFileNameFormatter implements Formatter<String> {
  	
 	@Override
  	public String format(String value, Locale loc) {

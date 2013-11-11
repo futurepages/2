@@ -11,7 +11,7 @@ import org.futurepages.core.formatter.Formatter;
 /**
  * Formata a data retornando o dia da Semana 
  */
-public class LiteralDayOfWeekFormatter extends Formatter {
+public class LiteralDayOfWeekFormatter implements Formatter {
 
 	public String format(Object date, Locale loc) {
 

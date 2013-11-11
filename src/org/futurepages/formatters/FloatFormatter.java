@@ -2,6 +2,7 @@ package org.futurepages.formatters;
 
 import java.text.DecimalFormat;
 import java.util.Locale;
+import org.futurepages.core.formatter.AbstractFormatter;
 
 import org.futurepages.core.formatter.Formatter;
 
@@ -9,8 +10,9 @@ import org.futurepages.core.formatter.Formatter;
  *
  * @author leandro
  */
-public class FloatFormatter extends Formatter<Object> {
+public class FloatFormatter extends AbstractFormatter{
 
+	@Override
     public String format(Object value, Locale locale) {
         DecimalFormat df = new DecimalFormat("#.#");
         return df.format(value);

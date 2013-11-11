@@ -8,7 +8,7 @@ import org.futurepages.core.formatter.Formatter;
  * Exibe a quantidade de elementos da coleção.
  * .
  */
-public class CollectionSizeFormatter extends Formatter {
+public class CollectionSizeFormatter implements Formatter {
     
     public String format(Object value, Locale loc) {
 		if(value instanceof Object[]){
