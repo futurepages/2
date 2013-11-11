@@ -5,7 +5,7 @@ import org.futurepages.util.CPFUtil;
 import java.util.Locale;
 import org.futurepages.core.formatter.Formatter;
  
- public class CPFCNPJFormatter extends Formatter {
+ public class CPFCNPJFormatter implements Formatter {
  	
  	public String format(Object value, Locale loc) {
 		String cpfCnpj = (String) value;

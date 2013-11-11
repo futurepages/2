@@ -7,7 +7,7 @@ import org.futurepages.core.formatter.Formatter;
 /**
  * Formata o texto escrito em textaerea em texto com quebras de linhas de html.
  */
- public class TextAreaFormatter extends Formatter {
+ public class TextAreaFormatter implements Formatter {
  	
 	@Override
  	public String format(Object value, Locale loc) {

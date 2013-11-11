@@ -10,7 +10,7 @@ import org.futurepages.core.formatter.Formatter;
 import org.futurepages.enums.MonthEnum;
 import org.futurepages.util.StringUtils;
 
-public class ElapsedTimeFormatter extends Formatter<Calendar> {
+public class ElapsedTimeFormatter implements Formatter<Calendar> {
 
 	@Override
 	public String format(Calendar momentoNoPassado, Locale loc) {

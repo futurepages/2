@@ -6,6 +6,7 @@ import javax.servlet.jsp.JspException;
 
 import org.futurepages.annotations.Tag;
 import org.futurepages.annotations.TagAttribute;
+import org.futurepages.core.formatter.AbstractFormatter;
 import org.futurepages.core.tags.PrintTag;
 import org.futurepages.core.tags.build.ContentTypeEnum;
 import org.futurepages.core.formatter.Formatter;
@@ -37,7 +38,7 @@ public class ValueFormatter extends PrintTag {
 			}
 
 			if (!Is.empty(param)) {
-				return f.format(object, action.getLocale(), param);
+				return ((AbstractFormatter)f).format(object, action.getLocale(), param);
 			}
 
 			return f.format(object, action.getLocale());

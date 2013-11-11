@@ -9,7 +9,7 @@ import java.util.Locale;
  *
  * @author Sergio Oliveira
  */
-public abstract class Formatter<T> {
+public interface Formatter<T> {
     
     /**
      * Formats an output object from this action.
@@ -20,9 +20,6 @@ public abstract class Formatter<T> {
      */
     public abstract String format(T value, Locale loc);
 	
-    public String format(T value, Locale loc, String param){
-		return null;
-	}
-	
+    	
 }
 	
