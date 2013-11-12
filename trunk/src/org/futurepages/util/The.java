@@ -1,12 +1,12 @@
 package org.futurepages.util;
 
-import org.futurepages.util.html.HtmlMapChars;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
 import org.apache.commons.lang.math.RandomUtils;
+import org.futurepages.util.html.HtmlMapChars;
 import org.futurepages.util.html.HtmlRegex;
 import org.futurepages.util.iterator.string.IterableString;
 import org.futurepages.util.iterator.string.MatchedToken;
@@ -16,6 +16,14 @@ import org.futurepages.util.iterator.string.MatchedToken;
  * @author leandro
  */
 public class The {
+	
+	// Patterns usados para "santinizar" Strings em relação ao JavaScript
+	private static Pattern NEW_LINE = Pattern.compile("\n");
+	private static Pattern CARRIAGE_RETURN = Pattern.compile("\r");
+	private static Pattern SINGLE_QUOTE = Pattern.compile("'");
+	private static Pattern DOUBLE_QUOTE = Pattern.compile("\"");
+	private static Pattern OPEN_SCRIPT_TAG = Pattern.compile("<(script)([^>]*)((.|\\s)*?)>");
+	private static Pattern CLOSE_SCRIP_TAG = Pattern.compile("</(script)>");
 
 	public static boolean bool(Boolean x) {
 		if (x != null) {
@@ -365,26 +373,17 @@ public class The {
 		return StringUtils.truncated(in, size);
 	}
 
-	public static String javascriptText(Object value) {
-		String valor = "";
-		if (String.class.isAssignableFrom(value.getClass())) {
-			valor = (String) value;
-			if ((valor).contains("\n")) {
-				valor = valor.replaceAll("\n", "\\\\n");
-			}
-			if (((String) value).contains("\r")) {
-				valor = valor.replaceAll("\r", "\\\\r");
-			}
-			if (((String) value).contains("'")) {
-				valor = valor.replaceAll("'", "\\\\'");
-			}
-			if (((String) value).contains("</script>")) {
-				valor = valor.replaceAll("</script>", "&lt;/script>");
-			}
-		} else {
-			valor = value.toString();
-		}
-		return valor;
+	public static String javascriptText(String value) {		
+		String val = value;
+
+		val = NEW_LINE.matcher(val).replaceAll("\\\\n");
+		val = CARRIAGE_RETURN.matcher(val).replaceAll("\\\\r");
+		val = SINGLE_QUOTE.matcher(val).replaceAll("\'");
+		val = DOUBLE_QUOTE.matcher(val).replaceAll("\"");
+		//val = OPEN_SCRIPT_TAG.matcher(val).replaceAll("&lt;$1$2$3&gt;");
+		val = CLOSE_SCRIP_TAG.matcher(val).replaceAll("&lt;/$1>");
+
+		return val;
 	}
 
 	static String stringWithoutInitialNumbers(String str) {
