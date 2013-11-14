@@ -19,6 +19,8 @@ import org.futurepages.util.Is;
 @Tag(bodyContent = ContentTypeEnum.EMPTY)
 public class ValueFormatter extends PrintTag {
 
+	private static Pattern PARAM_PATTERN = Pattern.compile("\\[(.*?)\\]");
+
 	@TagAttribute(required = true)
 	private Object object;
 	@TagAttribute
@@ -48,8 +50,7 @@ public class ValueFormatter extends PrintTag {
 	}
 
 	public String extractParam(String nameFormatter) {
-		Pattern pattern = Pattern.compile("\\[(.*?)\\]");
-		Matcher matcher = pattern.matcher(nameFormatter);
+		Matcher matcher = PARAM_PATTERN.matcher(nameFormatter);
 		if (matcher.find()) {
 			return matcher.group(1);
 		}

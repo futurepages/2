@@ -12,6 +12,15 @@ public class HtmlRegex {
 	private static Pattern COMPILED_TAGS_PATTERN;
 	private static Pattern COMPILED_TAGS_WITH_CONTENT_PATTERN;
 	private static Pattern COMPILED_URL_PATTERN;
+
+	// Patterns usados para "santinizar" Strings em relação ao JavaScript
+	private static Pattern NEW_LINE = Pattern.compile("\n");
+	private static Pattern CARRIAGE_RETURN = Pattern.compile("\r");
+	private static Pattern SINGLE_QUOTE = Pattern.compile("'");
+	private static Pattern DOUBLE_QUOTE = Pattern.compile("\"");
+	private static Pattern OPEN_SCRIPT_TAG = Pattern.compile("<(script)([^>]*)((.|\\s)*?)>");
+	private static Pattern CLOSE_SCRIP_TAG = Pattern.compile("</(script)>");
+
 	/**
 	 * Casa padrão da tag com seu conteúdo
 	 * @param tagName
@@ -136,5 +145,16 @@ public class HtmlRegex {
 			COMPILED_TAGS_WITH_CONTENT_PATTERN = Pattern.compile(tagAndContentPattern(tagName));
 		}
 		return COMPILED_TAGS_WITH_CONTENT_PATTERN;
+	}
+
+	public static String javascriptText(String value) {
+		String val = value;
+		val = NEW_LINE.matcher(val).replaceAll("\\\\n");
+		val = CARRIAGE_RETURN.matcher(val).replaceAll("\\\\r");
+		val = SINGLE_QUOTE.matcher(val).replaceAll("\'");
+		val = DOUBLE_QUOTE.matcher(val).replaceAll("\"");
+		//val = OPEN_SCRIPT_TAG.matcher(val).replaceAll("&lt;$1$2$3&gt;");
+		val = CLOSE_SCRIP_TAG.matcher(val).replaceAll("&lt;/$1>");
+		return val;
 	}
 }

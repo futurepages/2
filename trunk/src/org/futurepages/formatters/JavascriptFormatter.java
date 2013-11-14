@@ -9,10 +9,10 @@ import org.futurepages.util.The;
  * retira só as aspas para não quebrar dentro de atributos de tags html.
  * .
  */
-public class JavascriptFormatter implements Formatter {
+public class JavascriptFormatter implements Formatter<String> {
     
 	@Override
-    public String format(Object value, Locale loc) {
+    public String format(String value, Locale loc) {
         return The.javascriptText(value);
     }
 }

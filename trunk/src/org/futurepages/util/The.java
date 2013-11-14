@@ -17,14 +17,6 @@ import org.futurepages.util.iterator.string.MatchedToken;
  */
 public class The {
 	
-	// Patterns usados para "santinizar" Strings em relação ao JavaScript
-	private static Pattern NEW_LINE = Pattern.compile("\n");
-	private static Pattern CARRIAGE_RETURN = Pattern.compile("\r");
-	private static Pattern SINGLE_QUOTE = Pattern.compile("'");
-	private static Pattern DOUBLE_QUOTE = Pattern.compile("\"");
-	private static Pattern OPEN_SCRIPT_TAG = Pattern.compile("<(script)([^>]*)((.|\\s)*?)>");
-	private static Pattern CLOSE_SCRIP_TAG = Pattern.compile("</(script)>");
-
 	public static boolean bool(Boolean x) {
 		if (x != null) {
 			return x.booleanValue();
@@ -374,16 +366,7 @@ public class The {
 	}
 
 	public static String javascriptText(String value) {		
-		String val = value;
-
-		val = NEW_LINE.matcher(val).replaceAll("\\\\n");
-		val = CARRIAGE_RETURN.matcher(val).replaceAll("\\\\r");
-		val = SINGLE_QUOTE.matcher(val).replaceAll("\'");
-		val = DOUBLE_QUOTE.matcher(val).replaceAll("\"");
-		//val = OPEN_SCRIPT_TAG.matcher(val).replaceAll("&lt;$1$2$3&gt;");
-		val = CLOSE_SCRIP_TAG.matcher(val).replaceAll("&lt;/$1>");
-
-		return val;
+		return HtmlRegex.javascriptText(value);
 	}
 
 	static String stringWithoutInitialNumbers(String str) {
