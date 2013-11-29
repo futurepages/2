@@ -10,6 +10,11 @@ public class TituloEleitorUtil {
 		int ind1, ind2, limite, soma, digito;
 		String strDVc = "";
 		numero = numero.trim();
+		try {
+			Integer.parseInt(numero);
+		} catch (NumberFormatException nfe) {
+			return false;
+		}
 		while (numero.length() < 13) {
 			numero = '0' + numero;
 		}
