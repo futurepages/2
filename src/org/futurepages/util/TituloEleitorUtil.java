@@ -11,7 +11,7 @@ public class TituloEleitorUtil {
 		String strDVc = "";
 		numero = numero.trim();
 		try {
-			Integer.parseInt(numero);
+			Long.parseLong(numero);
 		} catch (NumberFormatException nfe) {
 			return false;
 		}
