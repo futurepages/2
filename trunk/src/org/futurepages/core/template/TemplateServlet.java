@@ -27,7 +27,7 @@ import org.futurepages.core.output.ResponseOutput;
  *
  * @author Davi Luan Carneiro
  */
-public abstract class TemplateServlet extends HttpServlet {
+public class TemplateServlet extends HttpServlet {
 
 	/**
 	 * Para acessar o initParam do web.xml
