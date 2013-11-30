@@ -130,11 +130,12 @@ public class EncodingUtil {
 
 	//Migração de projeto de ISO para UTF-8
 	public static void main(String[] args) throws URISyntaxException, Exception {
-		String path = "E:\\Users\\leandro\\Documents\\Workspaces\\netbeans\\placitum";
-		String pathWEB = path + "\\web\\exceptions";
+		String path = "E:\\Users\\leandro\\Documents\\Workspaces\\netbeans\\intranet";
+		String pathWEB = path + "\\web";
 //		String pathSRC = path + "\\src";
 //		String pathTEST = path + "\\test";
 
+		migratingISOtoUTF8(pathWEB, ".*\\.jsp");
 //		migratingISOtoUTF8(pathWEB, ".*\\.sql");
 //		migratingISOtoUTF8(pathWEB, ".*\\.htm");
 //		migratingISOtoUTF8(pathWEB, ".*\\.html");
