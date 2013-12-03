@@ -171,10 +171,6 @@ public class FileUtil {
 
 	/**
 	 * Puts the given items into the given key's place by replacing it.
-	 * @param items
-	 * @param key
-	 * @param fileUrl
-	 * @throws Exception
 	 */
 	public static void putKeyValue(String key, String value, String sourceUrl) throws Exception {
 		putKeyValue(key, value, sourceUrl, sourceUrl);
