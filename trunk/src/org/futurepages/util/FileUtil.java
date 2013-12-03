@@ -59,7 +59,7 @@ public class FileUtil {
 		char[] buffer = new char[(int) file.length()];
 		fr.read(buffer);
 		fr.close();
-		//antes era new String(buffer); //como tivemos problema com uff-8, que criou-se caracteres \0, trocamos.
+		//antes era new String(buffer); //como tivemos problema com utf-8, que criou-se caracteres \0, trocamos.
 		return buildString(buffer);
 	}
 
@@ -362,7 +362,7 @@ public class FileUtil {
 
 	/**
 	 * Copies the specified folder to destination folder.
-	 * @param origin - Origin folder
+	 * @param folder - Origin folder
 	 * @param destiny - Destiny folder
 	 * @param showLogCopy - Show only the file name copied
 	 * @param showPath - Shows the full path to the file name copied
