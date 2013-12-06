@@ -19,11 +19,12 @@ import org.futurepages.util.Is;
 @org.futurepages.annotations.Tag(bodyContent = ContentTypeEnum.JSP,name="if")
 public class IfTag extends ConditionalTag {
 
+	@Deprecated
 	@TagAttribute
 	private String test = null;
 
 	@TagAttribute
-	private String value = null;
+	private Object value = null;
 
 	@TagAttribute
 	private String dynValue = null;
@@ -32,7 +33,7 @@ public class IfTag extends ConditionalTag {
 		this.test = test;
 	}
 
-	public void setValue(String value) {
+	public void setValue(Object value) {
 		this.value = value;
 	}
 
@@ -72,8 +73,17 @@ public class IfTag extends ConditionalTag {
 
 	private boolean evaluateExpression() throws JspException {
 		if (Is.empty(test)) {
-			return Boolean.parseBoolean(value);
-		} else {
+			if(value == null){
+				return false;
+			}else {
+				if (value instanceof Boolean) {
+					return (Boolean) value;
+				} else {
+					return Boolean.valueOf(value.toString());
+				}
+			}
+		} else { //legado: atributo "test" não costuma mais ser utilizado.
+			String value = (String) this.value;
 			if (dynValue != null && value != null) {
 				throw new JspException("Invalid IfTag: cannot have value and dynValue at the same time!");
 			}
