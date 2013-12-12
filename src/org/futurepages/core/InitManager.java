@@ -1,52 +1,21 @@
 package org.futurepages.core;
 
-import org.futurepages.core.context.Context;
-import org.futurepages.formatters.LiteralAnniversaryFormatter;
-import org.futurepages.formatters.AnniversaryAbbrFormatter;
-import org.futurepages.formatters.AnniversaryFormatter;
-import java.util.Locale;
-
-import org.futurepages.core.config.Params;
-import org.futurepages.core.persistence.HibernateFilter;
-import org.futurepages.core.persistence.HibernateManager;
-import org.futurepages.filters.ExceptionFilter;
-import org.futurepages.filters.HeadTitleFilter;
-import org.futurepages.formatters.CPFCNPJFormatter;
-import org.futurepages.formatters.DateFormatter;
-import org.futurepages.formatters.DateTimeFormatter;
-import org.futurepages.formatters.ElapsedTimeFormatter;
-import org.futurepages.formatters.FloatFormatter;
-import org.futurepages.formatters.HTMLFormatter;
-import org.futurepages.formatters.JavascriptFormatter;
-import org.futurepages.formatters.LiteralDateFormatter;
-import org.futurepages.formatters.LiteralDayOfWeekFormatter;
-import org.futurepages.formatters.MoneyFormatter;
-import org.futurepages.formatters.NoSpecialsFormatter;
-import org.futurepages.formatters.SEOURLFormatter;
-import org.futurepages.formatters.TextAreaFormatter;
-import org.futurepages.formatters.UpperCaseFormatter;
-import org.futurepages.core.control.AbstractApplicationManager;
 import org.futurepages.consequences.NullConsequence;
 import org.futurepages.consequences.StringConsequence;
+import org.futurepages.core.config.Params;
+import org.futurepages.core.context.Context;
+import org.futurepages.core.control.AbstractApplicationManager;
 import org.futurepages.core.exception.DefaultExceptionLogger;
-import org.futurepages.filters.FileUploadFilter;
-import org.futurepages.filters.InjectionFilter;
 import org.futurepages.core.formatter.FormatterManager;
 import org.futurepages.core.i18n.LocaleManager;
-import org.futurepages.filters.AutoRedirectDomainFilter;
-import org.futurepages.formatters.CollectionSizeFormatter;
-import org.futurepages.formatters.ExtensionFileNameFormatter;
-import org.futurepages.formatters.FullDateTimeFormatter;
-import org.futurepages.formatters.LiteralDateTimeFormatter;
-import org.futurepages.formatters.MonthFormatter;
-import org.futurepages.formatters.PoorTextFormatter;
-import org.futurepages.formatters.RemainingTimeFormatter;
-import org.futurepages.formatters.SimpleElapsedTimeFormatter;
-import org.futurepages.formatters.SmartTextFormatter;
-import org.futurepages.formatters.TimeFormatter;
-import org.futurepages.formatters.UrlFormatter;
+import org.futurepages.core.persistence.HibernateFilter;
+import org.futurepages.core.persistence.HibernateManager;
+import org.futurepages.filters.*;
+import org.futurepages.formatters.*;
 import org.futurepages.json.JSONGenericRenderer;
 import org.futurepages.util.Is;
+
+import java.util.Locale;
 
 /**
  * ApplicationManager que gerencia a Ação Inicial e os filtros Globais
@@ -107,6 +76,7 @@ public class InitManager extends AbstractApplicationManager{
     public void loadFormatters() {
         FormatterManager.addFormatter("anniversary"        , new AnniversaryFormatter());
         FormatterManager.addFormatter("anniversaryAbbr"    , new AnniversaryAbbrFormatter());
+        FormatterManager.addFormatter("bigLong" 	       , new BigLongFormatter());
         FormatterManager.addFormatter("collectionSize" 	   , new CollectionSizeFormatter());
         FormatterManager.addFormatter("cpfCnpj"		 	   , new CPFCNPJFormatter());
         FormatterManager.addFormatter("date"         	   , new DateFormatter());
