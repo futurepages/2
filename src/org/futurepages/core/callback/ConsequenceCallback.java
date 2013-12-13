@@ -4,7 +4,7 @@ import org.futurepages.core.context.Context;
 import org.futurepages.core.exception.DefaultExceptionLogger;
 import org.futurepages.core.persistence.Dao;
 import org.futurepages.core.persistence.HibernateManager;
-import org.futurepages.util.StringUtils;
+import org.futurepages.util.The;
 
 public abstract class ConsequenceCallback implements Runnable {
 
@@ -23,8 +23,8 @@ public abstract class ConsequenceCallback implements Runnable {
 		this.caller = caller;
 	}
 
-	protected void handleException(Exception exCause){
-		String message = StringUtils.concat("ConsequenceCallback for "+this.caller,"[",this.actionReturn,"] for data "+this.actionData.toString()+" has crashed.");
+	private void handleException(Exception exCause){
+		String message = The.concat("ConsequenceCallback for " , this.caller, "[", this.actionReturn, "] for data " , this.actionData.toString() , " has crashed.");
 		ConsequenceCallbackException ex = new ConsequenceCallbackException(message,exCause);
 		DefaultExceptionLogger.getInstance().execute(ex);
 	}
