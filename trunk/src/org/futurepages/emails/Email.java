@@ -1,31 +1,18 @@
 package org.futurepages.emails;
 
+import org.futurepages.core.exception.DefaultExceptionLogger;
 import org.futurepages.core.mail.DefaultAuthenticator;
 import org.futurepages.exceptions.EmailException;
-import java.security.AccessControlException;
-import java.security.Security;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import org.futurepages.util.StringUtils;
+import org.futurepages.util.The;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Store;
-import javax.mail.Transport;
+import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-
-import org.futurepages.util.StringUtils;
-
-import javax.mail.Authenticator;
-import org.futurepages.core.exception.DefaultExceptionLogger;
+import java.security.AccessControlException;
+import java.security.Security;
+import java.util.*;
 
 // Revision: 193103
 
@@ -845,12 +832,30 @@ public abstract class Email {
             }
 
             Transport.send(this.message);
-        } catch (MessagingException me) {
-            throw new EmailException(me);
+        } catch (Exception ex) {
+	        throw new EmailException("Problem trying to send email to "+The.implodedArray(destinyAddress(),",","'")+": "+ex.getMessage());
         }
     }
 
-    /**
+	public String[] destinyAddress(){
+		String[] destinyAddress = new String[this.toList.size()];
+		int i = 0;
+		for(InternetAddress ia : this.toList){
+			destinyAddress[i] = ia.getAddress();
+			i++;
+		}
+		for(InternetAddress ia : this.bccList){
+			destinyAddress[i] = ia.getAddress();
+			i++;
+		}
+		for(InternetAddress ia : this.ccList){
+			destinyAddress[i] = ia.getAddress();
+			i++;
+		}
+		return destinyAddress;
+	}
+
+	/**
      * Sets the sent date for the email.  The sent date will default to the
      * current date if not explictly set.
      *
