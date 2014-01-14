@@ -13,6 +13,6 @@ public class JavascriptFormatter implements Formatter<String> {
     
 	@Override
     public String format(String value, Locale loc) {
-        return The.javascriptText(value);
+        return The.javascriptText((String)value);
     }
 }
