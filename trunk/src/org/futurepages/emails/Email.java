@@ -833,7 +833,7 @@ public abstract class Email {
 
             Transport.send(this.message);
         } catch (Exception ex) {
-	        throw new EmailException("Problem trying to send email to "+The.implodedArray(destinyAddress(),",","'")+": "+ex.getMessage());
+	        throw new EmailException("Problem trying to send email to "+The.implodedArray(destinyAddress(),",","'")+": "+ex.getMessage(), ex);
         }
     }
 
