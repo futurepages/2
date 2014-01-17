@@ -1,11 +1,6 @@
 package org.futurepages.util.template.simpletemplate.template;
 
-import java.util.List;
 import java.util.Map;
-import org.futurepages.util.template.simpletemplate.expressions.exceptions.BadExpression;
-import org.futurepages.util.template.simpletemplate.expressions.exceptions.ExpectedExpression;
-import org.futurepages.util.template.simpletemplate.expressions.exceptions.ExpectedOperator;
-import org.futurepages.util.template.simpletemplate.expressions.exceptions.Unexpected;
 import org.futurepages.util.template.simpletemplate.expressions.tree.Exp;
 import org.futurepages.util.template.simpletemplate.template.exceptions.TemplateException;
 
@@ -15,7 +10,7 @@ import org.futurepages.util.template.simpletemplate.template.exceptions.Template
  */
 public class TemplateStatic extends AbstractTemplateBlock {
 	
-	private List<Object> content;
+	private Object []content;
 	
 	public TemplateStatic() {
 	}
@@ -26,7 +21,7 @@ public class TemplateStatic extends AbstractTemplateBlock {
 		super.setNextInner(null);
 	}
 
-	public List<Object> getContent() {
+	public Object []getContent() {
 		return content;
 	}
 

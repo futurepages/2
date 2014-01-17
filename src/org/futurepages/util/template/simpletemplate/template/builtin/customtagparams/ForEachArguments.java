@@ -51,7 +51,7 @@ public class ForEachArguments implements Exp {
 		if (exp != null) {
 			return exp.eval(params);
 		} else {
-			return iterable;
+			return iterable.eval(params);
 		}
 	}
 
