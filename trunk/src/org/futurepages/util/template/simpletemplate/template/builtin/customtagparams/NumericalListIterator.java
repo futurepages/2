@@ -9,33 +9,29 @@ import org.futurepages.util.StringUtils;
  */
 public class NumericalListIterator implements Iterator<Integer> {
 
-	private final NumericalList numList;
+	private NumericalList numList;
 	private int current;
 	private boolean started;
-	private int incr;
+	private boolean upward; // ascendente
 	
 	public NumericalListIterator(NumericalList numList) {
 		this.numList = numList;
 		current = numList.getStart();
 		started = false;
-		
-		if (numList.getEnd() > numList.getStart()) {
-			incr = Math.abs(numList.getIncrement());
-		} else {
-			incr = -Math.abs(numList.getIncrement());
-		}
+
+		upward = numList.getLength() >= numList.getStart();
 	}
 	
 	@Override
 	public boolean hasNext() {
-		return (numList.size() > 0) && (!started || current < (numList.getEnd() - 1));
+		return (numList.size() > 0) && (!started || (upward ? current < (numList.getLength() - 1) : current > (numList.getLength() + 1)));
 	}
 
 	@Override
 	public Integer next() {
 		if (hasNext()) {
 			if (started) {
-				current += incr;
+				current += numList.getStep();
 			} else {
 				started = true;
 			}
@@ -43,7 +39,7 @@ public class NumericalListIterator implements Iterator<Integer> {
 			return current;
 		}
 
-		throw new RuntimeException(StringUtils.concat("Iterating over the limit of list [", numList.getStart(), "..", numList.getEnd(), "]"));
+		throw new RuntimeException(StringUtils.concat("Iterating over the limit of list [", numList.getStart(), "..", numList.getLength(), "]"));
 	}
 
 	@Override

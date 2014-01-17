@@ -1,7 +1,6 @@
 package org.futurepages.util.template.simpletemplate.template;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.ExpressionException;
@@ -189,7 +188,7 @@ public class TemplateParser {
 		return c;
 	}
 
-	public static List<Object> getContent(String content) throws TemplateException {
+	public static Object []getContent(String content) throws TemplateException {
 		ArrayList<Object> cont = new ArrayList<Object>();
 		
 		Matcher m = expPattern.matcher(content);
@@ -210,7 +209,11 @@ public class TemplateParser {
 
 		cont.add(content.substring(lastIndex));
 
-		return cont;
+		Object array [] = new Object[cont.size()];
+
+		cont.toArray(array);
+
+		return array;
 	}
 	
 	public static Tuple<String, Integer> expressionContent(String str) {

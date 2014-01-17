@@ -10,6 +10,7 @@ import org.futurepages.util.template.simpletemplate.expressions.exceptions.BadEx
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.ExpectedExpression;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.ExpectedOperator;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.Unexpected;
+import org.futurepages.util.template.simpletemplate.expressions.parser.Parser;
 import org.futurepages.util.template.simpletemplate.expressions.tree.Exp;
 import org.futurepages.util.template.simpletemplate.template.AbstractTemplateBlock;
 import org.futurepages.util.template.simpletemplate.template.TemplateBlock;
@@ -23,12 +24,12 @@ import org.futurepages.util.template.simpletemplate.template.builtin.customtagpa
  */
 public class ForEachTemplateTag extends TemplateTag {
 	// 1..10:1|var
-	//                                                           1             2          3       4    5
-	private static final Pattern isBuildArray = Pattern.compile("([0-9]+)\\.\\.([0-9]+)\\:([0-9]+)(\\|(\\w+))?");
+	//                                                           1                  2            3   4              5   6
+	private static final Pattern isBuildArray = Pattern.compile("([0-9]+|\\w+)\\.\\.([0-9]+|\\w+)(\\:([0-9]+|\\w+))?(\\|(\\w+))?");
 	private static final int built_in_group_begin = 1;
-	private static final int built_in_group_end = 2;
-	private static final int built_in_group_inc = 3;
-	private static final int built_in_group_var = 5;
+	private static final int built_in_group_length = 2;
+	private static final int built_in_group_step = 4;
+	private static final int built_in_group_var = 6;
 	
 	// lista|var|counter
 	//                                                     1    2          34   5      67   8
@@ -87,18 +88,31 @@ public class ForEachTemplateTag extends TemplateTag {
 		}
 	}
 	
+	protected Object builtInItem(String str) throws BadExpression, ExpectedExpression, ExpectedOperator, Unexpected {
+
+		if (str != null && !str.isEmpty()) {
+			try {
+				return Integer.valueOf(str);
+			} catch (NumberFormatException ex) {
+				return new Parser(str).parse();
+			}
+		}
+
+		return 1;
+	}
+	
 	@Override
 	public Exp evalExpression(String expression) throws ExpectedOperator, ExpectedExpression, BadExpression, Unexpected {
 		Matcher m1 = isBuildArray.matcher(expression);
 		Matcher m2 = isList.matcher(expression);
 		
 		if (m1.find()) {
-			int begin = Integer.parseInt(m1.group(built_in_group_begin));
-			int end = Integer.parseInt(m1.group(built_in_group_end));
-			int inc = Integer.parseInt(m1.group(built_in_group_inc));
+			Object begin = builtInItem(m1.group(built_in_group_begin));
+			Object length = builtInItem(m1.group(built_in_group_length));
+			Object step = builtInItem(m1.group(built_in_group_step));
 			String var = m1.group(built_in_group_var);
 
-			NumericalList nl = new NumericalList(begin, end, inc);
+			NumericalList nl = new NumericalList(begin, length, step);
 
 			return new ForEachArguments(nl, var);
 		} else if (m2.find()) {
@@ -111,7 +125,7 @@ public class ForEachTemplateTag extends TemplateTag {
 			return new ForEachArguments(exp, var, counter);
 		} else {
 			// @TODO: melhorar esta mensagem
-			throw new RuntimeException("Invalid tag parameter");
+			throw new BadExpression("Invalid tag parameter");
 		}
 	}
 

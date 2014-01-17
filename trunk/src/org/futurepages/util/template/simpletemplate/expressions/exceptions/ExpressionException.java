@@ -1,7 +1,5 @@
 package org.futurepages.util.template.simpletemplate.expressions.exceptions;
 
-import java.util.List;
-
 /**
  *
  * @author thiago
