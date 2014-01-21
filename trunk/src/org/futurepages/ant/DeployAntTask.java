@@ -15,8 +15,8 @@ public class DeployAntTask extends Task {
 	@Override
 	public void execute() throws BuildException {
 		System.out.println("DeployAntTask.execute()");
-		System.out.println("source: "+source );
-		System.out.println("target: "+target);
+		System.out.println("attr source: "+source );
+		System.out.println("attr target: "+target);
 	
 		try {
 			String baseDir = this.getProject().getBaseDir().getAbsolutePath();
@@ -25,8 +25,8 @@ public class DeployAntTask extends Task {
 				System.out.println("default source: "+source);
 			}
 			if(Is.empty(target)){
-				System.out.println("default target: "+target);
 				target = baseDir+"/_deployed";
+				System.out.println("default target: "+target);
 			}
 			SVNUtils.cleanCopy(source, target);
 		} catch (IOException e) {
