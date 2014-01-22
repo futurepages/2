@@ -53,4 +53,9 @@ public class IfTemplateTag extends TemplateTag {
 	public TemplateTag getNewInstance() {
 		return this;
 	}
+
+	@Override
+	public boolean hasOwnContext() {
+		return false;
+	}
 }
