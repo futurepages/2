@@ -150,4 +150,9 @@ public class ForEachTemplateTag extends TemplateTag {
 	public TemplateTag getNewInstance() {
 		return this;
 	}
+
+	@Override
+	public boolean hasOwnContext() {
+		return true;
+	}
 }

@@ -2,6 +2,7 @@ package org.futurepages.util.template.simpletemplate.template.builtin.tags;
 
 import java.util.HashMap;
 import java.util.Map;
+import static org.futurepages.util.StringUtils.concat;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.BadExpression;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.ExpectedExpression;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.ExpectedOperator;
@@ -9,10 +10,9 @@ import org.futurepages.util.template.simpletemplate.expressions.exceptions.Unexp
 import org.futurepages.util.template.simpletemplate.expressions.parser.Parser;
 import org.futurepages.util.template.simpletemplate.expressions.tree.Exp;
 import org.futurepages.util.template.simpletemplate.template.AbstractTemplateBlock;
+import org.futurepages.util.template.simpletemplate.template.TemplateWritter;
 import org.futurepages.util.template.simpletemplate.template.exceptions.TemplateTagDoesNotExists;
 import org.futurepages.util.template.simpletemplate.template.exceptions.TemplateWithSameNameAlreadyExistsException;
-import static org.futurepages.util.StringUtils.concat;
-import org.futurepages.util.template.simpletemplate.template.TemplateWritter;
 
 /**
  *
@@ -22,6 +22,9 @@ public abstract class TemplateTag {
 	
 	protected static final HashMap<String, TemplateTag> builtInTags = new HashMap<String, TemplateTag>();
 	protected static final HashMap<String, TemplateTag> customTags = new HashMap<String, TemplateTag>();
+	
+	// Split as strings pelo caractere |. Se houver ||, não vai fazer o split nest ponto.
+	// Pattern p = Pattern.compile("(?<!\\|)\\|(?!\\|)");
 
 	public static final int SKIP_BODY = 0;
 	public static final int EVAL_BODY = 1;
@@ -72,6 +75,8 @@ public abstract class TemplateTag {
 	}
 	
 	public abstract TemplateTag getNewInstance();
+	
+	public abstract boolean hasOwnContext();
 	
 	public void eval(AbstractTemplateBlock block, Map<String, Object> params, TemplateWritter sb) {		
 		int isDoBody = doBody(block, params, sb);
