@@ -57,7 +57,7 @@ public class TemplateStatic extends AbstractTemplateBlock {
 
 	// Falta ajeitar essa onça
 	@Override
-	public void eval(Map<String, Object> params, StringBuilder sb) {
+	public void eval(Map<String, Object> params, TemplateWritter sb) {
 		for (Object ob : content) {
 			if (ob instanceof Exp) {
 				sb.append(((Exp)ob).eval(params));

@@ -32,14 +32,14 @@ public class TemplateBlockBase extends AbstractTemplateBlock {
 	}
 
 	public String eval(Map<String, Object> params) {
-		StringBuilder sb = new StringBuilder();		
+		TemplateWritter sb = new TemplateWritter();		
 		eval(params, sb);
 		
 		return sb.toString();
 	}
 
 	@Override
-	public void eval(Map<String, Object> params, StringBuilder sb) {
+	public void eval(Map<String, Object> params, TemplateWritter sb) {
 		getNextInner().eval(params, sb);
 	}
 }

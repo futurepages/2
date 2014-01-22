@@ -165,13 +165,32 @@ public class TokensToExp {
 			return new Literal(o);
 		} else if (ok(o = getNumber(str))) {
 			return new Literal(o);
-		} // else -> string
+		} else if (ok(o = getString(str))) {
+			return new Literal(o);
+		}
 		
 		return null;
 	}
 
 	private Object getIndentifier(String str) {
 		return new Identifier(str);
+	}
+
+	// @TODO: Lançar exceção de fim de string
+	private String getString(String str) {
+		char s = str.charAt(0);
+		
+		switch (s) {
+			case '\'':
+			case '"':
+				char l = str.charAt(str.length() - 1);
+
+				if (s == l) {
+					return str.substring(1, str.length() - 1);
+				}
+			default:
+				return null;
+		}
 	}
 	
 	private Boolean getBoolean(String str) {

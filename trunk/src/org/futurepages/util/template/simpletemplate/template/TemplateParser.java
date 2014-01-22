@@ -79,11 +79,14 @@ public class TemplateParser {
 				// @TODO: Pode ser que não haja este trexo "estático". Verifica isto!
 				// Copiar tudo que esteja entre "lastLength" e o bloco encontrado, para
 				// um bloco estático
-				TemplateStatic sttc = new TemplateStatic();
-				sttc.setContent(input.substring(lastLength.getValue(), tagMatcher.start()));
+				String text = input.substring(lastLength.getValue(), tagMatcher.start());
+				if (!text.isEmpty()) {
+					TemplateStatic sttc = new TemplateStatic();
+					sttc.setContent(text);
 
-				// Adiciona o bloco estático ao bloco que está altualmente no topo da pilha
-				block.append(sttc);
+					// Adiciona o bloco estático ao bloco que está altualmente no topo da pilha
+					block.append(sttc);
+				}
 
 				// Atualiza do valor de lastLength
 				lastLength.setValue(tagMatcher.end());
@@ -113,13 +116,17 @@ public class TemplateParser {
 				}
 			}
 
-			// Adicione o resto do template através de um bloco estátio ao bloco que
-			// restou na pilha.
-			TemplateStatic sttc = new TemplateStatic();
-			sttc.setContent(input.substring(lastLength.getValue()));
+			String text = input.substring(lastLength.getValue());
 
-			AbstractTemplateBlock block = stack.peek();
-			block.append(sttc);
+			if (!text.isEmpty()) {
+				// Adicione o resto do template através de um bloco estátio ao bloco que
+				// restou na pilha.
+				TemplateStatic sttc = new TemplateStatic();
+				sttc.setContent(text);
+
+				AbstractTemplateBlock block = stack.pop();
+				block.append(sttc);
+			}
 		} catch (ExpressionException ex) {
 			
 			throw new TemplateException(ex.getMessage(), lineCounter(input.substring(0, tagMatcher.start())), ex.show());
