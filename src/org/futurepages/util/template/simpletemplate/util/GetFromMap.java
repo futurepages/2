@@ -47,7 +47,7 @@ public class GetFromMap {
 				value = getValue(key.substring(0,lastPoint) , key.substring(lastPoint+1,key.length())+(!Is.empty(fieldPath)?"."+fieldPath:"")  , mapValues);
 			}
 		}
-		return value != null ? value : "";
+		return value;
 	}
 
 }

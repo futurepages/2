@@ -12,6 +12,7 @@ import org.futurepages.util.template.simpletemplate.template.AbstractTemplateBlo
 import org.futurepages.util.template.simpletemplate.template.exceptions.TemplateTagDoesNotExists;
 import org.futurepages.util.template.simpletemplate.template.exceptions.TemplateWithSameNameAlreadyExistsException;
 import static org.futurepages.util.StringUtils.concat;
+import org.futurepages.util.template.simpletemplate.template.TemplateWritter;
 
 /**
  *
@@ -21,6 +22,9 @@ public abstract class TemplateTag {
 	
 	protected static final HashMap<String, TemplateTag> builtInTags = new HashMap<String, TemplateTag>();
 	protected static final HashMap<String, TemplateTag> customTags = new HashMap<String, TemplateTag>();
+
+	public static final int SKIP_BODY = 0;
+	public static final int EVAL_BODY = 1;
 	
 	protected static synchronized void addBuiltinTag(TemplateTag tag) {
 		if (!builtInTags.containsKey(tag.getTagName())) {
@@ -69,5 +73,38 @@ public abstract class TemplateTag {
 	
 	public abstract TemplateTag getNewInstance();
 	
-	public abstract void eval(AbstractTemplateBlock block, Map<String, Object> params, StringBuilder sb);
+	public void eval(AbstractTemplateBlock block, Map<String, Object> params, TemplateWritter sb) {		
+		int isDoBody = doBody(block, params, sb);
+		AbstractTemplateBlock inner = block.getNextInner();
+
+		switch (isDoBody) {
+			case EVAL_BODY:
+				if (inner != null) {
+					evalBody(block, params, sb);
+				}
+				break;
+
+			case SKIP_BODY:
+				break;
+
+			default:
+				break;
+		}
+
+		AbstractTemplateBlock next = block.getNext();
+		
+		if (next != null) {
+			next.eval(params, sb);
+		}
+	}
+	
+	public abstract int doBody(AbstractTemplateBlock block, Map<String, Object> params, TemplateWritter sb);
+	
+	protected void evalBody(AbstractTemplateBlock block, Map<String, Object> params, TemplateWritter sb) {
+		AbstractTemplateBlock inner = block.getNextInner();
+
+		if (inner != null) {
+			inner.eval(params, sb);
+		}
+	}
 }

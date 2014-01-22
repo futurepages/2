@@ -14,6 +14,7 @@ import org.futurepages.util.template.simpletemplate.expressions.parser.Parser;
 import org.futurepages.util.template.simpletemplate.expressions.tree.Exp;
 import org.futurepages.util.template.simpletemplate.template.AbstractTemplateBlock;
 import org.futurepages.util.template.simpletemplate.template.TemplateBlock;
+import org.futurepages.util.template.simpletemplate.template.TemplateWritter;
 import org.futurepages.util.template.simpletemplate.template.builtin.customtagparams.ForEachArguments;
 import org.futurepages.util.template.simpletemplate.template.builtin.customtagparams.NumericalList;
 import org.futurepages.util.template.simpletemplate.template.builtin.customtagparams.ObjectArrayIterator;
@@ -42,7 +43,7 @@ public class ForEachTemplateTag extends TemplateTag {
 		super("forEach");
 	}
 	
-	protected void fromBuildingArray(TemplateBlock block, Map<String, Object> params, ForEachArguments fparams, NumericalList nlist, StringBuilder sb) {
+	protected void fromBuildingArray(TemplateBlock block, Map<String, Object> params, ForEachArguments fparams, NumericalList nlist, TemplateWritter sb) {
 		Map<String, Object> ps = new HashMap<String, Object>(params);
 
 		for (int el : nlist) {
@@ -50,25 +51,25 @@ public class ForEachTemplateTag extends TemplateTag {
 				ps.put(fparams.getVar(), el);
 			}
 			
-			block.getNextInner().eval(ps, sb);
+			evalBody(block, params, sb);
 		}
 	}
 	
-	protected void fromList(TemplateBlock block, Map<String, Object> params, ForEachArguments fparams, Object result, StringBuilder sb) {
+	protected void fromList(TemplateBlock block, Map<String, Object> params, ForEachArguments fparams, Object result, TemplateWritter sb) {
 
 		if (result!= null) {
-			
+
 			Iterator it = null;
-			
+
 			if (result.getClass().isArray()) {
 				it = new ObjectArrayIterator(result);
 			} else if (result instanceof List) {
 				it = ((List)result).iterator();
 			}
-			
+
 			if (it != null) {
 				Map<String, Object> ps = new HashMap<String, Object>(params);
-				
+
 				int i = 0;
 				while (it.hasNext()) {
 					Object el = it.next();
@@ -79,9 +80,9 @@ public class ForEachTemplateTag extends TemplateTag {
 					if (fparams.getCounter() != null) {
 						ps.put(fparams.getCounter(), i);
 					}
-					
-					block.getNextInner().eval(ps, sb);
-					
+
+					evalBody(block, ps, sb);
+
 					i += 1;
 				}
 			}
@@ -130,23 +131,19 @@ public class ForEachTemplateTag extends TemplateTag {
 	}
 
 	@Override
-	public void eval(AbstractTemplateBlock block, Map<String, Object> params, StringBuilder sb) {
+	public int doBody(AbstractTemplateBlock block, Map<String, Object> params, TemplateWritter sb) {
 		TemplateBlock actualBlock = (TemplateBlock) block;
 		ForEachArguments ps = (ForEachArguments) actualBlock.getParams();
 
-		if (block.getNextInner() != null) {
-			Object result = ps.eval(params);
-			
-			if (result instanceof NumericalList) {
-				fromBuildingArray(actualBlock, params, ps, (NumericalList)result, sb);
-			} else {
-				fromList(actualBlock, params, ps, result, sb);
-			}
+		Object result = ps.eval(params);
+
+		if (result instanceof NumericalList) {
+			fromBuildingArray(actualBlock, params, ps, (NumericalList)result, sb);
+		} else {
+			fromList(actualBlock, params, ps, result, sb);
 		}
 
-		if (block.getNext() != null) {
-			block.getNext().eval(params, sb);
-		}
+		return SKIP_BODY;
 	}
 
 	@Override

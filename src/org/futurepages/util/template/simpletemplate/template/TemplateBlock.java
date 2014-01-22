@@ -53,7 +53,7 @@ public class TemplateBlock extends AbstractTemplateBlock {
 	}
 
 	@Override
-	public void eval(Map<String, Object> params, StringBuilder sb) {
+	public void eval(Map<String, Object> params, TemplateWritter sb) {
 		tag.eval(this, params, sb);
 	}
 }

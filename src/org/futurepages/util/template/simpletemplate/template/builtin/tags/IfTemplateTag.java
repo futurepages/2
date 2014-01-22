@@ -9,7 +9,7 @@ import org.futurepages.util.template.simpletemplate.expressions.exceptions.Unexp
 import org.futurepages.util.template.simpletemplate.expressions.tree.Exp;
 import org.futurepages.util.template.simpletemplate.template.AbstractTemplateBlock;
 import org.futurepages.util.template.simpletemplate.template.TemplateBlock;
-import org.futurepages.util.template.simpletemplate.template.TemplateParser;
+import org.futurepages.util.template.simpletemplate.template.TemplateWritter;
 
 /**
  *
@@ -37,24 +37,16 @@ public class IfTemplateTag extends TemplateTag {
 	}
 
 	@Override
-	public void eval(AbstractTemplateBlock block, Map<String, Object> params, StringBuilder sb) {
+	public int doBody(AbstractTemplateBlock block, Map<String, Object> params, TemplateWritter sb) {
 		TemplateBlock actualBlock = (TemplateBlock) block;
 
 		Exp exp = actualBlock.getParams();
 
 		Object t = exp.eval(params);
 
-		if (block.getNextInner() != null) {
-			boolean test = (t != null) && (!isBool(t) || ((Boolean)t));
+		boolean test = (t != null) && (!isBool(t) || ((Boolean)t));
 
-			if (test) {
-				block.getNextInner().eval(params, sb);
-			}
-		}
-		
-		if (block.getNext() != null) {
-			block.getNext().eval(params, sb);
-		}
+		return test ? EVAL_BODY : SKIP_BODY;
 	}
 
 	@Override

@@ -53,5 +53,5 @@ public abstract class AbstractTemplateBlock {
 	
 	public abstract void toString(StringBuilder sb);
 
-	public abstract void eval(Map<String, Object> params, StringBuilder sb);
+	public abstract void eval(Map<String, Object> params, TemplateWritter sb);
 }
