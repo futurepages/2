@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.List;
@@ -129,13 +128,14 @@ public class EncodingUtil {
 	}
 
 	//Migração de projeto de ISO para UTF-8
-	public static void main(String[] args) throws URISyntaxException, Exception {
-		String path = "E:\\Users\\leandro\\Documents\\Workspaces\\netbeans\\intranet";
+	public static void main(String[] args) throws Exception {
+		String path = "E:\\Users\\leandro\\Documents\\Workspaces\\Idea\\Projects\\intranet";
 		String pathWEB = path + "\\web";
 //		String pathSRC = path + "\\src";
 //		String pathTEST = path + "\\test";
 
-		migratingISOtoUTF8(pathWEB, ".*\\.jsp");
+		migratingISOtoUTF8(pathWEB, ".*\\.tag");
+//		migratingISOtoUTF8(pathWEB, ".*\\.jsp");
 //		migratingISOtoUTF8(pathWEB, ".*\\.sql");
 //		migratingISOtoUTF8(pathWEB, ".*\\.htm");
 //		migratingISOtoUTF8(pathWEB, ".*\\.html");
