@@ -239,8 +239,16 @@ public class AlternativeHtmlTagReplacer extends HtmlTagReplacer {
 			String parteAbertura = matcher.group(1);
 			String mg3 = matcher.group(3);
 			String conteudo = mg3.trim();
-			String espacoInicio = (mg3.substring(0, 1).trim().equals("")?" ":"");
-            String espacoFinal = (mg3.substring(mg3.length()-1).trim().equals("")?" ":"");
+			String espacoInicio;
+			String espacoFinal;
+			if (!mg3.isEmpty()) {
+				espacoInicio = (mg3.substring(0, 1).trim().equals("")?" ":"");
+				espacoFinal = (mg3.substring(mg3.length()-1).trim().equals("")?" ":"");
+			}
+			else {
+				espacoInicio=" ";
+				espacoFinal="";
+			}
 			String parteFechar = matcher.group(4);
 
 			IterableString iter = new IterableString(Pattern.compile(HtmlRegex.attrsPattern()), parteAbertura);
