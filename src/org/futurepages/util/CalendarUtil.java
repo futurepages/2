@@ -88,6 +88,12 @@ public class CalendarUtil {
 		int milliseconds = 86400000;
 		return getDifference(start, end, milliseconds);
 	}
+	
+	// calcula os dias sem levar em contas as horas
+	public static int getDifferenceInAbsoluteDays(Calendar start, Calendar end) {
+		int milliseconds = 86400000;
+		return getDifference(DateUtil.dateToCalendar(start.getTime()), DateUtil.dateToCalendar(end.getTime()), milliseconds);
+	}
 
 	/** 1 minute == 3.600.000 miliseconds //(60 * 60 * 1000)*/
 	public static int getDifferenceInHours(Calendar start, Calendar end) {
