@@ -8,11 +8,32 @@
       <excludeFolder url="file://$MODULE_DIR$/dist" />
       <excludeFolder url="file://$MODULE_DIR$/doc" />
       <excludeFolder url="file://$MODULE_DIR$/out" />
-      <excludeFolder url="file://$MODULE_DIR$/test" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="futurepagesLib" level="application" />
+    <orderEntry type="module-library" scope="TEST">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/lib/futurepages-tests" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/lib/futurepages-tests" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/lib/futurepages-tests" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/lib/futurepages-tests" recursive="false" type="SOURCES" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" scope="TEST">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../../netbeans/urvsis/lib/jxl.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
 
