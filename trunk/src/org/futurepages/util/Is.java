@@ -135,21 +135,31 @@ public class Is {
 			if(palavra.length()>1){
 				String primeiraLetra = String.valueOf(palavra.charAt(0));
 				String segundaLetra = String.valueOf(palavra.charAt(1));
-				if(primeiraLetra.equals(primeiraLetra.toLowerCase())
-				   && (segundaLetra.equals(segundaLetra.toUpperCase()) && !segundaLetra.equals("'") && !segundaLetra.equals("`") ) ){
+
+				//vendo se é letra o primeiro caractere.
+				if(primeiraLetra.toUpperCase().equals(primeiraLetra.toLowerCase())){
 					return false;
 				}
+
+				if(primeiraLetra.equals(primeiraLetra.toLowerCase())
+				   && (segundaLetra.equals(segundaLetra.toUpperCase())
+				   && !segundaLetra.equals("'") && !segundaLetra.equals("`") && !segundaLetra.equals("’")) ){
+					return false;
+				}
+
 				if(palavra.length()>3){
 					if(primeiraLetra.equals(primeiraLetra.toLowerCase())
-					&& !palavra.contains("'") && !palavra.contains("`")){
+					&& !palavra.contains("'") && !palavra.contains("`") && !palavra.contains("’")){
 						return false;
 					}
 				}
-			}else if(palavra.equalsIgnoreCase("e")){
+			}
+			else if(palavra.equalsIgnoreCase("e")){
 				if(palavra.equals("E")){
 					return false;
 				}
 			}
+
 			if(palavra.equalsIgnoreCase("de")
 			|| palavra.equalsIgnoreCase("do")
 			|| palavra.equalsIgnoreCase("da")
@@ -169,10 +179,70 @@ public class Is {
 				  || palavra.equalsIgnoreCase("VI")
 				  || palavra.equalsIgnoreCase("VII")
 				  || palavra.equalsIgnoreCase("VIII")
-				  //TO-DO seria interessante os demais??
+				  || palavra.equalsIgnoreCase("IX")
+				  || palavra.equalsIgnoreCase("X")
+				  || palavra.equalsIgnoreCase("XI")
+				  || palavra.equalsIgnoreCase("XII")
+				  || palavra.equalsIgnoreCase("XIII")
+				  || palavra.equalsIgnoreCase("XIV")
+				  || palavra.equalsIgnoreCase("XV")
+				  || palavra.equalsIgnoreCase("XVI")
+				  || palavra.equalsIgnoreCase("XVII")
+				  || palavra.equalsIgnoreCase("XVII")
+				  || palavra.equalsIgnoreCase("XVIII")
+				  || palavra.equalsIgnoreCase("XIX")
+				  || palavra.equalsIgnoreCase("XX")
+				  || palavra.equalsIgnoreCase("XXI")
+				  || palavra.equalsIgnoreCase("XXII")
+				  || palavra.equalsIgnoreCase("XXIII")
+				  || palavra.equalsIgnoreCase("XXIV")
+				  || palavra.equalsIgnoreCase("XXV")
+				  || palavra.equalsIgnoreCase("XXVI")
+				  || palavra.equalsIgnoreCase("XXVII")
+				  || palavra.equalsIgnoreCase("XXVIII")
+				  || palavra.equalsIgnoreCase("XXVIX")
+				  || palavra.equalsIgnoreCase("XXX")
+				  //TODO seria interessante os demais??
 			){
 				if(!palavra.equals(palavra.toUpperCase())){
 					return false;
+				}
+			}else{
+				if(palavra.length()==2 && !The.capitalizedWord(palavra).equals(palavra)){
+					if(palavra.equals("dI") || !palavra.equalsIgnoreCase("di")){
+						return false;
+					}
+				}
+				if(palavra.toUpperCase().equals(palavra)){
+					return false;
+				}else{
+						if(palavra.contains("'") || palavra.contains("`") || palavra.contains("’")){
+							if(palavra.length()>3){
+								for(int i = 3; i<palavra.length();i++){
+									String letra = String.valueOf(palavra.charAt(i));
+									if(letra.toUpperCase().equals(letra)){
+										return false;
+									}
+								}
+							}else{ //3 caracteres com aspostofo, so pode no meio
+								String letra = String.valueOf(palavra.charAt(2));
+								if(letra.toUpperCase().equals(letra)){
+									return false;
+								}
+								letra = String.valueOf(palavra.charAt(0));
+
+								if(!letra.toUpperCase().equals(letra)){
+									return false;
+								}
+							}
+						}else if(palavra.length()>2){
+							for(int i = 2; i<palavra.length();i++){
+								String letra = String.valueOf(palavra.charAt(i));
+								if(letra.toUpperCase().equals(letra)){
+									return false;
+								}
+						}
+					}
 				}
 			}
 		}
