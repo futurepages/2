@@ -1,5 +1,6 @@
 package org.futurepages.util.template.simpletemplate.template;
 
+import org.futurepages.util.template.simpletemplate.util.ContextTemplateTag;
 import java.util.Map;
 import org.futurepages.util.template.simpletemplate.expressions.tree.Exp;
 import org.futurepages.util.template.simpletemplate.template.builtin.tags.TemplateTag;
@@ -53,7 +54,7 @@ public class TemplateBlock extends AbstractTemplateBlock {
 	}
 
 	@Override
-	public void eval(Map<String, Object> params, TemplateWritter sb) {
-		tag.eval(this, params, sb);
+	public void eval(ContextTemplateTag context, TemplateWritter sb) {
+		tag.eval(this, context, sb);
 	}
 }

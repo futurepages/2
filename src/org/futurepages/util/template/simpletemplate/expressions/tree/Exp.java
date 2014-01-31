@@ -1,6 +1,6 @@
 package org.futurepages.util.template.simpletemplate.expressions.tree;
 
-import java.util.Map;
+import org.futurepages.util.template.simpletemplate.util.ContextTemplateTag;
 
 /**
  *
@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public interface Exp {
 
-	public Object eval(Map<String, Object> params);
+	public Object eval(ContextTemplateTag context);
 
 	public void toString(StringBuilder sb);
 }

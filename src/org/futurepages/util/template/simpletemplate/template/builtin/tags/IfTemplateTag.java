@@ -1,6 +1,5 @@
 package org.futurepages.util.template.simpletemplate.template.builtin.tags;
 
-import java.util.Map;
 import java.util.regex.Pattern;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.BadExpression;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.ExpectedExpression;
@@ -10,6 +9,7 @@ import org.futurepages.util.template.simpletemplate.expressions.tree.Exp;
 import org.futurepages.util.template.simpletemplate.template.AbstractTemplateBlock;
 import org.futurepages.util.template.simpletemplate.template.TemplateBlock;
 import org.futurepages.util.template.simpletemplate.template.TemplateWritter;
+import org.futurepages.util.template.simpletemplate.util.ContextTemplateTag;
 
 /**
  *
@@ -33,16 +33,16 @@ public class IfTemplateTag extends TemplateTag {
 		String ps = l_brackets.matcher(expression).replaceFirst("");
 		ps = r_brackets.matcher(ps).replaceFirst("");
 		
-		return super.evalExpression(ps);
+		return defaultEvalExpression(ps);
 	}
 
 	@Override
-	public int doBody(AbstractTemplateBlock block, Map<String, Object> params, TemplateWritter sb) {
+	public int doBody(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWritter sb) {
 		TemplateBlock actualBlock = (TemplateBlock) block;
 
 		Exp exp = actualBlock.getParams();
 
-		Object t = exp.eval(params);
+		Object t = exp.eval(context);
 
 		boolean test = (t != null) && (!isBool(t) || ((Boolean)t));
 

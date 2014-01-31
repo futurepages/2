@@ -2,6 +2,7 @@ package org.futurepages.util.template.simpletemplate.expressions.operators.uneva
 
 import java.util.Map;
 import org.futurepages.util.template.simpletemplate.expressions.operators.core.Operator;
+import org.futurepages.util.template.simpletemplate.util.ContextTemplateTag;
 
 
 /**
@@ -11,7 +12,7 @@ import org.futurepages.util.template.simpletemplate.expressions.operators.core.O
 public abstract class Parenthesis extends Operator {
 
 	@Override
-	public Object eval(Map<String, Object> params) {
+	public Object eval(ContextTemplateTag context) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }

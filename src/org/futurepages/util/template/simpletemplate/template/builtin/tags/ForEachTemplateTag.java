@@ -1,9 +1,7 @@
 package org.futurepages.util.template.simpletemplate.template.builtin.tags;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.BadExpression;
@@ -18,6 +16,7 @@ import org.futurepages.util.template.simpletemplate.template.TemplateWritter;
 import org.futurepages.util.template.simpletemplate.template.builtin.customtagparams.ForEachArguments;
 import org.futurepages.util.template.simpletemplate.template.builtin.customtagparams.NumericalList;
 import org.futurepages.util.template.simpletemplate.template.builtin.customtagparams.ObjectArrayIterator;
+import org.futurepages.util.template.simpletemplate.util.ContextTemplateTag;
 
 /**
  *
@@ -43,19 +42,17 @@ public class ForEachTemplateTag extends TemplateTag {
 		super("forEach");
 	}
 	
-	protected void fromBuildingArray(TemplateBlock block, Map<String, Object> params, ForEachArguments fparams, NumericalList nlist, TemplateWritter sb) {
-		Map<String, Object> ps = new HashMap<String, Object>(params);
-
+	protected void fromBuildingArray(TemplateBlock block, ContextTemplateTag context, ForEachArguments fparams, NumericalList nlist, TemplateWritter sb) {
 		for (int el : nlist) {
 			if (fparams.getVar() != null) {
-				ps.put(fparams.getVar(), el);
+				context.put(fparams.getVar(), el);
 			}
 			
-			evalBody(block, params, sb);
+			evalBody(block, context, sb);
 		}
 	}
 	
-	protected void fromList(TemplateBlock block, Map<String, Object> params, ForEachArguments fparams, Object result, TemplateWritter sb) {
+	protected void fromList(TemplateBlock block, ContextTemplateTag context, ForEachArguments fparams, Object result, TemplateWritter sb) {
 
 		if (result!= null) {
 
@@ -68,20 +65,18 @@ public class ForEachTemplateTag extends TemplateTag {
 			}
 
 			if (it != null) {
-				Map<String, Object> ps = new HashMap<String, Object>(params);
-
 				int i = 0;
 				while (it.hasNext()) {
 					Object el = it.next();
 
 					if (fparams.getVar() != null) {
-						ps.put(fparams.getVar(), el);
+						context.put(fparams.getVar(), el);
 					}
 					if (fparams.getCounter() != null) {
-						ps.put(fparams.getCounter(), i);
+						context.put(fparams.getCounter(), i);
 					}
 
-					evalBody(block, ps, sb);
+					evalBody(block, context, sb);
 
 					i += 1;
 				}
@@ -121,7 +116,7 @@ public class ForEachTemplateTag extends TemplateTag {
 			String var = m2.group(list_group_var);
 			String counter = m2.group(list_group_counter);
 
-			Exp exp = super.evalExpression(list);
+			Exp exp = defaultEvalExpression(list);
 
 			return new ForEachArguments(exp, var, counter);
 		} else {
@@ -131,16 +126,16 @@ public class ForEachTemplateTag extends TemplateTag {
 	}
 
 	@Override
-	public int doBody(AbstractTemplateBlock block, Map<String, Object> params, TemplateWritter sb) {
+	public int doBody(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWritter sb) {
 		TemplateBlock actualBlock = (TemplateBlock) block;
 		ForEachArguments ps = (ForEachArguments) actualBlock.getParams();
 
-		Object result = ps.eval(params);
+		Object result = ps.eval(context);
 
 		if (result instanceof NumericalList) {
-			fromBuildingArray(actualBlock, params, ps, (NumericalList)result, sb);
+			fromBuildingArray(actualBlock, context, ps, (NumericalList)result, sb);
 		} else {
-			fromList(actualBlock, params, ps, result, sb);
+			fromList(actualBlock, context, ps, result, sb);
 		}
 
 		return SKIP_BODY;

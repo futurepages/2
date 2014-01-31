@@ -27,6 +27,8 @@ public class TemplateTagInitializer {
 	private void initBuildin() {
 		TemplateTag.addBuiltinTag(new IfTemplateTag());
 		TemplateTag.addBuiltinTag(new ForEachTemplateTag());
+		TemplateTag.addBuiltinTag(new SetTemplateTag());
+		TemplateTag.addBuiltinTag(new ValueFormatterTemplateTag());
 	}
 	
 	public void addTag(TemplateTag tag) {

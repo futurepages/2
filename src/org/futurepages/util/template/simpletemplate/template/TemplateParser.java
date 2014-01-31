@@ -53,7 +53,9 @@ public class TemplateParser {
 		// a passagem de tipos primitivos por referência.
 		Wrap<Integer> lastLength = new Wrap(0);
 
-		TemplateBlockBase base = new TemplateBlockBase();
+		int initialBufferSize = (int)((float)input.length() * 1.3f);
+		
+		TemplateBlockBase base = new TemplateBlockBase(initialBufferSize);
 		Matcher tagMatcher = openPattern.matcher(input);
 		AbstractTemplateBlock block = base;
 		MyStack<AbstractTemplateBlock> stack = new MyStack<AbstractTemplateBlock>();

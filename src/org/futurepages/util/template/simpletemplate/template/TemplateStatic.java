@@ -1,8 +1,8 @@
 package org.futurepages.util.template.simpletemplate.template;
 
-import java.util.Map;
 import org.futurepages.util.template.simpletemplate.expressions.tree.Exp;
 import org.futurepages.util.template.simpletemplate.template.exceptions.TemplateException;
+import org.futurepages.util.template.simpletemplate.util.ContextTemplateTag;
 
 /**
  *
@@ -57,17 +57,17 @@ public class TemplateStatic extends AbstractTemplateBlock {
 
 	// Falta ajeitar essa onça
 	@Override
-	public void eval(Map<String, Object> params, TemplateWritter sb) {
+	public void eval(ContextTemplateTag context, TemplateWritter sb) {
 		for (Object ob : content) {
 			if (ob instanceof Exp) {
-				sb.append(((Exp)ob).eval(params));
+				sb.append(((Exp)ob).eval(context));
 			} else {
 				sb.append(ob);
 			}
 		}
 
 		if (getNext() != null) {
-			getNext().eval(params, sb);
+			getNext().eval(context, sb);
 		}
 	}
 }

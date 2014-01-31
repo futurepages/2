@@ -1,13 +1,13 @@
 package org.futurepages.util.template.simpletemplate.template.builtin.customtagparams;
 
-import java.util.Map;
 import org.futurepages.util.template.simpletemplate.expressions.tree.Exp;
+import org.futurepages.util.template.simpletemplate.util.ContextTemplateTag;
 
 /**
  *
  * @author thiago
  */
-public class ForEachArguments implements Exp {
+public class ForEachArguments implements TagParams {
 
 	private final Exp exp;
 	private final NumericalList iterable;
@@ -47,11 +47,11 @@ public class ForEachArguments implements Exp {
 	}
 
 	@Override
-	public Object eval(Map<String, Object> params) {
+	public Object eval(ContextTemplateTag context) {
 		if (exp != null) {
-			return exp.eval(params);
+			return exp.eval(context);
 		} else {
-			return iterable.eval(params);
+			return iterable.eval(context);
 		}
 	}
 

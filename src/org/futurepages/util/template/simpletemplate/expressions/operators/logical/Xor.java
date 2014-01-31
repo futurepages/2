@@ -1,7 +1,7 @@
 package org.futurepages.util.template.simpletemplate.expressions.operators.logical;
 
-import java.util.Map;
 import org.futurepages.util.template.simpletemplate.expressions.operators.core.BinaryOperator;
+import org.futurepages.util.template.simpletemplate.util.ContextTemplateTag;
 
 
 /**
@@ -11,9 +11,9 @@ import org.futurepages.util.template.simpletemplate.expressions.operators.core.B
 public class Xor extends BinaryOperator {
 
 	@Override
-	public Object eval(Map<String, Object> params) {
-		Object left = getLeft().eval(params);
-		Object right = getRight().eval(params);
+	public Object eval(ContextTemplateTag context) {
+		Object left = getLeft().eval(context);
+		Object right = getRight().eval(context);
 		
 		return execute(left, right);
 	}

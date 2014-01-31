@@ -1,6 +1,6 @@
 package org.futurepages.util.template.simpletemplate.template;
 
-import java.util.Map;
+import org.futurepages.util.template.simpletemplate.util.ContextTemplateTag;
 
 /**
  *
@@ -53,5 +53,5 @@ public abstract class AbstractTemplateBlock {
 	
 	public abstract void toString(StringBuilder sb);
 
-	public abstract void eval(Map<String, Object> params, TemplateWritter sb);
+	public abstract void eval(ContextTemplateTag context, TemplateWritter sb);
 }
