@@ -1,6 +1,7 @@
 package org.futurepages.util.template.simpletemplate.template;
 
 import java.util.Map;
+import org.futurepages.util.template.simpletemplate.util.ContextTemplateTag;
 
 /**
  *
@@ -8,7 +9,14 @@ import java.util.Map;
  */
 public class TemplateBlockBase extends AbstractTemplateBlock {
 	
+	private int initialBufferSize;
+	
 	public TemplateBlockBase() {
+		initialBufferSize = 128;
+	}
+
+	public TemplateBlockBase(int initialBufferSize) {
+		this.initialBufferSize = initialBufferSize;
 	}
 	
 	@Override
@@ -32,14 +40,24 @@ public class TemplateBlockBase extends AbstractTemplateBlock {
 	}
 
 	public String eval(Map<String, Object> params) {
-		TemplateWritter sb = new TemplateWritter();		
-		eval(params, sb);
+		TemplateWritter sb = new TemplateWritter(initialBufferSize);
+		
+		if (params instanceof ContextTemplateTag) {
+			eval((ContextTemplateTag)params, sb);
+		} else {
+			eval(params, sb);
+		}
 		
 		return sb.toString();
 	}
 
-	@Override
 	public void eval(Map<String, Object> params, TemplateWritter sb) {
-		getNextInner().eval(params, sb);
+		ContextTemplateTag context = new ContextTemplateTag(params);
+		eval(context, sb);
+	}
+
+	@Override
+	public void eval(ContextTemplateTag context, TemplateWritter sb) {
+		getNextInner().eval(context, sb);
 	}
 }

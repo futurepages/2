@@ -15,6 +15,10 @@ public class TemplateWritter implements Serializable {
 		sb = new StringBuilder();
 	}
 
+	public TemplateWritter(int capacity) {
+		sb = new StringBuilder(capacity);
+	}
+
 	public TemplateWritter(String str) {
 		sb = new StringBuilder(str);
 	}
@@ -168,6 +172,14 @@ public class TemplateWritter implements Serializable {
 			sb.append("null");
 		}
 		return this;
+	}
+
+	public int length() {
+		return sb.length();
+	}
+
+	public boolean isEmpty() {
+		return sb.length() == 0;
 	}
 
 	@Override

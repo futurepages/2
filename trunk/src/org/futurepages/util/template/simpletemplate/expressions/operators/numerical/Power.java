@@ -1,10 +1,10 @@
 package org.futurepages.util.template.simpletemplate.expressions.operators.numerical;
 
-import java.util.Map;
 import org.futurepages.util.template.simpletemplate.expressions.operators.core.BinaryOperator;
 import org.futurepages.util.template.simpletemplate.expressions.primitivehandle.Const;
 import org.futurepages.util.template.simpletemplate.expressions.primitivehandle.Infinity;
 import org.futurepages.util.template.simpletemplate.expressions.primitivehandle.NumHandle;
+import org.futurepages.util.template.simpletemplate.util.ContextTemplateTag;
 
 
 /**
@@ -51,9 +51,9 @@ public class Power extends BinaryOperator {
 	
 	
 	@Override
-	public Object eval(Map<String, Object> params) {
-		Object left = getLeft().eval(params);
-		Object right = getRight().eval(params);
+	public Object eval(ContextTemplateTag context) {
+		Object left = getLeft().eval(context);
+		Object right = getRight().eval(context);
 
 		return execute(left, right);
 	}

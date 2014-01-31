@@ -1,7 +1,7 @@
 package org.futurepages.util.template.simpletemplate.template.builtin.tags;
 
 import java.util.HashMap;
-import java.util.Map;
+import java.util.regex.Pattern;
 import static org.futurepages.util.StringUtils.concat;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.BadExpression;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.ExpectedExpression;
@@ -13,6 +13,7 @@ import org.futurepages.util.template.simpletemplate.template.AbstractTemplateBlo
 import org.futurepages.util.template.simpletemplate.template.TemplateWritter;
 import org.futurepages.util.template.simpletemplate.template.exceptions.TemplateTagDoesNotExists;
 import org.futurepages.util.template.simpletemplate.template.exceptions.TemplateWithSameNameAlreadyExistsException;
+import org.futurepages.util.template.simpletemplate.util.ContextTemplateTag;
 
 /**
  *
@@ -24,7 +25,7 @@ public abstract class TemplateTag {
 	protected static final HashMap<String, TemplateTag> customTags = new HashMap<String, TemplateTag>();
 	
 	// Split as strings pelo caractere |. Se houver ||, não vai fazer o split nest ponto.
-	// Pattern p = Pattern.compile("(?<!\\|)\\|(?!\\|)");
+	private static Pattern splitParams = Pattern.compile("(?<!\\|)\\|(?!\\|)");
 
 	public static final int SKIP_BODY = 0;
 	public static final int EVAL_BODY = 1;
@@ -59,6 +60,21 @@ public abstract class TemplateTag {
 		throw new TemplateTagDoesNotExists(concat("There is no ", tagName, " registred."));
 	}
 	
+	public static Exp defaultEvalExpression(String expression) throws ExpectedOperator, ExpectedExpression, BadExpression, Unexpected {
+		Parser p = new Parser(expression);
+		return p.parse();
+	}
+	
+	public static String []splitParams(String str) {
+		String []params = splitParams.split(str);
+
+		for (int i = 0, len = params.length; i < len; i++) {
+			params[i] = params[i].trim();
+		}
+
+		return params;
+	}
+	
 	private final String tagName;
 	
 	public TemplateTag(String tagName) {
@@ -69,23 +85,30 @@ public abstract class TemplateTag {
 		return tagName;
 	}
 	
-	public Exp evalExpression(String expression) throws ExpectedOperator, ExpectedExpression, BadExpression, Unexpected {
-		Parser p = new Parser(expression);
-		return p.parse();
-	}
+	public abstract Exp evalExpression(String expression) throws ExpectedOperator, ExpectedExpression, BadExpression, Unexpected;
 	
 	public abstract TemplateTag getNewInstance();
 	
 	public abstract boolean hasOwnContext();
 	
-	public void eval(AbstractTemplateBlock block, Map<String, Object> params, TemplateWritter sb) {		
-		int isDoBody = doBody(block, params, sb);
+	public void eval(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWritter sb) {		
+		int isDoBody = doBody(block, context, sb);
 		AbstractTemplateBlock inner = block.getNextInner();
 
 		switch (isDoBody) {
 			case EVAL_BODY:
 				if (inner != null) {
-					evalBody(block, params, sb);
+					boolean hasOwnContext;
+
+					if (hasOwnContext = hasOwnContext()) {
+						context.createNewContext();
+					}
+
+					evalBody(block, context, sb);
+
+					if (hasOwnContext) {
+						context.popContext();
+					}
 				}
 				break;
 
@@ -99,17 +122,17 @@ public abstract class TemplateTag {
 		AbstractTemplateBlock next = block.getNext();
 		
 		if (next != null) {
-			next.eval(params, sb);
+			next.eval(context, sb);
 		}
 	}
 	
-	public abstract int doBody(AbstractTemplateBlock block, Map<String, Object> params, TemplateWritter sb);
+	public abstract int doBody(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWritter sb);
 	
-	protected void evalBody(AbstractTemplateBlock block, Map<String, Object> params, TemplateWritter sb) {
+	protected void evalBody(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWritter sb) {
 		AbstractTemplateBlock inner = block.getNextInner();
 
 		if (inner != null) {
-			inner.eval(params, sb);
+			inner.eval(context, sb);
 		}
 	}
 }

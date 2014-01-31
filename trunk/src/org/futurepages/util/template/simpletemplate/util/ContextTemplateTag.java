@@ -1,4 +1,4 @@
-package org.futurepages.util.template.simpletemplate.template;
+package org.futurepages.util.template.simpletemplate.util;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -8,13 +8,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.futurepages.util.template.simpletemplate.util.MyStack;
 
 /**
  *
  * @author thiago
  */
-// @TODO: Ao calcular o size, ver os elementos que estão repetindo nos contextos anteriores;
+// @TODO: Adicionar leitura ao mapa do Params
 public class ContextTemplateTag implements Map<String, Object> {
 	
 	private static interface HashMapAcces {
@@ -80,6 +79,7 @@ public class ContextTemplateTag implements Map<String, Object> {
 	private static HashMapAcces hashMapAccess;
 	private static int numRuntimeErrors = 0;
 	private static final int maxRuntimeErrors = 5;
+	private static final GetFromMap.RetrieveDataMap defaultRetrieverDataMap = new GetFromMap.NonRecuriveRetrieveDataMap();
 	
 	private static Object get(List<HashMap<String, Object>> maps, String key) {
 		try {
@@ -114,22 +114,54 @@ public class ContextTemplateTag implements Map<String, Object> {
 	private MyStack<HashMap<String, Object>> contextStack;
 	private int size = 0;
 	private boolean mapChanged = false;
+	private GetFromMap.RetrieveDataMap retrieverDataMap;
 	//private MyStack<AbstractTemplateBlock> genealogy;
 	
 	public ContextTemplateTag() {
 		contextStack = new MyStack<HashMap<String, Object>>();
+		retrieverDataMap = defaultRetrieverDataMap;
+		//genealogy = new MyStack<AbstractTemplateBlock>();
+	}
+
+	public ContextTemplateTag(GetFromMap.RetrieveDataMap retrieverDataMap) {
+		contextStack = new MyStack<HashMap<String, Object>>();
+		this.retrieverDataMap = retrieverDataMap;
 		//genealogy = new MyStack<AbstractTemplateBlock>();
 	}
 	
-	public ContextTemplateTag(HashMap<String, Object> params) {
+	public ContextTemplateTag(Map<String, Object> params) {
 		this();
-		contextStack.push(params);
+
+		if (params instanceof HashMap) {
+			contextStack.push((HashMap<String, Object>)params);
+		} else {
+			contextStack.push(new HashMap<String, Object>()).peek().putAll(params);
+		}
+
+		size = params.size();
+		mapChanged = false;
+	}
+
+	public ContextTemplateTag(Map<String, Object> params, GetFromMap.RetrieveDataMap retrieverDataMap) {
+		this(retrieverDataMap);
+
+		if (params instanceof HashMap) {
+			contextStack.push((HashMap<String, Object>)params);
+		} else {
+			contextStack.push(new HashMap<String, Object>()).peek().putAll(params);
+		}
+
 		size = params.size();
 		mapChanged = false;
 	}
 	
-	public ContextTemplateTag createNewContext(HashMap<String, Object> params) {
-		contextStack.push(params);
+	public ContextTemplateTag createNewContext(Map<String, Object> params) {
+		if (params instanceof HashMap) {
+			contextStack.push((HashMap<String, Object>)params);
+		} else {
+			contextStack.push(new HashMap<String, Object>()).peek().putAll(params);
+		}
+
 		size = size(contextStack.getList());
 		mapChanged = false;
 		
@@ -257,5 +289,9 @@ public class ContextTemplateTag implements Map<String, Object> {
 		}
 
 		return plainMap.entrySet();
+	}
+	
+	public Object getValue(String key) {
+		return retrieverDataMap.getValue(key, this);
 	}
 }

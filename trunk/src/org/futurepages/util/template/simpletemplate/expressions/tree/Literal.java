@@ -1,6 +1,7 @@
 package org.futurepages.util.template.simpletemplate.expressions.tree;
 
 import java.util.Map;
+import org.futurepages.util.template.simpletemplate.util.ContextTemplateTag;
 
 /**
  *
@@ -25,7 +26,7 @@ public class Literal implements Token {
 	}
 	
 	@Override
-	public Object eval(Map<String, Object> params) {
+	public Object eval(ContextTemplateTag context) {
 		return val;
 	}
 	
