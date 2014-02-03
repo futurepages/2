@@ -75,10 +75,15 @@ public class PermissionFilter implements Filter {
 			}
 
 			if (roles != null) {
+				boolean hasPermission = false;
 				for (String roleId : roles) {
-					if (!action.loggedUser().hasRole(roleId)) {
-						return Authentication.accessDenied(chain);
+					if (action.loggedUser().hasRole(roleId)) {
+						hasPermission = true;
+						break;
 					}
+				}
+				if(!hasPermission){
+					return Authentication.accessDenied(chain);
 				}
 			}
 		}
