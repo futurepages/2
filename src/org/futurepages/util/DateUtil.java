@@ -374,7 +374,7 @@ public class DateUtil {
 	public static Date parseView(String dateString) {
 		if(dateString.length()==10){
 			if(dateString.charAt(2)!='/' || dateString.charAt(5)!='/'){
-				throw new RuntimeException("Invalida format of date: "+dateString);
+				throw new RuntimeException("Invalid format of date: "+dateString);
 			}
 		}
 		return parse(dateString, DateFormatEnum.VIEW_DATE_PT_BR);
