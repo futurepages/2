@@ -3,8 +3,6 @@ package org.futurepages.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -246,10 +244,8 @@ public class InjectionUtils {
 			}
 		}
 		else if (className.equals("java.util.Calendar") && loc != null) {
-			DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, loc); // change
-			df.setLenient(false);
 			try {
-				Date date = df.parse(value);
+				Date date = DateUtil.parseView(value);
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTime(date);
 				newValue = calendar;
@@ -257,17 +253,14 @@ public class InjectionUtils {
 				return null;
 			}
 		} else if (className.equals("java.util.Date") && loc != null && LocaleManager.getDateMask(loc) != null) {
-			SimpleDateFormat sdf = new SimpleDateFormat(LocaleManager.getDateMask(loc));
 			try {
-				newValue = sdf.parse(value);
+				newValue = DateUtil.parseView(value);
 			} catch (Exception e) {
 				return null;
 			}
 		} else if (className.equals("java.util.Date") && loc != null) {
-			DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, loc); // change
-			df.setLenient(false);
 			try {
-				newValue = df.parse(value);
+				newValue = DateUtil.parseView(value);
 			} catch (Exception e) {
 				return null;
 			}
