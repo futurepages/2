@@ -342,12 +342,10 @@ public class DateUtil {
 	 * the default "yyyy-MM-dd" is assumed and returns null if the input string does not match the
 	 * format.
 	 *
-	 * @param <b>dateString
-	 *            </b> The string to be converted to a Date
-	 * @param <b>formatString
-	 *            </b> The format of the string
+	 * @param dateString The string to be converted to a Date
+	 * @param formatString The format of the string
 	 *
-	 * @return <b>Date</b> The Date object of the string parsed
+	 * @return The Date object of the string parsed
 	 */
 	public static Date parse(String dateString, DateFormatEnum formatString) {
 		if (formatString == null) {
@@ -373,8 +371,16 @@ public class DateUtil {
 		return parse(dateString, DateFormatEnum.DATE);
 	}
 
+	public static Date parseView(String dateString) {
+		if(dateString.length()==10){
+			if(dateString.charAt(2)!='/' || dateString.charAt(5)!='/'){
+				throw new RuntimeException("Invalida format of date: "+dateString);
+			}
+		}
+		return parse(dateString, DateFormatEnum.VIEW_DATE_PT_BR);
+	}
+
 	/**
-	 * @see format(Date date)
 	 * @return format(calendar.getTime())
 	 */
 	public static String format(Calendar calendar) {
@@ -382,7 +388,6 @@ public class DateUtil {
 	}
 
 	/**
-	 * @see DateUtil.format(Date date, DateFormatEnum mask)
 	 * @return format(calendar ,mask.getMask())
 	 */
 	public static String format(Calendar calendar, DateFormatEnum mask) {
@@ -390,7 +395,6 @@ public class DateUtil {
 	}
 
 	/**
-	 * @see format(Date date, String mask)
 	 * @return format(calendar.getTime(),mask)
 	 */
 	public static String format(Calendar calendar, String mask) {
