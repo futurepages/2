@@ -105,6 +105,7 @@ public class InitManager extends AbstractApplicationManager{
         FormatterManager.addFormatter("time"			   , new TimeFormatter());
         FormatterManager.addFormatter("uppercase"		   , new UpperCaseFormatter());
 		FormatterManager.addFormatter("url"                , new UrlFormatter());
+		FormatterManager.addFormatter("collapsedText"      , new CollapsedTextFormatter());
     }
 
 	@Override
