@@ -282,6 +282,11 @@ public abstract class AbstractAction implements Pageable, Action {
 		return Authentication.accessDenied(this.getChain());
 	}
 
+	public String accessDenied(String accessMessage){
+		output("accessMessage", accessMessage);
+		return accessDenied();
+	}
+
 	@Override
 	public boolean hasSuccess() {
 		return (messages.get(Action.SUCCESS) != null) || (getRequest().getParameter(Action.SUCCESS)!=null);

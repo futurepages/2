@@ -78,6 +78,7 @@ public class InitManager extends AbstractApplicationManager{
         FormatterManager.addFormatter("anniversaryAbbr"    , new AnniversaryAbbrFormatter());
         FormatterManager.addFormatter("bigLong" 	       , new BigLongFormatter());
         FormatterManager.addFormatter("collectionSize" 	   , new CollectionSizeFormatter());
+		FormatterManager.addFormatter("collapsedText"      , new CollapsedTextFormatter());
         FormatterManager.addFormatter("cpfCnpj"		 	   , new CPFCNPJFormatter());
         FormatterManager.addFormatter("date"         	   , new DateFormatter());
         FormatterManager.addFormatter("dateTime"     	   , new DateTimeFormatter());
@@ -85,7 +86,7 @@ public class InitManager extends AbstractApplicationManager{
         FormatterManager.addFormatter("extensionFileName"  , new ExtensionFileNameFormatter());
         FormatterManager.addFormatter("float"        	   , new FloatFormatter());
         FormatterManager.addFormatter("fullDate"		   , new FullDateTimeFormatter(false));
-        FormatterManager.addFormatter("fullDateTime"	   , new FullDateTimeFormatter(true));		
+        FormatterManager.addFormatter("fullDateTime"	   , new FullDateTimeFormatter(true));
         FormatterManager.addFormatter("fullDateLiteral"	   , new FullDateTimeFormatter(false,true));
         FormatterManager.addFormatter("html"        	   , new HTMLFormatter());
         FormatterManager.addFormatter("javascript"         , new JavascriptFormatter());
@@ -105,7 +106,6 @@ public class InitManager extends AbstractApplicationManager{
         FormatterManager.addFormatter("time"			   , new TimeFormatter());
         FormatterManager.addFormatter("uppercase"		   , new UpperCaseFormatter());
 		FormatterManager.addFormatter("url"                , new UrlFormatter());
-		FormatterManager.addFormatter("collapsedText"      , new CollapsedTextFormatter());
     }
 
 	@Override

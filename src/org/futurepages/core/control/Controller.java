@@ -30,6 +30,7 @@ import org.futurepages.core.consequence.ConsequenceProvider;
 import org.futurepages.core.consequence.DefaultConsequenceProvider;
 import org.futurepages.core.context.MapContext;
 import org.futurepages.core.exception.DefaultExceptionLogger;
+import org.futurepages.exceptions.PageNotFoundException;
 import org.futurepages.filters.GlobalFilterFreeFilter;
 import org.futurepages.core.formatter.FormatterManager;
 import org.futurepages.core.input.RequestInput;
@@ -221,7 +222,7 @@ public class Controller extends HttpServlet {
 			if (AbstractApplicationManager.getDefaultAction() != null) {
 				ac = AbstractApplicationManager.getDefaultAction();
 			} else {
-				throw new ServletException("Could not find the action for actionName: " + actionName + (innerAction != null ? "." + innerAction : ""));
+				throw new PageNotFoundException("Could not find the action for actionName: " + actionName + (innerAction != null ? "." + innerAction : ""));
 			}
 		}
 

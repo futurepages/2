@@ -12,6 +12,7 @@ import org.futurepages.core.action.Manipulable;
 import org.futurepages.core.control.Controller;
 import org.futurepages.core.control.InvocationChain;
 import org.futurepages.exceptions.FuturepagesServletException;
+import org.futurepages.exceptions.PageNotFoundException;
 import org.futurepages.exceptions.ServletErrorException;
 import org.futurepages.util.DateUtil;
 import org.futurepages.util.EncodingUtil;
@@ -34,21 +35,27 @@ public class DefaultExceptionLogger implements ExceptionLogger, Manipulable{
 	}
 
 	public String execute(Throwable throwable, String errorType, HttpServletRequest req) {
+
+		boolean pageNotFoundEx = (throwable instanceof PageNotFoundException);
+
 		String numeroProtocolo = System.currentTimeMillis()+"-"+Thread.currentThread().getId();
 
 		InvocationChain chain = Controller.getInstance()!=null ? Controller.getInstance().getChain() : null;
 		String exceptionId =  StringUtils.concat("[",errorType.toUpperCase(),"] ",numeroProtocolo);
-        log(exceptionId , "  ("  , DateUtil.viewDateTime(new Date()) , ") >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        log(exceptionId , "  ("  , DateUtil.viewDateTime(new Date()) , ") >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 		if(chain!=null){
 			if(req == null){
 				req =  chain.getAction().getRequest();
 			}
 		}
-						 
-		throwable.printStackTrace();
 
-		System.out.println();
-		
+		if(!pageNotFoundEx){
+			throwable.printStackTrace();
+		} else {
+			log("\n[ PAGE NOT FOUND - PAGE NOT FOUND - unnecessary stack trace. ]\n");
+		}
+
+
 		if(req!=null){
 			log(">[url    ]  ", req.getRequestURL().toString(), (req.getQueryString()!=null?"?"+req.getQueryString():""));
 			log(">[referer]  ", req.getHeader("referer"));
@@ -60,51 +67,53 @@ public class DefaultExceptionLogger implements ExceptionLogger, Manipulable{
 			}
 			log(">[method ]  ", req.getMethod());
 
-			System.out.print(">[request]  ");
-			if(chain!= null){
-				 if(!(HiddenRequestAction.class.isAssignableFrom(chain.getAction().getClass()))){
-					for(Object key : req.getParameterMap().keySet()){
-						System.out.print(The.concat(key.toString(), ": ",
-													The.implodedArray(req.getParameterValues(key.toString()),",","'"),
-													";"
-											)
-										);
+			if (!pageNotFoundEx) {
+				System.out.print(">[request]  ");
+				if (chain != null) {
+					if (!(HiddenRequestAction.class.isAssignableFrom(chain.getAction().getClass()))) {
+						for (Object key : req.getParameterMap().keySet()) {
+							System.out.print(The.concat(key.toString(), ": ",
+									The.implodedArray(req.getParameterValues(key.toString()), ",", "'"),
+									";"
+							)
+							);
+						}
+					} else { //é  LoginAction ou similar que não pode exibir alguma senha no request.
+						System.out.println("<< hidden because it's a Hidden Request Action (maybe some kind of login) >>");
 					}
-				}else{ //é  LoginAction ou similar que não pode exibir alguma senha no request.
-					System.out.println("<< hidden because it's a Hidden Request Action (maybe some kind of login) >>");
-				 }
-			}else { //chain == null
-				for(Object key : req.getParameterMap().keySet()){
-					System.out.print(The.concat(key.toString(), ": ",
-												The.implodedArray(req.getParameterValues(key.toString()),",","'"),
-												";"
-										)
-									);
-				}
-			}
-			System.out.println();
-
-			log(">[session]  id: ", req.getSession().getId() , "; ",
-				"creation: ",DateUtil.viewDateTime(new Date(req.getSession().getCreationTime())), "; ",
-				"last access: ",DateUtil.viewDateTime(new Date(req.getSession().getLastAccessedTime())), "; ",
-				"max inative interval: ",String.valueOf(req.getSession().getMaxInactiveInterval()/60), " minutes;"
-			); //TODO - informacoes de tempo da sessao
-			System.out.print(">[session]  ");
-			Enumeration ralist = req.getSession().getAttributeNames();
-			while(ralist.hasMoreElements()){
-				String name=(String)ralist.nextElement();
-				String toStringValue = req.getSession().getAttribute(name).toString();
-
-				System.out.print(The.concat(name, ": '", toStringValue, "';" ));
-			}
-			System.out.println();
-
-			if (req.getCookies() != null) {
-				System.out.print(">[cookies]  (" + req.getCookies().length + ") ");
-				for (Cookie cookie : req.getCookies()) {
-					System.out.print(The.concat(cookie.getName(), ": '", EncodingUtil.decodeUrl(cookie.getValue()), "'; "));
+				} else { //chain == null
+					for (Object key : req.getParameterMap().keySet()) {
+						System.out.print(The.concat(key.toString(), ": ",
+								The.implodedArray(req.getParameterValues(key.toString()), ",", "'"),
+								";"
+						)
+						);
+					}
 				}
 				System.out.println();
+
+				log(">[session]  id: ", req.getSession().getId(), "; ",
+						"creation: ", DateUtil.viewDateTime(new Date(req.getSession().getCreationTime())), "; ",
+						"last access: ", DateUtil.viewDateTime(new Date(req.getSession().getLastAccessedTime())), "; ",
+						"max inative interval: ", String.valueOf(req.getSession().getMaxInactiveInterval() / 60), " minutes;"
+				); //TODO - informacoes de tempo da sessao
+				System.out.print(">[session]  ");
+				Enumeration ralist = req.getSession().getAttributeNames();
+				while (ralist.hasMoreElements()) {
+					String name = (String) ralist.nextElement();
+					String toStringValue = req.getSession().getAttribute(name).toString();
+
+					System.out.print(The.concat(name, ": '", toStringValue, "';"));
+				}
+				System.out.println();
+
+				if (req.getCookies() != null) {
+					System.out.print(">[cookies]  (" + req.getCookies().length + ") ");
+					for (Cookie cookie : req.getCookies()) {
+						System.out.print(The.concat(cookie.getName(), ": '", EncodingUtil.decodeUrl(cookie.getValue()), "'; "));
+					}
+					System.out.println();
+				}
 			}
 		}
 

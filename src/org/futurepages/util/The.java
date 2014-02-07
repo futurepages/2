@@ -215,6 +215,10 @@ public class The {
 		}
 	}
 
+	public static String integerWithoutLeftZeros(String numberWithLeftZeros){
+		return ((Integer)Integer.parseInt(numberWithLeftZeros)).toString();
+	}
+
 	/**
 	 * Capitaliza a primeira letra da string passada como entrada.
 	 * Exemplo: "palavraComposta" --> "PalavraComposta"
@@ -291,8 +295,7 @@ public class The {
 	}
 
 	/**
-	 * Retornar wIn sem caracteres especiais.
-	 * @param wIn
+	 * Retornar str sem caracteres especiais.
 	 */
 	public static String wordIn(String str) {
 
