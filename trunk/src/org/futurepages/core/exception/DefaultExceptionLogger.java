@@ -102,7 +102,12 @@ public class DefaultExceptionLogger implements ExceptionLogger, Manipulable{
 				while (ralist.hasMoreElements()) {
 					String name = (String) ralist.nextElement();
 					String toStringValue = req.getSession().getAttribute(name).toString();
-
+					if(toStringValue.length()>200){
+						toStringValue = toStringValue.substring(0,197)+" (...)";
+					}
+					if(toStringValue.contains("\n")){
+						toStringValue = toStringValue.replaceAll("\\s+"," ");
+					}
 					System.out.print(The.concat(name, ": '", toStringValue, "';"));
 				}
 				System.out.println();
@@ -157,7 +162,9 @@ public class DefaultExceptionLogger implements ExceptionLogger, Manipulable{
 	}
 	
 	private enum ExceptionLogType {
-		EXCEPTION, SERVLET_500, DYN_EXCEPTION, SILENT_EXCEPTION;
+		EXCEPTION,
+		SERVLET_500,
+		DYN_EXCEPTION,
+		SILENT_EXCEPTION
 	}
 }
-
