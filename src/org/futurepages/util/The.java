@@ -24,7 +24,7 @@ public class The {
 		return false;
 	}
 
-	public static <T extends Object> T cloneOf(T fromObj){
+	public static <T> T cloneOf(T fromObj){
 		return ReflectionUtil.clone(fromObj);
 	}
 
@@ -33,12 +33,12 @@ public class The {
 		if (quote == null) {
 			quote = "";
 		}
-		StringBuffer out = new StringBuffer("");
+		StringBuilder out = new StringBuilder("");
 		for (int i = 0; i < array.length; i++) {
 			if (i != 0) {
 				out.append(delim);
 			}
-			out.append(quote + array[i] + quote);
+			out.append(quote).append(array[i]).append(quote);
 		}
 		return out.toString();
 	}
@@ -47,12 +47,12 @@ public class The {
 		if (quote == null) {
 			quote = "";
 		}
-		StringBuffer out = new StringBuffer("");
+		StringBuilder out = new StringBuilder("");
 		for (int i = 0; i < array.length; i++) {
 			if (i != 0) {
 				out.append(delim);
 			}
-			out.append(quote + ReflectionUtil.getField(array[i],attributeName) + quote);
+			out.append(quote).append(ReflectionUtil.getField(array[i], attributeName)).append(quote);
 		}
 		return out.toString();
 	}
@@ -61,12 +61,12 @@ public class The {
 		if (quote == null) {
 			quote = "";
 		}
-		StringBuffer out = new StringBuffer("");
+		StringBuilder out = new StringBuilder("");
 		for (int i = 0; i < array.length; i++) {
 			if (i != 0) {
 				out.append(delim);
 			}
-			out.append(quote + array[i].toString() + quote);
+			out.append(quote).append(array[i].toString()).append(quote);
 		}
 		return out.toString();
 	}
@@ -75,12 +75,12 @@ public class The {
 		if (quote == null) {
 			quote = "";
 		}
-		StringBuffer out = new StringBuffer("");
+		StringBuilder out = new StringBuilder("");
 		for (int i = 0; i < array.length; i++) {
 			if (i != 0) {
 				out.append(delim);
 			}
-			out.append(quote + array[i] + quote);
+			out.append(quote).append(array[i]).append(quote);
 		}
 		return out.toString();
 	}
@@ -249,9 +249,9 @@ public class The {
 	 */
 	public static String stringWithNoSpecials(String str) {
 		StringTokenizer st = new StringTokenizer(str);
-		StringBuffer newStr = new StringBuffer(st.nextToken());
+		StringBuilder newStr = new StringBuilder(st.nextToken());
 		while (st.hasMoreTokens()) {
-			newStr.append(" " + st.nextToken());
+			newStr.append(" ").append(st.nextToken());
 		}
 		return newStr.toString();
 	}
@@ -383,6 +383,10 @@ public class The {
 
 	public static String concat(String... strs) {
 		return StringUtils.concat(strs);
+	}
+
+	public static String concat(Object... objs) {
+		return StringUtils.concat(objs);
 	}
 
 	public static String sequence(char ch, int len) {
