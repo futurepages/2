@@ -71,7 +71,7 @@ public class HibernateConfigurationFactory {
 
 	}
 
-	private void mapModule(File module, Map<String, Schema> schemasMap) throws FileNotFoundException, IOException {
+	private void mapModule(File module, Map<String, Schema> schemasMap) throws IOException {
 		Properties properties = new Properties();
 
 		String schemaId = getSchemaId(module, properties, schemasMap); //properties é preenchido e devolve schemaId
