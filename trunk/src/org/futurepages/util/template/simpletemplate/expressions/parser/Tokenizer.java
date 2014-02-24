@@ -50,7 +50,7 @@ public class Tokenizer {
 
 								break;
 							case '*':
-								i = findOnSequence(i, token, '*', lastIndex);
+								i = findInSequence(i, token, '*', lastIndex);
 								token = sb();
 								lastIndex = i + 1;
 
@@ -77,21 +77,21 @@ public class Tokenizer {
 							case '<': // <=
 							case '>': // >=
 							case '=': // ==
-								i = findOnSequence(i, token, '=', lastIndex);
+								i = findInSequence(i, token, '=', lastIndex);
 								token = sb();
 								lastIndex = i + 1;
 
 								break;
 
 							case '&': // &
-								i = findOnSequence(i, token, '&', lastIndex);
+								i = findInSequence(i, token, '&', lastIndex);
 								token = sb();
 								lastIndex = i + 1;
 
 								break;
 
 							case '|': // ||
-								i = findOnSequence(i, token, '|', lastIndex);
+								i = findInSequence(i, token, '|', lastIndex);
 								token = sb();
 								lastIndex = i + 1;
 
@@ -192,7 +192,8 @@ public class Tokenizer {
 
 		return tokenList;
 	}
-	
+
+	// Converte uma string que representa um hexadecimal (uffff) para um inteiro em hexadecimal 0xffff
 	private int charHexToInt(char [] u, int count) {
 		int code = 0, base = 1;
 		
@@ -265,59 +266,11 @@ public class Tokenizer {
 		return code;
 	}
 
-	private int charDecToInt(char [] u, int count) {
-		int code = 0, base = 1;
-		
-		for (int k = count; k >= 0; k--) {
-			int val;
-
-			switch (u[k]) {
-				case '0':
-					val = 0;
-					break;
-				case '1':
-					val = 1;
-					break;
-				case '2':
-					val = 2;
-					break;
-				case '3':
-					val = 3;
-					break;
-				case '4':
-					val = 4;
-					break;
-				case '5':
-					val = 5;
-					break;
-				case '6':
-					val = 6;
-					break;
-				case '7':
-					val = 7;
-					break;
-				case '8':
-					val = 8;
-					break;
-				case '9':
-					val = 9;
-					break;
-				default:
-					val = 0;
-			}
-			
-			code += val * base;
-			base *= 10;
-		}
-		
-		return code;
-	}
-	
 	private StringBuilder sb() {
 		return new StringBuilder();
 	}
 	
-	private int findOnSequence(int idx, StringBuilder sb, char next, int lastIndex) {
+	private int findInSequence(int idx, StringBuilder sb, char next, int lastIndex) {
 		int nxtIdx = idx + 1, len = stream.length();
 		char ch = stream.charAt(idx);
 
