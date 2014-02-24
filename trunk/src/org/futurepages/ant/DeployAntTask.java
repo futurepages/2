@@ -23,10 +23,20 @@ public class DeployAntTask extends Task {
 			if(Is.empty(source)){
 				source = baseDir+"/web";
 				System.out.println("default source: "+source);
+			}else{
+				if(!source.contains("/") && !source.contains("\\")){
+					source = baseDir+"/"+source;
+					System.out.println("inferred source: "+source);
+				}
 			}
 			if(Is.empty(target)){
 				target = baseDir+"/_deployed";
 				System.out.println("default target: "+target);
+			}else{
+				if(!target.contains("/") && !target.contains("\\")){
+					target = baseDir+"/"+target;
+					System.out.println("inferred target: "+target);
+				}
 			}
 			SVNUtils.cleanCopy(source, target);
 		} catch (IOException e) {
