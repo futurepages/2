@@ -108,7 +108,7 @@ public class Semantic {
 		}
 
 		if (i == exps.size() - 1) {
-			throw new ExpectedExpression(expression, tokens.get(i).getB(), "Expected right expression before ", i + 1, "º token (", exp.toString(), ")");
+			throw new ExpectedExpression(expression, tokens.get(i).getB(), "Expected right expression after ", i + 1, "º token (", exp.toString(), ")");
 		}
 
 		int prvIdx = i - 1;

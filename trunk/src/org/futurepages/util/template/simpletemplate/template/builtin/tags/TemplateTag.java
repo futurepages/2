@@ -24,12 +24,22 @@ public abstract class TemplateTag {
 	protected static final HashMap<String, TemplateTag> builtInTags = new HashMap<String, TemplateTag>();
 	protected static final HashMap<String, TemplateTag> customTags = new HashMap<String, TemplateTag>();
 	
-	// Split as strings pelo caractere |. Se houver ||, não vai fazer o split nest ponto.
+	// Split as strings pelo caractere |. Se houver ||, não vai fazer o split neste ponto.
 	private static Pattern splitParams = Pattern.compile("(?<!\\|)\\|(?!\\|)");
 
 	public static final int SKIP_BODY = 0;
 	public static final int EVAL_BODY = 1;
+	// Ainda não utilizado
+	public static final int EVAL_ELSE = 2;
 	
+	/* Futuramente usar esta enum em vez de inteiros
+	protected static enum OnBody {
+		SKIP_BODY,
+		EVAL_BODY,
+		EVAL_ELSE
+	}
+	*/
+
 	protected static synchronized void addBuiltinTag(TemplateTag tag) {
 		if (!builtInTags.containsKey(tag.getTagName())) {
 			builtInTags.put(tag.getTagName(), tag);
@@ -86,11 +96,13 @@ public abstract class TemplateTag {
 	}
 	
 	public abstract Exp evalExpression(String expression) throws ExpectedOperator, ExpectedExpression, BadExpression, Unexpected;
-	
+
 	public abstract TemplateTag getNewInstance();
-	
+
 	public abstract boolean hasOwnContext();
 	
+	public abstract int doBody(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWritter sb);
+
 	public void eval(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWritter sb) {		
 		int isDoBody = doBody(block, context, sb);
 		AbstractTemplateBlock inner = block.getNextInner();
@@ -125,8 +137,6 @@ public abstract class TemplateTag {
 			next.eval(context, sb);
 		}
 	}
-	
-	public abstract int doBody(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWritter sb);
 	
 	protected void evalBody(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWritter sb) {
 		AbstractTemplateBlock inner = block.getNextInner();
