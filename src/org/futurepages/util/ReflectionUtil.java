@@ -111,18 +111,21 @@ public final class ReflectionUtil {
 	 * @return Object
 	 */
 	public static Object invokeGetMethodOf(Object object, String fieldName) {
-		try {
-			String methodName = "get" + StringUtils.capitalize(fieldName);
-			Method method = object.getClass().getMethod(methodName);
-			return method.invoke(object);
-		} catch (Exception e) {
+		String []prefixes = {"get", "is"}; //, "has"};
+
+		for (int i = 0, len = prefixes.length; i < len;) {
+			String prefix = prefixes[i];
+			String methodName = prefix + StringUtils.capitalize(fieldName);
+
 			try {
-				String methodName = "is" + StringUtils.capitalize(fieldName);
 				Method method = object.getClass().getMethod(methodName);
+
 				return method.invoke(object);
-			} catch (Exception e2) {
+			} catch (Exception ex) {
+				i += 1;
 			}
 		}
+
 		return null;
 	}
 
