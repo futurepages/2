@@ -20,16 +20,15 @@ import org.futurepages.util.template.simpletemplate.util.ContextTemplateTag;
  * @author thiago
  */
 public abstract class TemplateTag {
-	
+
 	protected static final HashMap<String, TemplateTag> builtInTags = new HashMap<String, TemplateTag>();
 	protected static final HashMap<String, TemplateTag> customTags = new HashMap<String, TemplateTag>();
-	
+
 	// Split as strings pelo caractere |. Se houver ||, não vai fazer o split neste ponto.
 	private static Pattern splitParams = Pattern.compile("(?<!\\|)\\|(?!\\|)");
 
 	public static final int SKIP_BODY = 0;
 	public static final int EVAL_BODY = 1;
-	// Ainda não utilizado
 	public static final int EVAL_ELSE = 2;
 	
 	/* Futuramente usar esta enum em vez de inteiros
@@ -48,7 +47,7 @@ public abstract class TemplateTag {
 			throw new TemplateWithSameNameAlreadyExistsException(concat("A built in TemplateTag whith the same name (", tag.getTagName(), ") already exists: ", className));
 		}
 	}
-	
+
 	public static synchronized void addCustomTag(TemplateTag tag) {
 		if (builtInTags.containsKey(tag.getTagName())) {
 			String className = builtInTags.get(tag.getTagName()).getClass().getName();
@@ -57,10 +56,10 @@ public abstract class TemplateTag {
 			String className = customTags.get(tag.getTagName()).getClass().getName();
 			throw new TemplateWithSameNameAlreadyExistsException(concat("A custom TemplateTag whith the same name (", tag.getTagName(), ") already exists: [", className, "]"));
 		}
-		
+
 		customTags.put(tag.getTagName(), tag);
 	}
-	
+
 	public static TemplateTag getByTagName(String tagName) {
 		TemplateTag tag;
 		if (((tag = builtInTags.get(tagName)) != null) || ((tag = customTags.get(tagName)) != null)) {
@@ -69,12 +68,12 @@ public abstract class TemplateTag {
 
 		throw new TemplateTagDoesNotExists(concat("There is no ", tagName, " registred."));
 	}
-	
+
 	public static Exp defaultEvalExpression(String expression) throws ExpectedOperator, ExpectedExpression, BadExpression, Unexpected {
 		Parser p = new Parser(expression);
 		return p.parse();
 	}
-	
+
 	public static String []splitParams(String str) {
 		String []params = splitParams.split(str);
 
@@ -84,30 +83,31 @@ public abstract class TemplateTag {
 
 		return params;
 	}
-	
+
 	private final String tagName;
-	
+
 	public TemplateTag(String tagName) {
 		this.tagName = tagName;
 	}
-	
+
 	public String getTagName() {
 		return tagName;
 	}
-	
+
 	public abstract Exp evalExpression(String expression) throws ExpectedOperator, ExpectedExpression, BadExpression, Unexpected;
 
 	public abstract TemplateTag getNewInstance();
 
 	public abstract boolean hasOwnContext();
-	
+
 	public abstract int doBody(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWritter sb);
 
-	public void eval(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWritter sb) {		
-		int isDoBody = doBody(block, context, sb);
+	public void eval(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWritter sb) {
+		int whomEvaluate = doBody(block, context, sb);
 		AbstractTemplateBlock inner = block.getNextInner();
+		AbstractTemplateBlock innerElse = block.getNextInnerElse();
 
-		switch (isDoBody) {
+		switch (whomEvaluate) {
 			case EVAL_BODY:
 				if (inner != null) {
 					boolean hasOwnContext;
@@ -124,6 +124,22 @@ public abstract class TemplateTag {
 				}
 				break;
 
+			case EVAL_ELSE:
+				if (innerElse != null) {
+					boolean hasOwnContext;
+
+					if (hasOwnContext = hasOwnContext()) {
+						context.createNewContext();
+					}
+
+					evalElse(block, context, sb);
+
+					if (hasOwnContext) {
+						context.popContext();
+					}
+				}
+				break;
+
 			case SKIP_BODY:
 				break;
 
@@ -132,17 +148,25 @@ public abstract class TemplateTag {
 		}
 
 		AbstractTemplateBlock next = block.getNext();
-		
+
 		if (next != null) {
 			next.eval(context, sb);
 		}
 	}
-	
+
 	protected void evalBody(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWritter sb) {
 		AbstractTemplateBlock inner = block.getNextInner();
 
 		if (inner != null) {
 			inner.eval(context, sb);
+		}
+	}
+
+	protected void evalElse(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWritter sb) {
+		AbstractTemplateBlock innerElse = block.getNextInnerElse();
+
+		if (innerElse != null) {
+			innerElse.eval(context, sb);
 		}
 	}
 }
