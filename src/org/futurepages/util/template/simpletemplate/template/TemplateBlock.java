@@ -10,7 +10,7 @@ import org.futurepages.util.template.simpletemplate.template.builtin.tags.Templa
  * @author thiago
  */
 public class TemplateBlock extends AbstractTemplateBlock {
-	
+
 	private TemplateTag tag;
 	private Exp params;
 
@@ -32,19 +32,25 @@ public class TemplateBlock extends AbstractTemplateBlock {
 	public void setParams(Exp params) {
 		this.params = params;
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		toString(sb);
 		return sb.toString();
 	}
-	
+
 	@Override
 	public void toString(StringBuilder sb) {
 		if (getNextInner() != null) {
 			sb.append("<!--").append(tag.getTagName()).append(" ").append(params).append("-->");
 			getNextInner().toString(sb);
+
+			if (getNextInnerElse() != null) {
+				sb.append("<!--else-->");
+				getNextInnerElse().toString(sb);
+			}
+
 			sb.append("<!--end").append(tag.getTagName()).append("-->");
 		}
 

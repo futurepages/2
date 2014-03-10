@@ -16,23 +16,23 @@ import org.futurepages.util.template.simpletemplate.util.ContextTemplateTag;
  * @author thiago
  */
 public class IfTemplateTag extends TemplateTag {
-	
+
 	private static Pattern l_brackets = Pattern.compile("^\\[");
 	private static Pattern r_brackets = Pattern.compile("\\]$");
-	
+
 	public IfTemplateTag() {
 		super("if");
 	}
-	
+
 	protected boolean isBool(Object ob) {
 		return ob instanceof Boolean;
 	}
-	
+
 	@Override
 	public Exp evalExpression(String expression) throws ExpectedOperator, ExpectedExpression, BadExpression, Unexpected {
 		String ps = l_brackets.matcher(expression).replaceFirst("");
 		ps = r_brackets.matcher(ps).replaceFirst("");
-		
+
 		return defaultEvalExpression(ps);
 	}
 
@@ -46,7 +46,7 @@ public class IfTemplateTag extends TemplateTag {
 
 		boolean test = (t != null) && (!isBool(t) || ((Boolean)t));
 
-		return test ? EVAL_BODY : SKIP_BODY;
+		return test ? EVAL_BODY : EVAL_ELSE;
 	}
 
 	@Override

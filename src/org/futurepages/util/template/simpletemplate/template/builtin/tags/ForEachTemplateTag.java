@@ -30,31 +30,36 @@ public class ForEachTemplateTag extends TemplateTag {
 	private static final int built_in_group_length = 2;
 	private static final int built_in_group_step = 4;
 	private static final int built_in_group_var = 6;
-	
+
 	// lista|var|counter
 	//                                                     1    2          34   5      67   8
 	private static final Pattern isList = Pattern.compile("(\\w+(\\.\\w+)*)((\\|(\\w+))((\\|(\\w+)))?)?");
 	private static final int list_group_id = 1;
 	private static final int list_group_var = 5;
 	private static final int list_group_counter = 8;
-	
+
 	public ForEachTemplateTag() {
 		super("forEach");
 	}
-	
-	protected void fromBuildingArray(TemplateBlock block, ContextTemplateTag context, ForEachArguments fparams, NumericalList nlist, TemplateWritter sb) {
+
+	protected int fromBuildingArray(TemplateBlock block, ContextTemplateTag context, ForEachArguments fparams, NumericalList nlist, TemplateWritter sb) {
+		int iterations = 0;
+
 		for (int el : nlist) {
 			if (fparams.getVar() != null) {
 				context.put(fparams.getVar(), el);
 			}
-			
-			evalBody(block, context, sb);
-		}
-	}
-	
-	protected void fromList(TemplateBlock block, ContextTemplateTag context, ForEachArguments fparams, Object result, TemplateWritter sb) {
 
-		if (result!= null) {
+			evalBody(block, context, sb);
+
+			iterations++;
+		}
+
+		return iterations;
+	}
+
+	protected int fromList(TemplateBlock block, ContextTemplateTag context, ForEachArguments fparams, Object result, TemplateWritter sb) {
+		if (result != null) {
 
 			Iterator it = null;
 
@@ -80,10 +85,14 @@ public class ForEachTemplateTag extends TemplateTag {
 
 					i += 1;
 				}
+
+				return i;
 			}
 		}
+
+		return 0;
 	}
-	
+
 	protected Object builtInItem(String str) throws BadExpression, ExpectedExpression, ExpectedOperator, Unexpected {
 
 		if (str != null && !str.isEmpty()) {
@@ -96,12 +105,12 @@ public class ForEachTemplateTag extends TemplateTag {
 
 		return 1;
 	}
-	
+
 	@Override
 	public Exp evalExpression(String expression) throws ExpectedOperator, ExpectedExpression, BadExpression, Unexpected {
 		Matcher m1 = isBuildArray.matcher(expression);
 		Matcher m2 = isList.matcher(expression);
-		
+
 		if (m1.find()) {
 			Object begin = builtInItem(m1.group(built_in_group_begin));
 			Object length = builtInItem(m1.group(built_in_group_length));
@@ -131,14 +140,15 @@ public class ForEachTemplateTag extends TemplateTag {
 		ForEachArguments ps = (ForEachArguments) actualBlock.getParams();
 
 		Object result = ps.eval(context);
+		int iterations;
 
 		if (result instanceof NumericalList) {
-			fromBuildingArray(actualBlock, context, ps, (NumericalList)result, sb);
+			iterations = fromBuildingArray(actualBlock, context, ps, (NumericalList)result, sb);
 		} else {
-			fromList(actualBlock, context, ps, result, sb);
+			iterations = fromList(actualBlock, context, ps, result, sb);
 		}
 
-		return SKIP_BODY;
+		return iterations > 0 ? SKIP_BODY : EVAL_ELSE;
 	}
 
 	@Override

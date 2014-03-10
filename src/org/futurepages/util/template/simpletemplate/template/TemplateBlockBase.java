@@ -8,9 +8,9 @@ import org.futurepages.util.template.simpletemplate.util.ContextTemplateTag;
  * @author thiago
  */
 public class TemplateBlockBase extends AbstractTemplateBlock {
-	
+
 	private int initialBufferSize;
-	
+
 	public TemplateBlockBase() {
 		initialBufferSize = 128;
 	}
@@ -18,20 +18,24 @@ public class TemplateBlockBase extends AbstractTemplateBlock {
 	public TemplateBlockBase(int initialBufferSize) {
 		this.initialBufferSize = initialBufferSize;
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		
+
 		toString(sb);
 
 		return sb.toString();
 	}
-	
+
 	@Override
 	public void toString(StringBuilder sb) {
 		if (getNextInner() != null) {
 			getNextInner().toString(sb);
+
+			if (getNextInnerElse() != null) {
+				getNextInnerElse().toString(sb);
+			}
 		}
 
 		if (getNext() != null) {
@@ -41,13 +45,13 @@ public class TemplateBlockBase extends AbstractTemplateBlock {
 
 	public String eval(Map<String, Object> params) {
 		TemplateWritter sb = new TemplateWritter(initialBufferSize);
-		
+
 		if (params instanceof ContextTemplateTag) {
 			eval((ContextTemplateTag)params, sb);
 		} else {
 			eval(params, sb);
 		}
-		
+
 		return sb.toString();
 	}
 
