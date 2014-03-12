@@ -12,8 +12,11 @@ public class Is {
     public static boolean empty(Object fieldObj) {
         if (fieldObj == null) {
             return true;
-        } else if (fieldObj.toString().trim().equals("")) {
-            return true;
+        } else {
+	        String nbsp = String.valueOf((char) 160);
+	        if (fieldObj.toString().replaceAll(nbsp , "").trim().equals("")) {
+		        return true;
+	        }
         }
         return false;
     }
