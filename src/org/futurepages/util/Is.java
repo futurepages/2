@@ -13,8 +13,8 @@ public class Is {
         if (fieldObj == null) {
             return true;
         } else {
-	        String nbsp = String.valueOf((char) 160);
-	        if (fieldObj.toString().replaceAll(nbsp , "").trim().equals("")) {
+	        String nbsp = String.valueOf((char) 160); //pode ser trocado por ... String nbsp = "\u00A0";
+	        if (fieldObj.toString().replaceAll(nbsp, "").trim().equals("")) {
 		        return true;
 	        }
         }
