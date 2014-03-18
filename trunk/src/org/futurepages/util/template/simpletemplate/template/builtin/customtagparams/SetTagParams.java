@@ -1,7 +1,5 @@
 package org.futurepages.util.template.simpletemplate.template.builtin.customtagparams;
 
-import java.util.Map;
-import org.futurepages.core.formatter.Formatter;
 import org.futurepages.util.template.simpletemplate.expressions.tree.Exp;
 import org.futurepages.util.template.simpletemplate.util.ContextTemplateTag;
 
