@@ -162,9 +162,21 @@ public final class ReflectionUtil {
 		if (method.getReturnType() == Void.TYPE) {
 			method.invoke(object, value);
 		}
-
-		return;
 	}
+
+	public static Method getFirstMethod(Class<?> theClass, String methodName) {
+		while(theClass!=null){
+			Method[] methods = theClass.getMethods();
+			for (Method m : methods) {
+				if (m.getName().equals(methodName)) {
+					return m;
+				}
+			}
+			theClass = theClass.getSuperclass();
+		}
+		return null;
+	}
+
 
 	@SuppressWarnings("unchecked")
 	public static Method getMethodInvoke(Object object, String methodName, Class... value) throws ClassNotFoundException {
@@ -264,7 +276,7 @@ public final class ReflectionUtil {
 	/**
 	 * Invokes a void and empty parameter method from the given class.
 	 * @param object
-	 * @param methodName
+	 * @param collectionName
 	 * @return boolean
 	 */
 	@SuppressWarnings("unchecked")
@@ -394,8 +406,8 @@ public final class ReflectionUtil {
 	 * Um objeto 'child' recebe todos os valores herdados de seu pai 'parent'.
 	 * Os campos não herdados continuam com o valor nulo.
 	 *
-	 * @param fromObj é o pai de onde os campos serão herdados.
-	 * @param toObj é quem herdará os campos.
+	 * @param parent é o pai de onde os campos serão herdados.
+	 * @param child é quem herdará os campos.
 	 */
 	public static void setWithSuperFields(Object parent, Object child) {
 		Class clss = child.getClass();
