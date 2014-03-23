@@ -1,9 +1,16 @@
 package org.futurepages.core.control;
 
 import org.futurepages.consequences.Forward;
-import org.futurepages.core.consequence.Consequence;
-import org.futurepages.core.filter.Filter;
 import org.futurepages.core.action.Action;
+import org.futurepages.core.action.AsynchronousManager;
+import org.futurepages.core.action.Manipulable;
+import org.futurepages.core.consequence.Consequence;
+import org.futurepages.core.exception.DefaultExceptionLogger;
+import org.futurepages.core.filter.Filter;
+import org.futurepages.util.ModuleUtil;
+import org.futurepages.util.ReflectionUtil;
+
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,9 +18,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-
-import org.futurepages.core.action.Manipulable;
-import org.futurepages.core.exception.DefaultExceptionLogger;
 
 /**
  * An ActionConfig links together an action implementation, an action name or alias, action results and action consequences.
@@ -132,6 +136,7 @@ public class ActionConfig {
 	 * @return this action config for method chaining. Ex: addConsequence().addConsequence();
 	 */
 	public ActionConfig addConsequence(String result, Consequence c) {
+		verifyAC(result, "execute", actionClass, c);
 		consequences.put(result, c);
 		return this;
 	}
@@ -189,8 +194,24 @@ public class ActionConfig {
 			map = new HashMap<String, Consequence>();
 			innerConsequences.put(innerAction, map);
 		}
+		verifyAC(result, innerAction, actionClass, c);
 		map.put(result, c);
 		return this;
+	}
+
+	private void verifyAC(String result, String innerAction, Class<? extends Object> actionClass, Consequence c) {
+		String urlFw = (c instanceof Forward)? ((Forward)c).getUrl():"";
+
+		Method method = ReflectionUtil.getFirstMethod(actionClass,innerAction);
+
+		if(method == null) {
+			System.out.println("####> Method '"+innerAction+"' doesnt exist!  >>> " +  ModuleUtil.moduleId(actionClass)+ ".ModuleManager ## action(\"" + this.name + "." + innerAction + "\").on(\"" + result + "\", fwd('" + urlFw + "');");
+		}else{
+			if(AsynchronousManager.isAsynchronousAction(method,actionClass) && urlFw.endsWith(".page")) {
+				System.out.println("####> Is this correct? >>> " +  ModuleUtil.moduleId(actionClass)+ ".ModuleManager ## action(\"" + this.name + "." + innerAction + "\").on(\"" + result + "\", fwd('" + urlFw + "');");
+			}
+		}
+
 	}
 
 	/**
@@ -435,7 +456,7 @@ public class ActionConfig {
 	 * Shorter version.
 	 *
 	 * @param filter
-	 * @param args
+	 * @param innerActions
 	 * @return this action config
 	 * @since 1.11
 	 */

@@ -273,7 +273,11 @@ public class The {
 	 * @return o nome do pacote mais interno
 	 */
 	public static String lastPackageName(Object obj) {
-		String name = obj.getClass().getName();
+		return lastPackageName(obj.getClass());
+	}
+
+	public static String lastPackageName(Class clss) {
+		String name = clss.getName();
 		String[] explodedName = name.split("\\.");
 		return explodedName[explodedName.length - 2];
 	}

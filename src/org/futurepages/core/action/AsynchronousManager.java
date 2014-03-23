@@ -14,37 +14,48 @@ import org.futurepages.enums.AsynchronousActionType;
 public class AsynchronousManager {
 
 	public static boolean isAsynchronousAction(InvocationChain chain) {
-		return isDynAction(chain) || isAjaxAction(chain);
+		return isAsynchronousAction(chain.getMethod(), chain.getAction().getClass());
 	}
 
 	public static boolean isDynAction(InvocationChain chain) {
-		if(isInnerActionAnnotatedWith(chain, DYN)){
+		return isDynAction(chain.getMethod(),chain.getAction().getClass());
+	}
+
+	public static boolean isAjaxAction(InvocationChain chain) {
+		return isAjaxAction(chain.getMethod(), chain.getAction().getClass());
+	}
+
+	public static boolean isAsynchronousAction(Method method, Class actionClass) {
+		return isDynAction(method, actionClass) || isAjaxAction(method,actionClass);
+	}
+
+	public static boolean isDynAction(Method method, Class actionClass) {
+		if(isInnerActionAnnotatedWith(method, DYN)){
 			return true;
 		}
-		if(isInnerActionAnnotatedWith(chain, AJAX)){
+		if(isInnerActionAnnotatedWith(method, AJAX)){
 			return false;
 		}
-		if(DynAction.class.isAssignableFrom(chain.getAction().getClass())||isClassAnnotatedWIth(chain, DYN)){
+		if(DynAction.class.isAssignableFrom(actionClass)|| isClassAnnotatedWith(actionClass, DYN)){
 			return true;
 		}
 		return false;
 	}
 
-	public static boolean isAjaxAction(InvocationChain chain) {
-		if(isInnerActionAnnotatedWith(chain, AJAX)){
+	public static boolean isAjaxAction(Method method, Class actionClass) {
+		if(isInnerActionAnnotatedWith(method, AJAX)){
 			return true;
 		}
-		if(isInnerActionAnnotatedWith(chain, DYN)){
+		if(isInnerActionAnnotatedWith(method, DYN)){
 			return false;
 		}
-		if(AjaxAction.class.isAssignableFrom(chain.getAction().getClass())||isClassAnnotatedWIth(chain, AJAX)){
+		if(AjaxAction.class.isAssignableFrom(actionClass)|| isClassAnnotatedWith(actionClass, AJAX)){
 			return true;
 		}
 		return false;
 	}
 	
-	private static boolean isInnerActionAnnotatedWith(InvocationChain chain, AsynchronousActionType tipo){
-		Method method = chain.getMethod();
+	private static boolean isInnerActionAnnotatedWith(Method method, AsynchronousActionType tipo){
 		if(method!=null){
 			AsynchronousAction annotation = method.getAnnotation(AsynchronousAction.class);
 			if(annotation!=null && annotation.value().equals(tipo)){
@@ -54,13 +65,12 @@ public class AsynchronousManager {
 		return false;
 	}
 
-	private static boolean isClassAnnotatedWIth(InvocationChain chain, AsynchronousActionType tipo){
-		AsynchronousAction annotation = chain.getAction().getClass().getAnnotation(AsynchronousAction.class);
+	private static boolean isClassAnnotatedWith(Class<?> actionClass, AsynchronousActionType tipo){
+		AsynchronousAction annotation = actionClass.getAnnotation(AsynchronousAction.class);
 		if(annotation!=null && annotation.value().equals(tipo)){
 			return true;
 		}
 		return false;
-
 	}
 }
 
