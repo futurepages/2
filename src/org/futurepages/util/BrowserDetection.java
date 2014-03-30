@@ -155,9 +155,6 @@ public class BrowserDetection {
 		if (mobile == null) {
 			detectMobile();
 		}
-		
-		System.out.println(mobile);
-
 		return mobile.booleanValue();
 	}
 	
