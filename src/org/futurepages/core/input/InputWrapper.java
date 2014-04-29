@@ -1,5 +1,6 @@
 package org.futurepages.core.input;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -95,6 +96,10 @@ public class InputWrapper implements Input, Map {
     
     public boolean getBooleanValue(String name) {
         return getInput().getBooleanValue(name);
+    }
+
+	public Calendar getCalendarValue(String name) {
+        return getInput().getCalendarValue(name);
     }
     
     public boolean getBooleanValue(String name, boolean def) {

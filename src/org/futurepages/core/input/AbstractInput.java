@@ -4,9 +4,11 @@ import org.futurepages.exceptions.InputException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import org.futurepages.util.DateUtil;
 import org.futurepages.util.InjectionUtils;
 import org.futurepages.util.StringUtils;
 
@@ -17,36 +19,44 @@ public abstract class AbstractInput implements Input {
      */
 	@Override
     public boolean getBooleanValue(String name) {
-        
+
         String value = getStringValue(name);
 
         if (value == null || value.trim().equals("")) {
             // throw new NullPointerException(name + " is not defined");
             return false;
         }
-        
+
         value = value.trim();
-        
+
         if (value.equalsIgnoreCase("false")) return false;
-        
+
         if (value.equalsIgnoreCase("true") || value.equals("on")) return true;
-        
+
         int x = -1;
-        
+
         try {
             x = Integer.parseInt(value);
-            
+
             if (x == 0) return false;
             else if (x == 1) return true;
-            
+
         } catch(Exception e) { }
-        
+
         throw new InputException("Could not convert input to boolean: " + name + " (" + value + ")");
     }
-	
+
+	@Override
+	public Calendar getCalendarValue(String name){
+        String value = getStringValue(name);
+		return DateUtil.viewDateToCalendar(value);
+	}
+
+
+
 	@Override
 	public boolean getBooleanValue(String name, boolean def) {
-        
+
         String value = getStringValue(name);
 
         if (value == null || value.trim().equals("")) {
