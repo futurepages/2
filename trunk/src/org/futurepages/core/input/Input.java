@@ -1,5 +1,6 @@
 package org.futurepages.core.input;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -64,7 +65,6 @@ public interface Input {
 	 * @param name the parameter's name
 	 * @return the parameters's value as an int
 	 * @throws NullPointerException if the value does not exist.
-	 * @throws InputException is the value cannot be converted to an int.
 	 */
 	public int getIntValue(String name);
 
@@ -81,7 +81,6 @@ public interface Input {
 	 *
 	 * @param name the parameters'name
 	 * @return a int array with all the values or null if the don't exist.
-	 * @throws InputException if any of the values cannot be converted to an int.
 	 */
 	public int[] getIntValues(String name);
 
@@ -124,7 +123,6 @@ public interface Input {
      * @param name the parameter's name
      * @param def default value to return
      * @return the parameters's value as an int or def if not found
-     * @throws InputException is the value cannot be converted to an int.
      */
 	public int getIntValue(String name, int def);
     
@@ -135,7 +133,6 @@ public interface Input {
      * @param name the parameter's name
      * @return the parameters's value as a long
      * @throws NullPointerException if the value does not exist.
-     * @throws InputException is the value cannot be converted to a long
      */
     public long getLongValue(String name);
 
@@ -145,7 +142,6 @@ public interface Input {
      * @param name the parameter's name
      * @param def default value to return
      * @return the parameters's value as a long or def if not found
-     * @throws InputException is the value cannot be converted to a long.
      */
     public long getLongValue(String name, long def);
     
@@ -155,27 +151,26 @@ public interface Input {
      * @param name the parameter's name
      * @return the parameters's value as a boolean
      * @throws NullPointerException if the value does not exist.
-     * @throws InputException is the value cannot be converted to a boolean.
      */
     public boolean getBooleanValue(String name);
-    
+
+	public Calendar getCalendarValue(String name);
+
     /**
      * Gets a parameter value from this input as a boolean.
      *
      * @param name the parameter's name
      * @param def default value to return
      * @return the parameters's value as a boolean or def if not found
-     * @throws InputException is the value cannot be converted to a boolean.
      */
     public boolean getBooleanValue(String name, boolean def);
-    
+
     /**
      * Gets a parameter value from this input as a float.
      *
      * @param name the parameter's name
      * @return the parameters's value as a float
      * @throws NullPointerException if the value does not exist.
-     * @throws InputException is the value cannot be converted to a float.
      */
     public float getFloatValue(String name);
     
@@ -185,7 +180,6 @@ public interface Input {
      * @param name the parameter's name
      * @param def default value to return
      * @return the parameters's value as a float or def if not found
-     * @throws InputException is the value cannot be converted to a float.
      */
     public float getFloatValue(String name, float def);
     
@@ -195,7 +189,6 @@ public interface Input {
      * @param name the parameter's name
      * @return the parameters's value as a double
      * @throws NullPointerException if the value does not exist.
-     * @throws InputException is the value cannot be converted to a double
      */
     public double getDoubleValue(String name);
     
@@ -205,7 +198,6 @@ public interface Input {
      * @param name the parameter's name
      * @param def default value to return
      * @return the parameters's value as a double or def if not found
-     * @throws InputException is the value cannot be converted to a double.
      */
     public double getDoubleValue(String name, double def);
     
@@ -260,7 +252,6 @@ public interface Input {
 	 *
 	 * @param name the parameter's name
 	 * @return the parameter's value as a Date or null if it doesn't exist
-	 * @throws InputException throws if the attributte can't be parsed
 	 */
 	public Date getDate(String name);
 	
@@ -270,7 +261,6 @@ public interface Input {
 	 * @param name the parameter's name
 	 * @param style the DateFormat style to be used
 	 * @return the parameter's value as a Date or null if it doesn't exist
-	 * @throws InputException throws if the attributte can't be parsed
 	 */
 	public Date getDate(String name, int style);
 
@@ -280,7 +270,6 @@ public interface Input {
 	 * @param name the parameter's name
 	 * @param pattern The SimpleDateFormat pattern to be used
 	 * @return the parameter's value as a Date or null if it doesn't exist
-	 * @throws InputException throws if the attributte can't be parsed
 	 */
 	public Date getDate(String name, String pattern);
 	
