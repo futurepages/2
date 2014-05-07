@@ -42,7 +42,8 @@ public class ExceptionFilter  implements Filter {
 			Action action = chain.getAction();
 			ErrorException errorException = (ErrorException) cause;
 			boolean listDependencies = true;
-			if (cause.getClass().isAnnotationPresent(NotListDependencies.class)) {
+			if (cause.getClass().isAnnotationPresent(NotListDependencies.class)
+			 || chain.getMethod().isAnnotationPresent(NotListDependencies.class)) {
 				listDependencies = false;
 			}
 			return ((AbstractAction) action).putError(listDependencies, errorException);

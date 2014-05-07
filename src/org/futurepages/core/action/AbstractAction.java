@@ -417,6 +417,7 @@ public abstract class AbstractAction implements Pageable, Action {
 		if (listDependencies && !listingDependencies) {
 			this.doListDependencies();
 		}
+	    //@dynActions em crudActions listam dependência... para não listarem, tem que anotar o método com @NotListDependencies
 		return ERROR;
 	}
 
