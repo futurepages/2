@@ -1,10 +1,13 @@
 package org.futurepages.util.template.simpletemplate.expressions.parser;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.BadExpression;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.ExpectedExpression;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.ExpectedOperator;
+import org.futurepages.util.template.simpletemplate.expressions.exceptions.FunctionDoesNotExists;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.Unexpected;
+import org.futurepages.util.template.simpletemplate.expressions.function.Function;
 import org.futurepages.util.template.simpletemplate.expressions.operators.core.BinaryOperator;
 import org.futurepages.util.template.simpletemplate.expressions.operators.core.Operator;
 import org.futurepages.util.template.simpletemplate.expressions.operators.core.UnaryOperator;
@@ -26,6 +29,7 @@ import org.futurepages.util.template.simpletemplate.expressions.operators.numeri
 import org.futurepages.util.template.simpletemplate.expressions.operators.numerical.Negative;
 import org.futurepages.util.template.simpletemplate.expressions.operators.numerical.Positive;
 import org.futurepages.util.template.simpletemplate.expressions.operators.numerical.Power;
+import org.futurepages.util.template.simpletemplate.expressions.operators.unevaluable.Comma;
 import org.futurepages.util.template.simpletemplate.expressions.operators.unevaluable.LParenthesis;
 import org.futurepages.util.template.simpletemplate.expressions.operators.unevaluable.RParenthesis;
 import org.futurepages.util.template.simpletemplate.expressions.tree.Exp;
@@ -93,7 +97,15 @@ public class Parser {
 		exp = expression;
 	}
 
-	public Exp parse() throws ExpectedOperator, ExpectedExpression, BadExpression, Unexpected {
+	/*
+	 * TODO:
+	 *      1 - Buscar a chamada de funções na expressão
+	 *      2 - O Tokenizer deve retornar uma função na seguinte forma:
+	 *          "func", (", "arg1", "arg2", ... "arg_n", ")"
+	 *      3 - TokenToExp deve:
+	 *          Exp<func>, Exp<(>, Exp<arg1>, Exp<arg2>, ... Exp<arg_n>, Exp<)>
+	 */
+	public Exp parse() throws ExpectedOperator, ExpectedExpression, BadExpression, Unexpected, FunctionDoesNotExists {
 		// Lista de tupas que contém o token e o seu indice na string da expressão
 		List<Tuple<String, Integer>> tokens = new Tokenizer(exp).tokenList();
 		// Converte as Tuplas de tokens e suas respectivas classes
@@ -116,7 +128,7 @@ public class Parser {
 	protected void leftBranch(BinaryOperator bo, MyStack<Exp> stack) {
 		Exp left = stack.peek();
 		
-		if (left instanceof Token) {
+		if (left instanceof Token || left instanceof Function) {
 			bo.setLeft(stack.pop());
 		} else {
 			bo.setLeft(buildTreeAux(stack));
@@ -127,7 +139,7 @@ public class Parser {
 	protected void rightBranch(BinaryOperator bo, MyStack<Exp> stack) {
 		Exp right = stack.peek();
 		
-		if (right instanceof Token) {
+		if (right instanceof Token || right instanceof Function) {
 			bo.setRight(stack.pop());
 		} else {
 			bo.setRight(buildTreeAux(stack));
@@ -161,14 +173,14 @@ public class Parser {
 		return op;
 	}
 	
-	protected Exp buildTree(MyStack<Exp> stack) {
+	public Exp buildTree(MyStack<Exp> stack) {
 		Exp expr;
 
 		expr = stack.peek();
 
 		if (expr != null) {
 			
-			if (!(expr instanceof Token)) {
+			if (!(expr instanceof Token || expr instanceof Function)) {
 
 				Exp expression = buildTreeAux(stack);
 				return expression;
@@ -222,8 +234,71 @@ public class Parser {
 
 		return i < j;
 	}
+	
+	public MyStack<Exp> buildStack(List<Exp> itens) {
+		List<Exp> exprs = new ArrayList<Exp>();
+		
+		for (int i = 0, len = itens.size(); i < len; i++) {
+			Exp expr = itens.get(i);
+			
+			if (!isFunction(expr)) {
+				exprs.add(expr);
+			} else {
+				Tuple<Exp, Integer> f = resolveFunction(itens, i);
+				exprs.add(f.getA());
+				i = f.getB();
+			}
+		}	
+		
+		return buildStack0(exprs);
+	}
+	
+	public Tuple<Exp, Integer> resolveFunction(List<Exp> itens, int begin) {
+		Function f = (Function) itens.get(begin++);
+		List<Exp> argItens = new ArrayList<Exp>();
+		int parenthesis = 1, i;
+		
+		begin += 1;
+		
+		for (i = begin; ; i++) {
+			Exp expr = itens.get(i);
+			
+			if (expr instanceof Comma) {
+				MyStack<Exp> stack = buildStack0(argItens);
+				f.appendArg(buildTree(stack));
+				argItens = new ArrayList<Exp>();
+			} else if (expr instanceof Function) {
+				Tuple<Exp, Integer> func = resolveFunction(itens, i);
+				
+				argItens.add(func.getA());
+				i = func.getB();
+				
+			} else if (!isRParen(expr) && !isLParen(expr)) {
+				argItens.add(expr);
+			} else {
+				if (isLParen(expr)) {
+					parenthesis += 1;
+				} else if (isRParen(expr)) {
+					parenthesis -= 1;
+				}
+				
+				if (parenthesis > 0) {
+					argItens.add(expr);
+				} else {
+					MyStack<Exp> stack = buildStack0(argItens);
+					f.appendArg(buildTree(stack));
 
-	/**
+					break;
+				}
+			}
+		}
+		
+		f.trim();
+		
+		return new Tuple<Exp, Integer>(f, i);
+	}
+	
+	/*
 	 * Método que constroi a pila de operadores avaliavel à direita.
 	 *
 	 * O algorítmo:
@@ -233,12 +308,12 @@ public class Parser {
 	 *   opStack - guarda temporariamente um operador enquanto carrega os demais operandos
 	 *    lastOp - Guarda os últimos operadores
 	 *
-	 * 1 - Retire um token da fila e guarda em expr
+	 * 1 - Retire um token da fila e guarde em expr
 	 *
 	 * 2 - Se expr é um operador e difere de ")"
 	 *     2.1 - adicione expr a opStack
 	 *
-	 * 2.2 - Se expr difere de "(" e tem maior prescedência que o topo de lastOp e o topo de mainStack e um operador
+	 * 2.2 - Se expr é difere de "(" e tem maior prescedência que o topo de lastOp e o topo de mainStack é um operador
 	 *     2.2.1 - Coloque topo de mainStack abaixo do atual topo de opStack
 	 *     2.2.2 - Remova o topo de lastOp
 	 *     2.2.3 - Volte para 2.2
@@ -251,22 +326,22 @@ public class Parser {
 	 *     3.2 - Se não, será ")"
 	 *         3.2.1 - Remova o topo de opStack e coloque em lastOp
 	 *
-	 * 4 - Tente remover o máximo possível de operadores de opStack e coloca-los mainStack e lastOp.
+	 * 4 - Tente remover o máximo possível de operadores de opStack e coloca-los em mainStack e lastOp.
 	 * Pare somente se lastOp for vazio ou o topo de lastOp for "("
 	 *
 	 * 5 - Se a fila de token estiver vazia, retorne mainStack, senão, volte para 1
 	 *
 	 */
-	protected MyStack<Exp> buildStack(List<Exp> itens) {
+	protected MyStack<Exp> buildStack0(List<Exp> itens) {
 		MyStack<Exp> opStack = new MyStack<Exp>();
 		MyStack<Exp> mainStack = new MyStack<Exp>();
 		MyStack<Operator> lastOp = new MyStack<Operator>();
 
 		for (int i = 0, len  = itens.size(); i < len; i++) {
 			Exp expr = itens.get(i);
-
+			
 			if (isOp(expr) && !isRParen(expr)) {
-				opStack.push(expr);
+					opStack.push(expr);
 
 				while (!isLParen(expr) && !lastOp.isEmpty() && greaterThan((Operator)expr, lastOp.peek()) && isOp(mainStack.peek())) {
 					Exp temp1 = mainStack.pop(), temp2 = opStack.pop();
@@ -277,8 +352,8 @@ public class Parser {
 				continue;
 			}
 
-			if (isToken(expr) || isRParen(expr)) {
-				if (isToken(expr)) {
+			if (isToken(expr) || isFunction(expr) || isRParen(expr)) {
+				if (!isRParen(expr)) { // isToken(expr) || isFunction(expr)) -> True
 					mainStack.push(expr);
 				} else { // isRParen(expr) -> true
 					Exp lp = opStack.peek();
@@ -304,46 +379,10 @@ public class Parser {
 
 		return mainStack;
 	}
-
-//	@Deprecated
-//	private MyStack<Exp> buildStack_old(List<Exp> itens) {
-//		MyStack<Exp> opStack = new MyStack<Exp>();
-//		MyStack<Exp> execStack = new MyStack<Exp>();
-//
-//		for (int i = 0, len = itens.size(); i < len; i++) {
-//			Exp expr = itens.get(i);
-//
-//			if (isOp(expr) && !isRParen(expr)) {
-//				opStack.push(expr);
-//				continue;
-//			}
-//
-//			if (isToken(expr) || isRParen(expr)) {
-//				if (isToken(expr)) {
-//					execStack.push(expr);
-//				} else { // isRParen(expr) -> true
-//					Exp lp = opStack.peek();
-//
-//					if (isLParen(lp)) {
-//						opStack.pop();
-//					} else {
-//						// throw exeption;
-//					}
-//				}
-//
-//				boolean test = true;
-//				while (test) {
-//					if (opStack.isEmpty() || isLParen(opStack.peek())) {
-//						test = false;
-//					} else {
-//						execStack.push(opStack.pop());
-//					}
-//				}
-//			}
-//		}
-//
-//		return execStack;
-//	}
+	
+	private boolean isFunction(Exp ex) {
+		return ex instanceof Function;
+	}
 	
 	protected boolean isLParen(Exp ex) {
 		return ex instanceof LParenthesis;
@@ -361,3 +400,4 @@ public class Parser {
 		return ex instanceof Operator;
 	}
 }
+

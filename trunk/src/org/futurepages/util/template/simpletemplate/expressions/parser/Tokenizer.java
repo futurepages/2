@@ -63,6 +63,7 @@ public class Tokenizer {
 							case '^':
 							case '+':
 							case '-':
+							case ',':
 								if (token.length() > 0) {
 									tokenList.add(t(token.toString(), lastIndex));
 									token = sb();

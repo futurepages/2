@@ -5,7 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.BadExpression;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.ExpectedExpression;
+import org.futurepages.util.template.simpletemplate.expressions.exceptions.FunctionDoesNotExists;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.Unexpected;
+import org.futurepages.util.template.simpletemplate.expressions.function.Function;
+import org.futurepages.util.template.simpletemplate.expressions.function.FunctionsRegister;
 import org.futurepages.util.template.simpletemplate.expressions.operators.core.Operator;
 import org.futurepages.util.template.simpletemplate.expressions.operators.logical.And;
 import org.futurepages.util.template.simpletemplate.expressions.operators.logical.Equals;
@@ -25,6 +28,7 @@ import org.futurepages.util.template.simpletemplate.expressions.operators.numeri
 import org.futurepages.util.template.simpletemplate.expressions.operators.numerical.Negative;
 import org.futurepages.util.template.simpletemplate.expressions.operators.numerical.Positive;
 import org.futurepages.util.template.simpletemplate.expressions.operators.numerical.Power;
+import org.futurepages.util.template.simpletemplate.expressions.operators.unevaluable.Comma;
 import org.futurepages.util.template.simpletemplate.expressions.operators.unevaluable.LParenthesis;
 import org.futurepages.util.template.simpletemplate.expressions.operators.unevaluable.RParenthesis;
 import org.futurepages.util.template.simpletemplate.expressions.primitivehandle.Const;
@@ -48,7 +52,7 @@ public class TokensToExp {
 		ops = new HashMap<String, Class<? extends Operator>>();
 		
 		/*
-		 * - e + não adicionados ao mapa. Pois são tratados como casos especiais.
+		 * - e + não são adicionados ao mapa. Pois são tratados como casos especiais.
 		 */
 		ops.put("!", Not.class);
 		ops.put("*", Mult.class);
@@ -69,7 +73,41 @@ public class TokensToExp {
 		// UNEVALUABLE
 		ops.put("(", LParenthesis.class);
 		ops.put(")", RParenthesis.class);
+		ops.put(",", Comma.class);
 	}
+	
+	private static interface PositiveNegative {
+		public Exp signal();
+		public Exp operator();
+	}
+	
+	private static final PositiveNegative [] PN = new PositiveNegative[] {
+		new PositiveNegative() {
+			@Override
+			public Exp signal() {
+				return new Positive();
+			}
+			@Override
+			public Exp operator() {
+				return new Add();
+			}
+		},
+		new PositiveNegative() {
+			@Override
+			public Exp signal() {
+				return new Negative();
+			}
+			@Override
+			public Exp operator() {
+				return new Diff();
+			}
+		}
+	};
+	
+	private static final int POSITIVE = 0;
+	private static final int NEGATIVE = 1;
+
+	// ------------------------------------------------------------ END STATICS
 
 	private String expression;
 	private List<Tuple<String, Integer>> tokens;
@@ -81,14 +119,14 @@ public class TokensToExp {
 		this.expression = expression;
 	}
 
-	public List<Exp> convert() throws Unexpected, ExpectedExpression, BadExpression {
+	public List<Exp> convert() throws Unexpected, ExpectedExpression, BadExpression, FunctionDoesNotExists {
 		if (!executed) {
 			exps= new ArrayList<Exp>();
 			List<String> unprocessed = new ArrayList<String>();
-			
+
 			for (int i = 0, len = tokens.size(); i < len; i++) {
 				String token = tokens.get(i).getA();
-				Exp exp = idenfityExp(token);
+				Exp exp = idenfityExp(token, i);
 
 				exps.add(exp);
 
@@ -96,26 +134,18 @@ public class TokensToExp {
 					unprocessed.add(token);
 				}
 			}
-	
-			try {
-				fixUnprocesed(unprocessed);
-			} catch (Unexpected ex) {
-				
-			} catch (ExpectedExpression ex) {
-				
-			} catch (BadExpression ex) {
-				
-			}
 
-			tryOptimizePositiveAndNegative();
+			resolveUnprocesed(unprocessed);
+
+			tryToOptimizePositiveAndNegativeSignals();
 
 			executed = false;
 		}
-		
+
 		return exps;
 	}
 	
-	protected Exp idenfityExp(String str) {
+	protected Exp idenfityExp(String str, int i) throws FunctionDoesNotExists {
 		Object o;
 		
 		// Casos especiais, para tratamento posterior
@@ -128,6 +158,8 @@ public class TokensToExp {
 		if (ok(o = getOperator(str))) {
 			return (Operator)o;
 		} else if (ok(o = getLiteral(str))) {
+			return (Exp)o;
+		} else if (ok(o = getFunction(str, i))) {
 			return (Exp)o;
 		} else if (ok(o = getIndentifier(str))) {
 			return (Exp)o;
@@ -142,7 +174,7 @@ public class TokensToExp {
 	
 	protected Operator getOperator(String s) {
 		Class<? extends Operator> opC = ops.get(s);
-		
+
 		if (opC != null) {
 			try {
 				Operator op = opC.newInstance();
@@ -167,6 +199,24 @@ public class TokensToExp {
 			return new Literal(o);
 		} else if (ok(o = getString(str))) {
 			return new Literal(o);
+		}
+		
+		return null;
+	}
+
+	private Object getFunction(String str, int i) throws FunctionDoesNotExists {
+		if (tokens.size() -1 > i && tokens.get(i + 1).getA().equals("(")) {
+			Class<? extends Function> fclass = FunctionsRegister.instance().getFunctionClass(str);
+
+			if (fclass == null) {
+				throw new FunctionDoesNotExists(expression, tokens.get(i).getB(), "Function \"", str, "\" does not exists");
+			}
+
+			try {
+				return fclass.newInstance();
+			} catch (Exception ex) {
+				throw new RuntimeException(ex);
+			}
 		}
 		
 		return null;
@@ -314,7 +364,7 @@ public class TokensToExp {
 	}
 
 	// @TODO: muito código repetido
-	private void fixUnprocesed(List<String> unprocessed) throws Unexpected, ExpectedExpression, BadExpression {
+	private void resolveUnprocesed(List<String> unprocessed) throws Unexpected, ExpectedExpression, BadExpression {
 
 		if (unprocessed.size() > 0) {
 			for (int i = 0, u = 0, len = exps.size(); i < len; i++) {
@@ -323,96 +373,55 @@ public class TokensToExp {
 				if (exp == null) {
 					String op = unprocessed.get(u++);
 					int prevIdx = i - 1, nextIdx = i + 1;
+					int signal = op.equals("+") ? POSITIVE : NEGATIVE;
+					PositiveNegative pn = PN[signal];
 
-					if (op.equals("+")) {
-						if (i > 0) {
-							Exp p = exps.get(prevIdx);
-							
-							if (p instanceof Operator && !(p instanceof RParenthesis)) {
-								if (nextIdx < len) {
-									Exp n = exps.get(nextIdx);
-									
-									if (n instanceof Token || n instanceof LParenthesis) {
-										exps.set(i, new Positive());
-									} else {
-										throw new Unexpected(expression, tokens.get(i).getB(), "Unexpected expression after ", i + 1, "º token ", op); // operador no lugar errado
-									}
-								} else {
-									throw new ExpectedExpression(expression, tokens.get(i).getB(), "Expected expression after ", i + 1, "º token ", op); // faltando elemento à direita do +
-								}
-							} else { // p instaceof Token || p is ")"
-								if (nextIdx < len) {
-									Exp n = exps.get(nextIdx);
-									
-									if (n instanceof Token || n instanceof LParenthesis) {
-										exps.set(i, new Add());
-									} else {
-										throw new Unexpected(expression, tokens.get(i).getB(), "Bad expression after ", i + 1, "º token ", op); // operador no lugar errado
-									}
-								} else {
-									throw new ExpectedExpression(expression, tokens.get(i).getB(), "Expected expression after ", i + 1, "º token ", op); // faltando elemento à direita do +
-								}
-							}
+					if (i > 0) {
+						Exp p = exps.get(prevIdx);
 
-						} else if (nextIdx < len) { // i == 0
-							Exp n = exps.get(nextIdx);
-							
-							if (n instanceof Token || n instanceof LParenthesis) {
-								exps.set(i, new Positive());
+						if (p instanceof Operator && !(p instanceof RParenthesis)) {
+							if (nextIdx < len) {
+								Exp n = exps.get(nextIdx);
+
+								if (n instanceof Token || n instanceof LParenthesis) {
+									exps.set(i, pn.signal());
+								} else {
+									throw new Unexpected(expression, tokens.get(i).getB(), "Unexpected expression after ", i + 1, "º token ", op); // operador no lugar errado
+								}
 							} else {
-								throw new Unexpected(expression, tokens.get(i).getB(), "Unexpected expression after ", i + 1, "º token ", op); // operador no lugar errado
+								throw new ExpectedExpression(expression, tokens.get(i).getB(), "Expected expression after ", i + 1, "º token ", op); // faltando elemento à direita do +/-
 							}
-						} else {
-							throw new ExpectedExpression(expression, tokens.get(i).getB(), "Missing expression after ", i + 1, "º token ", op); // faltando elemento à direita do +
-						}
-					} else { // op.equals("-");
-						if (i > 0) {
-							Exp p = exps.get(prevIdx);
-							
-							if (p instanceof Operator && !(p instanceof RParenthesis)) {
-								if (nextIdx < len) {
-									Exp n = exps.get(nextIdx);
-									
-									if (n instanceof Token || n instanceof LParenthesis) {
-										exps.set(i, new Negative());
-									} else {
-										throw new Unexpected(expression, tokens.get(i).getB(), "Unexpected expression after ", i + 1, "º token ", op);
-									}
-								} else {
-									throw new ExpectedExpression(expression, tokens.get(i).getB(), "Expected expression after ", i + 1, "º token ", op); // faltando elemento à direita do -
-								}
-							} else { // p instaceof Token
-								if (nextIdx < len) {
-									Exp n = exps.get(nextIdx);
-									
-									if (n instanceof Token || n instanceof LParenthesis) {
-										exps.set(i, new Diff());
-									} else {
-										throw new Unexpected(expression, tokens.get(i).getB(), "Bad expression after ", i + 1, "º token ", op); // operador no lugar errado
-									}
-								} else {
-									throw new ExpectedExpression(expression, tokens.get(i).getB(), "Expected expression after ", i + 1, "º token ", op); // faltando elemento à direita do -
-								}
-							}
+						} else { // p instaceof Token || p is ")"
+							if (nextIdx < len) {
+								Exp n = exps.get(nextIdx);
 
-						} else if (nextIdx < len) { // i == 0
-							Exp n = exps.get(nextIdx);
-							
-							if (n instanceof Token || n instanceof LParenthesis) {
-								exps.set(i, new Negative());
+								if (n instanceof Token || n instanceof LParenthesis || n instanceof Function) {
+									exps.set(i, pn.operator());
+								} else {
+									throw new Unexpected(expression, tokens.get(i).getB(), "Bad expression after ", i + 1, "º token ", op); // operador no lugar errado
+								}
 							} else {
-								throw new Unexpected(expression, tokens.get(i).getB(), "Unexpected expression after ", i + 1, "º token ", op); // operador no lugar errado
+								throw new ExpectedExpression(expression, tokens.get(i).getB(), "Expected expression after ", i + 1, "º token ", op); // faltando elemento à direita do +/-
 							}
-						} else {
-							throw new ExpectedExpression(expression, tokens.get(i).getB(), "Missing expression after ", i + 1, "º token ", op); // faltando elemento à direita do -
 						}
+
+					} else if (nextIdx < len) { // i == 0
+						Exp n = exps.get(nextIdx);
+
+						if (n instanceof Token || n instanceof LParenthesis || n instanceof Function) {
+							exps.set(i, pn.signal());
+						} else {
+							throw new Unexpected(expression, tokens.get(i).getB(), "Unexpected expression after ", i + 1, "º token ", op); // operador no lugar errado
+						}
+					} else {
+						throw new ExpectedExpression(expression, tokens.get(i).getB(), "Missing expression after ", i + 1, "º token ", op); // faltando elemento à direita do +/-
 					}
 				}
 			}
 		}
 	}
 
-	private void tryOptimizePositiveAndNegative() {
+	private void tryToOptimizePositiveAndNegativeSignals() {
 		List<Exp> temp = new ArrayList<Exp>();
 		
 		for (int i = 0, len = exps.size(); i < len; i++) {
