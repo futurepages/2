@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.BadExpression;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.ExpectedExpression;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.ExpectedOperator;
+import org.futurepages.util.template.simpletemplate.expressions.exceptions.FunctionDoesNotExists;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.Unexpected;
 import org.futurepages.util.template.simpletemplate.expressions.parser.Parser;
 import org.futurepages.util.template.simpletemplate.expressions.tree.Exp;
@@ -93,7 +94,7 @@ public class ForEachTemplateTag extends TemplateTag {
 		return 0;
 	}
 
-	protected Object builtInItem(String str) throws BadExpression, ExpectedExpression, ExpectedOperator, Unexpected {
+	protected Object builtInItem(String str) throws BadExpression, ExpectedExpression, ExpectedOperator, Unexpected, FunctionDoesNotExists {
 
 		if (str != null && !str.isEmpty()) {
 			try {
@@ -107,7 +108,7 @@ public class ForEachTemplateTag extends TemplateTag {
 	}
 
 	@Override
-	public Exp evalExpression(String expression) throws ExpectedOperator, ExpectedExpression, BadExpression, Unexpected {
+	public Exp evalExpression(String expression) throws ExpectedOperator, ExpectedExpression, BadExpression, Unexpected, FunctionDoesNotExists {
 		Matcher m1 = isBuildArray.matcher(expression);
 		Matcher m2 = isList.matcher(expression);
 

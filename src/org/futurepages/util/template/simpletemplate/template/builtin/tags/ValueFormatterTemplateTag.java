@@ -5,6 +5,7 @@ import org.futurepages.core.formatter.FormatterManager;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.BadExpression;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.ExpectedExpression;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.ExpectedOperator;
+import org.futurepages.util.template.simpletemplate.expressions.exceptions.FunctionDoesNotExists;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.Unexpected;
 import org.futurepages.util.template.simpletemplate.expressions.tree.Exp;
 import org.futurepages.util.template.simpletemplate.template.AbstractTemplateBlock;
@@ -77,7 +78,7 @@ public class ValueFormatterTemplateTag extends TemplateTag {
 	}
 
 	@Override
-	public Exp evalExpression(String expression) throws ExpectedOperator, ExpectedExpression, BadExpression, Unexpected {
+	public Exp evalExpression(String expression) throws ExpectedOperator, ExpectedExpression, BadExpression, Unexpected, FunctionDoesNotExists {
 		String [] attrs = splitParams(expression);
 		
 		if (attrs != null) {

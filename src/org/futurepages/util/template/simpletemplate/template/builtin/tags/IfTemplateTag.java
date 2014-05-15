@@ -4,6 +4,7 @@ import java.util.regex.Pattern;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.BadExpression;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.ExpectedExpression;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.ExpectedOperator;
+import org.futurepages.util.template.simpletemplate.expressions.exceptions.FunctionDoesNotExists;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.Unexpected;
 import org.futurepages.util.template.simpletemplate.expressions.tree.Exp;
 import org.futurepages.util.template.simpletemplate.template.AbstractTemplateBlock;
@@ -29,7 +30,7 @@ public class IfTemplateTag extends TemplateTag {
 	}
 
 	@Override
-	public Exp evalExpression(String expression) throws ExpectedOperator, ExpectedExpression, BadExpression, Unexpected {
+	public Exp evalExpression(String expression) throws ExpectedOperator, ExpectedExpression, BadExpression, Unexpected, FunctionDoesNotExists {
 		String ps = l_brackets.matcher(expression).replaceFirst("");
 		ps = r_brackets.matcher(ps).replaceFirst("");
 
