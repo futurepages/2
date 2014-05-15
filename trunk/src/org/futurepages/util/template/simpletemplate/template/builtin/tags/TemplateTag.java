@@ -6,6 +6,7 @@ import static org.futurepages.util.StringUtils.concat;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.BadExpression;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.ExpectedExpression;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.ExpectedOperator;
+import org.futurepages.util.template.simpletemplate.expressions.exceptions.FunctionDoesNotExists;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.Unexpected;
 import org.futurepages.util.template.simpletemplate.expressions.parser.Parser;
 import org.futurepages.util.template.simpletemplate.expressions.tree.Exp;
@@ -69,7 +70,7 @@ public abstract class TemplateTag {
 		throw new TemplateTagDoesNotExists(concat("There is no ", tagName, " registred."));
 	}
 
-	public static Exp defaultEvalExpression(String expression) throws ExpectedOperator, ExpectedExpression, BadExpression, Unexpected {
+	public static Exp defaultEvalExpression(String expression) throws ExpectedOperator, ExpectedExpression, BadExpression, Unexpected, FunctionDoesNotExists {
 		Parser p = new Parser(expression);
 		return p.parse();
 	}
@@ -94,7 +95,7 @@ public abstract class TemplateTag {
 		return tagName;
 	}
 
-	public abstract Exp evalExpression(String expression) throws ExpectedOperator, ExpectedExpression, BadExpression, Unexpected;
+	public abstract Exp evalExpression(String expression) throws ExpectedOperator, ExpectedExpression, BadExpression, Unexpected, FunctionDoesNotExists;
 
 	public abstract TemplateTag getNewInstance();
 
