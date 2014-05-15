@@ -27,4 +27,8 @@ public class Null implements Const {
 	public Object value() {
 		return null;
 	}
+
+	public boolean equals(Object other) {
+		return other == this;
+	}
 }
