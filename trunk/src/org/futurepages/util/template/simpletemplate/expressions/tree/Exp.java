@@ -6,7 +6,7 @@ import org.futurepages.util.template.simpletemplate.util.ContextTemplateTag;
  *
  * @author thiago
  */
-public interface Exp extends ExpBase {
+public interface Exp {
 
 	public Object eval(ContextTemplateTag context);
 
