@@ -35,7 +35,11 @@ public abstract class Function implements Exp {
 	}
 	
 	public void trim() {
-		this.args = new ArrayList<Exp>(this.args);
+		try {
+			((ArrayList<Exp>)this.args).trimToSize();
+		} catch (ClassCastException ex) {
+			this.args = new ArrayList<Exp>(this.args);
+		}
 	}
 
 	@Override
