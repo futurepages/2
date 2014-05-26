@@ -25,12 +25,12 @@ import org.futurepages.util.template.simpletemplate.util.ContextTemplateTag;
  */
 public class ForEachTemplateTag extends TemplateTag {
 	// 1..10:1|var
-	//                                                           1                  2            3   4              5   6
-	private static final Pattern isBuildArray = Pattern.compile("([0-9]+|\\w+)\\.\\.([0-9]+|\\w+)(\\:([0-9]+|\\w+))?(\\|(\\w+))?");
+	//                                                           1           2       3           4   5          6   7
+	private static final Pattern isBuildArray = Pattern.compile("([^\\.\\.]*)(\\.\\.)([^\\:\\|]*)(\\:([^\\|]*))?(\\|(\\w+))?");
 	private static final int built_in_group_begin = 1;
-	private static final int built_in_group_length = 2;
-	private static final int built_in_group_step = 4;
-	private static final int built_in_group_var = 6;
+	private static final int built_in_group_length = 3;
+	private static final int built_in_group_step = 5;
+	private static final int built_in_group_var = 7;
 
 	// lista|var|counter
 	//                                                     1    2          34   5      67   8
