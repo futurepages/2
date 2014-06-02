@@ -18,5 +18,5 @@ package org.futurepages.core.admin;
 public interface RedirectAfterLogin {
    
    public boolean shouldRedirect(String innerAction);
-	
+
 }

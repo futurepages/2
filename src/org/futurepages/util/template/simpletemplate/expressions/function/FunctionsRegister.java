@@ -37,6 +37,7 @@ public class FunctionsRegister {
 		addBuiltInFunction("length", Length.class);
 		addBuiltInFunction("str", Str.class);
 		addBuiltInFunction("pow", Pow.class);
+		addBuiltInFunction("get", Get.class);
 	}
 	
 	private void addBuiltInFunction(String name, Class<? extends Function> f) {
