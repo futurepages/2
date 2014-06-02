@@ -72,8 +72,6 @@ public class RedirectAfterLoginFilter implements Filter {
 				RedirectAfterLogin classAnnotation = classAction.getAnnotation(RedirectAfterLogin.class);
 				RedirectAfterLogin methodAnnotation = null;
 
-				// Se houver casos de heranças com sobreescrita de método e casos de sobrecarga de métodos,
-				// pode ser que não funcione como o esperado.
 				if (!Is.empty(innerAction)) {
 					Method method = classAction.getDeclaredMethod(innerAction);
 					methodAnnotation = method.getAnnotation(RedirectAfterLogin.class);
