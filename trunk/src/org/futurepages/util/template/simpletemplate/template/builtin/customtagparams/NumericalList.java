@@ -2,6 +2,7 @@ package org.futurepages.util.template.simpletemplate.template.builtin.customtagp
 
 import java.util.Iterator;
 import org.futurepages.util.StringUtils;
+import org.futurepages.util.template.simpletemplate.expressions.function.Function;
 import org.futurepages.util.template.simpletemplate.expressions.tree.Exp;
 import org.futurepages.util.template.simpletemplate.expressions.tree.Token;
 import org.futurepages.util.template.simpletemplate.util.ContextTemplateTag;
@@ -49,16 +50,16 @@ public class NumericalList implements Iterable<Integer>, Exp {
 	
 	@Override
 	public Object eval(ContextTemplateTag context) {
-		i_start = (start instanceof Token)
-			? (Integer)((Token)start).eval(context)
+		i_start = (start instanceof Token || start instanceof Function)
+			? (Integer)((Exp)start).eval(context)
 			: ((Integer)start);
 
-		i_length = (length instanceof Token)
-			? (Integer)((Token)length).eval(context)
+		i_length = (length instanceof Token || length instanceof Function)
+			? (Integer)((Exp)length).eval(context)
 			: ((Integer)length);
 
-		i_step = (step instanceof Token)
-			? (Integer)((Token)step).eval(context)
+		i_step = (step instanceof Token || step instanceof Function)
+			? (Integer)((Exp)step).eval(context)
 			: ((Integer)step);
 
 		i_size = Math.abs(i_length - i_start);

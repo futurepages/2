@@ -1,10 +1,16 @@
 package org.futurepages.util;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Classe responsável por comparações diversas com retornos lógicos (true/false).
  *
  */
 public class Is {
+
+    private static final Pattern nbspPattern = Pattern.compile(String.valueOf((char) 160));
+    private static final Pattern atPattern = Pattern.compile("@");
 
     /**
      * Se o parâmetro é vazio ou nulo ou possui somente espaços, retorna true
@@ -13,8 +19,9 @@ public class Is {
         if (fieldObj == null) {
             return true;
         } else {
-	        String nbsp = String.valueOf((char) 160); //pode ser trocado por ... String nbsp = "\u00A0";
-	        if (fieldObj.toString().replaceAll(nbsp, "").trim().equals("")) {
+	        Matcher m = nbspPattern.matcher(fieldObj.toString());
+	        //pode ser trocado por ... String nbsp = "\u00A0";
+	        if (m.replaceAll("").trim().equals("")) {
 		        return true;
 	        }
         }
@@ -44,7 +51,7 @@ public class Is {
      * TODO altera para regex
      */
     public static boolean validMail(String mailStr) {
-        String[] mailParts = mailStr.split("@");
+        String[] mailParts = atPattern.split(mailStr);
 
         // Como o operador && é curto-circuito, as duas próximas operações
 		// só serão realizadas se a primeira operação "mailParts.length == 2"

@@ -102,6 +102,9 @@ public class Params {
 		paramsMap.put("SCHEMA_GENERATION_TYPE", "none");
 		paramsMap.put("QUARTZ_MODE", "off");
 
+		// parâmetros de redirecionamento
+		paramsMap.put("LOGIN_URL_REDIRECT", null);
+		paramsMap.put("LOGIN_URL_REDIRECT_VAR_NAME", "next");
 
 		return classesPath;
 	}
