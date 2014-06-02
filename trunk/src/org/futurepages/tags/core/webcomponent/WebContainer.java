@@ -53,6 +53,8 @@ public final class WebContainer extends SimpleTagSupport {
 
 	private StringBuilder headSB = null;
 
+	private StringBuilder specialHeadTitle = null;
+
 	private Map<String, ImportComponentRes> components;
 
 
@@ -111,15 +113,19 @@ public final class WebContainer extends SimpleTagSupport {
 		}
 		headBufferBegin.append("><head>");
 
+		//invoca o conteúdo dentro do container
+		getJspBody().invoke(evalResult);
+
 		if (HeadTitleFilter.isPretty()) {
-			if (!Is.empty(this.headTitle)) {
+			if (!Is.empty(specialHeadTitle)) {
+				headBufferBegin.append("<title>").append(specialHeadTitle).append("</title>");
+			} else if (!Is.empty(this.headTitle)) {
 				headBufferBegin.append("<title>").append(headTitle).append(" | ").append(HeadTitleFilter.getPrettyTitle()).append("</title>");
 			} else {
 				headBufferBegin.append("<title>").append(HeadTitleFilter.getPrettyTitle()).append(HeadTitleFilter.SEPARATOR).append(HeadTitleFilter.getGlobalTitle()).append("</title>");
 			}
 		}
 
-		getJspBody().invoke(evalResult); //invoca o conteúdo dentro do container
 
 		//Head Content
 		if(headSB!=null){
@@ -218,5 +224,16 @@ public final class WebContainer extends SimpleTagSupport {
 			headSB = new StringBuilder();
 		}
 		return headSB;
+	}
+
+	public void addSpecialHeadContent(String specialHeadContent) {
+		specialHeadTitle = new StringBuilder(specialHeadContent);
+	}
+
+	public StringBuilder getSpecialHeadTitle() {
+		if (specialHeadTitle == null) {
+			specialHeadTitle = new StringBuilder();
+		}
+		return specialHeadTitle;
 	}
 }
