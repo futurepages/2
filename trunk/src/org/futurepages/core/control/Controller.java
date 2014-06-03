@@ -1,23 +1,30 @@
 package org.futurepages.core.control;
 
-import java.io.UnsupportedEncodingException;
-import org.futurepages.core.consequence.Consequence;
-import org.futurepages.core.context.CookieContext;
-import org.futurepages.core.context.ApplicationContext;
-import org.futurepages.core.context.SessionContext;
-import org.futurepages.core.filter.AfterConsequenceFilter;
-import org.futurepages.core.filter.GlobalFilterFree;
-import org.futurepages.core.filter.Filter;
+import org.futurepages.core.ApplicationManager;
 import org.futurepages.core.action.Action;
+import org.futurepages.core.callback.ConsequenceCallback;
 import org.futurepages.core.config.Params;
-import java.io.IOException;
-import java.lang.management.ManagementFactory;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.regex.Pattern;
+import org.futurepages.core.consequence.Consequence;
+import org.futurepages.core.consequence.ConsequenceProvider;
+import org.futurepages.core.consequence.DefaultConsequenceProvider;
+import org.futurepages.core.context.ApplicationContext;
+import org.futurepages.core.context.CookieContext;
+import org.futurepages.core.context.MapContext;
+import org.futurepages.core.context.SessionContext;
+import org.futurepages.core.exception.DefaultExceptionLogger;
+import org.futurepages.core.filter.AfterConsequenceFilter;
+import org.futurepages.core.filter.Filter;
+import org.futurepages.core.filter.GlobalFilterFree;
+import org.futurepages.core.formatter.FormatterManager;
+import org.futurepages.core.i18n.LocaleManager;
+import org.futurepages.core.input.PrettyGlobalURLRequestInput;
+import org.futurepages.core.input.PrettyURLRequestInput;
+import org.futurepages.core.input.RequestInput;
+import org.futurepages.core.output.ResponseOutput;
+import org.futurepages.exceptions.PageNotFoundException;
+import org.futurepages.filters.ConsequenceCallbackFilter;
+import org.futurepages.filters.GlobalFilterFreeFilter;
+import org.futurepages.util.The;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -25,24 +32,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.futurepages.core.ApplicationManager;
-import org.futurepages.core.callback.ConsequenceCallback;
-
-import org.futurepages.core.consequence.ConsequenceProvider;
-import org.futurepages.core.consequence.DefaultConsequenceProvider;
-import org.futurepages.core.context.MapContext;
-import org.futurepages.core.exception.DefaultExceptionLogger;
-import org.futurepages.exceptions.PageNotFoundException;
-import org.futurepages.filters.GlobalFilterFreeFilter;
-import org.futurepages.core.formatter.FormatterManager;
-import org.futurepages.core.input.RequestInput;
-import org.futurepages.core.output.ResponseOutput;
-import org.futurepages.core.i18n.LocaleManager;
-import org.futurepages.core.input.PrettyGlobalURLRequestInput;
-import org.futurepages.core.input.PrettyURLRequestInput;
-import org.futurepages.exceptions.FilterException;
-import org.futurepages.filters.ConsequenceCallbackFilter;
-import org.futurepages.util.The;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.lang.management.ManagementFactory;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 /**
  * The central controller. The actions are intercepted and
@@ -171,9 +169,7 @@ public class Controller extends HttpServlet {
 	public void destroy() {
 		if (appManager != null) {
 			Set<Filter> filters = appManager.getAllFilters();
-			Iterator<Filter> iter = filters.iterator();
-			while (iter.hasNext()) {
-				Filter f = iter.next();
+			for (Filter f : filters) {
 				f.destroy();
 			}
 
@@ -351,10 +347,9 @@ public class Controller extends HttpServlet {
 			throw new IllegalArgumentException(
 					"filters parameter should be non-null and a zero-sized list!");
 		}
-		Iterator<Filter> iter = chain.getFilters().iterator();
 
-		while (iter.hasNext()) {
-			filters.add(iter.next());
+		for (Filter filter : chain.getFilters()) {
+			filters.add(filter);
 		}
 
 		// execute chain!
@@ -393,9 +388,7 @@ public class Controller extends HttpServlet {
 	}
 
 	private boolean hasGlobalFilterFreeMarkerFilter(List<Filter> filters, String innerAction) {
-		Iterator<Filter> iter = filters.iterator();
-		while (iter.hasNext()) {
-			Filter f = iter.next();
+		for (Filter f : filters) {
 			if (GlobalFilterFreeFilter.class.isAssignableFrom(f.getClass())) {
 				GlobalFilterFreeFilter gffmf = (GlobalFilterFreeFilter) f;
 				return gffmf.isGlobalFilterFree(innerAction);
@@ -463,7 +456,7 @@ public class Controller extends HttpServlet {
 
 		String context = req.getContextPath();
 
-		String uri = req.getRequestURI().toString();
+		String uri = req.getRequestURI();
 
 		return getActionUrlParts(context, uri);
 	}
@@ -475,7 +468,7 @@ public class Controller extends HttpServlet {
 
 		String context = req.getContextPath();
 
-		String uri = req.getRequestURI().toString();
+		String uri = req.getRequestURI();
 
 		String debugParameter = req.getParameter("debug");
 
@@ -493,7 +486,7 @@ public class Controller extends HttpServlet {
 		return this.chainTL.get();
 	}
 
-	protected String[] getActionUrlParts(String context, String uri) {
+	public String[] getActionUrlParts(String context, String uri) {
 
 		// remove the context from the uri, if present
 		if (context.length() > 0 && uri.indexOf(context) == 0) {
@@ -599,7 +592,7 @@ public class Controller extends HttpServlet {
 	 */
 	protected String getURI(HttpServletRequest req) {
 		String context = req.getContextPath();
-		String uri = req.getRequestURI().toString();
+		String uri = req.getRequestURI();
 		// remove the context from the uri, if present
 		if (context.length() > 0 && uri.indexOf(context) == 0) {
 			uri = uri.substring(context.length());
@@ -649,7 +642,7 @@ public class Controller extends HttpServlet {
 	}
 
 	public ApplicationManager getAppManager() {
-		return (ApplicationManager) appManager;
+		return appManager;
 	}
 
 	private static void restartController()  {
