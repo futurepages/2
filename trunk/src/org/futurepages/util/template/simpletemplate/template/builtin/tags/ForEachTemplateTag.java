@@ -13,7 +13,7 @@ import org.futurepages.util.template.simpletemplate.expressions.parser.Parser;
 import org.futurepages.util.template.simpletemplate.expressions.tree.Exp;
 import org.futurepages.util.template.simpletemplate.template.AbstractTemplateBlock;
 import org.futurepages.util.template.simpletemplate.template.TemplateBlock;
-import org.futurepages.util.template.simpletemplate.template.TemplateWritter;
+import org.futurepages.util.template.simpletemplate.template.TemplateWriter;
 import org.futurepages.util.template.simpletemplate.template.builtin.customtagparams.ForEachArguments;
 import org.futurepages.util.template.simpletemplate.template.builtin.customtagparams.NumericalList;
 import org.futurepages.util.template.simpletemplate.template.builtin.customtagparams.ObjectArrayIterator;
@@ -43,7 +43,7 @@ public class ForEachTemplateTag extends TemplateTag {
 		super("forEach");
 	}
 
-	protected int fromBuildingArray(TemplateBlock block, ContextTemplateTag context, ForEachArguments fparams, NumericalList nlist, TemplateWritter sb) {
+	protected int fromBuildingArray(TemplateBlock block, ContextTemplateTag context, ForEachArguments fparams, NumericalList nlist, TemplateWriter sb) {
 		int iterations = 0;
 
 		for (int el : nlist) {
@@ -59,7 +59,7 @@ public class ForEachTemplateTag extends TemplateTag {
 		return iterations;
 	}
 
-	protected int fromList(TemplateBlock block, ContextTemplateTag context, ForEachArguments fparams, Object result, TemplateWritter sb) {
+	protected int fromList(TemplateBlock block, ContextTemplateTag context, ForEachArguments fparams, Object result, TemplateWriter sb) {
 		if (result != null) {
 
 			Iterator it = null;
@@ -136,7 +136,7 @@ public class ForEachTemplateTag extends TemplateTag {
 	}
 
 	@Override
-	public int doBody(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWritter sb) {
+	public int doBody(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWriter sb) {
 		TemplateBlock actualBlock = (TemplateBlock) block;
 		ForEachArguments ps = (ForEachArguments) actualBlock.getParams();
 

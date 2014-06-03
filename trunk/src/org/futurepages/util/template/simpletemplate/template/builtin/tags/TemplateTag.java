@@ -11,7 +11,7 @@ import org.futurepages.util.template.simpletemplate.expressions.exceptions.Unexp
 import org.futurepages.util.template.simpletemplate.expressions.parser.Parser;
 import org.futurepages.util.template.simpletemplate.expressions.tree.Exp;
 import org.futurepages.util.template.simpletemplate.template.AbstractTemplateBlock;
-import org.futurepages.util.template.simpletemplate.template.TemplateWritter;
+import org.futurepages.util.template.simpletemplate.template.TemplateWriter;
 import org.futurepages.util.template.simpletemplate.template.exceptions.TemplateTagDoesNotExists;
 import org.futurepages.util.template.simpletemplate.template.exceptions.TemplateWithSameNameAlreadyExistsException;
 import org.futurepages.util.template.simpletemplate.util.ContextTemplateTag;
@@ -101,9 +101,9 @@ public abstract class TemplateTag {
 
 	public abstract boolean hasOwnContext();
 
-	public abstract int doBody(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWritter sb);
+	public abstract int doBody(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWriter sb);
 
-	public void eval(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWritter sb) {
+	public void eval(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWriter sb) {
 		int whomEvaluate = doBody(block, context, sb);
 		AbstractTemplateBlock inner = block.getNextInner();
 		AbstractTemplateBlock innerElse = block.getNextInnerElse();
@@ -155,7 +155,7 @@ public abstract class TemplateTag {
 		}
 	}
 
-	protected void evalBody(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWritter sb) {
+	protected void evalBody(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWriter sb) {
 		AbstractTemplateBlock inner = block.getNextInner();
 
 		if (inner != null) {
@@ -163,7 +163,7 @@ public abstract class TemplateTag {
 		}
 	}
 
-	protected void evalElse(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWritter sb) {
+	protected void evalElse(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWriter sb) {
 		AbstractTemplateBlock innerElse = block.getNextInnerElse();
 
 		if (innerElse != null) {

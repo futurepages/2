@@ -70,5 +70,5 @@ public abstract class AbstractTemplateBlock {
 
 	public abstract void toString(StringBuilder sb);
 
-	public abstract void eval(ContextTemplateTag context, TemplateWritter sb);
+	public abstract void eval(ContextTemplateTag context, TemplateWriter sb);
 }

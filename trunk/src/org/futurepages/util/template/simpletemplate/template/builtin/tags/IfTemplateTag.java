@@ -9,7 +9,7 @@ import org.futurepages.util.template.simpletemplate.expressions.exceptions.Unexp
 import org.futurepages.util.template.simpletemplate.expressions.tree.Exp;
 import org.futurepages.util.template.simpletemplate.template.AbstractTemplateBlock;
 import org.futurepages.util.template.simpletemplate.template.TemplateBlock;
-import org.futurepages.util.template.simpletemplate.template.TemplateWritter;
+import org.futurepages.util.template.simpletemplate.template.TemplateWriter;
 import org.futurepages.util.template.simpletemplate.util.ContextTemplateTag;
 
 /**
@@ -38,7 +38,7 @@ public class IfTemplateTag extends TemplateTag {
 	}
 
 	@Override
-	public int doBody(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWritter sb) {
+	public int doBody(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWriter sb) {
 		TemplateBlock actualBlock = (TemplateBlock) block;
 
 		Exp exp = actualBlock.getParams();

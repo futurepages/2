@@ -8,7 +8,7 @@ import org.futurepages.util.template.simpletemplate.expressions.exceptions.Unexp
 import org.futurepages.util.template.simpletemplate.expressions.tree.Exp;
 import org.futurepages.util.template.simpletemplate.template.AbstractTemplateBlock;
 import org.futurepages.util.template.simpletemplate.template.TemplateBlock;
-import org.futurepages.util.template.simpletemplate.template.TemplateWritter;
+import org.futurepages.util.template.simpletemplate.template.TemplateWriter;
 import org.futurepages.util.template.simpletemplate.template.builtin.customtagparams.SetTagParams;
 import org.futurepages.util.template.simpletemplate.util.ContextTemplateTag;
 
@@ -33,7 +33,7 @@ public class SetTemplateTag extends TemplateTag {
 	}
 
 	@Override
-	public int doBody(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWritter sb) {
+	public int doBody(AbstractTemplateBlock block, ContextTemplateTag context, TemplateWriter sb) {
 		TemplateBlock actualBlock = (TemplateBlock) block;
 		SetTagParams params = (SetTagParams)actualBlock.getParams();
 		
@@ -48,7 +48,7 @@ public class SetTemplateTag extends TemplateTag {
 				result = attr.eval(context);
 				context.put(varName, result);
 			} else if (actualBlock.getNextInner() != null){
-				TemplateWritter tw = new TemplateWritter();
+				TemplateWriter tw = new TemplateWriter();
 				evalBody(block, context, tw);
 
 				if (!tw.isEmpty()) {
