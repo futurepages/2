@@ -132,7 +132,7 @@ public class AuthenticationFilter implements Filter {
 	private String getURIRedirect(HttpServletRequest req) {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(urlRedirect).append("?").append(nextVarName).append("=").append(req.getRequestURI());
+		sb.append(req.getContextPath()).append(urlRedirect).append("?").append(nextVarName).append("=").append(req.getRequestURI());
 
 		if (!Is.empty(req.getQueryString())) {
 			sb.append("?").append(req.getQueryString());
