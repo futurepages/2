@@ -44,7 +44,7 @@ public class TemplateBlockBase extends AbstractTemplateBlock {
 	}
 
 	public String eval(Map<String, Object> params) {
-		TemplateWritter sb = new TemplateWritter(initialBufferSize);
+		TemplateWriter sb = new TemplateWriter(initialBufferSize);
 
 		if (params instanceof ContextTemplateTag) {
 			eval((ContextTemplateTag)params, sb);
@@ -55,13 +55,13 @@ public class TemplateBlockBase extends AbstractTemplateBlock {
 		return sb.toString();
 	}
 
-	public void eval(Map<String, Object> params, TemplateWritter sb) {
+	public void eval(Map<String, Object> params, TemplateWriter sb) {
 		ContextTemplateTag context = new ContextTemplateTag(params);
 		eval(context, sb);
 	}
 
 	@Override
-	public void eval(ContextTemplateTag context, TemplateWritter sb) {
+	public void eval(ContextTemplateTag context, TemplateWriter sb) {
 		getNextInner().eval(context, sb);
 	}
 }

@@ -57,7 +57,7 @@ public class TemplateStatic extends AbstractTemplateBlock {
 
 	// Falta ajeitar essa onça
 	@Override
-	public void eval(ContextTemplateTag context, TemplateWritter sb) {
+	public void eval(ContextTemplateTag context, TemplateWriter sb) {
 		for (Object ob : content) {
 			if (ob instanceof Exp) {
 				sb.append(((Exp)ob).eval(context));

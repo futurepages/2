@@ -6,38 +6,38 @@ import java.io.Serializable;
  *
  * @author thiago
  */
-public class TemplateWritter implements Serializable {
+public class TemplateWriter implements Serializable {
 
 	private StringBuilder sb;
 	private boolean printNull = false;;
 
-	public TemplateWritter() {
+	public TemplateWriter() {
 		sb = new StringBuilder();
 	}
 
-	public TemplateWritter(int capacity) {
+	public TemplateWriter(int capacity) {
 		sb = new StringBuilder(capacity);
 	}
 
-	public TemplateWritter(String str) {
+	public TemplateWriter(String str) {
 		sb = new StringBuilder(str);
 	}
 
-	public TemplateWritter(CharSequence seq) {
+	public TemplateWriter(CharSequence seq) {
 		sb = new StringBuilder(seq);
 	}
 
-	public TemplateWritter(boolean printNull) {
+	public TemplateWriter(boolean printNull) {
 		sb = new StringBuilder();
 		this.printNull = printNull;
 	}
 
-	public TemplateWritter(String str, boolean printNull) {
+	public TemplateWriter(String str, boolean printNull) {
 		sb = new StringBuilder(str);
 		this.printNull = printNull;
 	}
 
-	public TemplateWritter(CharSequence seq, boolean printNull) {
+	public TemplateWriter(CharSequence seq, boolean printNull) {
 		sb = new StringBuilder(seq);
 		this.printNull = printNull;
 	}
@@ -46,7 +46,7 @@ public class TemplateWritter implements Serializable {
 		return obj == null;
 	}
 
-	public TemplateWritter append(Object obj) {
+	public TemplateWriter append(Object obj) {
 		if (!isNull(obj)) {
 			sb.append(obj);
 		} else if (printNull) {
@@ -55,7 +55,7 @@ public class TemplateWritter implements Serializable {
 		return this;
 	}
 
-	public TemplateWritter append(String str) {
+	public TemplateWriter append(String str) {
 		if (!isNull(str)) {
 			sb.append(str);
 		} else if (printNull) {
@@ -64,7 +64,7 @@ public class TemplateWritter implements Serializable {
 		return this;
 	}
 
-	private TemplateWritter append(StringBuilder sb) {
+	private TemplateWriter append(StringBuilder sb) {
 		if (!isNull(sb)) {
 			this.sb.append(sb);
 		} else if (printNull) {
@@ -73,7 +73,7 @@ public class TemplateWritter implements Serializable {
 		return this;
 	}
 
-	public TemplateWritter append(StringBuffer sb) {
+	public TemplateWriter append(StringBuffer sb) {
 		if (!isNull(sb)) {
 			this.sb.append(sb);
 		} else if (printNull) {
@@ -82,7 +82,7 @@ public class TemplateWritter implements Serializable {
 		return this;
 	}
 
-	public TemplateWritter append(CharSequence s) {
+	public TemplateWriter append(CharSequence s) {
 		if (!isNull(s)) {
 			sb.append(s);
 		} else if (printNull) {
@@ -91,7 +91,7 @@ public class TemplateWritter implements Serializable {
 		return this;
 	}
 
-	public TemplateWritter append(CharSequence s, int start, int end) {
+	public TemplateWriter append(CharSequence s, int start, int end) {
 		if (!isNull(s)) {
 			sb.append(s, start, end);
 		} else if (printNull) {
@@ -101,7 +101,7 @@ public class TemplateWritter implements Serializable {
 		return this;
 	}
 
-	public TemplateWritter append(char str[]) {
+	public TemplateWriter append(char str[]) {
 		if (!isNull(str)) {
 			sb.append(str);
 		} else if (printNull) {
@@ -111,7 +111,7 @@ public class TemplateWritter implements Serializable {
 		return this;
 	}
 
-	public TemplateWritter append(char str[], int offset, int len) {
+	public TemplateWriter append(char str[], int offset, int len) {
 		if (!isNull(str)) {
 			sb.append(str, offset, len);
 		} else if (printNull) {
@@ -120,7 +120,7 @@ public class TemplateWritter implements Serializable {
 		return this;
 	}
 
-	public TemplateWritter append(boolean b) {
+	public TemplateWriter append(boolean b) {
 		if (!isNull(b)) {
 			sb.append(b);
 		} else if (printNull) {
@@ -129,7 +129,7 @@ public class TemplateWritter implements Serializable {
 		return this;
 	}
 
-	public TemplateWritter append(char c) {
+	public TemplateWriter append(char c) {
 		if (!isNull(c)) {
 			sb.append(c);
 		} else if (printNull) {
@@ -138,7 +138,7 @@ public class TemplateWritter implements Serializable {
 		return this;
 	}
 
-	public TemplateWritter append(int i) {
+	public TemplateWriter append(int i) {
 		if (!isNull(i)) {
 			sb.append(i);
 		} else if (printNull) {
@@ -147,7 +147,7 @@ public class TemplateWritter implements Serializable {
 		return this;
 	}
 
-	public TemplateWritter append(long lng) {
+	public TemplateWriter append(long lng) {
 		if (!isNull(lng)) {
 			sb.append(lng);
 		} else if (printNull) {
@@ -156,7 +156,7 @@ public class TemplateWritter implements Serializable {
 		return this;
 	}
 
-	public TemplateWritter append(float f) {
+	public TemplateWriter append(float f) {
 		if (!isNull(f)) {
 			sb.append(f);
 		} else if (printNull) {
@@ -165,7 +165,7 @@ public class TemplateWritter implements Serializable {
 		return this;
 	}
 
-	public TemplateWritter append(double d) {
+	public TemplateWriter append(double d) {
 		if (!isNull(d)) {
 			sb.append(d);
 		} else if (printNull) {
