@@ -60,9 +60,10 @@ public class RedirectAfterLoginFilter implements Filter {
 		String callback = (String) session.getAttribute(AuthenticationFilter.URL_KEY);
 
 		Controller control = Controller.getInstance();
-		String [] parts = getActionName(control, action.getRequest());
+		String [] parts = null;
 
-		if (!result.equals(AbstractAction.ERROR) && parts != null) {
+		if (definedUrlLogin && (!result.equals(AbstractAction.ERROR) &&
+		    (parts = getActionName(control, action.getRequest())) != null)) {
 			Action ac = getAction(control, action.getRequest(), parts);
 
 			if (ac != null) {
