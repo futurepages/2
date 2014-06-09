@@ -78,7 +78,7 @@ public class Controller extends HttpServlet {
 				break;
 			}
 		}
-		if (isDebugging && Params.get("DEBUG_MODE")!=null && Params.get("DEBUG_MODE").equalsIgnoreCase("ON")) {
+		if (isDebugging && Params.get("DEBUG_MODE")!=null && Params.get("DEBUG_MODE").equalsIgnoreCase("on")) {
 			objectGetActionUrlParts = new ClassGetActionUrlPartsDebugMode();
 		}
 		else {

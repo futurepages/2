@@ -1,17 +1,19 @@
 package org.futurepages.consequences;
 
-import org.futurepages.exceptions.ConsequenceException;
 import org.futurepages.core.action.Action;
-import java.net.URI;
-import java.util.Iterator;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.futurepages.core.consequence.Consequence;
 import org.futurepages.core.output.Output;
+import org.futurepages.exceptions.ConsequenceException;
 import org.futurepages.util.EncodingUtil;
 import org.futurepages.util.Is;
-import static org.futurepages.util.StringUtils.*;
 import org.futurepages.util.The;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.net.URI;
+import java.util.Iterator;
+
+import static org.futurepages.util.StringUtils.concat;
 
 /**
  * A redirect consequence that has the following features:
@@ -80,7 +82,7 @@ public class Redirect implements Consequence {
 			URI uri = new URI(theURL);
 
 			String urlPath = pathWithPrettyParams(uri.getPath(), output);
-			String urlQuery = uri.getQuery();
+			String urlQuery = theURL.contains("?")? theURL.substring(theURL.indexOf("?")+1) : null;
 			
 			StringBuilder urlToRedir = builBasicUrlToRedir(uri);
 

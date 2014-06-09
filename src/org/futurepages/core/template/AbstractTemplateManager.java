@@ -3,6 +3,7 @@ package org.futurepages.core.template;
 import org.futurepages.exceptions.TemplateException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -15,7 +16,7 @@ import java.util.Map;
  */
 public abstract class AbstractTemplateManager {
 
-    private Map<String, Page> pages = new HashMap<String, Page>();
+    private Map<String, Page> pages = new LinkedHashMap<String, Page>();
 
     /**
      * Metodo a ser implementado, onde as configuracoes devem ser feitas

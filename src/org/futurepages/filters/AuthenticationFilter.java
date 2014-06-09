@@ -1,8 +1,5 @@
 package org.futurepages.filters;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.futurepages.actions.LoginAction;
 import org.futurepages.core.action.Action;
 import org.futurepages.core.action.AsynchronousManager;
@@ -13,8 +10,12 @@ import org.futurepages.core.context.Context;
 import org.futurepages.core.context.SessionContext;
 import org.futurepages.core.control.InvocationChain;
 import org.futurepages.core.filter.Filter;
+import org.futurepages.util.EncodingUtil;
 import org.futurepages.util.Is;
-import org.futurepages.util.StringUtils;
+import org.futurepages.util.The;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * A filter to handle user authentcation.
@@ -74,7 +75,7 @@ public class AuthenticationFilter implements Filter {
 			if (definedUrlLogin && (!isAjax && !isDyn)) {
 				action.getOutput().setValue(
 					Action.REDIR_URL,
-					StringUtils.concat(getDomain(action.getRequest()), getURIRedirect(action.getRequest()))
+					The.concat(getDomain(action.getRequest()), getURIRedirect(action.getRequest()))
 				);
 
 				return REDIR;
@@ -132,12 +133,12 @@ public class AuthenticationFilter implements Filter {
 	private String getURIRedirect(HttpServletRequest req) {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append(req.getContextPath()).append(urlRedirect).append("?").append(nextVarName).append("=").append(req.getRequestURI());
+		sb.append(req.getContextPath()).append(urlRedirect).append("?").append(nextVarName).append("=").append(EncodingUtil.encodeUrl(req.getRequestURI()));
 
 		if (!Is.empty(req.getQueryString())) {
-			sb.append("?").append(req.getQueryString());
+			sb.append(EncodingUtil.encodeUrl("?" + req.getQueryString()));
 		}
-
+		System.out.println(sb.toString());
 		return sb.toString();
 	}
 
