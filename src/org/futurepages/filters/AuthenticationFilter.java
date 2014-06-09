@@ -138,7 +138,6 @@ public class AuthenticationFilter implements Filter {
 		if (!Is.empty(req.getQueryString())) {
 			sb.append(EncodingUtil.encodeUrl("?" + req.getQueryString()));
 		}
-		System.out.println(sb.toString());
 		return sb.toString();
 	}
 
