@@ -1,28 +1,27 @@
 package org.futurepages.filters;
 
-import org.apache.tools.ant.taskdefs.condition.Http;
 import org.futurepages.annotations.RedirectAfterLogin;
+import org.futurepages.consequences.Redirect;
 import org.futurepages.core.ApplicationManager;
-import org.futurepages.core.action.Action;
 import org.futurepages.core.action.AbstractAction;
+import org.futurepages.core.action.Action;
 import org.futurepages.core.config.Params;
 import org.futurepages.core.context.Context;
 import org.futurepages.core.control.AbstractApplicationManager;
 import org.futurepages.core.control.ActionConfig;
 import org.futurepages.core.control.Controller;
-import org.futurepages.core.filter.Filter;
 import org.futurepages.core.control.InvocationChain;
+import org.futurepages.core.filter.Filter;
 import org.futurepages.core.output.Output;
-import org.futurepages.consequences.Redirect;
+import org.futurepages.util.EncodingUtil;
 import org.futurepages.util.Is;
-import org.futurepages.util.StringUtils;
-
-import static org.futurepages.util.StringUtils.concat;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static org.futurepages.util.StringUtils.concat;
 
 /**
  * A filter that implements the redirect after login mechanism.
@@ -84,7 +83,7 @@ public class RedirectAfterLoginFilter implements Filter {
 				if (methodAnnotation == null) {
 					if (classAnnotation != null) {
 						if (!classAnnotation.negate()) {
-							String next = getRefererQueryString(action.getRequest());
+							String next =  getRefererQueryString(action.getRequest());
 							String ret = returnRedirect(action, next);
 
 							if (ret != null) {
@@ -134,7 +133,9 @@ public class RedirectAfterLoginFilter implements Filter {
 			Matcher matcher = varNextMatch.matcher(req.getHeader("referer"));
 
 			if (matcher.find()) {
-				return referer.substring(matcher.end());
+				return EncodingUtil.decodeUrl(referer.substring(matcher.end()));
+			}else{
+				return !Is.empty(req.getParameter(nextVarName))? req.getParameter(nextVarName) : null;
 			}
 		}
 
