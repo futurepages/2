@@ -564,6 +564,10 @@ public class CalendarUtil {
 		return exp;
 	}
 
+	public static Calendar getToday() {
+		return buildDate(Calendar.getInstance());
+	}
+
 	public static class TooBigDateException extends Exception {
 	}
 
