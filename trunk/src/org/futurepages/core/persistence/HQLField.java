@@ -120,7 +120,7 @@ public class HQLField implements HQLable {
 	public String equalsTo(Boolean value) {
         if (value == null) {
             return isNull();
-        } else if (value == false) {
+        } else if (!value) {
             return isFalse();
         }
         return isTrue();
@@ -450,8 +450,16 @@ public class HQLField implements HQLable {
         return likeExpression("'", value, "%'");
     }
 
+    public String startsWith(Enum<?> value) {
+        return likeExpression("'", value.name(), "%'");
+    }
+
 	public String notStartsWith(String value) {
         return notLikeExpression("'", value, "%'");
+    }
+
+	public String notStartsWith(Enum<?> value) {
+        return notLikeExpression("'", value.name(), "%'");
     }
 
     public String endsWith(String value) {
