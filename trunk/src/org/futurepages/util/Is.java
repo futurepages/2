@@ -1,16 +1,10 @@
 package org.futurepages.util;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * Classe responsável por comparações diversas com retornos lógicos (true/false).
  *
  */
 public class Is {
-
-    private static final Pattern nbspPattern = Pattern.compile(String.valueOf((char) 160));
-    private static final Pattern atPattern = Pattern.compile("@");
 
     /**
      * Se o parâmetro é vazio ou nulo ou possui somente espaços, retorna true
@@ -19,9 +13,8 @@ public class Is {
         if (fieldObj == null) {
             return true;
         } else {
-	        Matcher m = nbspPattern.matcher(fieldObj.toString());
-	        //pode ser trocado por ... String nbsp = "\u00A0";
-	        if (m.replaceAll("").trim().equals("")) {
+	        String nbsp = String.valueOf((char) 160); //pode ser trocado por ... String nbsp = "\u00A0";
+	        if (fieldObj.toString().replaceAll(nbsp, "").trim().equals("")) {
 		        return true;
 	        }
         }
@@ -51,7 +44,7 @@ public class Is {
      * TODO altera para regex
      */
     public static boolean validMail(String mailStr) {
-        String[] mailParts = atPattern.split(mailStr);
+        String[] mailParts = mailStr.split("@");
 
         // Como o operador && é curto-circuito, as duas próximas operações
 		// só serão realizadas se a primeira operação "mailParts.length == 2"
@@ -114,18 +107,18 @@ public class Is {
             return false;
         }
 
-		String loginVerify;
+		String strToVerify;
 
 		if (!allowsInitialNumber){
-			loginVerify = The.stringWithoutInitialNumbers(str);
+			strToVerify = The.stringWithoutInitialNumbers(str);
 		} else{
-			loginVerify = str;
+			strToVerify = str;
 		}
 
 		//TIRA CARACTERES ESPECIAIS MANTENDO SOMENTE PONTO, UNDERLINE E HIFEN
-        loginVerify = The.stringKeyIn(loginVerify);
+        strToVerify = The.stringKeyIn(strToVerify);
 
-        if (loginVerify.equalsIgnoreCase(str)) {
+        if (strToVerify.equalsIgnoreCase(str)) {
             return true;
         }
 
@@ -258,4 +251,30 @@ public class Is {
 		}
 		return true;
 	}
+
+	public static boolean NaN(String str) {
+		try{
+			double d = Double.valueOf(str);
+			return Double.isNaN(d);
+		}catch(Exception ex){
+			return true;
+		}
+	}
+
+//	public static void testNaN(String[] args) {
+
+//		Resultados false
+//		System.out.println(NaN("1.79769313486231570e+308"));
+//		System.out.println(NaN("1"));
+//		System.out.println(NaN("2"));
+//		System.out.println(NaN("1.03"));
+//		System.out.println(NaN("01.03"));
+//		System.out.println(NaN("1234322493249234"));
+
+//		Resultados true
+//		System.out.println(NaN(""));
+//		System.out.println(NaN("abc"));
+//		System.out.println(NaN("1,3d,d3"));
+//		System.out.println(NaN("1,3d"));
+//	}
 }
