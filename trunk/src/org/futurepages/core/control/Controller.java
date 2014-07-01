@@ -1,39 +1,16 @@
 package org.futurepages.core.control;
 
-import org.futurepages.core.ApplicationManager;
-import org.futurepages.core.action.Action;
-import org.futurepages.core.callback.ConsequenceCallback;
-import org.futurepages.core.config.Params;
-import org.futurepages.core.consequence.Consequence;
-import org.futurepages.core.consequence.ConsequenceProvider;
-import org.futurepages.core.consequence.DefaultConsequenceProvider;
-import org.futurepages.core.context.ApplicationContext;
-import org.futurepages.core.context.CookieContext;
-import org.futurepages.core.context.MapContext;
-import org.futurepages.core.context.SessionContext;
-import org.futurepages.core.exception.DefaultExceptionLogger;
-import org.futurepages.core.filter.AfterConsequenceFilter;
-import org.futurepages.core.filter.Filter;
-import org.futurepages.core.filter.GlobalFilterFree;
-import org.futurepages.core.formatter.FormatterManager;
-import org.futurepages.core.i18n.LocaleManager;
-import org.futurepages.core.input.PrettyGlobalURLRequestInput;
-import org.futurepages.core.input.PrettyURLRequestInput;
-import org.futurepages.core.input.RequestInput;
-import org.futurepages.core.output.ResponseOutput;
-import org.futurepages.exceptions.PageNotFoundException;
-import org.futurepages.filters.ConsequenceCallbackFilter;
-import org.futurepages.filters.GlobalFilterFreeFilter;
-import org.futurepages.util.The;
-
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import org.futurepages.core.consequence.Consequence;
+import org.futurepages.core.context.CookieContext;
+import org.futurepages.core.context.ApplicationContext;
+import org.futurepages.core.context.SessionContext;
+import org.futurepages.core.filter.AfterConsequenceFilter;
+import org.futurepages.core.filter.GlobalFilterFree;
+import org.futurepages.core.filter.Filter;
+import org.futurepages.core.action.Action;
+import org.futurepages.core.config.Params;
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -41,6 +18,31 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.futurepages.core.ApplicationManager;
+import org.futurepages.core.callback.ConsequenceCallback;
+
+import org.futurepages.core.consequence.ConsequenceProvider;
+import org.futurepages.core.consequence.DefaultConsequenceProvider;
+import org.futurepages.core.context.MapContext;
+import org.futurepages.core.exception.DefaultExceptionLogger;
+import org.futurepages.exceptions.PageNotFoundException;
+import org.futurepages.filters.GlobalFilterFreeFilter;
+import org.futurepages.core.formatter.FormatterManager;
+import org.futurepages.core.input.RequestInput;
+import org.futurepages.core.output.ResponseOutput;
+import org.futurepages.core.i18n.LocaleManager;
+import org.futurepages.core.input.PrettyGlobalURLRequestInput;
+import org.futurepages.core.input.PrettyURLRequestInput;
+import org.futurepages.exceptions.FilterException;
+import org.futurepages.filters.ConsequenceCallbackFilter;
+import org.futurepages.util.The;
 
 /**
  * The central controller. The actions are intercepted and
@@ -78,7 +80,7 @@ public class Controller extends HttpServlet {
 				break;
 			}
 		}
-		if (isDebugging && Params.get("DEBUG_MODE")!=null && Params.get("DEBUG_MODE").equalsIgnoreCase("on")) {
+		if (isDebugging && Params.get("DEBUG_MODE")!=null && Params.get("DEBUG_MODE").equalsIgnoreCase("ON")) {
 			objectGetActionUrlParts = new ClassGetActionUrlPartsDebugMode();
 		}
 		else {
@@ -472,10 +474,13 @@ public class Controller extends HttpServlet {
 
 		String debugParameter = req.getParameter("debug");
 
+		String possivelUri1 = context + "/" + Params.get("START_PAGE_NAME");
+		String possivelUri2 = possivelUri1 + "/";
+
 		if (debugParameter!=null
 				&& debugParameter.equalsIgnoreCase("ac")
-				&& (uri.equalsIgnoreCase("/" + Params.get("START_PAGE_NAME"))
-						|| uri.equalsIgnoreCase("/" + Params.get("START_PAGE_NAME") + "/"))) {
+				&& (uri.equalsIgnoreCase(possivelUri1)
+						|| uri.equalsIgnoreCase(possivelUri2))) {
 			restartController();
 		}
 
