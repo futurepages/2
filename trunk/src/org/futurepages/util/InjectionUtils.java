@@ -643,6 +643,10 @@ public class InjectionUtils {
 						System.err.println("Error injecting by field: " + value + " in " + target);
 						throw e;
 					}
+				}else{
+					if(input.getValue(var)!=null && String[].class.isAssignableFrom(type) && input.getValue(var) instanceof String){
+						f.set(target, input.getStringValues(var));
+					}
 				}
 			}
 		}
