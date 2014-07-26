@@ -128,7 +128,9 @@ public class ApplicationListener implements ServletContextListener {
 				Paths.initialize(context); //somente se o AUTO_REDIRECT_DOMAIN for completo com protocolo.
 			}else{
 				if(Params.get("DEPLOY_MODE").equals("production")){
-					log("Auto Redirect Domain OFF. Prefira usar o parâmetro AUTO_REDIRECT_DOMAIN para melhorar a performance da aplicação.");
+					if(Is.empty(Params.get("AUTO_REDIRECT_DOMAIN"))){
+						log("Auto Redirect Domain OFF. Prefira usar o parâmetro AUTO_REDIRECT_DOMAIN para melhorar a performance da aplicação.");
+					}
 				}
 				Paths.initialize();
 			}
