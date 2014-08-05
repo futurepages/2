@@ -19,6 +19,8 @@ public class VOFilter implements Filter {
     private boolean tryField = true;
     private boolean convert = true;
     private boolean convertNullToFalse = true;
+
+	private String[] excludedPaths;
     
     public VOFilter(Class klass) {
         
@@ -42,9 +44,13 @@ public class VOFilter implements Filter {
     }
     
     public VOFilter(String key, Class klass) {
-    	
     	this(klass, key);
-    	
+    }
+
+    public VOFilter(String key, Class klass,String... excludedPaths) {
+    	this(klass, key);
+	    this.excludedPaths = excludedPaths;
+
     }
     
     public VOFilter(Class klass, String key, boolean tryField) {
@@ -104,8 +110,7 @@ public class VOFilter implements Filter {
     	Action action = chain.getAction();
 
     	Object target = getTarget();
-
-    	InjectionUtils.getObject(target, action.getInput(), action.getLocale(), tryField, prefix, convert, convertNullToFalse);
+		InjectionUtils.getObject(target, action.getInput(), action.getLocale(), tryField, prefix, convert, convertNullToFalse, excludedPaths);
 
     	setTarget(action, target);
     	
