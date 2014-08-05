@@ -501,16 +501,16 @@ public class InjectionUtils {
 
 	public static void getObject(Object target, Input input, Locale loc,
 			boolean tryField, String prefix, boolean tryToConvert,
-			boolean convertBoolean) throws Exception {
+			boolean convertBoolean, String... excludedPaths) throws Exception {
 
 		// the default is to allow recursion...
-		getObject(target, input, loc, tryField, prefix, tryToConvert, convertBoolean, true);
+		getObject(target, input, loc, tryField, prefix, tryToConvert, convertBoolean, true, excludedPaths);
 
 	}
 
 	public static void getObject(Object target, Input input, Locale loc,
 			boolean tryField, String prefix, boolean tryToConvert,
-			boolean convertBoolean, boolean allowRecursion) throws Exception {
+			boolean convertBoolean, boolean allowRecursion, String... excludedPaths) throws Exception {
 
 		Class<? extends Object> targetClass = target.getClass();
 		Map<String, Object> setters, fields;
@@ -543,6 +543,19 @@ public class InjectionUtils {
 
 		while (iter.hasNext()) {
 			String var = iter.next();
+
+			if(excludedPaths!=null){
+				boolean avaliateVar = true;
+				for(String excludedPath : excludedPaths){
+					if(excludedPath.equals(var)){
+						avaliateVar = false;
+						break;
+					}
+				}
+				if(!avaliateVar){
+					continue;
+				}
+			}
 			boolean hasValue = hasValueToInject(var, input, prefix);
 			Object value = getValueToInject(var, input, prefix);
 			boolean tryingToConvertBoolean = false;
@@ -572,9 +585,25 @@ public class InjectionUtils {
 					// i did not inject... how about a VO object for this setter?
 					Class<?> type = m.getParameterTypes()[0];
 					if (!type.getName().startsWith("java.lang.") && !type.isPrimitive() && hasDefaultConstructor(type)) {
+						String[] newExcludedPaths = null;
 						if (!Modifier.isAbstract(type.getModifiers())) {
 							Object param = type.newInstance();
-							InjectionUtils.getObject(param, input, loc, true, prefix, true, true, false); // no recursion...
+							if(excludedPaths!=null){
+								List<String> newExcludedOnes = new ArrayList<String>();
+								for(String excludedOne : excludedPaths){
+									String discardingPath = var + ".";
+									if(excludedOne.startsWith(discardingPath)){
+										newExcludedOnes.add(The.firstTokenAfter(excludedOne,discardingPath,""));
+									}
+								}
+								if(newExcludedOnes.size()>0){
+									newExcludedPaths = new String[newExcludedOnes.size()];
+									for(int i = 0; i < newExcludedPaths.length; i++){
+										newExcludedPaths[i] = newExcludedOnes.get(i);
+									}
+								}
+							}
+							InjectionUtils.getObject(param, input, loc, true, prefix, true, true, false, newExcludedPaths); // no recursion...
 							inject(m, target, param, loc, false, false);
 						}
 					}
@@ -599,7 +628,7 @@ public class InjectionUtils {
 						Class<?> type = m.getParameterTypes()[0];
 						if (!type.getName().startsWith("java.lang.") && !type.isPrimitive() && hasDefaultConstructor(type)) {
 							Object param = type.newInstance();
-							InjectionUtils.getObject(param, input, loc, true, prefix, true, true, false); // no recursion...
+							InjectionUtils.getObject(param, input, loc, true, prefix, true, true, false, excludedPaths); // no recursion...
 							if (inject(m, target, param, loc, false, false)) {
 								break; // done...
 							}
