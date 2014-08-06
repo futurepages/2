@@ -44,6 +44,11 @@ public class Is {
      * TODO altera para regex
      */
     public static boolean validMail(String mailStr) {
+
+	    if (mailStr.startsWith(".") || mailStr.endsWith(".")) {
+		    return false;
+	    }
+
         String[] mailParts = mailStr.split("@");
 
         // Como o operador && é curto-circuito, as duas próximas operações
