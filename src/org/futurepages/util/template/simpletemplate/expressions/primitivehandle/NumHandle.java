@@ -107,4 +107,20 @@ public class NumHandle {
 			}
 		}
 	}
+	
+	public static boolean isZero(Number obj) {
+		if (obj instanceof Integer) {
+			return (Integer)obj == 0;
+		} else if (obj instanceof Long) {
+			return (Long)obj == 0;
+		} else if (obj instanceof Short) {
+			return (Short)obj == 0;
+		} else if (obj instanceof Byte) {
+			return (Byte)obj == 0;
+		} else if (obj instanceof Float) {
+			return (Float)obj == 0.0f;
+		} else { // Double
+			return (Double)obj == 0.0d;
+		}
+	}
 }
