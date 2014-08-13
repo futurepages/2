@@ -48,7 +48,7 @@ public class TemplateWriter implements Serializable {
 	}
 
 	public TemplateWriter append(Object obj) {
-		if (!isNull(obj)) {
+		if (!isNull(obj) && obj != Const.NULL) {
 			sb.append(obj);
 		} else if (printNull) {
 			sb.append("null");
