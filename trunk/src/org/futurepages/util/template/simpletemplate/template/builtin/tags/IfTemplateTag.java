@@ -6,6 +6,7 @@ import org.futurepages.util.template.simpletemplate.expressions.exceptions.Expec
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.ExpectedOperator;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.FunctionDoesNotExists;
 import org.futurepages.util.template.simpletemplate.expressions.exceptions.Unexpected;
+import org.futurepages.util.template.simpletemplate.expressions.primitivehandle.NumHandle;
 import org.futurepages.util.template.simpletemplate.expressions.tree.Exp;
 import org.futurepages.util.template.simpletemplate.template.AbstractTemplateBlock;
 import org.futurepages.util.template.simpletemplate.template.TemplateBlock;
@@ -37,23 +38,7 @@ public class IfTemplateTag extends TemplateTag {
 		return obj instanceof String;
 	}
 
-	protected boolean isZero(Number obj) {
-		if (obj instanceof Integer) {
-			return (Integer)obj == 0;
-		} else if (obj instanceof Long) {
-			return (Long)obj == 0;
-		} else if (obj instanceof Short) {
-			return (Short)obj == 0;
-		} else if (obj instanceof Byte) {
-			return (Byte)obj == 0;
-		} else if (obj instanceof Float) {
-			return (Float)obj == 0.0f;
-		} else { // Double
-			return (Double)obj == 0.0d;
-		}
-	}
-
-	protected boolean isEmptyStr(Object obj) {
+	protected boolean isEmptyStr(String obj) {
 		return ((String)obj).isEmpty();
 	}
 
@@ -73,7 +58,7 @@ public class IfTemplateTag extends TemplateTag {
 
 		Object t = exp.eval(context);
 
-		boolean test = (t != null) && ((isNumber(t) && !isZero((Number)t)) || (isString(t) && !isEmptyStr((String)t)) || (isBool(t) && ((Boolean)t)));
+		boolean test = (t != null) && (isBool(t) ? (Boolean)t :!((isNumber(t) && NumHandle.isZero((Number)t)) ^ (isString(t) && isEmptyStr((String)t))));
 
 		return test ? EVAL_BODY : EVAL_ELSE;
 	}
