@@ -164,8 +164,8 @@ public class Semantic {
 		int nxtIdx = i + 1;
 		Exp next = exps.get(nxtIdx);
 		
-		if (!isUnary(next) && !isLParen(next) && !isToken(next)) {
-			throw new Unexpected(expression, tokens.get(i).getB(), "Unexpected ", i + 1, "º token (", exps.toString(), ")");
+		if (!isUnary(next) && !isLParen(next) && !isToken(next) && !isFunction(next)) {
+			throw new Unexpected(expression, tokens.get(i).getB(), "Unexpected ", i + 1, "º token (", exp.toString(), ")");
 		}
 	}
 	

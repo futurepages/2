@@ -192,7 +192,7 @@ public class TokensToExp {
 		Exp exp = null;
 		
 		if (ok(getNull(str))) {
-			return new Literal(null);
+			return new Literal(Const.NULL);
 		} else if (ok(o = getBoolean(str))) {
 			return new Literal(o);
 		} else if (ok(o = getNumber(str))) {
