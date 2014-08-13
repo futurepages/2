@@ -150,7 +150,7 @@ public class Parser {
 	protected void branch(UnaryOperator uo, MyStack<Exp> stack) {
 		Exp param = stack.peek();
 		
-		if (param instanceof Token) {
+		if (param instanceof Token || param instanceof Function) {
 			uo.setParam(stack.pop());
 		} else {
 			uo.setParam(buildTreeAux(stack));

@@ -1,6 +1,7 @@
 package org.futurepages.util.template.simpletemplate.template;
 
 import java.io.Serializable;
+import org.futurepages.util.template.simpletemplate.expressions.primitivehandle.Const;
 
 /**
  *
@@ -51,6 +52,8 @@ public class TemplateWriter implements Serializable {
 			sb.append(obj);
 		} else if (printNull) {
 			sb.append("null");
+		} else if (obj == Const.NULL) {
+			sb.append("");
 		}
 		return this;
 	}
