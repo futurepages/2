@@ -439,6 +439,8 @@ public final class ReflectionUtil {
 	 * Joga os atributos de um objeto em outro vazio.
 	 * @param fromObj
 	 * @param toObj
+	 * Caso deseja criar novas referências nas dependências, utilize SerializationUtil (apache commons)
+	 *
 	 */
 	public static void cloneFields(Object fromObj, Object toObj) {
 		Class clss = toObj.getClass();
