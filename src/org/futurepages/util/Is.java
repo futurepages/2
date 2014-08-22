@@ -1,5 +1,7 @@
 package org.futurepages.util;
 
+import java.util.Collection;
+
 /**
  * Classe responsável por comparações diversas com retornos lógicos (true/false).
  *
@@ -16,6 +18,12 @@ public class Is {
 	        String nbsp = String.valueOf((char) 160); //pode ser trocado por ... String nbsp = "\u00A0";
 	        if (fieldObj.toString().replaceAll(nbsp, "").trim().equals("")) {
 		        return true;
+	        }
+	        if (fieldObj instanceof Collection) {
+		        Collection collection = (Collection) fieldObj;
+				if (collection.isEmpty()) {
+					return true;
+				}
 	        }
         }
         return false;

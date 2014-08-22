@@ -1,22 +1,21 @@
 package org.futurepages.core.persistence;
 
+import org.futurepages.core.pagination.PaginationSlice;
+import org.futurepages.util.Is;
+import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.metadata.ClassMetadata;
+import org.hibernate.transform.AliasToBeanResultTransformer;
+import org.hibernate.transform.Transformers;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-
 import java.util.Map;
-
-import org.hibernate.Criteria;
-import org.hibernate.Query;
-import org.hibernate.transform.AliasToBeanResultTransformer;
-
-import org.futurepages.core.pagination.PaginationSlice;
-import org.futurepages.util.Is;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.transform.Transformers;
 
 public class GenericDao extends HQLProvider {
 
@@ -76,7 +75,11 @@ public class GenericDao extends HQLProvider {
     }
 
     public String getIdName(Class entity) {
-        return session().getSessionFactory().getClassMetadata(entity).getIdentifierPropertyName();
+	    ClassMetadata classMetadata = session().getSessionFactory().getClassMetadata(entity);
+	    if (classMetadata == null) {
+		    return null;
+	    }
+        return classMetadata.getIdentifierPropertyName();
     }
 
     public Class getIdType(Class entity) {

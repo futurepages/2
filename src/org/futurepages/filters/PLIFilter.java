@@ -3,6 +3,7 @@ package org.futurepages.filters;
 import java.util.List;
 import org.futurepages.core.persistence.Dao;
 import org.futurepages.core.persistence.HQLProvider;
+import org.futurepages.util.EnumerationUtil;
 import org.futurepages.util.ReflectionUtil;
 import org.futurepages.util.The;
 import org.futurepages.core.input.Input;
@@ -50,7 +51,11 @@ public class PLIFilter extends HQLProvider implements Filter {
 
     private static List keyObjects(String[] keyValues, Class classToInject) {
         if (keyValues != null) {
-            return Dao.list(classToInject, field(Dao.getIdName(classToInject)).in(keyValues));
+	        if (classToInject.isEnum()) {
+		        return EnumerationUtil.listByKeys(classToInject, keyValues);
+	        } else {
+		        return Dao.list(classToInject, field(Dao.getIdName(classToInject)).in(keyValues));
+	        }
         }
         return null;
     }
