@@ -38,6 +38,9 @@ public class CheckOptions extends HTMLTag {
 	@TagAttribute(required = false)
 	private String itemOuterTag = null;
 
+	@TagAttribute(required = false)
+	private boolean disabled = false;
+
 	@Override
 	public String getStringToPrint() throws JspException {
 		StringBuilder sb = new StringBuilder();
@@ -60,7 +63,7 @@ public class CheckOptions extends HTMLTag {
 					}
 					sb.append("<input value=\"").append(value1).append("\" id=\"")
 							.append(name).append("_").append(i).append("\" type=\"checkbox\" name=\"").append(name)
-							.append("\" ").append(cssClass);
+							.append("\" ").append(disabled ? " disabled " : "").append(cssClass);
 					for (int j = 0; j < list.size(); j++) {
 						value2 = getAttributeValue(j, attributePath);
 						if (value1.equals(value2)) {
@@ -82,7 +85,7 @@ public class CheckOptions extends HTMLTag {
 					}
 					sb.append("<input value=\"").append(value1).append("\" id=\"").append(name)
 							.append("_").append(i).append("\" type=\"checkbox\" name=\"").append(name)
-							.append("\" ").append(cssClass).append("/>&nbsp;")
+							.append("\" ").append(disabled ? " disabled " : "").append(cssClass).append("/>&nbsp;")
 							.append(ReflectionUtil.getField(fullList.get(i), showAttr).toString());
 					if (itemOuterTag == null) {
 						sb.append("<br/>");
@@ -140,5 +143,9 @@ public class CheckOptions extends HTMLTag {
 			return true;
 		}
 		return false;
+	}
+
+	public void setDisabled(boolean disabled) {
+		this.disabled = disabled;
 	}
 }
