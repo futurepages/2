@@ -1,16 +1,15 @@
 package org.futurepages.tags.core;
 
-import java.util.List;
-
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.Tag;
-
 import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.tags.build.ContentTypeEnum;
 import org.futurepages.core.tags.cerne.Context;
 import org.futurepages.core.tags.cerne.ListContext;
 import org.futurepages.core.tags.cerne.LoopTag;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.Tag;
+import java.util.List;
 
 /**
  * @author Sergio Oliveira
@@ -30,6 +29,9 @@ public class Loop extends LoopTag implements Context {
     @TagAttribute
     private String counter = COUNTER_VAR;
 
+	@TagAttribute
+	private int personalIndex;
+
     public void setVar(String var) {
         this.varname = var;
     }
@@ -38,7 +40,11 @@ public class Loop extends LoopTag implements Context {
         this.counter = counter;
     }
 
-    private void setNext() {
+	public void setPersonalIndex(int personalIndex) {
+		this.personalIndex = personalIndex;
+	}
+
+	private void setNext() {
         currIndex++;
         if (varname != null)
             pageContext.setAttribute(varname, list.get(currIndex),
@@ -46,6 +52,8 @@ public class Loop extends LoopTag implements Context {
         if (counter != null)
             pageContext.setAttribute(counter, new Integer(currIndex),
                     PageContext.PAGE_SCOPE);
+		pageContext.setAttribute("personalIndex", personalIndex++,
+				PageContext.PAGE_SCOPE);
     }
 
     private boolean hasMore() {
