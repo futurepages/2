@@ -483,5 +483,10 @@ public class The {
 		}
 		return sb.toString();
 	}
-	
+
+	public static String strWithoutCharsetBreakers(String str) {
+			str = SEOUtil.replaceSpecialAlphas(str);  //substitui acentuados e troca ç por c e retorna todo em in.
+			String regexPatternChars = "[\\d|A-Z|a-z|\\s|\\-|\\.]"; //regex para manter somente estes caracteres.
+			return The.wordInRegex(str, regexPatternChars); //retira caracteres especiais
+	}
 }
