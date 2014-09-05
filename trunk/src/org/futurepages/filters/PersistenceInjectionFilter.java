@@ -25,9 +25,14 @@ import org.futurepages.util.The;
  * 	<br>O objeto Turma retornado na base é injetado no objeto Aluno obtido por input.getValue("aluno")
  * <br><br>   
  * <li>("aluno.turma","turmaId",Turma.class)
- *  <br>busca um objeto Turma na base de dados com um id representado pelo valor de input.getValue("turmaId"). 
+ *  <br>busca um objeto Turma na base de dados com um id representado pelo valor de input.getValue("turmaId").
  * 	<br>O objeto Turma retornado na base é injetado no objeto Aluno obtido por input.getValue("aluno")
- * <br><br>      
+ * <br><br>
+ *
+ * //TODO Outros casos a implemtar
+ * <li>("preVinculado.manifestacaoPrincipal","manifestacaoPrincipalId",Manifestacao.class)
+ * <li>("preVinculado.manifestacaoPrincipal","manifestacaoPrincipalProtocolo","protocolo",Manifestacao.class)
+ *
  * @author Danilo Medeiros
  */
 public class PersistenceInjectionFilter implements Filter{
