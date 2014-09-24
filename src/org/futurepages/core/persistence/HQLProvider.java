@@ -8,20 +8,20 @@ import org.futurepages.util.StringUtils;
  */
 public class HQLProvider implements HQLable {
 
-	public static HQLField field(String fieldName){
+	public static HQLField field(String fieldName) {
 		return new HQLField(fieldName);
 	}
-	
+
 	/*
 	 * Como este método é sobrecarregado, sempre que for chamado
 	 * com um só parâmetro, o método chamado será o
 	 * "HQLField field(String fieldName)"
 	 */
-	public static HQLField field(String ...fieldPath) {
+	public static HQLField field(String... fieldPath) {
 		if (fieldPath.length > 0) {
 			StringBuilder sb = new StringBuilder();
 			String separator = "";
-			
+
 			if (!Is.empty(fieldPath[0])) {
 				sb.append(fieldPath[0]);
 				separator = ".";
@@ -33,10 +33,10 @@ public class HQLProvider implements HQLable {
 					separator = ".";
 				}
 			}
-			
+
 			return new HQLField(sb.toString());
 		}
-		
+
 		return null;
 	}
 
@@ -58,19 +58,19 @@ public class HQLProvider implements HQLable {
 
 	public static String not(String notClause) {
 		if (!Is.empty(notClause)) {
-			return concat(" NOT (" , notClause,") ");
+			return concat(" NOT (", notClause, ") ");
 		} else {
 			return "";
 		}
 	}
 
 	public static String updateSetting(Class entityClass) {
-		return concat(" UPDATE " , entityClass.getName() , " SET ");
+		return concat(" UPDATE ", entityClass.getName(), " SET ");
 	}
 
 	public static String max(String maxClause) {
 		if (!Is.empty(maxClause)) {
-			return concat(" MAX(",maxClause,")");
+			return concat(" MAX(", maxClause, ")");
 		} else {
 			return "";
 		}
@@ -78,7 +78,7 @@ public class HQLProvider implements HQLable {
 
 	public static String min(String minClause) {
 		if (!Is.empty(minClause)) {
-			return concat(" MIN(",minClause,")");
+			return concat(" MIN(", minClause, ")");
 		} else {
 			return "";
 		}
@@ -86,7 +86,7 @@ public class HQLProvider implements HQLable {
 
 	public static String count(String countClause) {
 		if (!Is.empty(countClause)) {
-			return concat(" COUNT(",countClause,")");
+			return concat(" COUNT(", countClause, ")");
 		} else {
 			return "";
 		}
@@ -94,26 +94,26 @@ public class HQLProvider implements HQLable {
 
 	public static String sum(String sumClause) {
 		if (!Is.empty(sumClause)) {
-			return concat(" SUM(",sumClause,")");
+			return concat(" SUM(", sumClause, ")");
 		} else {
 			return "";
 		}
 	}
 
 	public static HQLField day(String date) {
-		return new HQLField(concat(" DAY(",date,")"));
+		return new HQLField(concat(" DAY(", date, ")"));
 	}
 
 	public static HQLField month(String date) {
-		return new HQLField(concat(" MONTH(",date,")"));
+		return new HQLField(concat(" MONTH(", date, ")"));
 	}
 
 	public static HQLField year(String date) {
-		return new HQLField(concat(" YEAR(",date,")"));
+		return new HQLField(concat(" YEAR(", date, ")"));
 	}
 
 	public static HQLField date(String date) {
-		return new HQLField(concat(" DATE(",date,")"));
+		return new HQLField(concat(" DATE(", date, ")"));
 	}
 
 	public static String from(Class entityClass) {
@@ -124,13 +124,34 @@ public class HQLProvider implements HQLable {
 		}
 	}
 
-	public static String from(Class entityClass,String alias) {
+	public static String from(Class entityClass, String alias) {
 		if (entityClass != null) {
-			return concat(" FROM ",entityClass.getName()," ",alias);
+			return concat(" FROM ", entityClass.getName(), " ", alias);
 		} else {
 			return "";
 		}
 	}
+
+
+	/**
+	 * @param entityClass
+	 * @param alias
+	 * @param joins       Joins para a consulta
+	 * @return
+	 */
+	public static String from(Class entityClass, String alias, String... joins) {
+		if (entityClass != null) {
+			String s = concat(" FROM ", entityClass.getName(), " ", alias);
+			StringBuilder sb = new StringBuilder();
+			for (String j : joins) {
+				sb.append(join(j));
+			}
+			return concat(s, sb.toString());
+		} else {
+			return "";
+		}
+	}
+
 
 	public static String join(String joinClause) {
 		if (!Is.empty(joinClause)) {
@@ -139,7 +160,7 @@ public class HQLProvider implements HQLable {
 			return "";
 		}
 	}
-    
+
 	public static String leftJoin(String joinClause) {
 		if (!Is.empty(joinClause)) {
 			return LEFT_JOIN + joinClause;
@@ -149,7 +170,7 @@ public class HQLProvider implements HQLable {
 	}
 
 	public static String notExists(String clause) {
-		if(!Is.empty(clause)) {
+		if (!Is.empty(clause)) {
 			return NOT_EXISTS + "(" + clause + ")";
 		} else {
 			return "";
@@ -166,43 +187,43 @@ public class HQLProvider implements HQLable {
 
 	public static String orderBy(String... fields) {
 		if (fields != null) {
-			if(fields.length==1){
-				if(!Is.empty(fields[0])){
-					return ORDER_BY+fields[0];
+			if (fields.length == 1) {
+				if (!Is.empty(fields[0])) {
+					return ORDER_BY + fields[0];
 				}
+			} else if (fields.length > 1) {
+				StringBuilder sb = new StringBuilder(ORDER_BY);
+				for (String field : fields) {
+					sb.append(field).append(",");
+				}
+				String result = sb.toString();
+				return result.substring(0, result.length() - 1);
 			}
-			else
-				if(fields.length>1){
-					StringBuilder sb = new StringBuilder(ORDER_BY);
-					for(String field : fields){
-						sb.append(field).append(",");
-					}
-					String result = sb.toString();
-					return  result.substring(0, result.length()-1);
-				}
 		}
 		return "";
 	}
 
 	public static String as(String alias) {
 		if (!Is.empty(alias)) {
-			return AS+alias;
+			return AS + alias;
 		} else {
 			return "";
 		}
 	}
 
 	public static String asc(String field) {
-		return field+ASC;
+		return field + ASC;
 	}
 
 	public static String desc(String field) {
-		return field+DESC;
+		return field + DESC;
 	}
+
 	/**
-	 * Monta conjunções com as expresões passadas 
+	 * Monta conjunções com as expresões passadas
+	 *
 	 * @param clauses : array de expressões booleanas
-	 * @return (clauses[0]) AND (clauses[1]) AND ... AND (clauses[length-1]) 
+	 * @return (clauses[0]) AND (clauses[1]) AND ... AND (clauses[length-1])
 	 */
 	public static String ands(String... clauses) {
 		return connectClauses(AND, clauses);
@@ -219,30 +240,30 @@ public class HQLProvider implements HQLable {
 		StringBuffer st = new StringBuffer();
 		boolean primeiro = true;
 		for (String clause : clauses) {
-			if(primeiro){
+			if (primeiro) {
 				st.append(expressionBuilder("", clause));
-				if(!Is.empty(clause)){
+				if (!Is.empty(clause)) {
 					primeiro = false;
 				}
-			}else{
+			} else {
 				st.append(expressionBuilder(connector, clause));
 			}
 		}
 		return st.toString();
 	}
-	
+
 	private static String expressionBuilder(String conector, String clause) {
 		if (Is.empty(clause))
 			return "";
-		return concat(conector ,"(",clause,")");
+		return concat(conector, "(", clause, ")");
 	}
-	
+
 	public static String and(String clause) {
 		if (Is.empty(clause))
 			return "";
-		return concat(AND,"(",clause,")");
+		return concat(AND, "(", clause, ")");
 	}
-	
+
 	public static String ors(String... clauses) {
 		return connectClauses(OR, clauses);
 	}
@@ -250,7 +271,7 @@ public class HQLProvider implements HQLable {
 	public static String or(String clause) {
 		if (Is.empty(clause))
 			return "";
-		return concat(OR,"(",clause,")");
+		return concat(OR, "(", clause, ")");
 	}
 
 	public static String groupBy(String groupClause) {
@@ -261,7 +282,7 @@ public class HQLProvider implements HQLable {
 		}
 	}
 
-	public static String concat(String... args){
-	   return StringUtils.concat(args);
+	public static String concat(String... args) {
+		return StringUtils.concat(args);
 	}
 }
