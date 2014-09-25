@@ -77,7 +77,8 @@ public class HQLField implements HQLable {
     	if (Is.empty(enumeration)) {
     		return "";
     	}
-        return concat(fieldName , " = '" , escQuoteAndSlashes(enumeration.name()) , "'");
+	    String s = concat(fieldName , " = '" , escQuoteAndSlashes(enumeration.name()) , "'");
+        return s;
     }
 
     public String equalsTo(String value) {

@@ -136,7 +136,7 @@ public class Dao extends HQLProvider {
 	public static <T extends Serializable> List<T> listDistinctWithJoin(String entityAlias, Class<T> entity, String joinClause, String whereClause, String... orderClauses) {
 		return getInstance().listDistinctWithJoin(entityAlias, entity, joinClause, whereClause, orderClauses);
 	}
-    
+
 	public static <T extends Serializable> List<T> listDistinctWithJoin(String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
 		return getInstance().listDistinctWithJoin(entityAlias, fromAndJoin, whereClause, orderClauses);
 	}
