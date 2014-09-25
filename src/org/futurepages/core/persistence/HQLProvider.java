@@ -116,6 +116,10 @@ public class HQLProvider implements HQLable {
 		return new HQLField(concat(" DATE(", date, ")"));
 	}
 
+	public static HQLField size(String element) {
+		return new HQLField(concat(" SIZE(", element, ")"));
+	}
+
 	public static String from(Class entityClass) {
 		if (entityClass != null) {
 			return concat(" FROM ", entityClass.getName(), " ");
