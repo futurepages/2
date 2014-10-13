@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.Cookie;
 
 import javax.servlet.http.HttpServletRequest;
@@ -56,7 +58,7 @@ public abstract class AbstractAction implements Pageable, Action {
 	private Paginator paginator;
 
 	private InvocationChain chain;
-	
+
 	public AbstractAction() {
 		messages = new HashMap<String, String>();
 		messages.put(SUCCESS, null);
@@ -85,39 +87,40 @@ public abstract class AbstractAction implements Pageable, Action {
 
 	/**
 	 * Valida perante três modos: breakOnFirst =  false | true.
-	 * 
+	 *
 	 * @param breakOnFirst true se lança ErrorException na primeira falha, false para retornar todos os erros.
 	 * @return retorna o validador daquele tipo passando o tipo de validação
 	 */
-	public <V extends Validator> V validate(Class<V> t, boolean breakOnFirst){
+	public <V extends Validator> V validate(Class<V> t, boolean breakOnFirst) {
 		V validator = Validator.validate(t, breakOnFirst);
 		return validator;
 	}
 
 	/**
 	 * Valida quebrando retornando ErrorException na primeira falha
+	 *
 	 * @param t Tipo do Validator
 	 * @return o validador
 	 */
-	public <V extends Validator> V validate(Class<V> t){
+	public <V extends Validator> V validate(Class<V> t) {
 		return Validator.validate(t, true);
 	}
 
-	protected Paginator getPaginator(){
-		if(paginator == null){
+	protected Paginator getPaginator() {
+		if (paginator == null) {
 			paginator = new Paginator(output, input);
 		}
 		return paginator;
 	}
 
-	protected Paginator getPaginator(int defaultPageSize){
+	protected Paginator getPaginator(int defaultPageSize) {
 		getPaginator().setDefaultPageSize(defaultPageSize);
 		return paginator;
 	}
 
 	/**
 	 * Paginação de elementos
-	 *
+	 * <p/>
 	 * Depreciado por ser uma má pratica de programação (mistura controle e modelo)
 	 *
 	 * @deprecated Utilize setOutputPaginationSlice (verificar em site2 e scrummer o uso)
@@ -129,71 +132,72 @@ public abstract class AbstractAction implements Pageable, Action {
 	/**
 	 * Atenção: Este método é legado do Futurepages 1 e aparentemente não está funcionando corretamente
 	 * na contagem dos itens para paginação.
-	 * 
+	 * <p/>
 	 * Utilize Dao.reportPage() or Dao.listReports()
-	 * 
+	 *
 	 * @deprecated
 	 */
 	@Deprecated
 	public List paginateReport(int pageSize, Class entityClass, String fields, String where, String group, String order, Class resultClass) {
-		return getPaginator().paginateReport(pageSize, entityClass, resultClass,fields, where, group, order);
+		return getPaginator().paginateReport(pageSize, entityClass, resultClass, fields, where, group, order);
 	}
 
 	public <T extends Serializable> void setOutputPaginationSlice(String listKey, PaginationSlice<T> slice) {
 		getPaginator().setOutputPaginationSlice(listKey, slice);
 	}
 
-	protected Object input(String key){
+	protected Object input(String key) {
 		return input.getValue(key);
 	}
 
 	@Override
-	public void output(String key, Object obj){
+	public void output(String key, Object obj) {
 		output.setValue(key, obj);
 	}
-	protected void outputOnly(String key, Object obj){
+
+	protected void outputOnly(String key, Object obj) {
 		clearOutput();
 		output(key, obj);
 	}
 
-	protected void outputPrettyUrlParams(Object... params){
+	protected void outputPrettyUrlParams(Object... params) {
 		output(PRETTY_URL_PARAMS, params);
 	}
 
 
-	protected void clearOutput(){
+	protected void clearOutput() {
 		output = new MapOutput();
 	}
 
-	protected String onlySuccess(String msg){
+	protected String onlySuccess(String msg) {
 		clearOutput();
 		return success(msg);
 	}
 
-	
-	protected String onlyError(String msg){
+
+	protected String onlyError(String msg) {
 		clearOutput();
 		return error(msg);
 	}
 
-	protected String onlyError(Exception ex){
+	protected String onlyError(Exception ex) {
 		clearOutput();
 		return error(ex.getMessage());
 	}
 
 	@Override
 	public String redir(String url) {
-			return redir(url,false);
+		return redir(url, false);
 	}
 
 	@Override
 	public String redir(String url, boolean keepOutput) {
-		if(AsynchronousManager.isAjaxAction(chain)){
-			outputAjax(Paths.context(getRequest())+url);
+		if (AsynchronousManager.isAjaxAction(chain)) {
+			outputAjax(Paths.context(getRequest()) + url);
 			return AJAX_REDIR;
 		} else {
 			String howToRedir = REDIR_APPEND_OUTPUT;
-			if(!keepOutput){
+			if (!keepOutput) {
 				clearOutput();
 				howToRedir = REDIR;
 			}
@@ -203,13 +207,17 @@ public abstract class AbstractAction implements Pageable, Action {
 
 	}
 
-	/** @return Pega o numero da página corrente em uso */
+	/**
+	 * @return Pega o numero da página corrente em uso
+	 */
 	protected int getPageNum() {
 		return getPaginator().getPageNum();
 	}
 
-	/** @return Pega o tamanho do deslocamento dos elementos na página */
-	protected int getOffsetPages(){
+	/**
+	 * @return Pega o tamanho do deslocamento dos elementos na página
+	 */
+	protected int getOffsetPages() {
 		return getPaginator().getPagesOffset();
 	}
 
@@ -224,7 +232,7 @@ public abstract class AbstractAction implements Pageable, Action {
 	/**
 	 * Pega o objeto que se encontra no input com uma determinada chave String passada
 	 * por parâmetro e coloca-o no output com a mesma chave.
-	 * 
+	 *
 	 * @param key nome da chave do input que irá pro output.
 	 */
 	protected void fwdValue(String key) {
@@ -238,25 +246,25 @@ public abstract class AbstractAction implements Pageable, Action {
 	public void headTitle(String headTitle) {
 		output(HEAD_TITLE, headTitle);
 	}
-	
-    public void headTitleAppend(String headTitle) {
-		String previousValue = (String)output.getValue(HEAD_TITLE);
-		if(HeadTitleFilter.isPretty()){
-			if(!Is.empty(previousValue)){
-				output(HEAD_TITLE, The.concat(headTitle , HeadTitleFilter.SEPARATOR ,previousValue ));
-			}else{
+
+	public void headTitleAppend(String headTitle) {
+		String previousValue = (String) output.getValue(HEAD_TITLE);
+		if (HeadTitleFilter.isPretty()) {
+			if (!Is.empty(previousValue)) {
+				output(HEAD_TITLE, The.concat(headTitle, HeadTitleFilter.SEPARATOR, previousValue));
+			} else {
 				headTitle(headTitle);
 			}
-		}else{
-			if(!Is.empty(previousValue)){
-				output(HEAD_TITLE, The.concat(previousValue , HeadTitleFilter.SEPARATOR , headTitle));
-			}else{
+		} else {
+			if (!Is.empty(previousValue)) {
+				output(HEAD_TITLE, The.concat(previousValue, HeadTitleFilter.SEPARATOR, headTitle));
+			} else {
 				headTitle(headTitle);
 			}
 		}
-    }
+	}
 
-	public void setModuleId(String moduleId){
+	public void setModuleId(String moduleId) {
 		ModuleIdFilter.setModuleId(this, moduleId);
 	}
 
@@ -276,20 +284,20 @@ public abstract class AbstractAction implements Pageable, Action {
 
 	protected void listDependencies() {
 	}
-	
+
 	@Override
-	public String accessDenied(){
+	public String accessDenied() {
 		return Authentication.accessDenied(this.getChain());
 	}
 
-	public String accessDenied(String accessMessage){
+	public String accessDenied(String accessMessage) {
 		output("accessMessage", accessMessage);
 		return accessDenied();
 	}
 
 	@Override
 	public boolean hasSuccess() {
-		return (messages.get(Action.SUCCESS) != null) || (getRequest().getParameter(Action.SUCCESS)!=null);
+		return (messages.get(Action.SUCCESS) != null) || (getRequest().getParameter(Action.SUCCESS) != null);
 	}
 
 	@Override
@@ -299,7 +307,7 @@ public abstract class AbstractAction implements Pageable, Action {
 
 	@Override
 	public boolean hasError() {
-		return messages.get(ERROR) != null || (getRequest().getParameter(Action.ERROR)!=null);
+		return messages.get(ERROR) != null || (getRequest().getParameter(Action.ERROR) != null);
 	}
 
 	@Override
@@ -327,7 +335,7 @@ public abstract class AbstractAction implements Pageable, Action {
 		return getIpsFromRequest(this.getRequest());
 	}
 
-	public static String getIpsFromRequest(HttpServletRequest req){
+	public static String getIpsFromRequest(HttpServletRequest req) {
 		String ipClientReal = req.getHeader("x-forwarded-for");
 		String ipResult;
 		if (ipClientReal == null) {
@@ -340,6 +348,7 @@ public abstract class AbstractAction implements Pageable, Action {
 
 	/**
 	 * Verifica se possui usuário logado.
+	 *
 	 * @return true se está logado.
 	 */
 	@Override
@@ -368,19 +377,19 @@ public abstract class AbstractAction implements Pageable, Action {
 		return this.putMessage(SUCCESS, msg);
 	}
 
-    public String error() {
-        return error("");
-    }
+	public String error() {
+		return error("");
+	}
 
-    protected String error(String msg) {
-        return this.putMessage(ERROR, msg);
-    }
+	protected String error(String msg) {
+		return this.putMessage(ERROR, msg);
+	}
 
-	public String warning(){
+	public String warning() {
 		return warning(false, "");
 	}
 
-	public String warning(String msg){
+	public String warning(String msg) {
 		return warning(false, msg);
 	}
 
@@ -393,31 +402,31 @@ public abstract class AbstractAction implements Pageable, Action {
 	}
 
 	protected String error(ErrorException ex) {
-        return this.putError(true, ex);
-    }
+		return this.putError(true, ex);
+	}
 
 	protected ErrorException errorEx(String message) {
-        return new ErrorException(message);
-    }
+		return new ErrorException(message);
+	}
 
 	protected ErrorException errorEx(Exception ex) {
-        return new ErrorException(ex.getMessage());
-    }
+		return new ErrorException(ex.getMessage());
+	}
 
-    public String putError(boolean listDependencies, ErrorException errorException) {
-        this.putMessage(ERROR, errorException.getMessage());
+	public String putError(boolean listDependencies, ErrorException errorException) {
+		this.putMessage(ERROR, errorException.getMessage());
 
-		if(AsynchronousManager.isAjaxAction(chain)){
+		if (AsynchronousManager.isAjaxAction(chain)) {
 			outputAjax(errorException.getValidationMap());
 			return AJAX_ERROR;
-		}else{
+		} else {
 			output("errorList", errorException.getValidationMap());
 		}
 
 		if (listDependencies && !listingDependencies) {
 			this.doListDependencies();
 		}
-	    //@dynActions em crudActions listam dependência... para não listarem, tem que anotar o método com @NotListDependencies
+		//@dynActions em crudActions listam dependência... para não listarem, tem que anotar o método com @NotListDependencies
 		return ERROR;
 	}
 
@@ -449,11 +458,11 @@ public abstract class AbstractAction implements Pageable, Action {
 	}
 
 	@Override
-	public boolean hasNoCache(){
-		return The.bool((Boolean)session.getAttribute("noCache"));
+	public boolean hasNoCache() {
+		return The.bool((Boolean) session.getAttribute("noCache"));
 	}
 
-	protected void setNoCache(){
+	protected void setNoCache() {
 		session.setAttribute("noCache", true);
 	}
 
@@ -512,12 +521,12 @@ public abstract class AbstractAction implements Pageable, Action {
 	}
 
 	@Override
-	public Context getCallback(){
+	public Context getCallback() {
 		return callback;
 	}
 
 	@Override
-	public void setCallback(Context callback){
+	public void setCallback(Context callback) {
 		this.callback = callback;
 	}
 
@@ -538,15 +547,15 @@ public abstract class AbstractAction implements Pageable, Action {
 
 	@Override
 	public Cookie getCookie(String key) {
-        Cookie[] cookiesArray = this.getRequest().getCookies();
-        if (cookiesArray != null) {
-            for (int i = 0; i < cookiesArray.length; i++) {
-                if (cookiesArray[i].getName().equals(key)) {
-                    return cookiesArray[i];
-                }
-            }
-        }
-        return null;
+		Cookie[] cookiesArray = this.getRequest().getCookies();
+		if (cookiesArray != null) {
+			for (int i = 0; i < cookiesArray.length; i++) {
+				if (cookiesArray[i].getName().equals(key)) {
+					return cookiesArray[i];
+				}
+			}
+		}
+		return null;
 	}
 
 	@Override
@@ -581,7 +590,7 @@ public abstract class AbstractAction implements Pageable, Action {
 	}
 
 	public static boolean isLogged(HttpServletRequest req) {
-		return req.getSession().getAttribute(USER_KEY)!=null ;
+		return req.getSession().getAttribute(USER_KEY) != null;
 	}
 
 	public static DefaultUser loggedUser(HttpServletRequest req) {
@@ -600,13 +609,13 @@ public abstract class AbstractAction implements Pageable, Action {
 		return input.getProperty("contextPath");
 	}
 
-	public InvocationChain getChain(){
+	public InvocationChain getChain() {
 		return this.chain;
 	}
 
 	@Override
 	public void setChain(InvocationChain chain) {
-		if(this.chain==null){
+		if (this.chain == null) {
 			this.chain = chain;
 		}
 	}
@@ -618,54 +627,76 @@ public abstract class AbstractAction implements Pageable, Action {
 		Map<String, String> messages;
 		Output output;
 
-		public Dispatcher(){
+		public Dispatcher() {
 		}
 
-		public void load(){
+		public void load() {
 			load(true);
 		}
 
-		public void load(boolean loadAndRemove){
-			load("dispatcherHash",loadAndRemove);
+		public void load(boolean loadAndRemove) {
+			load("dispatcherHash", loadAndRemove);
 		}
 
-		public void load(String hashKey){
-			load(hashKey,true);
+		public void load(String hashKey) {
+			load(hashKey, true);
 		}
 
 
-		public void load(String hashKey, boolean loadAndRemove){
+		public void load(String hashKey, boolean loadAndRemove) {
 			String sessionKey = input.getStringValue(hashKey);
-			Dispatcher dispatcher = (Dispatcher) session.getAttribute("dispatcher_"+sessionKey);
-			if(dispatcher!=null){
+			Dispatcher dispatcher = (Dispatcher) session.getAttribute("dispatcher_" + sessionKey);
+			if (dispatcher != null) {
 				this.output = dispatcher.output;
 				this.messages = dispatcher.messages;
-				if(loadAndRemove){
-					session.removeAttribute("dispatcher_"+sessionKey);
+				if (loadAndRemove) {
+					session.removeAttribute("dispatcher_" + sessionKey);
 				}
 				dispatcher = null;
-				
+
 				setOutput(this.output);
 				setMessages(this.messages);
-			}else{
+			} else {
 				throw new DispatcherNotPresentException();
 			}
 		}
 
-		public String hash(){
-			if(hash == null){
-				hash = The.concat(Security.md5(getChain().getActionName()).substring(0,6),
-								",",String.valueOf(Thread.currentThread().getId()),
-								",",String.valueOf(System.currentTimeMillis())
-					);
+		public String hash() {
+			if (hash == null) {
+				hash = The.concat(Security.md5(getChain().getActionName()).substring(0, 6),
+						",", String.valueOf(Thread.currentThread().getId()),
+						",", String.valueOf(System.currentTimeMillis())
+				);
 				this.output = getOutput();
 				this.messages = getMessages();
-				session.setAttribute("dispatcher_"+hash, this);
+				session.setAttribute("dispatcher_" + hash, this);
 			}
 			return hash;
 		}
 	}
 
-	protected class DispatcherNotPresentException extends RuntimeException {}
+	protected class DispatcherNotPresentException extends RuntimeException {
+	}
+
+	protected void log(Level level, String txt, String... values) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(txt);
+		for (String s : values) {
+			sb.append(s + ", ");
+		}
+		log(sb.toString(), level);
+	}
+
+	protected void log(String value) {
+		log(value, null);
+	}
+
+	protected void log(String value, Level level) {
+		if (level == null) {
+			level = Level.INFO;
+		}
+		Logger.getLogger(this.getClass().getName()).log(level, value);
+
+	}
 
 }
