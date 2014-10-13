@@ -5,19 +5,19 @@ import java.util.Map;
 
 public class StringUtils {
 
-	public static String replace(String text, String textToBeReplaced, String replacement){
+	public static String replace(String text, String textToBeReplaced, String replacement) {
 		return org.apache.commons.lang.StringUtils.replace(text, textToBeReplaced, replacement);
 	}
 
-	public static String concat(String... args){
+	public static String concat(String... args) {
 		StringBuilder sb = new StringBuilder();
 		for (String string : args) {
 			sb.append(string);
 		}
 		return sb.toString();
 	}
-	
-    public static String concat(Object... args){
+
+	public static String concat(Object... args) {
 		StringBuilder sb = new StringBuilder();
 		for (Object string : args) {
 			sb.append(string);
@@ -26,9 +26,9 @@ public class StringUtils {
 	}
 
 	public static String concatWith(String inserted, String... array) {
-		if(inserted == null){
+		if (inserted == null) {
 			return concat(array);
-		}else{
+		} else {
 			StringBuffer out = new StringBuffer();
 			for (int i = 0; i < array.length; i++) {
 				if (i != 0) {
@@ -39,7 +39,7 @@ public class StringUtils {
 			return out.toString();
 		}
 	}
-	
+
 	public static boolean isNotEmpty(String s) {
 		return s != null && s.length() > 0;
 	}
@@ -48,24 +48,24 @@ public class StringUtils {
 		return s == null || s.length() == 0;
 	}
 
-	public static String truncated(String in, int size){
-		if(in == null || in.length()<=size){
+	public static String truncated(String in, int size) {
+		if (in == null || in.length() <= size) {
 			return in;
-		}	else{
+		} else {
 			return in.substring(0, size);
 		}
 	}
 
 	public static String replace(String strIn, Map<Character, String> dirt) {
-		if(Is.empty(strIn)) return "";
+		if (Is.empty(strIn)) return "";
 
 		StringBuilder outBuffer = new StringBuilder();
 		String clean;
 		for (Character charDirty : strIn.toCharArray()) {
 
-			if(dirt.containsKey(charDirty)){
+			if (dirt.containsKey(charDirty)) {
 				clean = dirt.get(charDirty);
-			}else{
+			} else {
 				clean = charDirty.toString();
 			}
 			outBuffer.append(clean);
@@ -83,6 +83,14 @@ public class StringUtils {
 		}
 
 		return strIn;
+	}
+
+	public static String leftPad(String value, int qt, String token) {
+		return org.apache.commons.lang.StringUtils.leftPad(value, qt, token);
+	}
+
+	public static String rightPad(String value, int qt, String token) {
+		return org.apache.commons.lang.StringUtils.rightPad(value, qt, token);
 	}
 
 	//corrige um nome que possa estar em maiusculo para ficar no formato: Fulano da Silva dos Anzois

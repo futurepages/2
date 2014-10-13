@@ -2,6 +2,7 @@ package org.futurepages.util;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+
 import org.futurepages.enums.DayOfWeek;
 import org.futurepages.enums.MonthEnum;
 import org.futurepages.enums.UnitTimeEnum;
@@ -17,7 +18,7 @@ public class CalendarUtil {
 	private static Calendar now() {
 		return Calendar.getInstance();
 	}
-	
+
 	/**
 	 * Retorna o iésimo dia do ano da data informada.
 	 * <br>Se o ano for não bisexto(possui um dia a menos no ano),o valor retornado será o iésimo dia +1 para os dias após 01/03.
@@ -35,18 +36,20 @@ public class CalendarUtil {
 		return nDia;
 	}
 
-	public static boolean areEquals(Calendar cal1, Calendar cal2){
+	public static boolean areEquals(Calendar cal1, Calendar cal2) {
 
-		return (   cal1.get(Calendar.DAY_OF_MONTH)==cal2.get(Calendar.DAY_OF_MONTH)
-				&& cal1.get(Calendar.MONTH)==cal2.get(Calendar.MONTH)
-				&& cal1.get(Calendar.YEAR)==cal2.get(Calendar.YEAR)
-				&& cal1.get(Calendar.HOUR_OF_DAY)==cal2.get(Calendar.HOUR_OF_DAY)
-				&& cal1.get(Calendar.MINUTE)==cal2.get(Calendar.MINUTE)
-				&& cal1.get(Calendar.SECOND)==cal2.get(Calendar.SECOND)
-				);
+		return (cal1.get(Calendar.DAY_OF_MONTH) == cal2.get(Calendar.DAY_OF_MONTH)
+				&& cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH)
+				&& cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)
+				&& cal1.get(Calendar.HOUR_OF_DAY) == cal2.get(Calendar.HOUR_OF_DAY)
+				&& cal1.get(Calendar.MINUTE) == cal2.get(Calendar.MINUTE)
+				&& cal1.get(Calendar.SECOND) == cal2.get(Calendar.SECOND)
+		);
 	}
 
-	/** @return true se o ano do calendário informado for um ano bisexto, false caso contrário. */
+	/**
+	 * @return true se o ano do calendário informado for um ano bisexto, false caso contrário.
+	 */
 	public static boolean isLeapYear(Calendar cal) {
 		int year = cal.get(Calendar.YEAR);
 		return year % 4 == 0;
@@ -58,11 +61,12 @@ public class CalendarUtil {
 
 	/**
 	 * Compara dois Calendar utilizando os campos ano, mes e ano
+	 *
 	 * @param calendar1
 	 * @param calencdar2
 	 * @return -1 (quando a primeira data é menor que a segunda)
-	 *          1 (quando a primeira data é maior que a segunda)
-	 *          0 (quando os dois são iguais)
+	 * 1 (quando a primeira data é maior que a segunda)
+	 * 0 (quando os dois são iguais)
 	 */
 	public static int compareCalendarDate(Calendar calendar1, Calendar calencdar2) {
 		Integer ano1 = calendar1.get(Calendar.YEAR);
@@ -82,32 +86,40 @@ public class CalendarUtil {
 		return comparador;
 	}
 
-	/** 1 day == 86.400.000 miliseconds; //(24 * 60 * 60 * 1000)  */
+	/**
+	 * 1 day == 86.400.000 miliseconds; //(24 * 60 * 60 * 1000)
+	 */
 	//CUIDADO, E UM ARREDONDAMENTO. SE POSSUIR 1,2 dia CONTARÁ COMO 1 e 1,6 dia contará como 2.
 	public static int getDifferenceInDays(Calendar start, Calendar end) {
 		int milliseconds = 86400000;
 		return getDifference(start, end, milliseconds);
 	}
-	
+
 	// calcula os dias sem levar em contas as horas
 	public static int getDifferenceInAbsoluteDays(Calendar start, Calendar end) {
 		int milliseconds = 86400000;
 		return getDifference(DateUtil.dateToCalendar(start.getTime()), DateUtil.dateToCalendar(end.getTime()), milliseconds);
 	}
 
-	/** 1 minute == 3.600.000 miliseconds //(60 * 60 * 1000)*/
+	/**
+	 * 1 minute == 3.600.000 miliseconds //(60 * 60 * 1000)
+	 */
 	public static int getDifferenceInHours(Calendar start, Calendar end) {
 		int milliseconds = 3600000;
 		return getDifference(start, end, milliseconds);
 	}
 
-	/** 1 minute == 60.000 miliseconds //(60 * 1000) */
+	/**
+	 * 1 minute == 60.000 miliseconds //(60 * 1000)
+	 */
 	public static int getDifferenceInMinutes(Calendar start, Calendar end) {
 		int milliseconds = 60000;
 		return getDifference(start, end, milliseconds);
 	}
 
-	/** 1 second == 1.000 miliseconds */
+	/**
+	 * 1 second == 1.000 miliseconds
+	 */
 	public static int getDifferenceInSeconds(Calendar start, Calendar end) {
 		int milliseconds = 1000;
 		return getDifference(start, end, milliseconds);
@@ -156,11 +168,12 @@ public class CalendarUtil {
 
 	/**
 	 * Compara dois Calendar utilizando os campos hora, minuto , segundo
+	 *
 	 * @param calendar1
 	 * @param calencdar2
 	 * @return -1 (quando o segundo tempo é maior que o primeiro)
-	 *          1 (quando o primeiro tempo é maior que o segundo)
-	 *          0 (quando os dois são iguais do mesmo horario)
+	 * 1 (quando o primeiro tempo é maior que o segundo)
+	 * 0 (quando os dois são iguais do mesmo horario)
 	 */
 	public static int compareCalendarTime(Calendar calendar1, Calendar calencdar2) {
 		Integer hora1 = calendar1.get(Calendar.HOUR_OF_DAY);
@@ -182,11 +195,11 @@ public class CalendarUtil {
 
 	/**
 	 * Compara dois Calendar utilizando o campo dia do mes
+	 *
 	 * @param calendar1
 	 * @param calencdar2
-	 * @return
-	 *          true (quando os dois são iguais do mesmo dia do mes)
-	 *          false caso contrario
+	 * @return true (quando os dois são iguais do mesmo dia do mes)
+	 * false caso contrario
 	 */
 	public static boolean compareCalendarByDayOfMonth(Calendar calendar1, Calendar calencdar2) {
 		Integer dia1 = calendar1.get(Calendar.DAY_OF_MONTH);
@@ -201,11 +214,11 @@ public class CalendarUtil {
 
 	/**
 	 * Compara dois Calendar utilizando o campo mes
+	 *
 	 * @param calendar1
 	 * @param calencdar2
-	 * @return
-	 *          true (quando os dois são iguais do mesmo mes)
-	 *          false caso contrario
+	 * @return true (quando os dois são iguais do mesmo mes)
+	 * false caso contrario
 	 */
 	public static boolean compareCalendarByMonth(Calendar calendar1, Calendar calencdar2) {
 		Integer mes1 = calendar1.get(Calendar.MONTH);
@@ -220,11 +233,11 @@ public class CalendarUtil {
 
 	/**
 	 * Compara dois Calendar utilizando o campo ano
+	 *
 	 * @param calendar1
 	 * @param calendar2
-	 * @return
-	 *          true (quando os dois são iguais do mesmo ano)
-	 *          false caso contrario
+	 * @return true (quando os dois são iguais do mesmo ano)
+	 * false caso contrario
 	 */
 	public static boolean compareCalendarByYear(Calendar calendar1, Calendar calendar2) {
 		Integer ano1 = calendar1.get(Calendar.YEAR);
@@ -265,6 +278,7 @@ public class CalendarUtil {
 	 * retorna um literal expressando o tempo para um
 	 * determinado intervalo de calendar que possuem o mesmo dia/mes/ano
 	 * caso contrario se não forem do mesmo dia e retornado ""
+	 *
 	 * @param calIni
 	 * @param calFim
 	 * @return período literal de horários
@@ -419,9 +433,8 @@ public class CalendarUtil {
 	}
 
 	/**
-	 *
-	 * @param start
-	 * @param end
+	 * @param startI
+	 * @param endI
 	 * @return array int[ano,mes,dia,minuto,segundo]
 	 */
 	public static int[] getElapsedTime(Calendar startI, Calendar endI) {
@@ -486,23 +499,23 @@ public class CalendarUtil {
 	}
 
 	public static String getElapsedTimeUntilNowStatement(Calendar start, UnitTimeEnum unitLimit, int limitValue,
-			String commonPrefix, String exceptionPrefix) {
+	                                                     String commonPrefix, String exceptionPrefix) {
 		return getElapsedTimeUntilNowStatementPriv(start, Calendar.getInstance(), unitLimit, limitValue, commonPrefix, exceptionPrefix);
 	}
 
 	private static String getElapsedTimeUntilNowStatementPriv(Calendar start, Calendar end, UnitTimeEnum unitLimit, int limitValue,
-			String commonPrefix, String exceptionPrefix) {
+	                                                          String commonPrefix, String exceptionPrefix) {
 		return getElapsedTimeUntilNowStatement(start, end, unitLimit, limitValue, commonPrefix, exceptionPrefix, true);
 	}
 
 	public static String getElapsedTimeUntilNowStatement(Calendar start, Calendar end, UnitTimeEnum unitLimit, int limitValue,
-			String commonPrefix, String exceptionPrefix, boolean mostrarSegundoValor) {
-			return getDifferenceToNowStatement(start, end, unitLimit, limitValue, commonPrefix, exceptionPrefix, mostrarSegundoValor, false);
+	                                                     String commonPrefix, String exceptionPrefix, boolean mostrarSegundoValor) {
+		return getDifferenceToNowStatement(start, end, unitLimit, limitValue, commonPrefix, exceptionPrefix, mostrarSegundoValor, false);
 	}
 
 	public static String getRemainingTimeFromNowStatement(Calendar start, Calendar end, UnitTimeEnum unitLimit, int limitValue,
-			String commonPrefix, String exceptionPrefix, boolean mostrarSegundoValor) {
-			return getDifferenceToNowStatement(start, end, unitLimit, limitValue, commonPrefix, exceptionPrefix, mostrarSegundoValor, true);
+	                                                      String commonPrefix, String exceptionPrefix, boolean mostrarSegundoValor) {
+		return getDifferenceToNowStatement(start, end, unitLimit, limitValue, commonPrefix, exceptionPrefix, mostrarSegundoValor, true);
 	}
 
 	/**
@@ -544,7 +557,7 @@ public class CalendarUtil {
 
 
 	public static String getDifferenceToNowStatement(Calendar start, Calendar end, UnitTimeEnum unitLimit, int limitValue,
-			String commonPrefix, String exceptionPrefix, boolean mostrarSegundoValor, boolean nowFirst) {
+	                                                 String commonPrefix, String exceptionPrefix, boolean mostrarSegundoValor, boolean nowFirst) {
 
 		String prefix;
 		String exp;
@@ -555,7 +568,7 @@ public class CalendarUtil {
 
 		} catch (TooBigDateException e) {
 			prefix = exceptionPrefix;
-			exp = DateUtil.viewDateTime((nowFirst? end : start));
+			exp = DateUtil.viewDateTime((nowFirst ? end : start));
 		}
 
 		if (!Is.empty(prefix)) {
@@ -580,17 +593,15 @@ public class CalendarUtil {
 	 * Monta uma Expressão do tipo "1h e 3min" para o valor associado ás duas maiores unidades de tempo entre ano, mes, dia, ano, minuto
 	 * presentes no array informado.
 	 * Se o valor da unidade (ano, mes, dias...) mais relevante maior que zero for superior ao valor limite é levantada uma {@link TooBigDateException}
+	 * <p/>
+	 * 0,  1,  2,  3,   4,
+	 * ano mes dia hora min
 	 *
-	 * 	 0,  1,  2,  3,   4,
-	 *	ano mes dia hora min
-	 * @param time array: [ano,mes,dia,hora,minuto]
-	 *
+	 * @param time       array: [ano,mes,dia,hora,minuto]
 	 * @param unitLimit: unidade limite a qual deve ser montada a expressão (X unidade atrás),
-	 * 	 obs: se a maior unidade > 0 for 'mes' e a unidadeLimite for dia, uma {@link TooBigDateException} será lançada.
-	 *
+	 *                   obs: se a maior unidade > 0 for 'mes' e a unidadeLimite for dia, uma {@link TooBigDateException} será lançada.
 	 * @param limitValue valor limite para a unidadeLimite
-	 *   obs: se a maior unidade > 0 for 'mes' com valor 2 e o valorLimite for 1, uma {@link TooBigDateException} será lançada.
-	 *
+	 *                   obs: se a maior unidade > 0 for 'mes' com valor 2 e o valorLimite for 1, uma {@link TooBigDateException} será lançada.
 	 * @return Expressão do tipo "1 ano 2 meses"
 	 * @throws TooBigDateException
 	 */
@@ -658,32 +669,102 @@ public class CalendarUtil {
 	public static String getMonthAbbr(Calendar cal) {
 		return MonthEnum.values()[cal.get(Calendar.MONTH)].getAbbr();
 	}
-	
+
 	public static boolean isToday(Calendar cal) {
 		return isSameDay(cal, now());
 	}
-	
+
 	public static boolean isSameDay(Calendar day1, Calendar day2) {
 		boolean isSameYear = day1.get(Calendar.YEAR) == day2.get(Calendar.YEAR);
 		boolean isSameMonth = day1.get(Calendar.MONTH) == day2.get(Calendar.MONTH);
-		boolean isSameDay = day1.get(Calendar.DAY_OF_MONTH) == day2.get(Calendar.DAY_OF_MONTH);		
+		boolean isSameDay = day1.get(Calendar.DAY_OF_MONTH) == day2.get(Calendar.DAY_OF_MONTH);
 
 		return (isSameYear && isSameMonth && isSameDay);
 	}
 
-	public static boolean isInFuture(Calendar cal){
+	public static boolean isInFuture(Calendar cal) {
 		return cal.after(Calendar.getInstance());
 	}
 
-	public static boolean isInPast(Calendar cal){
+	public static boolean isInPast(Calendar cal) {
 		return cal.before(Calendar.getInstance());
 	}
-	
+
 	public static boolean isAnniversaryToday(Calendar birthday) {
 		Calendar now = now();
 		boolean isSameMonth = now.get(Calendar.MONTH) == birthday.get(Calendar.MONTH);
 		boolean isSameDay = now.get(Calendar.DAY_OF_MONTH) == birthday.get(Calendar.DAY_OF_MONTH);
-		
+
 		return isSameMonth && isSameDay;
 	}
+
+	/**
+	 * Returns last day from mounth in current year.
+	 *
+	 * @param mounth
+	 * @return
+	 */
+	public static int getLastDay(int mounth) {
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.MONTH, mounth - 1);
+		return c.getActualMaximum(Calendar.DAY_OF_MONTH);
+	}
+
+	/**
+	 * Returns last day from mounth and year.
+	 *
+	 * @param mounth
+	 * @param year
+	 * @return Calendar
+	 */
+	public static Calendar getLastDay(int mounth, int year) {
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.MONTH, mounth - 1);
+		c.set(Calendar.YEAR, year);
+		int i = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+		c.set(Calendar.DAY_OF_MONTH, i);
+		return c;
+	}
+
+	/**
+	 * Returns first day from mounth and year.
+	 *
+	 * @param mounth
+	 * @param year
+	 * @return Calendar
+	 */
+	public static Calendar getFirstDay(int mounth, int year) {
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.MONTH, mounth - 1);
+		c.set(Calendar.YEAR, year);
+		c.set(Calendar.DAY_OF_MONTH, 1);
+		return c;
+	}
+
+	/**
+	 * Return true if test is between begin and end;
+	 *
+	 * @param test
+	 * @param begin
+	 * @param end
+	 * @return
+	 */
+
+	public static boolean between(Calendar test, Calendar begin, Calendar end) {
+		if (areEquals(test, begin) || areEquals(test, end)) return true;
+		if (test.after(begin) && test.before(end)) return true;
+		return false;
+	}
+
+	public static void main(String[] args) {
+		Calendar t = Calendar.getInstance();
+		Calendar t0 = Calendar.getInstance();
+		Calendar t1 = Calendar.getInstance();
+		t0.add(Calendar.MONTH, -1);
+		t1.add(Calendar.MONTH, 1);
+		t.add(Calendar.MONTH, 5);
+		System.out.println(between(t, t0, t1));
+
+	}
+
 }
