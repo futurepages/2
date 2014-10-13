@@ -1,7 +1,6 @@
 package org.futurepages.core.persistence;
 
 /**
- *
  * @author leandro
  */
 public interface HQLable {
@@ -29,4 +28,5 @@ public interface HQLable {
     public static final String GREATER_EQUALS  = " >= ";
     public static final String LOWER  = " < ";
     public static final String LOWER_EQUALS  = " <= ";
+	public static final String BETWEEN  = " BETWEEN ";
 }
