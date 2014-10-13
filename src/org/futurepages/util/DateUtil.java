@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+
 import org.futurepages.core.i18n.LocaleManager;
 
 import org.futurepages.enums.DateFormatEnum;
@@ -93,18 +94,18 @@ public class DateUtil {
 	}
 
 	public static Calendar viewDateToCalendar(String in) {
-			try {
-				DateFormat df =  DateFormat.getDateInstance(DateFormat.SHORT, LocaleManager.getDefaultLocale());
-				df.setLenient(false);
-				Date date = df.parse(in);
-				Calendar cal = Calendar.getInstance();
-				cal.setTime(date);
-				return cal;
-			} catch(Exception ex){
-				return null;
-			}
+		try {
+			DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, LocaleManager.getDefaultLocale());
+			df.setLenient(false);
+			Date date = df.parse(in);
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(date);
+			return cal;
+		} catch (Exception ex) {
+			return null;
+		}
 	}
-	
+
 	public static String literalDateFromDB(Object in) {
 		String value = "";
 		if (in instanceof Date) {
@@ -211,7 +212,7 @@ public class DateUtil {
 		return null;
 	}
 
-    /**
+	/**
 	 * Formato da entrada: YYYY-MM-DD
 	 * Formato da saída: DD/MM/YYYY
 	 */
@@ -245,7 +246,6 @@ public class DateUtil {
 
 	/**
 	 * A data do dia corrente no formato YYYY-MM-DD
-	 *
 	 */
 	public static String dbToday() {
 		Date hoje = new Date();
@@ -269,7 +269,6 @@ public class DateUtil {
 	/**
 	 * Recebe como entrada a data no formato DD/MM/YYYY e retorna
 	 * o valor da tada do tipo long no formato YYYYMMDD
-	 *
 	 */
 	public static long longDate(String in) {
 		String dia, mes, ano, data;
@@ -342,9 +341,8 @@ public class DateUtil {
 	 * the default "yyyy-MM-dd" is assumed and returns null if the input string does not match the
 	 * format.
 	 *
-	 * @param dateString The string to be converted to a Date
+	 * @param dateString   The string to be converted to a Date
 	 * @param formatString The format of the string
-	 *
 	 * @return The Date object of the string parsed
 	 */
 	public static Date parse(String dateString, DateFormatEnum formatString) {
@@ -362,6 +360,7 @@ public class DateUtil {
 			try {
 				data = sdf.parse(dateString);
 			} catch (ParseException e) {
+				e.printStackTrace();
 			}
 		}
 		return data;
@@ -372,9 +371,9 @@ public class DateUtil {
 	}
 
 	public static Date parseView(String dateString) {
-		if(dateString.length()==10){
-			if(dateString.charAt(2)!='/' || dateString.charAt(5)!='/'){
-				throw new RuntimeException("Invalid format of date: "+dateString);
+		if (dateString.length() == 10) {
+			if (dateString.charAt(2) != '/' || dateString.charAt(5) != '/') {
+				throw new RuntimeException("Invalid format of date: " + dateString);
 			}
 		}
 		return parse(dateString, DateFormatEnum.VIEW_DATE_PT_BR);
@@ -388,14 +387,14 @@ public class DateUtil {
 	}
 
 	/**
-	 * @return format(calendar ,mask.getMask())
+	 * @return format(calendar, mask.getMask())
 	 */
 	public static String format(Calendar calendar, DateFormatEnum mask) {
 		return format(calendar, mask.getMask());
 	}
 
 	/**
-	 * @return format(calendar.getTime(),mask)
+	 * @return format(calendar.getTime(), mask)
 	 */
 	public static String format(Calendar calendar, String mask) {
 		Date date = null;
@@ -405,7 +404,9 @@ public class DateUtil {
 		return format(date, mask);
 	}
 
-	/** Mask: "yyyy-MM-dd" */
+	/**
+	 * Mask: "yyyy-MM-dd"
+	 */
 	public static String format(Date date) {
 		return format(date, DateFormatEnum.DATE);
 	}
@@ -416,6 +417,7 @@ public class DateUtil {
 
 	/**
 	 * Formata a data com a máscara informada.
+	 *
 	 * @param date
 	 * @param mask
 	 */
