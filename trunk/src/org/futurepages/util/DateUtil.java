@@ -360,7 +360,8 @@ public class DateUtil {
 			try {
 				data = sdf.parse(dateString);
 			} catch (ParseException e) {
-				e.printStackTrace();
+				//comentado de propósito. o retorno ficando sendo null. Descomente somente enquanto desenvolve.
+				// e.printStackTrace();
 			}
 		}
 		return data;
