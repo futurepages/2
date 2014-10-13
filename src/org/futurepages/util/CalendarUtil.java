@@ -755,16 +755,4 @@ public class CalendarUtil {
 		if (test.after(begin) && test.before(end)) return true;
 		return false;
 	}
-
-	public static void main(String[] args) {
-		Calendar t = Calendar.getInstance();
-		Calendar t0 = Calendar.getInstance();
-		Calendar t1 = Calendar.getInstance();
-		t0.add(Calendar.MONTH, -1);
-		t1.add(Calendar.MONTH, 1);
-		t.add(Calendar.MONTH, 5);
-		System.out.println(between(t, t0, t1));
-
-	}
-
 }
