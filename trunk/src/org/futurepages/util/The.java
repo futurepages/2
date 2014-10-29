@@ -1,15 +1,24 @@
 package org.futurepages.util;
 
+import org.apache.commons.lang.math.RandomUtils;
+import org.futurepages.core.exception.DefaultExceptionLogger;
+import org.futurepages.util.html.HtmlMapChars;
+import org.futurepages.util.html.HtmlRegex;
+import org.futurepages.util.iterator.string.IterableString;
+import org.futurepages.util.iterator.string.MatchedToken;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Pattern;
-import org.apache.commons.lang.math.RandomUtils;
-import org.futurepages.util.html.HtmlMapChars;
-import org.futurepages.util.html.HtmlRegex;
-import org.futurepages.util.iterator.string.IterableString;
-import org.futurepages.util.iterator.string.MatchedToken;
 
 /**
  * Esta é "A" Classe
@@ -488,5 +497,78 @@ public class The {
 			str = SEOUtil.replaceSpecialAlphas(str);  //substitui acentuados e troca ç por c e retorna todo em in.
 			String regexPatternChars = "[\\d|A-Z|a-z|\\s|\\-|\\.]"; //regex para manter somente estes caracteres.
 			return The.wordInRegex(str, regexPatternChars); //retira caracteres especiais
+	}
+
+	/**
+	 * Serialize object...
+	 * put on byte[] array
+	 *
+	 * @return null quando obj é null
+	 *
+	 */
+	public static byte[] bytesFrom(Object obj) {
+		byte[] objBytes = null;
+		if(obj!=null){
+			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			ObjectOutput out = null;
+			try {
+				out = new ObjectOutputStream(bos);
+				out.writeObject(obj);
+				objBytes = bos.toByteArray();
+			}catch(IOException ex){
+				DefaultExceptionLogger.getInstance().execute(ex);
+			} finally {
+				try {
+					if (out != null) {
+						out.close();
+					}
+				} catch (IOException ex) {
+					DefaultExceptionLogger.getInstance().execute(ex);
+				}
+				try {
+					bos.close();
+				} catch (IOException ex) {
+					DefaultExceptionLogger.getInstance().execute(ex);
+				}
+			}
+		}
+		return objBytes;
+	}
+
+	/**
+	 * Serialize object...
+	 * put on byte[] array
+	 *
+	 * @return null quando obj é null
+	 *
+	 */
+	public static Object objectFrom(byte[] bytes){
+		Object obj = null;
+		if(bytes!=null){
+			ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+			ObjectInput in = null;
+			try {
+				in = new ObjectInputStream(bis);
+				obj = in.readObject();
+			} catch (IOException e)
+			{
+				DefaultExceptionLogger.getInstance().execute(e);
+			}
+			catch (ClassNotFoundException e)
+			{
+				DefaultExceptionLogger.getInstance().execute(e);
+			}
+			finally {
+				try {
+					bis.close();
+					if (in != null) {
+						in.close();
+					}
+				} catch (IOException e) {
+					DefaultExceptionLogger.getInstance().execute(e);
+				}
+			}
+		}
+		return obj;
 	}
 }
