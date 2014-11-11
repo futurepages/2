@@ -638,6 +638,7 @@ public class GenericDao extends HQLProvider {
 		executeSQLs(false, sqls);
 	}
 
+	//TODO CORRIGIR BUG QUANDO   /* ... [\n]* ... */
 	public void executeSQLs(boolean withLog, String... sqls) {
 		String trimmedSql = null;
 		String delimiter = ";";
@@ -648,6 +649,7 @@ public class GenericDao extends HQLProvider {
 			if (trimmedSql.length() == 0
 					|| trimmedSql.startsWith("--")
 					|| trimmedSql.startsWith("//")
+					|| trimmedSql.startsWith("#")
 					|| (trimmedSql.startsWith("/*") && !trimmedSql.startsWith("/*!") )) {
 				continue;
 			} else {
