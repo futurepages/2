@@ -289,4 +289,8 @@ public class HQLProvider implements HQLable {
 	public static String concat(String... args) {
 		return StringUtils.concat(args);
 	}
+
+	public static String toPath(String alias){
+		return Is.empty(alias) ? "" : alias+".";
+	}
 }
