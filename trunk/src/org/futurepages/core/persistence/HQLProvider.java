@@ -290,6 +290,10 @@ public class HQLProvider implements HQLable {
 		return StringUtils.concat(args);
 	}
 
+	@Deprecated
+	/**
+	 * @deprecated utilize field(a,b,c) em vez de field(a+b+c) , isto elimina a nescessidade deste método.
+	 */
 	public static String toPath(String alias){
 		return Is.empty(alias) ? "" : alias+".";
 	}
