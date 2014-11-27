@@ -1,17 +1,15 @@
 package org.futurepages.core.persistence;
 
+import org.futurepages.core.pagination.PaginationSlice;
+import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
-
 import java.util.Map;
-
-import org.hibernate.Criteria;
-import org.hibernate.Query;
-
-import org.futurepages.core.pagination.PaginationSlice;
-import org.hibernate.SQLQuery;
 
 public class Dao extends HQLProvider {
 
@@ -57,6 +55,10 @@ public class Dao extends HQLProvider {
 		return getInstance().sqlQueryList(sqlQuery, clss);
 	}
 
+	public static <T extends Serializable> List<T> sqlList(String sqlQuery, Class<T> clss) {
+		return getInstance().sqlQueryList(sqlQuery, clss);
+	}
+
 	public static Query query(String hqlQuery) {
 		return getInstance().query(hqlQuery);
 	}
@@ -86,8 +88,8 @@ public class Dao extends HQLProvider {
 	}
 
 	public static void delete(Class entity, String alias, String whereClause) {
-        getInstance().delete(entity, alias, whereClause);
-    }
+		getInstance().delete(entity, alias, whereClause);
+	}
 
 	public static long getNextLong(String field, Class entity) {
 		return getInstance().getNextLong(field, entity);
@@ -248,17 +250,17 @@ public class Dao extends HQLProvider {
 		return getInstance().mapGrouped(entity, entityAlias, join, key, value, where);
 	}
 
-    public static Map mapGrouped(String entityAlias, String fromAndjoin, String key, String value, String where) {
+	public static Map mapGrouped(String entityAlias, String fromAndjoin, String key, String value, String where) {
 		return getInstance().mapGrouped(entityAlias, fromAndjoin, key, value, where);
 	}
 
-    public static Object reportTotal(Class entity, String functions, String where, Class reportClass) {
-        return getInstance().reportTotal(entity, functions, where, reportClass);
-    }
+	public static Object reportTotal(Class entity, String functions, String where, Class reportClass) {
+		return getInstance().reportTotal(entity, functions, where, reportClass);
+	}
 
-    public static <T extends Serializable> List<T> topReportWithJoin(int topSize, Class entity,Class<T> reportClass, String fields, String joinClause, String whereClause, String group, String... orderClauses) {
-				return getInstance().topReportWithJoin(topSize, entity, reportClass, fields, joinClause, whereClause, group, orderClauses);
-    }
+	public static <T extends Serializable> List<T> topReportWithJoin(int topSize, Class entity,Class<T> reportClass, String fields, String joinClause, String whereClause, String group, String... orderClauses) {
+		return getInstance().topReportWithJoin(topSize, entity, reportClass, fields, joinClause, whereClause, group, orderClauses);
+	}
 
 	public static <T extends Serializable> List<T> topReportWithJoin(int topSize, String entityAlias, Class entity, Class<T> reportClass, String fields, String joinClause, String whereClause, String group, String... orderClauses) {
 		return getInstance().topReportWithJoin(topSize, entityAlias, entity, reportClass, fields, joinClause, whereClause, group, orderClauses);
