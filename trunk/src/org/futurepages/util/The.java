@@ -228,6 +228,15 @@ public class The {
 		return ((Integer)Integer.parseInt(numberWithLeftZeros)).toString();
 	}
 
+	public static <X> boolean arrayContains(X[] xArray, X obj) {
+		for(X x : xArray){
+			if(x==obj){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * Capitaliza a primeira letra da string passada como entrada.
 	 * Exemplo: "palavraComposta" --> "PalavraComposta"
