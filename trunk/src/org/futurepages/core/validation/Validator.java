@@ -73,7 +73,7 @@ public abstract class Validator {
 		this.breakOnFirst = breakOnFirst;
 	}
 
-	protected void validate(){
+	public void validate(){
 		validationMap();
 	}
 
