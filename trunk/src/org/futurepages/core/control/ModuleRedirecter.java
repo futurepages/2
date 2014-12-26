@@ -69,7 +69,6 @@ public class ModuleRedirecter extends HttpServlet {
 
 
 			(new Redirect(newUrlSB.toString())).execute(null, req, res);
-			System.out.println(targetModule);
 		} catch (Exception ex) {
 			throw new ServletException("Impossible to redirect '"+url+"' to '"+targetModule+"' module");
 		}
