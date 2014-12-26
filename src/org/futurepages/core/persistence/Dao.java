@@ -56,7 +56,7 @@ public class Dao extends HQLProvider {
 	}
 
 	public static <T extends Serializable> List<T> sqlList(String sqlQuery, Class<T> clss) {
-		return getInstance().sqlQueryList(sqlQuery, clss);
+		return getInstance().sqlList(sqlQuery, clss);
 	}
 
 	public static Query query(String hqlQuery) {
