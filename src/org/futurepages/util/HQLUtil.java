@@ -1,8 +1,8 @@
 package org.futurepages.util;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -58,12 +58,16 @@ public class HQLUtil {
 		return out.toString();
 	}
 
-	public static String imploded(List elements) {
-		StringBuffer out = new StringBuffer("");
+	public static String imploded(Collection elements) {
+		StringBuilder out = new StringBuilder("");
 		String virgula = "";
 		for (Object element : elements) {
 			out.append(virgula);
-			out.append("'" + escQuotesAndSlashes(element.toString()) + "'");
+			if(element instanceof Integer || element instanceof Long){
+				out.append(escQuotesAndSlashes(element.toString()));
+			}else{
+				out.append("'").append(escQuotesAndSlashes(element.toString())).append("'");
+			}
 			if (virgula.equals("")) {
 				virgula = ",";
 			}
@@ -72,11 +76,11 @@ public class HQLUtil {
 	}
 
 	public static String imploded(Enum[] elements) {
-		StringBuffer out = new StringBuffer("");
+		StringBuilder out = new StringBuilder("");
 		String virgula = "";
 		for (Enum element : elements) {
 			out.append(virgula);
-			out.append("'" + escQuotesAndSlashes(element.name()) + "'");
+			out.append("'").append(escQuotesAndSlashes(element.name())).append("'");
 			if (virgula.equals("")) {
 				virgula = ",";
 			}
@@ -221,7 +225,7 @@ public class HQLUtil {
 		}
 
 		//## PARTE 2 - Monta SQL com os caras listados
-		StringBuffer hqlQueryBuffer = new StringBuffer();
+		StringBuilder hqlQueryBuffer = new StringBuilder();
 
 		boolean primeiro = true;
 		for (String token : tokensLike) {
