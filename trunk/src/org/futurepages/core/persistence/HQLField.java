@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import org.futurepages.util.StringUtils;
 
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -385,7 +386,7 @@ public class HQLField implements HQLable {
 		return buildlStringExpression(IN, tokens);
 	}
 
-	public String inList(List list) {
+	public String inList(Collection list) {
 		if (list == null || list.size() == 0) {
 			return "";
 		}
