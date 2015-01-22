@@ -164,12 +164,10 @@ public final class WebContainer extends SimpleTagSupport {
 			try {
 				((PageContext) getJspContext()).include(headFile, false);
 			} catch (ServletException ex) {
-				throw new JspException("Impossível incluir arquivo HEAD '" + headFile + "'. Motivo: " + ex.getMessage());
+				throw new JspException("Impossível incluir arquivo HEAD '" + headFile + "'. Motivo: " + ex.getMessage(), ex);
 			}
 		}
-		getJspContext().getOut().print(headBufferEnd);
-		getJspContext().getOut().print(evalResult.getBuffer());
-		getJspContext().getOut().print(footerBuffer);
+		getJspContext().getOut().print(headBufferEnd.append(evalResult.getBuffer()).append(footerBuffer));
 
 		bodyEvaluated = true;
 		threadLocal.remove(); // quase equivalente a threadLocal.set(null);
