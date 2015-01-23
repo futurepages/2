@@ -22,6 +22,8 @@ public class GenericDao extends HQLProvider {
 	private String schemaId;
 
 
+	GenericDao(){ this.schemaId = HibernateManager.DEFAULT; }
+
 	GenericDao(String sessionFactoryKey){
 		this.schemaId = sessionFactoryKey;
 	}
