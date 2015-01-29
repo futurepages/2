@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JRExporterParameter;
@@ -93,6 +94,11 @@ public class PDFReportsUtil {
 	public static JasperPrint jasperPrint( InputStream inputStream, Map<String, Object> parameters, List lista) throws JRException {
 		JRDataSource dsCollection = new JRBeanCollectionDataSource(lista);
 		JasperPrint jp = JasperFillManager.fillReport(inputStream, parameters, dsCollection);
+		return jp;
+	}
+
+	public static JasperPrint jasperPrint( InputStream inputStream, Map<String, Object> parameters) throws JRException {
+		JasperPrint jp = JasperFillManager.fillReport(inputStream, parameters, new JREmptyDataSource());
 		return jp;
 	}
 }
