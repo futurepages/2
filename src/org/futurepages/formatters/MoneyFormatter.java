@@ -12,6 +12,9 @@ public class MoneyFormatter implements Formatter {
 
 	@Override
 	public String format(Object value, Locale loc) {
+		if(value == null){
+			return "0,00";
+		}
 		if (value instanceof Float) {
 			return MoneyUtil.moneyFormat(((Float)value).doubleValue());
 		} else if(value instanceof Double) {
