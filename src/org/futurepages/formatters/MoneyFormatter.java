@@ -13,7 +13,7 @@ public class MoneyFormatter implements Formatter {
 	@Override
 	public String format(Object value, Locale loc) {
 		if(value == null){
-			return "0,00"; //TODO temporário
+			return "0,00"; //TODO temporário - formato exclusivamente brasileiro.
 		}
 		if (value instanceof Float) {
 			return MoneyUtil.moneyFormat(((Float)value).doubleValue());
