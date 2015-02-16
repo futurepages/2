@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 public abstract class SpecificDao<T extends Serializable> extends GenericDao {
 
 	Class<T> entityClass;
