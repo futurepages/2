@@ -30,7 +30,7 @@ public abstract class SchemaGenerator {
 
 	protected void executeSQLFromFile(String path) throws FileNotFoundException, IOException {
 		String[] sqls = FileUtil.getStringLines(this.getClass(), path);
-		Dao.executeSQLs(sqls);
+		Dao.executeSQLs(true, sqls);
 	}
 
 	public abstract void execute() throws Exception;
