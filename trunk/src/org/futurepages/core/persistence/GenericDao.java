@@ -1,6 +1,8 @@
 package org.futurepages.core.persistence;
 
+import org.futurepages.core.exception.DefaultExceptionLogger;
 import org.futurepages.core.pagination.PaginationSlice;
+import org.futurepages.util.FileUtil;
 import org.futurepages.util.Is;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -11,6 +13,9 @@ import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.transform.Transformers;
 
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -655,6 +660,7 @@ public class GenericDao extends HQLProvider {
 		String trimmedSql = null;
 		String delimiter = ";";
 		StringBuffer sqlToExecute = new StringBuffer();
+		Connection conn = Dao.getInstance().session().connection();
 
 		for (int i = 0; i < sqls.length; i++) {
 			trimmedSql = sqls[i].trim();
@@ -678,7 +684,14 @@ public class GenericDao extends HQLProvider {
 						if(withLog){
 							System.out.println("  "+sql);
 						}
-						executeSQL(sql);
+						PreparedStatement stmt;
+						try {
+							stmt = conn.prepareStatement(sql);
+							stmt.executeUpdate();
+							stmt.close();
+						} catch (SQLException e) {
+							throw new RuntimeException(e);
+						}
 						sqlToExecute.delete(0, sqlToExecute.length());
 					} else {
 						if (trimmedSql.endsWith(delimiter)) {
@@ -687,7 +700,14 @@ public class GenericDao extends HQLProvider {
 							if(withLog){
 								System.out.println("  "+sql);
 							}
-							executeSQL(sql);
+							PreparedStatement stmt;
+							try {
+								stmt = conn.prepareStatement(sql);
+								stmt.executeUpdate();
+								stmt.close();
+							} catch (SQLException e) {
+								throw new RuntimeException(e);
+							}
 							sqlToExecute.delete(0, sqlToExecute.length());
 						} else {
 							sqlToExecute.append(trimmedSql + " ");
@@ -696,6 +716,11 @@ public class GenericDao extends HQLProvider {
 				}
 
 			}
+		}
+		try {
+			conn.close();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
 		}
 	}
 }

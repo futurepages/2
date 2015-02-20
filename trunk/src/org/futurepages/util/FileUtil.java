@@ -110,7 +110,9 @@ public class FileUtil {
 	}
 
 	public static String[] getStringLines(Class cls, String path) throws FileNotFoundException, IOException {
-		return getStringLines(classRealPath(cls)+"/"+path);
+		String pathClass = classRealPath(cls);
+		pathClass = (pathClass.endsWith("/")? pathClass.substring(0,pathClass.length()-1):pathClass);
+		return getStringLines(pathClass+"/"+path);
 	}
 
 
