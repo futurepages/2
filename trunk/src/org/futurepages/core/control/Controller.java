@@ -40,7 +40,6 @@ import org.futurepages.core.output.ResponseOutput;
 import org.futurepages.core.i18n.LocaleManager;
 import org.futurepages.core.input.PrettyGlobalURLRequestInput;
 import org.futurepages.core.input.PrettyURLRequestInput;
-import org.futurepages.exceptions.FilterException;
 import org.futurepages.filters.ConsequenceCallbackFilter;
 import org.futurepages.util.The;
 
