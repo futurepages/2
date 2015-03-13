@@ -13,6 +13,7 @@ import org.futurepages.core.control.InvocationChain;
 import org.futurepages.core.exception.DefaultExceptionLogger;
 import org.futurepages.core.filter.AfterConsequenceFilter;
 import org.futurepages.filters.ExceptionFilter;
+import org.hibernate.TransactionException;
 
 public class HibernateFilter implements AfterConsequenceFilter {
 
@@ -53,7 +54,7 @@ public class HibernateFilter implements AfterConsequenceFilter {
 						}
 					}catch(Exception ex){
 						rollbackTransaction(isMultiTransactional);
-						return ExceptionFilter.treatedException(chain, ex);
+						ExceptionFilter.treatedException(chain, ex);
 					}
 				}
 			}
@@ -120,7 +121,7 @@ public class HibernateFilter implements AfterConsequenceFilter {
 			Dao.beginTransaction();
 		}else{
 			for (String keySession : HibernateManager.getConfigurationsMap().keySet()) {
-					Dao.getInstance(keySession).beginTransaction();
+				Dao.getInstance(keySession).beginTransaction();
 			}
 		}
 	}
@@ -155,12 +156,25 @@ public class HibernateFilter implements AfterConsequenceFilter {
 	// nenhum fará, quebrará o método para que seja feito o rollback.
 	private void commitTransaction() {
 		if (Params.connectExternalModules()) {
-			for (String keySession : HibernateManager.getConfigurationsMap().keySet()) {
-				Dao.getInstance(keySession).flush();
-			}
-			for (String keySession : HibernateManager.getConfigurationsMap().keySet()) {
-				Dao.getInstance(keySession).commitTransaction();
-			}
+				String lastKey = "";
+				try{
+					for (String keySession : HibernateManager.getConfigurationsMap().keySet()) {
+						lastKey = keySession;
+						Dao.getInstance(keySession).flush();
+					}
+				}
+				catch(Exception ex){
+					throw new TransactionException("Problem trying to flush on '"+lastKey+"' database",ex);
+				}
+				try{
+					lastKey = "";
+					for (String keySession : HibernateManager.getConfigurationsMap().keySet()) {
+						lastKey = keySession;
+						Dao.getInstance(keySession).commitTransaction();
+					}
+				} catch(Exception ex){
+					throw new TransactionException("Problem trying to commit on '"+lastKey+"' database",ex);
+				}
 		}else{
 			Dao.commitTransaction();
 		}
