@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -153,7 +154,7 @@ public class HibernateConfigurationFactory {
 	}
 
 	private Map<String, Configurations> generateConfigurationsMap(Map<String, Schema> schemasMap) {
-		Map<String, Configurations> configurationsMap = new HashMap<String, Configurations>();
+		Map<String, Configurations> configurationsMap = new LinkedHashMap<String, Configurations>(); //LinkedHashMap experimental por conta do MultiTransactional
 		for(String schemaId : schemasMap.keySet()){
 			Schema schema = schemasMap.get(schemaId);
 			insertSchemaProperties(schema);
