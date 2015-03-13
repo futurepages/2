@@ -2,6 +2,8 @@
 package org.futurepages.filters;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.futurepages.core.action.AbstractAction;
 import org.futurepages.core.action.Action;
 import org.futurepages.core.control.InvocationChain;
 import org.futurepages.core.filter.Filter;
@@ -19,20 +21,22 @@ public class AutoRedirectDomainFilter implements Filter {
 
 	private String mainDomain;
 	private String mainProtocol;
+	private String protocolPlusDomain;
 
 	public AutoRedirectDomainFilter(String baseURL) {
 		int posiProtocol = baseURL.indexOf("://");
 		if(posiProtocol>-1){
 			mainProtocol = baseURL.substring(0, posiProtocol);
 			mainDomain = baseURL.substring(posiProtocol+3);
+			protocolPlusDomain = mainProtocol+"://"+mainDomain;
 		}else{
-			this.mainDomain = baseURL;
 			this.mainProtocol = null;
+			this.mainDomain = baseURL;
 		}
 //		System.out.println(mainProtocol);
 //		System.out.println(mainDomain);
 		String[] domainParts = this.mainDomain.split("\\:");
-		if(!Is.validStringKey(domainParts[0],3,100,true) || this.mainDomain.endsWith(":") || (domainParts.length==2 && NumberUtil.strToLong(domainParts[1])==null) ){
+		if(!Is.validStringKey(domainParts[0].replaceAll("/","_"),3,1000,true) || this.mainDomain.endsWith(":") || (domainParts.length==2 && NumberUtil.strToLong(domainParts[1])==null) ){
 			throw new RuntimeException("Erro ao inicializar o filtro AutoRedirectDomainFilter. Especifique um domínio válido em app-params.xml[param=AUTO_REDIRECT_DOMAIN]");
 		}
 	}
@@ -62,7 +66,7 @@ public class AutoRedirectDomainFilter implements Filter {
 	 * @return
 	 */
 	private String changeDomain(HttpServletRequest request){
-		StringBuffer newUrl = new StringBuffer();
+		StringBuilder newUrl = new StringBuilder();
 		newUrl.append(request.getScheme()).append("://").append(this.mainDomain);
 		//nao descomentar, erroneamente estava encaminhando a porta para a nova url, acontece que a porta deve vim no parametro da url nova.
 		//newUrl.append(request.getLocalPort()!=80 && request.getLocalPort()!=443 ? ":"+request.getLocalPort() : "" );
@@ -74,8 +78,8 @@ public class AutoRedirectDomainFilter implements Filter {
 	}
 
 	private String changeDomainAndProtocol(HttpServletRequest request){
-		StringBuffer newUrl = new StringBuffer();
-		newUrl.append(this.mainProtocol).append("://").append(this.mainDomain);
+		StringBuilder newUrl = new StringBuilder();
+		newUrl.append(this.protocolPlusDomain);
 		//nao descomentar, erroneamente estava encaminhando a porta para a nova url, acontece que a porta deve vim no parametro da url nova.
 		//newUrl.append(request.getLocalPort()!=80 && request.getLocalPort()!=443 ? ":"+request.getLocalPort() : "" );
 		newUrl.append(request.getRequestURI());
@@ -87,5 +91,10 @@ public class AutoRedirectDomainFilter implements Filter {
 
 	@Override
 	public void destroy() {	}
+
+//	public static void main(String[] args) throws Exception {
+//		AutoRedirectDomainFilter f = new AutoRedirectDomainFilter("https://www.tjpi.jus.br/intranet/");
+//		f.filter(new InvocationChain("", new AbstractAction() {	}));
+//	}
 
 }
