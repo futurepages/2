@@ -144,7 +144,7 @@ public class HibernateFilter implements AfterConsequenceFilter {
 				try{
 					Dao.getInstance(keySession).rollBackTransaction();
 				}catch(Exception ex){
-					DefaultExceptionLogger.getInstance().execute(ex);
+					DefaultExceptionLogger.getInstance().execute(new TransactionException("Problem trying to roolback "+keySession+" database",ex));
 				}
 			}
 		}else{
