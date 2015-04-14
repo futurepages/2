@@ -19,7 +19,10 @@ public class SEOUtil {
         specials.put('-',"_");
         specials.put(' ',"-");
         specials.put('@',"_");
-        specials.put('º', empty);
+        specials.put('/', "-");
+        specials.put('ª',empty);
+        specials.put('º',empty);
+        specials.put('°',empty);
         specials.put('!', empty);
         specials.put('?',  empty);
         specials.put('.', empty);
@@ -29,9 +32,12 @@ public class SEOUtil {
         specials.put('(', empty);
         specials.put(')', empty);
         specials.put('\'', empty);
+        specials.put('`',empty);
+        specials.put('´',empty);
+        specials.put('~',empty);
+        specials.put('^',empty);
         specials.put('"', empty);
         specials.put('\\', empty);
-        specials.put('/', "-");
         specials.put('<', empty);
         specials.put('>', empty);
         specials.put('\t',empty);
@@ -44,7 +50,7 @@ public class SEOUtil {
         specials.put('ð',empty);
         specials.put('Æ',empty);
         specials.put('æ',empty);
-        
+
         alphabetics.put('á',"a");
         alphabetics.put('â',"a");
         alphabetics.put('à',"a");
@@ -84,8 +90,6 @@ public class SEOUtil {
 
     /**
      * Devolve a string informada sem acentuacao e pontuacao
-     * @see urlMappingAlphabetics
-     * @see urlMappingEspeciais
      */
 	public static String replaceSpecialAlphas(String strIn){
         strIn = strIn.toLowerCase().trim();
@@ -95,8 +99,6 @@ public class SEOUtil {
 	
 	/**
 	 * Devolve a string informada sem acentuacao, pontuacao e sem caracteres especiais
-	 * @see urlMappingAlphabetics
-	 * @see urlMappingEspeciais
 	 */
 	public static String urlFormat(String strIn){
 		strIn = strIn.toLowerCase().trim();
