@@ -61,7 +61,7 @@ public class HibernateConfigurationFactory {
 	 */
 	public Map<String, Configurations> getApplicationConfigurations() throws ConfigFileNotFoundException, UnsupportedEncodingException, FileNotFoundException, IOException {
 
-		Map<String, Schema> schemasMap = new HashMap<String, Schema>();
+		Map<String, Schema> schemasMap = new LinkedHashMap<String, Schema>();
 		File[] modulesDirs = getModulesDirs();
 		if (modulesDirs != null) {
 			for (File module : modulesDirs) {
