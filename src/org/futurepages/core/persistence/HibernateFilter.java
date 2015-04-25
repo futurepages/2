@@ -142,9 +142,11 @@ public class HibernateFilter implements AfterConsequenceFilter {
 		if (Params.connectExternalModules() && multiTransactional) {
 			for (String keySession : HibernateManager.getConfigurationsMap().keySet()) {
 				try{
-					Dao.getInstance(keySession).rollBackTransaction();
+					if(Dao.getInstance(keySession).isTransactionActive()){
+						Dao.getInstance(keySession).rollBackTransaction();
+					}
 				}catch(Exception ex){
-					DefaultExceptionLogger.getInstance().execute(new TransactionException("Problem trying to roolback "+keySession+" database",ex));
+					DefaultExceptionLogger.getInstance().execute(new TransactionException("Problem trying to rollback "+keySession+" database",ex));
 				}
 			}
 		}else{
@@ -170,10 +172,12 @@ public class HibernateFilter implements AfterConsequenceFilter {
 					lastKey = "";
 					for (String keySession : HibernateManager.getConfigurationsMap().keySet()) {
 						lastKey = keySession;
-						Dao.getInstance(keySession).commitTransaction();
+						if(Dao.getInstance(keySession).isTransactionActive()){
+							Dao.getInstance(keySession).commitTransaction();
+						}
 					}
 				} catch(Exception ex){
-					throw new TransactionException("Problem trying to commit on '"+lastKey+"' database",ex);
+					DefaultExceptionLogger.getInstance().execute(new Exception("Problem trying to commit on '"+lastKey+"' database",ex));
 				}
 		}else{
 			Dao.commitTransaction();
