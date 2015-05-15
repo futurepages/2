@@ -30,6 +30,7 @@ import org.quartz.SchedulerException;
  */
 public class ApplicationListener implements ServletContextListener {
 
+	private static final String ON = "on";
 	private String contextName;
 
 	@Override
@@ -98,12 +99,16 @@ public class ApplicationListener implements ServletContextListener {
 				log("WARNING: HIBERNATE is not running!");
 			}
 
+			if(Params.get("FLYWAY_MIGRATION_MODE").equals(ON)){
+				DataBaseUpdate.execute();
+			}
+
 			log("Session Listenter...: ");
 			new SessionListenerManager(modules).initialize();
 			log("Session Listenter...: OK ");
 
 			//Inicializa o gerenciador do Quartz (Agendador de Tarefas) caso solicitado.
-			if (Params.get("QUARTZ_MODE").equals("on")) {
+			if (Params.get("QUARTZ_MODE").equals(ON)) {
 				log("Iniciando Quartz...");
 				QuartzManager.initialize(modules);
 				log("Quartz Inicializado.");
@@ -157,7 +162,7 @@ public class ApplicationListener implements ServletContextListener {
 	@Override
 	public void contextDestroyed(ServletContextEvent evt) {
 		log("Parando: " + evt.getServletContext().getServletContextName());
-		if (Params.get("QUARTZ_MODE").equals("on")) {
+		if (Params.get("QUARTZ_MODE").equals(ON)) {
 			try {
 				QuartzManager.shutdown();
 				log("Schedulers do Quartz parado.");
