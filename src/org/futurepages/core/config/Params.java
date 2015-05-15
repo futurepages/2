@@ -6,20 +6,19 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.futurepages.core.exception.DefaultExceptionLogger;
-
-import org.jdom.Element;
-import org.jdom.JDOMException;
-
 import org.futurepages.exceptions.BadFormedConfigFileException;
 import org.futurepages.exceptions.ConfigFileNotFoundException;
 import org.futurepages.util.FileUtil;
 import org.futurepages.util.The;
 import org.futurepages.util.XmlUtil;
+import org.jdom.Element;
+import org.jdom.JDOMException;
 
 /**
  * Parâmetros da aplicação Futurepages
- * 
+ *
  * @author leandro
  */
 public class Params {
@@ -69,7 +68,7 @@ public class Params {
 		devMode = Params.get("DEV_MODE").equals("on");
 		connectExternalModules = Params.get("CONNECT_EXTERNAL_MODULES").equals("true");
 	}
-	
+
 	public static String get(String name) {
 		return paramsMap.get(name);
 	}
@@ -105,6 +104,7 @@ public class Params {
 		// parâmetros de redirecionamento
 		paramsMap.put("LOGIN_URL_REDIRECT", null);
 		paramsMap.put("LOGIN_URL_REDIRECT_VAR_NAME", "next");
+		paramsMap.put("FLYWAY_MIGRATION_MODE", "off");
 
 		return classesPath;
 	}
@@ -169,7 +169,7 @@ public class Params {
 	}
 
 	/**
-	 * Constroi os Parâmetros Compostos 
+	 * Constroi os Parâmetros Compostos
 	 */
 	private static void compositeWebParams() {
 
@@ -190,7 +190,7 @@ public class Params {
 			paramsMap.put("RELEASE_QUERY", "");
 		}
 		String autoRedirectDomain = get("AUTO_REDIRECT_DOMAIN");
-		if(!devMode && autoRedirectDomain!=null 
+		if(!devMode && autoRedirectDomain!=null
 				&&  (!autoRedirectDomain.startsWith("http://") && !autoRedirectDomain.startsWith("https://"))){
 			paramsMap.put("HTTPS_PATH", "https://"+autoRedirectDomain);
 		}else{
