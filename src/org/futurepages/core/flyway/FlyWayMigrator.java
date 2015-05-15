@@ -1,14 +1,4 @@
-package org.futurepages.core;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.Properties;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.sql.DataSource;
+package org.futurepages.core.flyway;
 
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.MigrationInfo;
@@ -17,13 +7,20 @@ import org.futurepages.core.persistence.HibernateConfigurationFactory;
 import org.futurepages.exceptions.ConfigFileNotFoundException;
 import org.futurepages.util.Is;
 
-public class DataBaseUpdate {
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.util.Properties;
 
-	public static void main(String[] args) throws ConfigFileNotFoundException, UnsupportedEncodingException, FileNotFoundException, InterruptedException, NamingException, IOException {
+public class FlyWayMigrator {
+
+	public static void main(String[] args) throws ConfigFileNotFoundException, InterruptedException, NamingException, IOException {
 
 	}
 
-	public static void execute() throws InterruptedException, NamingException, ConfigFileNotFoundException, UnsupportedEncodingException, FileNotFoundException, IOException {
+	public static void execute() throws InterruptedException, NamingException, ConfigFileNotFoundException, IOException {
         Flyway flyway = new Flyway();
         flyway.setInitOnMigrate(true);
         configDataSource(flyway);
@@ -37,7 +34,7 @@ public class DataBaseUpdate {
         System.out.println("Total de scripts executados "+result);
 	}
 
-	private static void configDataSource(Flyway flyway) throws NamingException, ConfigFileNotFoundException, UnsupportedEncodingException, FileNotFoundException, IOException {
+	private static void configDataSource(Flyway flyway) throws NamingException, ConfigFileNotFoundException, IOException {
 		Properties properties = HibernateConfigurationFactory.getInstance().getApplicationConfigurations().get("default").getEntitiesConfig().getProperties();
 		boolean isDataSource = !Is.empty(properties.getProperty("hibernate.connection.datasource"));
 		String url = properties.getProperty("hibernate.connection.url");

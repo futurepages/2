@@ -8,6 +8,7 @@ import javax.servlet.ServletContextListener;
 
 import org.futurepages.core.config.Params;
 import org.futurepages.core.exception.DefaultExceptionLogger;
+import org.futurepages.core.flyway.FlyWayMigrator;
 import org.futurepages.core.install.InstallersManager;
 import org.futurepages.core.mail.MailConfig;
 import org.futurepages.core.path.Paths;
@@ -95,12 +96,15 @@ public class ApplicationListener implements ServletContextListener {
 						}
 					}
 				}
+
+				if(Params.get("FLYWAY_MIGRATION_MODE").equals(ON)){
+					log("FLYWAY_MIGRATION_MODE ...: ");
+					FlyWayMigrator.execute();
+					log("FLYWAY_MIGRATION OK");
+				}
+
 			} else {
 				log("WARNING: HIBERNATE is not running!");
-			}
-
-			if(Params.get("FLYWAY_MIGRATION_MODE").equals(ON)){
-				DataBaseUpdate.execute();
 			}
 
 			log("Session Listenter...: ");
@@ -179,7 +183,7 @@ public class ApplicationListener implements ServletContextListener {
 
 	/**
 	 * Mensagem de log padrão do listener.
-	 * @param logText
+	 * @param logText the Text!
 	 */
 	private void log(String logText) {
 		System.out.println("[::" + contextName + "::] " + logText);
