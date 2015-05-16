@@ -508,6 +508,25 @@ public class The {
 			return The.wordInRegex(str, regexPatternChars); //retira caracteres especiais
 	}
 
+	public static String serializedList(List strings, String separator){
+		StringBuilder out = new StringBuilder();
+		if (separator == null) {
+			for (Object string : strings) {
+				out.append(string);
+			}
+			return out.toString();
+		} else {
+			for (int i = 0; i < strings.size(); i++) {
+				if (i != 0) {
+					out.append(separator);
+				}
+				out.append(strings.get(i));
+			}
+			return out.toString();
+		}
+
+	}
+
 	/**
 	 * Serialize object...
 	 * put on byte[] array
