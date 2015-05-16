@@ -23,7 +23,7 @@ public abstract class Installer implements Installation {
 		}
 	}
 
-	protected void install(Installation installer) throws Exception {
+	public static void install(Installation installer) throws Exception {
 		long initTime = System.currentTimeMillis() / 1000l;//em segundos
 		String instaladorNome = installer.getClass().getName();
 
