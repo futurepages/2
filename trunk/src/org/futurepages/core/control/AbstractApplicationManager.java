@@ -1,12 +1,5 @@
 package org.futurepages.core.control;
 
-import org.futurepages.consequences.Forward;
-import org.futurepages.consequences.Chain;
-import org.futurepages.consequences.Redirect;
-import org.futurepages.core.consequence.Consequence;
-import org.futurepages.core.context.Context;
-import org.futurepages.core.filter.Filter;
-import org.futurepages.consequences.StreamConsequence;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -20,9 +13,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.futurepages.consequences.AjaxConsequence;
+import org.futurepages.consequences.Chain;
+import org.futurepages.consequences.Forward;
+import org.futurepages.consequences.Redirect;
+import org.futurepages.consequences.StreamConsequence;
 import org.futurepages.core.action.Manipulable;
 import org.futurepages.core.ajax.AjaxRenderer;
 import org.futurepages.core.config.Params;
+import org.futurepages.core.consequence.Consequence;
+import org.futurepages.core.context.Context;
+import org.futurepages.core.filter.Filter;
 import org.futurepages.filters.InjectionFilter;
 import org.futurepages.filters.OutjectionFilter;
 import org.futurepages.util.The;
@@ -45,7 +45,7 @@ public abstract class AbstractApplicationManager  implements Manipulable{
     private static String realPath;
 
 	private Map<String, ActionConfig> actions = new HashMap<String, ActionConfig>();
-    private Map<String, Map<String, ActionConfig>> innerActions = new HashMap<String, Map<String, ActionConfig>>();
+	private Map<String, Map<String, ActionConfig>> innerActions = new HashMap<String, Map<String, ActionConfig>>();
 	private List<Filter> globalFilters = new LinkedList<Filter>();
     private List<Filter> globalFiltersLast = new LinkedList<Filter>();
 	private Map<String, Consequence> globalConsequences = new HashMap<String, Consequence>();
@@ -59,6 +59,8 @@ public abstract class AbstractApplicationManager  implements Manipulable{
     static void setApplication(Context appContext) {
        AbstractApplicationManager.appContext = appContext;
     }
+
+
 
     public static Context getApplication() {
        return appContext;
@@ -229,7 +231,7 @@ public abstract class AbstractApplicationManager  implements Manipulable{
 	}
 
 
-	protected Map<String, ActionConfig> getActions() {
+	public Map<String, ActionConfig> getActions() {
 		return actions;
 	}
 
@@ -458,7 +460,7 @@ public abstract class AbstractApplicationManager  implements Manipulable{
         filters.addAll(globalFiltersLast);
         Iterator<ActionConfig> iterAc = actions.values().iterator();
 		while(iterAc.hasNext()) {
-            ActionConfig ac = (ActionConfig) iterAc.next();
+            ActionConfig ac = iterAc.next();
             filters.addAll(ac.getFilters());
         }
 		Iterator<Map<String, ActionConfig>> iter = innerActions.values().iterator();

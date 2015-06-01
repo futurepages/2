@@ -1,16 +1,7 @@
 package org.futurepages.core.control;
 
-import java.io.UnsupportedEncodingException;
-import org.futurepages.core.consequence.Consequence;
-import org.futurepages.core.context.CookieContext;
-import org.futurepages.core.context.ApplicationContext;
-import org.futurepages.core.context.SessionContext;
-import org.futurepages.core.filter.AfterConsequenceFilter;
-import org.futurepages.core.filter.GlobalFilterFree;
-import org.futurepages.core.filter.Filter;
-import org.futurepages.core.action.Action;
-import org.futurepages.core.config.Params;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -25,22 +16,32 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.futurepages.core.ApplicationManager;
-import org.futurepages.core.callback.ConsequenceCallback;
 
+import org.futurepages.core.ApplicationManager;
+import org.futurepages.core.action.Action;
+import org.futurepages.core.callback.ConsequenceCallback;
+import org.futurepages.core.config.Params;
+import org.futurepages.core.consequence.Consequence;
 import org.futurepages.core.consequence.ConsequenceProvider;
 import org.futurepages.core.consequence.DefaultConsequenceProvider;
+import org.futurepages.core.context.ApplicationContext;
+import org.futurepages.core.context.Context;
+import org.futurepages.core.context.CookieContext;
 import org.futurepages.core.context.MapContext;
+import org.futurepages.core.context.SessionContext;
 import org.futurepages.core.exception.DefaultExceptionLogger;
-import org.futurepages.exceptions.PageNotFoundException;
-import org.futurepages.filters.GlobalFilterFreeFilter;
+import org.futurepages.core.filter.AfterConsequenceFilter;
+import org.futurepages.core.filter.Filter;
+import org.futurepages.core.filter.GlobalFilterFree;
 import org.futurepages.core.formatter.FormatterManager;
-import org.futurepages.core.input.RequestInput;
-import org.futurepages.core.output.ResponseOutput;
 import org.futurepages.core.i18n.LocaleManager;
 import org.futurepages.core.input.PrettyGlobalURLRequestInput;
 import org.futurepages.core.input.PrettyURLRequestInput;
+import org.futurepages.core.input.RequestInput;
+import org.futurepages.core.output.ResponseOutput;
+import org.futurepages.exceptions.PageNotFoundException;
 import org.futurepages.filters.ConsequenceCallbackFilter;
+import org.futurepages.filters.GlobalFilterFreeFilter;
 import org.futurepages.util.The;
 
 /**
@@ -61,10 +62,10 @@ public class Controller extends HttpServlet {
 	private ApplicationManager appManager = null;
 	private static String appMgrClassname = null;
 	private static ServletContext application = null;
-	protected static ApplicationContext appContext = null;
+	protected static Context appContext = null;
 	private static ConsequenceProvider defaultConsequenceProvider = new DefaultConsequenceProvider();
 	private boolean withPrettyURL;
-	private static Controller INSTANCE;
+	public static Controller INSTANCE;
 	private ThreadLocal<InvocationChain> chainTL = new ThreadLocal<InvocationChain>();
 	private static ServletConfig conf;
 	private static ClassGetActionUrlParts objectGetActionUrlParts;
@@ -108,6 +109,27 @@ public class Controller extends HttpServlet {
 			INSTANCE = this;
 
 			this.configureServlet(conf);
+			initApplicationManager();
+		} catch (Exception ex) {
+			DefaultExceptionLogger.getInstance().execute(ex, null, null, true);
+		}
+
+	}
+
+
+	/**
+	 * Initialize the Controller, creating and starting the ApplicationManager.
+	 */
+	public void offLineInit() throws ServletException {
+		try {
+			withPrettyURL = Params.get("PRETTY_URL").equals("true");
+			startPage = Params.get("START_PAGE_NAME");
+
+			if (withPrettyURL) {
+				innerActionSeparator = '-';
+			}
+			INSTANCE = this;
+			configureServletOffLine();
 			initApplicationManager();
 		} catch (Exception ex) {
 			DefaultExceptionLogger.getInstance().execute(ex, null, null, true);
@@ -295,7 +317,7 @@ public class Controller extends HttpServlet {
 					}
 				}
 			}
-			if(actionExecuted && conseqExecuted && callbackFilters != null 
+			if(actionExecuted && conseqExecuted && callbackFilters != null
 				// e não ocorreu exception no meio do caminho...
 			   && !(returnedFromAction!=null && (returnedFromAction.equals(Action.EXCEPTION) ||  returnedFromAction.equals(Action.DYN_EXCEPTION)) )
 			) {
@@ -630,6 +652,10 @@ public class Controller extends HttpServlet {
 		return innerActionSeparator;
 	}
 
+	private void configureServletOffLine() {
+		appMgrClassname = "org.futurepages.core.ApplicationManager"; // default without package...
+		appContext = new MapContext();
+	}
 	private void configureServlet(ServletConfig conf) {
 		application = conf.getServletContext();
 		appContext = new ApplicationContext(application);
