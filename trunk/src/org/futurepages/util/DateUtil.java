@@ -440,4 +440,8 @@ public class DateUtil {
 	public static Calendar dateToCalendar(Date date) {
 		return dbDateToCalendar(dbDate(date));
 	}
+
+	public static Calendar viewDateTimeToCalendar(String viewDateTime) {
+		return DateUtil.dateTimeToCalendar(DateUtil.parse(viewDateTime,DateFormatEnum.VIEW_DATE_TIME_PT_BR));
+	}
 }
