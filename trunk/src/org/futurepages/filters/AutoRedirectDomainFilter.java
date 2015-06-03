@@ -1,14 +1,14 @@
 
 package org.futurepages.filters;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.futurepages.core.action.AbstractAction;
 import org.futurepages.core.action.Action;
+import org.futurepages.core.config.Params;
 import org.futurepages.core.control.InvocationChain;
 import org.futurepages.core.filter.Filter;
 import org.futurepages.util.Is;
 import org.futurepages.util.NumberUtil;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Filtro responsável pela modificação do domínio da url para um domínio padronizado. Isto é útil para
@@ -70,7 +70,11 @@ public class AutoRedirectDomainFilter implements Filter {
 		newUrl.append(request.getScheme()).append("://").append(this.mainDomain);
 		//nao descomentar, erroneamente estava encaminhando a porta para a nova url, acontece que a porta deve vim no parametro da url nova.
 		//newUrl.append(request.getLocalPort()!=80 && request.getLocalPort()!=443 ? ":"+request.getLocalPort() : "" );
-		newUrl.append(request.getRequestURI());
+		if(!request.getRequestURI().equals("/"+Params.get("START_PAGE_NAME"))){
+			newUrl.append(request.getRequestURI());
+		}else{
+			newUrl.append("/");
+		}
 		if(request.getQueryString()!=null){
 			newUrl.append("?").append(request.getQueryString());
 		}
@@ -82,7 +86,11 @@ public class AutoRedirectDomainFilter implements Filter {
 		newUrl.append(this.protocolPlusDomain);
 		//nao descomentar, erroneamente estava encaminhando a porta para a nova url, acontece que a porta deve vim no parametro da url nova.
 		//newUrl.append(request.getLocalPort()!=80 && request.getLocalPort()!=443 ? ":"+request.getLocalPort() : "" );
-		newUrl.append(request.getRequestURI());
+		if(!request.getRequestURI().equals("/"+Params.get("START_PAGE_NAME"))) {
+			newUrl.append(request.getRequestURI());
+		}else{
+			newUrl.append("/");
+		}
 		if(request.getQueryString()!=null){
 			newUrl.append("?").append(request.getQueryString());
 		}
