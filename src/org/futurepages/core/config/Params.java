@@ -55,12 +55,14 @@ public class Params {
 	}
 
 	public static void initialize(String contextName) throws UnsupportedEncodingException {
+		System.out.println(">> Params [web] ...");
 		paramsMap = new HashMap<String, String>();
 		String classesPath = defineMainParams();
 		webDefaultParams(classesPath, contextName);
 		parseXML();
 		cachedParams();
 		compositeWebParams();
+		System.out.println(">> Params [web] OK");
 	}
 
 
