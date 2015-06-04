@@ -38,6 +38,9 @@ public final class WebContainer extends SimpleTagSupport {
 	private String headFile = null;
 
 	@TagAttribute
+	private String footerFile = null;
+
+	@TagAttribute
 	private String htmlAttrs = "";
 
 	@TagAttribute
@@ -52,6 +55,8 @@ public final class WebContainer extends SimpleTagSupport {
 	private boolean bodyEvaluated = false;
 
 	private StringBuilder headSB = null;
+
+	private StringBuilder footerSB = null;
 
 	private StringBuilder specialHeadTitle = null;
 
@@ -116,26 +121,6 @@ public final class WebContainer extends SimpleTagSupport {
 		//invoca o conteúdo dentro do container
 		getJspBody().invoke(evalResult);
 
-		if (HeadTitleFilter.isPretty()) {
-			if (!Is.empty(specialHeadTitle)) {
-				headBufferBegin.append("<title>").append(specialHeadTitle).append("</title>");
-			} else if (!Is.empty(this.headTitle)) {
-				headBufferBegin.append("<title>").append(headTitle).append(" | ").append(HeadTitleFilter.getPrettyTitle()).append("</title>");
-			} else {
-				headBufferBegin.append("<title>").append(HeadTitleFilter.getPrettyTitle()).append(HeadTitleFilter.SEPARATOR).append(HeadTitleFilter.getGlobalTitle()).append("</title>");
-			}
-		}
-
-
-		//Head Content
-		if(headSB!=null){
-			headBufferBegin
-//					.append("\n<!-- [BEGIN] Dynamic Head Content  -->") //for DEBUG-MODE
-					.append(headSB.toString())
-//					.append("\n<!-- [END] Head Content  -->\n") //for DEBUG-MODE
-			;
-		}
-
 		//Components' Resources
 
 		for (ImportComponentRes component : getComponents().values()) {
@@ -160,6 +145,7 @@ public final class WebContainer extends SimpleTagSupport {
 		footerBuffer.append("</body></html>");
 
 		getJspContext().getOut().print(headBufferBegin);
+
 		if (headFile != null) {
 			try {
 				((PageContext) getJspContext()).include(headFile, false);
@@ -167,7 +153,38 @@ public final class WebContainer extends SimpleTagSupport {
 				throw new JspException("Impossível incluir arquivo HEAD '" + headFile + "'. Motivo: " + ex.getMessage(), ex);
 			}
 		}
-		getJspContext().getOut().print(headBufferEnd.append(evalResult.getBuffer()).append(footerBuffer));
+
+		StringBuffer afterHeadFileBuffer = new StringBuffer();
+		if (HeadTitleFilter.isPretty()) {
+			if (!Is.empty(specialHeadTitle)) {
+				afterHeadFileBuffer.append("<title>").append(specialHeadTitle).append("</title>");
+			} else if (!Is.empty(this.headTitle)) {
+				afterHeadFileBuffer.append("<title>").append(headTitle).append(" | ").append(HeadTitleFilter.getPrettyTitle()).append("</title>");
+			} else {
+				afterHeadFileBuffer.append("<title>").append(HeadTitleFilter.getPrettyTitle()).append(HeadTitleFilter.SEPARATOR).append(HeadTitleFilter.getGlobalTitle()).append("</title>");
+			}
+		}
+		//Dynamic Head Content (from tag)
+		if(headSB!=null){
+			afterHeadFileBuffer
+//					.append("\n<!-- [BEGIN] Dynamic Head Content  -->") //for DEBUG-MODE
+					.append(headSB.toString())
+//					.append("\n<!-- [END] Head Content  -->\n") //for DEBUG-MODE
+			;
+		}
+		getJspContext().getOut().print(afterHeadFileBuffer.append(headBufferEnd).append(evalResult.getBuffer()));
+		if (footerFile != null) {
+			try {
+				((PageContext) getJspContext()).include(footerFile, false);
+			} catch (ServletException ex) {
+				throw new JspException("Impossível incluir arquivo FOOTER '" + footerFile+ "'. Motivo: " + ex.getMessage(), ex);
+			}
+		}
+		if(footerSB!=null){
+			getJspContext().getOut().print(footerSB.append(footerBuffer));
+		}else{
+			getJspContext().getOut().print(footerBuffer);
+		}
 
 		bodyEvaluated = true;
 		threadLocal.remove(); // quase equivalente a threadLocal.set(null);
@@ -175,6 +192,10 @@ public final class WebContainer extends SimpleTagSupport {
 
 	public void setHeadFile(String headFile) {
 		this.headFile = headFile;
+	}
+
+	public void setFooterFile(String footerFile) {
+		this.footerFile = footerFile;
 	}
 
 	public void setHeadTitle(String headTitle) {
@@ -194,7 +215,11 @@ public final class WebContainer extends SimpleTagSupport {
 	}
 
 	public void setXmlns(String xmlns) {
-		this.xmlns = " xmlns=\""+ xmlns+"\"";
+		if(!Is.empty(xmlns)){
+			this.xmlns = " xmlns=\""+ xmlns+"\"";
+		}else{
+			this.xmlns = "";
+		}
 	}
 
 	public void setHtmlAttrs(String htmlAttrs) {
@@ -217,11 +242,22 @@ public final class WebContainer extends SimpleTagSupport {
 		getHeadSB().append("\n").append(headContent);
 	}
 
+	void addFooterContent(String footerContent) {
+		getFooterSB().append("\n").append(footerContent);
+	}
+
 	public StringBuilder getHeadSB() {
 		if(headSB==null){
 			headSB = new StringBuilder();
 		}
 		return headSB;
+	}
+
+	public StringBuilder getFooterSB() {
+		if(footerSB==null){
+			footerSB = new StringBuilder();
+		}
+		return footerSB;
 	}
 
 	public void addSpecialHeadContent(String specialHeadContent) {
