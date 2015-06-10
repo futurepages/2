@@ -16,13 +16,15 @@ public final class Footer extends SimpleTagSupport {
 
 	@Override
 	public void doTag() throws JspException, IOException {
-		getMyContainer();
-		if (myContainer != null) {
-				StringWriter evalResult = new StringWriter(); //escreve o body da tag
-				if(getJspBody()!=null){
-					getJspBody().invoke(evalResult);
-					myContainer.addFooterContent(evalResult.getBuffer().toString());
-				}
+		StringWriter evalResult = new StringWriter(); //escreve o body da tag
+		if (getJspBody() != null) {
+			getJspBody().invoke(evalResult);
+			getMyContainer();
+			if (myContainer != null) {
+				myContainer.addFooterContent(evalResult.getBuffer().toString());
+			}else{
+				getJspContext().getOut().print(evalResult.getBuffer().toString());
+			}
 		}
 	}
 
