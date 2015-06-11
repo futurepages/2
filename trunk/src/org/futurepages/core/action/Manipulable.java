@@ -41,6 +41,7 @@ public interface Manipulable {
     public static final String DYN_DENIED = "dynDenied";
     public static final String AJAX_DENIED = "ajaxDenied";
     public static final String EXCEPTION = "exception";
+    public static final String NOT_FOUND = "notFound";
     public static String DYN_EXCEPTION = "dynException";
     public static String STRING = "string";
     public static final String REDIR = "redir";
