@@ -48,6 +48,7 @@ public class InitManager extends AbstractApplicationManager{
 
             on(NULL, new NullConsequence());
 			on(EXCEPTION, fwd(Params.get("EXCEPTION_FILE_PATH")));
+			on(NOT_FOUND, fwd("/exceptions/404.jsp"));
 			on(DYN_EXCEPTION, fwd(Params.get("DYN_EXCEPTION_FILE_PATH")));
 			on(STRING, new StringConsequence() );
 			on(REDIR, redir());
