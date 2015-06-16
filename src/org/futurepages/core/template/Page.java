@@ -87,8 +87,6 @@ public class Page {
      *            O path que devera ser usado para o acesso a esse page
      * @param view
      *            Pagina jsp
-     * @param listener
-     *            Classe do listener
      */
     public Page(String path, String view, boolean withRule) {
         this(path, view);
