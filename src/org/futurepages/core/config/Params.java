@@ -88,6 +88,8 @@ public class Params {
 		paramsMap.put("CLASSES_REAL_PATH", classesPath.substring(0, classesPath.length()-1)); //sem a última barra, mantido por conta de legados.
 		paramsMap.put("MODULES_CLASSES_REAL_PATH", get("CLASSES_REAL_PATH") + "/" + Params.MODULES_PATH);
 
+		paramsMap.put("BEANS_PACK_NAME", "beans");
+
 		//stand-alone params
 		paramsMap.put("CONNECT_EXTERNAL_MODULES", "false"); //só quando for dar suporte a mais de um banco de dados
 		paramsMap.put("DATABASE_DIR_NAME", "database");
