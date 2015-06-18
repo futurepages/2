@@ -112,7 +112,16 @@ public class HibernateConfigurationFactory {
 	}
 
 	private Collection<Class<Object>> listBeansAnnotatedFromModule(File module) throws ModuleWithoutBeanDirException {
-		File beansDirectory = new File(module.getAbsolutePath() + "/" + Params.BEANS_PACK_NAME);
+		String beanPackName = Params.BEANS_PACK_NAME;
+
+		try{
+			String beanPackFromFile = Params.get("BEANS_PACK_NAME");
+			if(!Is.empty(beanPackFromFile)){
+				beanPackName = beanPackFromFile;
+			}
+		}catch (Exception ex){}
+
+		File beansDirectory = new File(module.getAbsolutePath() + "/" + beanPackName);
 		if (beansDirectory.listFiles() != null) {
 			return ClassesUtil.getInstance().listClassesFromDirectory(beansDirectory, getRootFileDir().getAbsolutePath(), null, Entity.class, true);
 		}
