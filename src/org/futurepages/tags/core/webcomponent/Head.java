@@ -18,6 +18,9 @@ public final class Head extends SimpleTagSupport {
 	@TagAttribute(required = false)
 	private String specialHeadTitle;
 
+	@TagAttribute(required = false)
+	private String bodyClasses;
+
 	@Override
 	public void doTag() throws JspException, IOException {
 		getMyContainer();
@@ -29,6 +32,9 @@ public final class Head extends SimpleTagSupport {
 				}
 				if (!Is.empty(specialHeadTitle)) {
 					myContainer.addSpecialHeadContent(specialHeadTitle);
+				}
+				if (!Is.empty(bodyClasses)) {
+					myContainer.addBodyClasses(bodyClasses);
 				}
 		}
 	}
@@ -46,5 +52,9 @@ public final class Head extends SimpleTagSupport {
 			myContainer = WebContainer.get();
 		}
 		return myContainer;
+	}
+
+	public void setBodyClasses(String bodyClasses) {
+		this.bodyClasses = bodyClasses;
 	}
 }

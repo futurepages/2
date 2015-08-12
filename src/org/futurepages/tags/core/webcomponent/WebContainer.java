@@ -2,14 +2,19 @@ package org.futurepages.tags.core.webcomponent;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
+import javax.swing.*;
+
 import org.futurepages.annotations.Tag;
 import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.tags.build.ContentTypeEnum;
@@ -61,6 +66,7 @@ public final class WebContainer extends SimpleTagSupport {
 	private StringBuilder specialHeadTitle = null;
 
 	private Map<String, ImportComponentRes> components;
+	private HashSet bodyClasses;
 
 
 	public WebContainer() {
@@ -138,8 +144,12 @@ public final class WebContainer extends SimpleTagSupport {
 
 		headBufferEnd.append("</head><body ");
 		if (bodyClass != null && bodyClass.length() > 0) {
-			headBufferEnd.append(StringUtils.concat("class=\"", bodyClass, "\" "));
+			addBodyClasses(bodyClass);
 		}
+		if(getBodyClasses().size()>0){
+			headBufferEnd.append(StringUtils.concat("class=\"", getBodyClassesStr(), "\" "));
+		}
+
 		headBufferEnd.append(" >");
 		
 		footerBuffer.append("</body></html>");
@@ -270,4 +280,27 @@ public final class WebContainer extends SimpleTagSupport {
 		}
 		return specialHeadTitle;
 	}
+
+	public void addBodyClasses(String bodyClasses) {
+		String[] bodyClassesArray = bodyClasses.split(" ");
+		for(String clsss : bodyClassesArray){
+			getBodyClasses().add(clsss);
+		}
+	}
+
+	public Set<String> getBodyClasses() {
+		if(bodyClasses == null){
+			bodyClasses = new HashSet();
+		}
+		return bodyClasses;
+	}
+
+	private String getBodyClassesStr() {
+		StringBuilder sb = new StringBuilder();
+		for(String clsss : getBodyClasses()){
+			sb.append(clsss).append(" ");
+		}
+		return sb.toString();
+	}
+
 }
