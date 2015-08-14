@@ -23,34 +23,36 @@ public class JavaScriptMinifier {
 			int pathInit = Params.get("WEB_REAL_PATH").length() - 1;
 			FileWriter resultFileWriter = new FileWriter(alreadyCompressed);
 			for (File f : jsFiles) {
-				FileInputStream fis = null;
-				FileWriter fileWriter = null;
-				InputStreamReader inReader = null;
-				fis = new FileInputStream(f);
-				inReader = new InputStreamReader(fis);
-				String jsPath = ("[ JS-Min ...  ] " + f.getAbsolutePath().substring(pathInit));
-				System.out.println(jsPath);
-				resultFileWriter.write(jsPath+"\n");
-				try {
-					JavaScriptCompressor compressor = new JavaScriptCompressor(inReader, new FpgErrorReporter());
-					fileWriter = new FileWriter(f);
-					compressor.compress(fileWriter, Integer.MAX_VALUE, true, false, true, false);
-					fileWriter.close();
-					String jsFileOK = ("[ JS-Min OK!  ]");
-					resultFileWriter.write(jsFileOK+"\n");
-					System.out.println(jsFileOK);
-				} catch (Exception ex) {
-					String jsFileNotOK = ("[# JS-ERROR  #]");
-					resultFileWriter.write(jsFileNotOK+"\n");
-					resultFileWriter.write(ex.getMessage()+"\n");
-					resultFileWriter.write(ex.getLocalizedMessage()+"\n");
-					resultFileWriter.write(ex.getStackTrace().toString()+"\n");
-					System.out.println(jsFileNotOK);
+				if(!f.getAbsolutePath().startsWith(Params.get("WEB_REAL_PATH")+"/init/") && !f.getAbsolutePath().endsWith(".min.js")){
+					FileInputStream fis = null;
+					FileWriter fileWriter = null;
+					InputStreamReader inReader = null;
+					fis = new FileInputStream(f);
+					inReader = new InputStreamReader(fis);
+					String jsPath = ("[ JS-Min ...  ] " + f.getAbsolutePath().substring(pathInit));
+					System.out.println(jsPath);
+					resultFileWriter.write(jsPath+"\n");
 					try {
-						fis.close();
-						inReader.close();
-					} catch (IOException ex2) {
-						DefaultExceptionLogger.getInstance().execute(ex2);
+						JavaScriptCompressor compressor = new JavaScriptCompressor(inReader, new FpgErrorReporter());
+						fileWriter = new FileWriter(f);
+						compressor.compress(fileWriter, Integer.MAX_VALUE, true, false, true, false);
+						fileWriter.close();
+						String jsFileOK = ("[ JS-Min OK!  ]");
+						resultFileWriter.write(jsFileOK+"\n");
+						System.out.println(jsFileOK);
+					} catch (Exception ex) {
+						String jsFileNotOK = ("[# JS-ERROR  #]");
+						resultFileWriter.write(jsFileNotOK+"\n");
+						resultFileWriter.write(ex.getMessage()+"\n");
+						resultFileWriter.write(ex.getLocalizedMessage()+"\n");
+						resultFileWriter.write(ex.getStackTrace().toString()+"\n");
+						System.out.println(jsFileNotOK);
+						try {
+							fis.close();
+							inReader.close();
+						} catch (IOException ex2) {
+							DefaultExceptionLogger.getInstance().execute(ex2);
+						}
 					}
 				}
 			}
