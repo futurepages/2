@@ -657,7 +657,7 @@ public abstract class AbstractAction implements Pageable, Action {
 				setOutput(this.output);
 				setMessages(this.messages);
 			} else {
-				throw new DispatcherNotPresentException();
+				throw new DispatcherNotPresentException(); //TODO parametrizar isso pra nem sempre ocorrer.
 			}
 		}
 
