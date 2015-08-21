@@ -82,6 +82,7 @@ public class InitManager extends AbstractApplicationManager{
 		FormatterManager.addFormatter("collapsedText"        , new CollapsedTextFormatter());
         FormatterManager.addFormatter("cpfCnpj"		 	     , new CPFCNPJFormatter());
         FormatterManager.addFormatter("date"         	     , new DateFormatter());
+        FormatterManager.addFormatter("dbDate"         	     , new DBDateFormatter());
         FormatterManager.addFormatter("dateTime"     	     , new DateTimeFormatter());
         FormatterManager.addFormatter("elapsedTime"   	     , new ElapsedTimeFormatter());
         FormatterManager.addFormatter("extensionFileName"    , new ExtensionFileNameFormatter());

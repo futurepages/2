@@ -26,18 +26,25 @@ public class DateTimeInjectionFilter implements Filter {
 	private Class dateTimeType;
 	private String keyToInject;
 
+	boolean html5Input = false;
+
+
 	public DateTimeInjectionFilter(String keyToInject) {
 		this.keyToInject = keyToInject;
 		this.dateTimeType = Calendar.class;
+	}
+	public DateTimeInjectionFilter(String keyToInject,boolean html5Input) {
+		this(keyToInject);
+		this.html5Input = html5Input;
 	}
 
 	@Override
 	public String filter(InvocationChain chain) throws Exception {
 		Input input = chain.getAction().getInput();
 		try {
-			String date = DateUtil.dbDate(input.getStringValue(keyToInject + "_date"));
+			String date = (html5Input)? input.getStringValue(keyToInject + "_date") : DateUtil.dbDate(input.getStringValue(keyToInject + "_date"));
 			String time = input.getStringValue(keyToInject + "_time");
-			String dbDateTime = date + " " + time + ":00";
+			String dbDateTime = date + " " + time + (time.length()==5?":00":"");
 			if (dateTimeType == Calendar.class) {
 				input.setValue(keyToInject, DateUtil.dbDateTimeToCalendar(dbDateTime));
 			} else if (dateTimeType == Date.class) {
