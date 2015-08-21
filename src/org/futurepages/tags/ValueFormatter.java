@@ -28,7 +28,7 @@ public class ValueFormatter extends PrintTag {
 
 	@Override
 	public String getStringToPrint() throws JspException {
-		if (formatter != null) {
+		if (!Is.empty(formatter)) {
 
 			String param = extractParam(formatter);
 			if (!Is.empty(param)) {
