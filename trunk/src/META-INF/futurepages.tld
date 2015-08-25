@@ -1147,7 +1147,7 @@
 			<name>list</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
-			<type>java.lang.String</type>
+			<type>java.lang.Object</type>
 		</attribute>
 		<attribute>
 			<name>max</name>
