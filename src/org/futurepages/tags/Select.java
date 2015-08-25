@@ -20,7 +20,7 @@ import org.futurepages.core.tags.cerne.HTMLTag;
 public class Select extends HTMLTag {
 
 	@TagAttribute
-    private String list;
+    private Object list;
     
     @TagAttribute
     private String selected = null;
@@ -65,7 +65,12 @@ public class Select extends HTMLTag {
 
             javax.servlet.jsp.tagext.Tag parent = findAncestorWithClass(this, Context.class);
 
-			Object tempVal = Out.getValue(parent, list , pageContext, true);
+			Object tempVal = null;
+            if(list instanceof String){
+                tempVal = Out.getValue(parent, (String) list, pageContext, true);
+            }else{
+                tempVal = list;
+            }
 			List actionList;
 			
 			if (tempVal instanceof List) {
@@ -79,7 +84,7 @@ public class Select extends HTMLTag {
 				}
 			}
 
-			String value_id = "";
+			String value_id;
             if (defaultText != null) {
                 sb.append("<option value=\"").append(defaultValue).append("\">").append(defaultText).append("</option>");
             }
@@ -95,7 +100,11 @@ public class Select extends HTMLTag {
 					if(idNameTry!=null){
 						value_id = ReflectionUtil.getField(actionList.get(i), idNameTry).toString();
 					} else {
-						value_id = actionList.get(i).toString();
+                        if(!objectClass.isEnum()){
+                            value_id = actionList.get(i).toString();
+                        }else{
+                            value_id = ((Enum)actionList.get(i)).name();
+                        }
 					}
 
                     sb.append("<option value=\"").append(value_id).append("\"");
@@ -125,7 +134,7 @@ public class Select extends HTMLTag {
         this.selected = selected;
     }
 
-    public void setList(String list) {
+    public void setList(Object list) {
         this.list = list;
     }
 
