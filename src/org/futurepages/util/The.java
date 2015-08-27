@@ -1,5 +1,6 @@
 package org.futurepages.util;
 
+import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang.math.RandomUtils;
 import org.futurepages.core.exception.DefaultExceptionLogger;
 import org.futurepages.util.html.HtmlMapChars;
@@ -598,5 +599,9 @@ public class The {
 			}
 		}
 		return obj;
+	}
+
+	public static String camelFromSnake(String str) {
+		return uncapitalizedWord(WordUtils.capitalizeFully(str, new char[]{'_'}).replaceAll("_", ""));
 	}
 }
