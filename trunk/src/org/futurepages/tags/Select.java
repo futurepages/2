@@ -110,9 +110,9 @@ public class Select extends HTMLTag {
                     sb.append("<option value=\"").append(value_id).append("\"");
 
                     if ((values == null || values.length == 0) && selected != null && selected.equals(value_id)) {
-                        sb.append(" selected=\"true\" ");
+                        sb.append(" selected=\"selected\" ");
                     } else if (contains(values, value_id)) {
-                        sb.append(" selected=\"true\" ");
+                        sb.append(" selected=\"selected\" ");
                     }
                     sb.append(">");
                     if (showAttr == null) {
