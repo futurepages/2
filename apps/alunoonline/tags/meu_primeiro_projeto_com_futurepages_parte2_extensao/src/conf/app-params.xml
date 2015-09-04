@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<app-params-configuration>
+
+    <param name="SCHEMA_GENERATION_TYPE"    value="none"/>
+    <param name="INSTALL_MODE"              value="off"/>
+
+</app-params-configuration>

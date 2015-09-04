@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	<display-name>Aluno On Line</display-name>
+
+        <!-- Tempo padrÃ£o da sessÃ£o http do usuÃ¡rio -->
+	<session-config>
+		<session-timeout>10</session-timeout>
+	</session-config>
+
+        <!-- Servlet Controlador - responsÃ¡vel pelas Actions -->
+	<servlet>
+		<servlet-name>Controller</servlet-name>
+		<servlet-class>org.futurepages.core.control.Controller</servlet-class>
+		<init-param>
+			<param-name>applicationManager</param-name>
+			<param-value>org.futurepages.core.ApplicationManager</param-value>
+		</init-param>
+	</servlet>
+
+        <!-- Servlet responsÃ¡vel pelos Templates -->
+        <servlet>
+		<servlet-name>TemplateServlet</servlet-name>
+		<servlet-class>org.futurepages.core.template.JspTemplateServlet</servlet-class>
+		<init-param>
+			<param-name>TemplateManager</param-name>
+			<param-value>org.futurepages.core.template.TemplateManager</param-value>
+		</init-param>
+	</servlet>
+
+        <!-- Inicializador da aplicaÃ§Ã£o Futurepages -->
+	<listener>
+		<description>Application Listener</description>
+		<listener-class>org.futurepages.core.ApplicationListener</listener-class>
+	</listener>
+
+        <!-- Gerenciador de eventos na criaÃ§Ã£o e destruiÃ§Ã£o de sessÃµes http de usuÃ¡rio -->
+	<listener>
+		<listener-class>org.futurepages.core.session.SessionListener</listener-class>
+	</listener>
+    
+
+        <!-- Mapeamentos de actions -->
+	<servlet-mapping>
+		<servlet-name>Controller</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>Controller</servlet-name>
+		<url-pattern>*.fpg</url-pattern>
+	</servlet-mapping>
+
+        <!-- Mapeamentos de templates -->
+	<servlet-mapping>
+		<servlet-name>TemplateServlet</servlet-name>
+		<url-pattern>*.page</url-pattern>
+	</servlet-mapping>
+</web-app>

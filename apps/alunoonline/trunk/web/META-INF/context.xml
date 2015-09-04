@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context antiJARLocking="true" path="/alunoonline">
+
+	<!--Caso queira configurar resource do banco de dados (pool de conexões do prório servidor), descomente...-->
+        <!--<Resource-->
+            <!--name="jdbc/alunoOnLineDS"-->
+            <!--type="javax.sql.DataSource"-->
+            <!--driverClassName="com.mysql.jdbc.Driver"-->
+            <!--url="jdbc:mysql://localhost:3306/alunoonlinebd"-->
+            <!--username="root"-->
+            <!--password=""-->
+            <!--auth="Container"-->
+            <!--initialSize="4"-->
+            <!--maxActive="-1"-->
+            <!--validationQuery="Select 1"-->
+            <!--testOnBorrow="true"-->
+        <!--/>-->
+</Context>

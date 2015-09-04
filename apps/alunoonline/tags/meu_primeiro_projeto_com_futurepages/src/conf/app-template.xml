@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<app-template-configuration>
+    <page rule="^.*$" base="template/layout.jsp">
+        <block id="cabecalho"   value="template/cabecalho.jsp"/>
+        <block id="rodape"      value="template/rodape.jsp"/>
+     </page>
+</app-template-configuration>
