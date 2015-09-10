@@ -1,26 +1,24 @@
 package org.futurepages.tags.core.webcomponent;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.JspContext;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.SimpleTagSupport;
-import javax.swing.*;
-
 import org.futurepages.annotations.Tag;
 import org.futurepages.annotations.TagAttribute;
 import org.futurepages.core.tags.build.ContentTypeEnum;
 import org.futurepages.filters.HeadTitleFilter;
 import org.futurepages.util.Is;
 import org.futurepages.util.StringUtils;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.JspContext;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.SimpleTagSupport;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 @Tag(bodyContent = ContentTypeEnum.SCRIPTLESS)
 public final class WebContainer extends SimpleTagSupport {
