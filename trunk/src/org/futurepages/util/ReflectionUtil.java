@@ -3,6 +3,7 @@ package org.futurepages.util;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -448,8 +449,10 @@ public final class ReflectionUtil {
 			Field[] fields = clss.getDeclaredFields();
 			for (Field field : fields) {
 				try {
-					field.setAccessible(true);
-					field.set(toObj, field.get(fromObj));
+					if(!Modifier.isFinal(field.getModifiers())){
+						field.setAccessible(true);
+						field.set(toObj, field.get(fromObj));
+					}
 				} catch (Exception ex) {
 					throw new RuntimeException(ex);
 				}
