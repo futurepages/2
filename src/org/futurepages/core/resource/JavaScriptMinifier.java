@@ -23,15 +23,16 @@ public class JavaScriptMinifier {
 			int pathInit = Params.get("WEB_REAL_PATH").length() - 1;
 			FileWriter resultFileWriter = new FileWriter(alreadyCompressed);
 			for (File f : jsFiles) {
-				if(!f.getAbsolutePath().startsWith(Params.get("WEB_REAL_PATH")+"/init/") && !f.getAbsolutePath().endsWith(".min.js")){
+				String jsPath = (f.getAbsolutePath().substring(pathInit));
+				if(!jsPath.startsWith("/init/") && !f.getAbsolutePath().endsWith(".min.js")){
 					FileInputStream fis = null;
 					FileWriter fileWriter = null;
 					InputStreamReader inReader = null;
 					fis = new FileInputStream(f);
 					inReader = new InputStreamReader(fis);
-					String jsPath = ("[ JS-Min ...  ] " + f.getAbsolutePath().substring(pathInit));
-					System.out.println(jsPath);
-					resultFileWriter.write(jsPath+"\n");
+					String outLogJsPath = "[ JS-Min ...  ] " + jsPath;
+					System.out.println(outLogJsPath);
+					resultFileWriter.write(outLogJsPath+"\n");
 					try {
 						JavaScriptCompressor compressor = new JavaScriptCompressor(inReader, new FpgErrorReporter());
 						fileWriter = new FileWriter(f);
