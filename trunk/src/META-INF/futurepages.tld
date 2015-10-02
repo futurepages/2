@@ -1572,6 +1572,9 @@
 		</attribute>
 	</tag>
 
+	<!--Exemplo de .tag gerada na biblioteca.-->
+	<!--<tag-file><name>importCSS</name><path>/META-INF/tags/arquivo.tag</path></tag-file>-->
+
 	<!-- ${TAGS_REPLACE} -->
 	<!-- ${TAGSFILE_REPLACE} -->
 </taglib>
