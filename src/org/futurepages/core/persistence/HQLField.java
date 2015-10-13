@@ -473,6 +473,14 @@ public class HQLField implements HQLable {
 		return concat(fieldName, LIKE, prefix, escLike(value), sufix);
 	}
 
+	public String isEmpty() {
+		return concat(fieldName, EQUALS, "''");
+	}
+
+	public String isNotEmpty() {
+		return concat(fieldName, DIFFERENT, "''");
+	}
+
 	private String notLikeExpression(String prefix, String value, String sufix) {
 		if (Is.empty(value)) {
 			return "";

@@ -604,4 +604,8 @@ public class The {
 	public static String camelFromSnake(String str) {
 		return uncapitalizedWord(WordUtils.capitalizeFully(str, new char[]{'_'}).replaceAll("_", ""));
 	}
+
+	public static int intVal(Integer number) {
+		return number==null? 0 : number;
+	}
 }
