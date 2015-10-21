@@ -54,7 +54,7 @@ public class HibernateFilter implements AfterConsequenceFilter {
 						}
 					}catch(Exception ex){
 						rollbackTransaction(isMultiTransactional);
-						ExceptionFilter.treatedException(chain, ex);
+						return ExceptionFilter.treatedException(chain, ex);
 					}
 				}
 			}
