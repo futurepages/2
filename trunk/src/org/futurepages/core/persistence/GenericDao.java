@@ -253,6 +253,19 @@ public class GenericDao extends HQLProvider {
 		return new PaginationSlice<T>(numRows, pageSize, pagesOffset, totalPages, page, list);
 	}
 
+
+
+	public <T extends Serializable> PaginationSlice<T> paginationSliceFromHQL(int page, int pageSize,
+	                                                                          int pagesOffset, Class<T> entity,
+	                                                                          String countHQL,
+	                                                                          String hql, String... orderClauses) {
+		final long numRows = numRowsFromHQL(entity, countHQL);
+		int totalPages = calcNumPages(numRows, pageSize);
+		page = correctPageNumber(page, totalPages, pagesOffset);
+		List<T> list = listPage(page, pageSize, pagesOffset, concat(hql, orderBy(orderClauses)));
+		return new PaginationSlice<T>(numRows, pageSize, pagesOffset, totalPages, page, list);
+	}
+
 	public <T extends Serializable> PaginationSlice<T> paginationSlice(int page, int pageSize,                  String entityAlias, String fromAndJoin, String whereClause, String... orderClauses) {
 		return paginationSlice(page, pageSize, 0, entityAlias,fromAndJoin, whereClause, orderClauses);
 	}
@@ -456,6 +469,10 @@ public class GenericDao extends HQLProvider {
 
 	public long numRows(Class entity, String where) {
 		Long res = (Long) query(concat(select(count("*")), from(entity), where(where))).uniqueResult();
+		return res.longValue();
+	}
+	public long numRowsFromHQL(Class entity, String hql) {
+		Long res = (Long) query(hql).uniqueResult();
 		return res.longValue();
 	}
 

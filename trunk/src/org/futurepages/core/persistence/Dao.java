@@ -167,6 +167,10 @@ public class Dao extends HQLProvider {
 		return getInstance().paginationSlice(page, pageSize, entity, whereClause, orderClauses);
 	}
 
+	public static <T extends Serializable> PaginationSlice<T> paginationSliceFromHQL(int page, int pageSize, Class<T> entity, String count, String hql, String... orderClauses) {
+		return getInstance().paginationSliceFromHQL(page, pageSize, 0, entity, count, hql, orderClauses);
+	}
+
 	public static <T extends Serializable> PaginationSlice<T> paginationSlice(int page, int pageSize, int pagesOffset, Class<T> entity, String whereClause, String... orderClauses) {
 		return getInstance().paginationSlice(page, pageSize, pagesOffset, entity, whereClause, orderClauses);
 	}
