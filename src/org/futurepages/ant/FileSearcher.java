@@ -15,7 +15,6 @@ import java.util.Set;
 import org.apache.commons.io.FileUtils;
 
 /**
- *
  * @author Mohammad Faisal
  */
 public class FileSearcher {
