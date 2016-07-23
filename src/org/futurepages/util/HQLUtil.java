@@ -118,7 +118,7 @@ public class HQLUtil {
 	 * @param original HQL de entrada
 	 */
 	public static String escQuotesAndSlashes(String original) {
-		original = original.replace("'", "''").replace("\\", "\\\\");
+		original = original!=null? original.replace("'", "''").replace("\\", "\\\\") : original;
 		return original;
 	}
 

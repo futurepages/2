@@ -82,7 +82,7 @@ public class PIFilter implements Filter {
 	 * @param objToInject
 	 */
 	private void inject(Input input, Serializable objToInject) {
-		String[] explodedTarget = The.explodedToArray(targetKey, ".");
+ 		String[] explodedTarget = The.explodedToArray(targetKey, ".");
 		Object targetObject = input.getValue(explodedTarget[0]);
 		if (targetObject != null) {
 			setField(objToInject, explodedTarget, targetObject);

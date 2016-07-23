@@ -20,7 +20,11 @@ public class ModuleIdFilter implements Filter {
 	public String returnValue;
 
 	public static String getModuleId(Action action) {
-		return (String) action.getOutput().getValue(ModuleIdFilter.MODULE_ID_KEY);
+		String moduleId = (String) action.getOutput().getValue(ModuleIdFilter.MODULE_ID_KEY);
+		if(moduleId.contains("/")){
+			moduleId = moduleId.split("/")[0];
+		}
+		return moduleId;
 	}
 
 	public static void setModuleId(Action action, String moduleId) {
