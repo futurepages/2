@@ -26,5 +26,7 @@ public @interface ModuleMakeAttribute {
 
     boolean createSelect() default false;
 
+    boolean searchParam() default false;
+
 
 }
