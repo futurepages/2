@@ -286,7 +286,7 @@ public class HQLProvider implements HQLable {
 		}
 	}
 
-	public static String concat(String... args) {
+	public static String concat(Object... args) {
 		return StringUtils.concat(args);
 	}
 
