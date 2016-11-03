@@ -21,7 +21,7 @@ public enum MonthEnum implements Serializable {
 	private int id;
 	private String name;
 
-	private MonthEnum(int id, String name) {
+	MonthEnum(int id, String name) {
 
 		this.id = id;
 		this.name = name;
@@ -58,6 +58,16 @@ public enum MonthEnum implements Serializable {
 		} else { //fevereiro e seus bisextos
 			return ((ano % 100 != 0) ? (((ano % 4) != 0) ? 28 : 29) : ((ano / 100 % 4 != 0) ? 28 : 29));
 		}
+	}
+
+	public static MonthEnum obterPorMesInteiro(int mes){
+		for (MonthEnum mesEnum : MonthEnum.values()) {
+			if(mesEnum.id == mes){
+				return mesEnum;
+			}
+		}
+
+		return null;
 	}
 
 	@Override
