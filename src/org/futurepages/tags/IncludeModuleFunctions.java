@@ -5,7 +5,6 @@ import javax.servlet.jsp.JspException;
 
 import org.futurepages.annotations.Tag;
 import org.futurepages.annotations.TagAttribute;
-import org.futurepages.core.ApplicationManager;
 import org.futurepages.core.config.Params;
 import org.futurepages.core.control.Controller;
 import org.futurepages.core.path.Paths;
