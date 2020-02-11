@@ -294,44 +294,58 @@ public class FileUtil {
 	}
 
 	public static void copy(String fromFileName, String toFileName) throws IOException {
+//		System.out.println(fromFileName+ "-->"+toFileName);
 
 		File fromFile = new File(fromFileName);
 		File toFile = new File(EncodingUtil.correctPath(toFileName));
-		if (toFile.isDirectory()) {
+
+		//para casos de mandar arquivo para dentro de uma pasta com o mesmo nome....
+		if (!fromFile.isDirectory() && toFile.exists() && toFile.isDirectory()) {
 			toFile = new File(toFile, fromFile.getName());
 		}
 
-		if (!toFile.exists()) {
-			String parent = toFile.getParent();
-			if (parent == null) {
-				parent = System.getProperty("user.dir");
-			}
-		}
+		//cópia de uma pasta inteira (recursiva)
+		if(fromFile.isDirectory()){
 
-		FileInputStream from = null;
-		FileOutputStream to = null;
-		try {
-			from = new FileInputStream(fromFile);
-			to = new FileOutputStream(toFile);
-			byte[] buffer = new byte[4096];
-			int bytesRead;
-
-			while ((bytesRead = from.read(buffer)) != -1) {
-				to.write(buffer, 0, bytesRead); // write
+			if(!toFile.exists()){
+				toFile.mkdirs();
 			}
-		} finally {
-			if (from != null) {
-				try {
-					from.close();
-				} catch (IOException e) {
-					DefaultExceptionLogger.getInstance().execute(e);
+
+			File[] childrenFiles = fromFile.listFiles();
+			if(childrenFiles!=null && childrenFiles.length>0){
+				for(File childFile : childrenFiles){
+					copy(childFile.getAbsolutePath(), toFile.getAbsolutePath()+"/"+childFile.getName());
 				}
 			}
-			if (to != null) {
-				try {
-					to.close();
-				} catch (IOException e) {
-					DefaultExceptionLogger.getInstance().execute(e);
+
+			// cópia de arquivo...
+		} else {
+
+			FileInputStream from = null;
+			FileOutputStream to = null;
+			try {
+				from = new FileInputStream(fromFile);
+				to = new FileOutputStream(toFile);
+				byte[] buffer = new byte[4096];
+				int bytesRead;
+
+				while ((bytesRead = from.read(buffer)) != -1) {
+					to.write(buffer, 0, bytesRead); // write
+				}
+			} finally {
+				if (from != null) {
+					try {
+						from.close();
+					} catch (IOException e) {
+						DefaultExceptionLogger.getInstance().execute(e);
+					}
+				}
+				if (to != null) {
+					try {
+						to.close();
+					} catch (IOException e) {
+						DefaultExceptionLogger.getInstance().execute(e);
+					}
 				}
 			}
 		}

@@ -69,6 +69,16 @@ public class Controller extends HttpServlet {
 	private ThreadLocal<InvocationChain> chainTL = new ThreadLocal<InvocationChain>();
 	private static ServletConfig conf;
 	private static ClassGetActionUrlParts objectGetActionUrlParts;
+	private static boolean up = true;
+
+	public static void makeUnavailable() {
+		up = false;
+	}
+
+	public static void makeAvailable() {
+		up = true;
+	}
+
 
 	static  {
 		boolean isDebugging = false;
@@ -220,6 +230,11 @@ public class Controller extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		try {
+			if(up){
+				doService(req, res);
+			}else{
+				res.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+			}
 			doService(req, res);
 		} catch (Exception ex) {
 			DefaultExceptionLogger.getInstance().execute(ex, getChain(), req, true);

@@ -7,10 +7,11 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import org.futurepages.core.config.Params;
+import org.futurepages.core.control.Controller;
 import org.futurepages.core.exception.DefaultExceptionLogger;
-import org.futurepages.core.flyway.FlyWayMigrator;
 import org.futurepages.core.install.InstallersManager;
 import org.futurepages.core.mail.MailConfig;
+import org.futurepages.core.migration.DataModelMigrationController;
 import org.futurepages.core.path.Paths;
 import org.futurepages.core.persistence.HibernateManager;
 import org.futurepages.core.persistence.SchemaGeneration;
@@ -97,12 +98,7 @@ public class ApplicationListener implements ServletContextListener {
 					}
 				}
 
-				if(Params.get("FLYWAY_MIGRATION_MODE").equals(ON)){
-					log("FLYWAY_MIGRATION_MODE ...: ");
-					FlyWayMigrator.execute();
-					log("FLYWAY_MIGRATION OK");
-				}
-
+				DataModelMigrationController.execute();
 			} else {
 				log("WARNING: HIBERNATE is not running!");
 			}
@@ -159,6 +155,7 @@ public class ApplicationListener implements ServletContextListener {
 			log(servletContext.getServletContextName() + " inicializado.");
 		} catch (Exception ex) {
 			log("Erro ao inicializar contexto.");
+			Controller.makeUnavailable();
 			DefaultExceptionLogger.getInstance().execute(ex);
 		}
 	}

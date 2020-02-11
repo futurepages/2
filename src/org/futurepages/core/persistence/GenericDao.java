@@ -228,6 +228,14 @@ public class GenericDao extends HQLProvider {
 
 	}
 
+	public <T extends Serializable> T getFirst(Class<T> entity,String where, String order) {
+		List<T> objs = topList(1, entity,where,order);
+		if(objs.size()>0){
+			return objs.get(0);
+		}
+		return null;
+	}
+
 	private int correctPageNumber(int page, int totalPages, int pagesOffset) {
 		if(pagesOffset == 0){
 			if (page > totalPages) {
