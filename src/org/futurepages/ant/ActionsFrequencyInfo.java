@@ -16,6 +16,7 @@ import org.futurepages.core.control.ActionConfig;
 import org.futurepages.core.control.Controller;
 import org.futurepages.util.ascii.TableBuilder;
 
+@Deprecated
 public class ActionsFrequencyInfo extends Task  {
 
 	private String root;

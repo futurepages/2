@@ -17,6 +17,7 @@ import org.apache.commons.io.FileUtils;
 /**
  * @author Mohammad Faisal
  */
+@Deprecated
 public class FileSearcher {
 
 	Collection<File> files = null;
