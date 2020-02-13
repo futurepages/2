@@ -235,7 +235,6 @@ public class Controller extends HttpServlet {
 			}else{
 				res.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
 			}
-			doService(req, res);
 		} catch (Exception ex) {
 			DefaultExceptionLogger.getInstance().execute(ex, getChain(), req, true);
 		} finally {
