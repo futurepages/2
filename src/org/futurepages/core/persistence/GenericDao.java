@@ -685,7 +685,6 @@ public class GenericDao extends HQLProvider {
 		String trimmedSql = null;
 		String delimiter = ";";
 		StringBuffer sqlToExecute = new StringBuffer();
-		Connection conn = Dao.getInstance().session().connection();
 
 		for (int i = 0; i < sqls.length; i++) {
 			trimmedSql = sqls[i].trim();
@@ -696,7 +695,7 @@ public class GenericDao extends HQLProvider {
 					|| (trimmedSql.startsWith("/*") && !trimmedSql.startsWith("/*!") )) {
 				continue;
 			} else {
-				int posComment = trimmedSql.indexOf("--");
+				int posComment = trimmedSql.indexOf("-- "); //BREAK-ALERT: se possuir essa string dentro de uma variável string, vai quebrar!
 				if(posComment>0){
 					trimmedSql = trimmedSql.substring(0, posComment);
 				}
@@ -709,14 +708,7 @@ public class GenericDao extends HQLProvider {
 						if(withLog){
 							System.out.println("  "+sql);
 						}
-						PreparedStatement stmt;
-						try {
-							stmt = conn.prepareStatement(sql);
-							stmt.executeUpdate();
-							stmt.close();
-						} catch (SQLException e) {
-							throw new RuntimeException(e);
-						}
+						executeSQL(sql);
 						sqlToExecute.delete(0, sqlToExecute.length());
 					} else {
 						if (trimmedSql.endsWith(delimiter)) {
@@ -725,14 +717,7 @@ public class GenericDao extends HQLProvider {
 							if(withLog){
 								System.out.println("  "+sql);
 							}
-							PreparedStatement stmt;
-							try {
-								stmt = conn.prepareStatement(sql);
-								stmt.executeUpdate();
-								stmt.close();
-							} catch (SQLException e) {
-								throw new RuntimeException(e);
-							}
+							executeSQL(sql);
 							sqlToExecute.delete(0, sqlToExecute.length());
 						} else {
 							sqlToExecute.append(trimmedSql + " ");
@@ -741,11 +726,6 @@ public class GenericDao extends HQLProvider {
 				}
 
 			}
-		}
-		try {
-			conn.close();
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
 		}
 	}
 }
