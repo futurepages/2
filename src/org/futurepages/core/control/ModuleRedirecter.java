@@ -54,7 +54,7 @@ public class ModuleRedirecter extends HttpServlet {
 	protected void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		String url = req.getRequestURL().toString();
 		try {
-			String urlInit = The.concat(req.getScheme(), "://", req.getHeader("host"),req.getContextPath(),(Params.get("PRETTY_URL").equals("true")?"":"/"+Params.MODULES_PATH));
+			String urlInit = The.concat(Params.get("DEFAULT_SCHEME"), "://", req.getHeader("host"),req.getContextPath(),(Params.get("PRETTY_URL").equals("true")?"":"/"+Params.MODULES_PATH));
 
 			String newUrl = req.getRequestURL().toString().replace(urlInit, "");
 			String[] urlParts = newUrl.split("/");

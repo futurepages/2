@@ -22,7 +22,7 @@ public class StaticPaths extends Paths {
 	private String themePath;
 
 	public StaticPaths(String context) {
-		hostPath = Params.get("AUTO_REDIRECT_DOMAIN");
+		hostPath = The.concat(Params.get("DEFAULT_SCHEME"),"://",Params.get("AUTO_REDIRECT_DOMAIN"));
 		contextPath = The.concat("/",context);
 		modulePath = The.concat(contextPath,"/",Params.MODULES_PATH,"/");
 		modulesActionPath = (Params.get("PRETTY_URL").equals("true")) ? The.concat(contextPath,"/") : modulePath;

@@ -1,8 +1,10 @@
 package org.futurepages.consequences;
 
 import org.futurepages.core.action.Action;
+import org.futurepages.core.config.Params;
 import org.futurepages.core.consequence.Consequence;
 import org.futurepages.core.output.Output;
+import org.futurepages.core.path.Paths;
 import org.futurepages.exceptions.ConsequenceException;
 import org.futurepages.util.EncodingUtil;
 import org.futurepages.util.Is;
@@ -130,7 +132,7 @@ public class Redirect implements Consequence {
 				return theURL.substring(1, theURL.length());
 			} else {
 				// url relative to the context path...
-				return concat(req.getContextPath(), (!theURL.startsWith("/") ? "/" : ""), theURL);
+				return concat(Paths.context(req), (!theURL.startsWith("/") ? "/" : ""), theURL);
 			}	
 	}
 
@@ -171,7 +173,9 @@ public class Redirect implements Consequence {
 	private StringBuilder builBasicUrlToRedir(URI uri) {
 		StringBuilder urlToRedir = new StringBuilder();
 		if(uri.getHost()!=null) {
-				urlToRedir.append(concat(uri.getScheme(),"://",uri.getHost(),(uri.getPort()!=80 && uri.getPort()!=443 && uri.getPort()!=-1 ? ":"+uri.getPort() : "")));
+			urlToRedir.append(concat(Params.get("DEFAULT_SCHEME"),"://",uri.getHost(),(uri.getPort()!=80 && uri.getPort()!=443 && uri.getPort()!=-1 ? ":"+uri.getPort() : "")));
+		}else if(!Is.empty(Params.get("AUTO_REDIRECT_DOMAIN"))){
+			urlToRedir.append(concat(Params.get("DEFAULT_SCHEME"),"://",Params.get("AUTO_REDIRECT_DOMAIN")));
 		}
 		return urlToRedir;
 	}
