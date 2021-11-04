@@ -21,6 +21,7 @@
 	<param name="EMAIL_HOST_NAME"          value="smtp.futurepages.org"/>
 	<param name="EMAIL_DEFAULT_PORT"       value="25"/>
 	<param name="EMAIL_SSL_CONNECTION"     value="false"/>
+	<param name="MAIL_SMTP_STARTTLS_ENABLE"     value="false"/>
 	<param name="EMAIL_FROM"               value="Futurepages App"/>
 	<param name="EMAIL_FROM_NAME"          value="Aplicação de Exemplo para o Futurepages!"/>
 	<param name="EMAIL_CHARSET"            value="UTF_8"/>

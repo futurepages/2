@@ -98,6 +98,7 @@ public class Params {
     	paramsMap.put("EMAIL_ACTIVE", "false");
 		paramsMap.put("EMAIL_DEFAULT_PORT", "25");
 		paramsMap.put("EMAIL_SSL_CONNECTION", "false");
+		paramsMap.put("MAIL_SMTP_STARTTLS_ENABLE", "false");
 		paramsMap.put("INSTALL_MODE", "off");
 		paramsMap.put("PAGE_ENCODING", "ISO-8859-1");
 		paramsMap.put("RELEASE", "");

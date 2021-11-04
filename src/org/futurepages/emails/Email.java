@@ -63,6 +63,8 @@ public abstract class Email {
 
     public static final String MAIL_SMTP_AUTH = "mail.smtp.auth";
 
+    public static final String MAIL_SMTP_STARTTLS_ENABLE = "mail.smtp.starttls.enable";
+
     public static final String MAIL_TRANSPORT_PROTOCOL = "mail.transport.protocol";
 
     public static final String SMTP = "smtp";
@@ -232,8 +234,9 @@ public abstract class Email {
     private static String def_port = null;
     /** para smtp com conexao via ssl, como o caso do smtp do Gmail */
     private static boolean ssl_connection = false;
-    
-    
+
+    private static boolean mailSmtpStarttlsEnable = false;
+
     public static void setDefaultPort( int port ) {
     	def_port = String.valueOf( port );
     }
@@ -245,8 +248,12 @@ public abstract class Email {
     public static void setSSLConnection ( boolean active ) {
     	ssl_connection = active;
     }
-    
-    /** 
+
+    public static void setMailSmtpStarttlsEnable(boolean active){
+        mailSmtpStarttlsEnable = active;
+    }
+
+    /**
      *  true or false
      * 
      *  @param active (String)
@@ -282,7 +289,6 @@ public abstract class Email {
         if( ssl_connection ) {
         	Security.addProvider( new com.sun.net.ssl.internal.ssl.Provider() );
         }
-        
     }
 
     /**
@@ -436,6 +442,10 @@ public abstract class Email {
 	            	properties.setProperty( MAIL_FACTORY_CLASS, SSL_FACTORY );
 	            	properties.setProperty( MAIL_FACTORY_FALLBACK, factory_fallback );
 	            }
+
+                if ( mailSmtpStarttlsEnable ) {
+	            	properties.setProperty( MAIL_SMTP_STARTTLS_ENABLE, "true");
+                }
 	
 	            if ( this.bounceAddress != null ) {
 	                properties.setProperty( MAIL_SMTP_FROM, this.bounceAddress );
