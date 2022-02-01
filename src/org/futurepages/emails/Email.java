@@ -457,7 +457,7 @@ public abstract class Email {
 
 
                 if (!StringUtils.isEmpty(mailSmtpSslProtocols)) {
-	                properties.setProperty( MAIL_TRANSPORT_PROTOCOL, mailSmtpSslProtocols);
+	                properties.setProperty( MAIL_SMTP_SSL_PROTOCOLS, mailSmtpSslProtocols);
                 }
 	
 	            if ( this.bounceAddress != null ) {
