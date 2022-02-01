@@ -17,6 +17,7 @@ public class MailConfig {
             String  EMAIL_DEFAULT_PORT =    Params.get("EMAIL_DEFAULT_PORT");
             boolean EMAIL_SSL_CONNECTION =	Params.get("EMAIL_SSL_CONNECTION").equals("true");
             boolean MAIL_SMTP_STARTTLS =	Params.get("MAIL_SMTP_STARTTLS_ENABLE").equals("true");
+            String MAIL_TRANSPORT_PROTOCOL =	Params.get("MAIL_TRANSPORT_PROTOCOL");
             String  EMAIL_USER_NAME =		Params.get("EMAIL_USER_NAME");
             String  EMAIL_USER_PASSWORD =	Params.get("EMAIL_USER_PASSWORD");
             String  EMAIL_FROM =			Params.get("EMAIL_FROM");
@@ -28,6 +29,7 @@ public class MailConfig {
             Email.setDefaultPort(EMAIL_DEFAULT_PORT);
             Email.setSSLConnection(EMAIL_SSL_CONNECTION);
             Email.setMailSmtpStarttlsEnable(MAIL_SMTP_STARTTLS);
+            Email.setMailSmtpSslProtocols(MAIL_TRANSPORT_PROTOCOL);
             Email.setDefaultAuthentication(EMAIL_USER_NAME, EMAIL_USER_PASSWORD);
             Email.setDefaultFrom(EMAIL_FROM, EMAIL_FROM_NAME);
             Email.setDefaultCharset(EMAIL_CHARSET);

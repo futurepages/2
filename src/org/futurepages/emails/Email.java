@@ -65,6 +65,8 @@ public abstract class Email {
 
     public static final String MAIL_SMTP_STARTTLS_ENABLE = "mail.smtp.starttls.enable";
 
+    public static final String MAIL_SMTP_SSL_PROTOCOLS = "mail.smtp.ssl.protocols";
+
     public static final String MAIL_TRANSPORT_PROTOCOL = "mail.transport.protocol";
 
     public static final String SMTP = "smtp";
@@ -237,6 +239,8 @@ public abstract class Email {
 
     private static boolean mailSmtpStarttlsEnable = false;
 
+    private static String mailSmtpSslProtocols = "TLSv1.2";
+
     public static void setDefaultPort( int port ) {
     	def_port = String.valueOf( port );
     }
@@ -251,6 +255,10 @@ public abstract class Email {
 
     public static void setMailSmtpStarttlsEnable(boolean active){
         mailSmtpStarttlsEnable = active;
+    }
+
+    public static void setMailSmtpSslProtocols(String protocol) {
+        mailSmtpSslProtocols = protocol;
     }
 
     /**
@@ -445,6 +453,11 @@ public abstract class Email {
 
                 if ( mailSmtpStarttlsEnable ) {
 	            	properties.setProperty( MAIL_SMTP_STARTTLS_ENABLE, "true");
+                }
+
+
+                if (!StringUtils.isEmpty(mailSmtpSslProtocols)) {
+	                properties.setProperty( MAIL_TRANSPORT_PROTOCOL, mailSmtpSslProtocols);
                 }
 	
 	            if ( this.bounceAddress != null ) {
